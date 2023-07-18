@@ -16,13 +16,13 @@ import com.ssafy.db.repository.UserRepositorySupport;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	UserRepositorySupport userRepositorySupport;
-	
+
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+
 	@Override
 	public User createUser(UserRegisterPostReq userRegisterInfo) {
 		User user = new User();
