@@ -82,6 +82,7 @@ def buildTime() {
 project.ext.set("build.date", buildTime())
 
 processResources {
+    duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
     with copySpec {
         from "src/main/resources"
         include "**/application*.yml"
