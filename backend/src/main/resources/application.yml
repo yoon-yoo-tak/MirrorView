@@ -13,6 +13,11 @@ spring:
       format_sql: true
       ddl-auto: create-drop
 
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
 logging:
   level:
     org:
@@ -22,3 +27,10 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+
+springfox:
+  documentation:
+    swagger:
+      use-model-v3: false
+
+
