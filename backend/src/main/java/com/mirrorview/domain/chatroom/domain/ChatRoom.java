@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Chatroom {
+public class ChatRoom {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
