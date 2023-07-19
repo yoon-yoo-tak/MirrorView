@@ -29,11 +29,11 @@ public class Friend {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "from_user_id")
+	@JoinColumn(name = "from_member_id")
 	private Member from;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "to_user_id")
+	@JoinColumn(name = "to_member_id")
 	private Member to;
 
 	@Column(name = "is_connected",nullable = false,columnDefinition = "TINYINT(1)")
