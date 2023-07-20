@@ -28,6 +28,8 @@ public class Member {
 	@Column(name = "userid")
 	private String userId;
 
+	private String username;
+
 	private String password;
 
 	private String nickname;
