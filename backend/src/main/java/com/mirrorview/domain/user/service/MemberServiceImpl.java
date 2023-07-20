@@ -17,8 +17,8 @@ public class MemberServiceImpl implements MemberService{
 	// private final PasswordEncoder passwordEncoder;
 
 	@Override
-	public boolean duplicatedUserId(String userid) {
-		if(memberRepository.existsByUserId(userid)){
+	public boolean duplicatedUserId(String userId) {
+		if(!memberRepository.existsByUserId(userId)){
 			return false;
 		}
 		return true;
@@ -26,12 +26,10 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public void save(JoinDto joinDto) {
-		Member joinMember = Member.builder()
-			.userId(joinDto.getEmail())
-			.nickname(joinDto.getNickname())
-			.email(joinDto.getEmail())
-			// .password(passwordEncoder.encode(joinDto.getPassword()))
-			.build();
+		if (duplicatedUserId(joinDto.getUserId())) {
+			throw new IllegalArgumentException("중복 에러");
+		}
+		Member joinMember = joinDto.toEntity();
 
 		memberRepository.save(joinMember);
 	}
