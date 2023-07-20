@@ -1,6 +1,7 @@
 ### Secret ###
 <<<<<<< HEAD
 src/main/resources/application-secret.properties
+src/main/resources/email.properties
 src/main/generated/
 src/main/resources/dist/
 =======
