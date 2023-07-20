@@ -38,4 +38,7 @@ public class Member {
 
 	private String photo;
 
+	public void updatePhoto(String updatePhoto){
+		this.photo = updatePhoto;
+	}
 }
