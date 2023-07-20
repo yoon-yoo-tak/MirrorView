@@ -1,5 +1,6 @@
 package com.mirrorview.domain.user.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mirrorview.domain.user.service.MemberProfileService;
+import com.mirrorview.global.response.BaseResponse;
 
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,11 @@ public class MyPageController {
 	private final MemberProfileService memberProfileService;
 
 	@PatchMapping("/image")
-	public ResponseEntity<?> updateImage(){
-		return null;
+	public ResponseEntity<?> updateImage(String userId, String photo){
+		memberProfileService.updatePhoto(userId, photo);
+		return BaseResponse.ok(HttpStatus.OK, "프로필 사진 수정 완료");
 	}
+
 
 	@PatchMapping("/nickname")
 	public ResponseEntity<?> updateNickname(){
