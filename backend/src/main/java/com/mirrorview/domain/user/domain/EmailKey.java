@@ -33,4 +33,7 @@ public class EmailKey {
 	@Column(nullable = false, columnDefinition = "TINYINT(1)")
 	private Boolean checked;
 
+	public void check() {
+		this.checked = true;
+	}
 }

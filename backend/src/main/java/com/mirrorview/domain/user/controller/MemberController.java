@@ -48,20 +48,24 @@ public class MemberController {
 
 	@PostMapping("/{email}")
 	public ResponseEntity<?> checkEmailKey(@PathVariable String email, @RequestBody Map<String, String> map) {
-		//todo email과 암호 디비 일치 체크
-
-		if (map.getOrDefault("key", "-1").equals("1234")) {
-			return BaseResponse.ok(HttpStatus.OK, "암호 확인 완료");
+		String key = map.getOrDefault("key", "empty");
+		if (key.equals("empty")) {
+			return BaseResponse.fail("클라이언트 서버 에러", 501);
 		}
-		return BaseResponse.fail("재확인 필요", 400);
+		boolean isChecked = emailService.checkKey(email, key);
+		if (!isChecked) {
+			return BaseResponse.fail("다시 입력해주세요.", 400);
+		}
+		return BaseResponse.ok(HttpStatus.OK, "암호 확인 완료");
 	}
 
 	@GetMapping("/{email}")
 	public ResponseEntity<?> sendEmailKey(@PathVariable String email) {
 		boolean complete = emailService.sendEmail(email);
-
-		//todo  email 전송 구현하기
-		return BaseResponse.okWithData(HttpStatus.OK, "이메일 전송이 완료되었습니다.", email);
+		if (complete) {
+			return BaseResponse.okWithData(HttpStatus.OK, "이메일 전송이 완료되었습니다.", email);
+		}
+		return BaseResponse.fail("이메일 전송 오류", 500);
 	}
 
 }

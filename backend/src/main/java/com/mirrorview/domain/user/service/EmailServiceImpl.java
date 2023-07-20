@@ -9,6 +9,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mirrorview.domain.user.domain.EmailKey;
 import com.mirrorview.domain.user.repository.EmailKeyRepository;
@@ -42,6 +43,17 @@ public class EmailServiceImpl implements EmailService {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	@Transactional
+	public boolean checkKey(String email, String key) {
+		Optional<EmailKey> findEmailKey = emailKeyRepository.findByEmailAndKey(email, key);
+		if (findEmailKey.isPresent()) {
+			findEmailKey.get().check();
+			return true;
+		}
+		return false;
 	}
 
 	private void saveEmailKey(EmailKey emailKey) {
