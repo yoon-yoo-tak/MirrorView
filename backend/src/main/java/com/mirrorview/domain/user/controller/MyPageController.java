@@ -32,8 +32,13 @@ public class MyPageController {
 
 
 	@PatchMapping("/nickname")
-	public ResponseEntity<?> updateNickname(){
-		return null;
+	public ResponseEntity<?> updateNickname(String userId, String nickname){
+		try {
+			memberProfileService.updateNickname(userId, nickname);
+		}catch (IllegalArgumentException e){
+			return BaseResponse.fail(e.getMessage(), 400);
+		}
+		return BaseResponse.ok(HttpStatus.OK, "닉네임 변경 완료");
 	}
 
 	@GetMapping("/feedbacks&roomid={roomid}")

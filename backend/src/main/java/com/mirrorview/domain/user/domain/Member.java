@@ -39,4 +39,6 @@ public class Member {
 	public void updatePhoto(String updatePhoto){
 		this.photo = updatePhoto;
 	}
+
+	public void updateNickName(String nickname){this.nickname = nickname;}
 }
