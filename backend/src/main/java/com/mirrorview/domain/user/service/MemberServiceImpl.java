@@ -1,5 +1,7 @@
 package com.mirrorview.domain.user.service;
 
+import java.util.Optional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,13 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Member findByUserId(String userId) {
 		return memberRepository.findByUserId(userId);
+	}
+
+	@Override
+	public String findByEmail(String email) {
+		Optional<Member> findMemberByEmail = memberRepository.findByEmail(email);
+		return findMemberByEmail.map(member -> member.getUserId() + "***")
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
 	}
 
 	@Override

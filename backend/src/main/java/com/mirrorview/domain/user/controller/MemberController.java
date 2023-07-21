@@ -30,7 +30,7 @@ public class MemberController {
 	public ResponseEntity<?> join(@RequestBody JoinDto joinDto) {
 		//todo check되어있는지 확인하기
 		try {
-			emailService.checkEmail(joinDto.getEmail());
+			// emailService.checkEmail(joinDto.getEmail());
 			memberService.save(joinDto);
 		} catch (Exception e) {
 			return BaseResponse.fail(e.getMessage(), 400);
@@ -84,4 +84,18 @@ public class MemberController {
 		return BaseResponse.ok(HttpStatus.OK, "사용 가능한 닉네임입니다.");
 	}
 
+	@GetMapping("/find/id")
+	public ResponseEntity<?> findUserId(@RequestBody Map<String, String> map) {
+		if (!map.containsKey("email")) {
+			return BaseResponse.fail("잘못된 데이터 형식입니다.", 500);
+		}
+		String email = map.get("email");
+		String findUserId;
+		try {
+			findUserId = memberService.findByEmail(email);
+		} catch (Exception e) {
+			return BaseResponse.fail(e.getMessage(), 400);
+		}
+		return BaseResponse.okWithData(HttpStatus.OK,"사용자 아이디 조회 완료",findUserId);
+	}
 }

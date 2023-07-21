@@ -11,4 +11,6 @@ public interface MemberService {
 	boolean duplicatedNickname(String nickname);
 
 	Member findByUserId(String userId);
+
+	String findByEmail(String email);
 }
