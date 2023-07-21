@@ -14,33 +14,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "member")
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Member {
+@Table(name = "email_key")
+@Builder
+public class EmailKey {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "userid")
-	private String userId;
-
-	private String username;
-
-	private String password;
-
-	private String nickname;
-
 	private String email;
 
-	private String photo;
+	@Column(name = "code")
+	private String key;
 
-	public void updatePhoto(String updatePhoto){
-		this.photo = updatePhoto;
+	@Column(nullable = false, columnDefinition = "TINYINT(1)")
+	private Boolean checked;
+
+	public void check() {
+		this.checked = true;
 	}
-
-	public void updateNickName(String nickname){this.nickname = nickname;}
 }
