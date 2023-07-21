@@ -23,7 +23,7 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void save(JoinDto joinDto) {
 		if (duplicatedUserId(joinDto.getUserId())) {
-			throw new IllegalArgumentException("중복 에러");
+			throw new IllegalArgumentException("아이디 확인이 필요합니다.");
 		}
 		Member joinMember = joinDto.toEntity();
 

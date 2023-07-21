@@ -30,9 +30,10 @@ public class MemberController {
 	public ResponseEntity<?> join(@RequestBody JoinDto joinDto) {
 		//todo check되어있는지 확인하기
 		try {
+			emailService.checkEmail(joinDto.getEmail());
 			memberService.save(joinDto);
 		} catch (Exception e) {
-			return BaseResponse.fail("회원가입 실패", 400);
+			return BaseResponse.fail(e.getMessage(), 400);
 		}
 		return BaseResponse.okWithData(HttpStatus.OK, "회원가입 완료", joinDto);
 	}

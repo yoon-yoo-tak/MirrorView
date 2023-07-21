@@ -56,8 +56,24 @@ public class EmailServiceImpl implements EmailService {
 		return false;
 	}
 
+	@Override
+	public void checkEmail(String email) {
+		Optional<EmailKey> findEmail = getByEmail(email);
+		if (findEmail.isEmpty()) {
+			throw new IllegalArgumentException("이메일을 다시 확인해 주세요");
+		}
+		EmailKey emailKey = findEmail.get();
+		if (!emailKey.getChecked()) {
+			throw new IllegalArgumentException("이메일 검증이 필요합니다.");
+		}
+	}
+
+	private Optional<EmailKey> getByEmail(String email) {
+		return emailKeyRepository.findByEmail(email);
+	}
+
 	private void saveEmailKey(EmailKey emailKey) {
-		Optional<EmailKey> findEmail = emailKeyRepository.findByEmail(emailKey.getEmail());
+		Optional<EmailKey> findEmail = getByEmail(emailKey.getEmail());
 		findEmail.ifPresent(emailKeyRepository::delete);
 		emailKeyRepository.save(emailKey);
 	}
@@ -137,7 +153,7 @@ public class EmailServiceImpl implements EmailService {
 			+ "<div class='container'>"
 			+ "<h2>안녕하세요? 미러뷰입니다.</h2>"
 			+ "<p>아래 인증 번호를 입력하시고 회원가입을 계속 진행해주세요.</p>"
-			+ "<p>인증번호: <span class='verification'>"+key+"</span></p>"
+			+ "<p>인증번호: <span class='verification'>" + key + "</span></p>"
 			+ "<p class='note'>* 인증번호는 10분간 유효합니다.</p>"
 			+ "</div>"
 			+ "</body>"
