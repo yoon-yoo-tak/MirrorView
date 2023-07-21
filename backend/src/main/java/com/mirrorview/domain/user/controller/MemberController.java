@@ -69,4 +69,19 @@ public class MemberController {
 		return BaseResponse.fail("이메일 전송 오류", 500);
 	}
 
+	@GetMapping("/{nickname}/check-nickname")
+	public ResponseEntity<?> checkNickname(@PathVariable String nickname) {
+		try {
+			boolean isDuplicated = memberService.duplicatedNickname(nickname);
+			if (isDuplicated) {
+				throw new IllegalArgumentException("중복된 닉네임 입니다.");
+			}
+		} catch (IllegalArgumentException e) {
+			return BaseResponse.fail(e.getMessage(), 400);
+		} catch (Exception e) {
+			return BaseResponse.fail("서버에러", 500);
+		}
+		return BaseResponse.ok(HttpStatus.OK, "사용 가능한 닉네임입니다.");
+	}
+
 }

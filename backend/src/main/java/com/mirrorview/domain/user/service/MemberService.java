@@ -6,4 +6,6 @@ public interface MemberService {
 	boolean duplicatedUserId(String userid);
 
 	void save(JoinDto joinDto);
+
+	boolean duplicatedNickname(String nickname);
 }
