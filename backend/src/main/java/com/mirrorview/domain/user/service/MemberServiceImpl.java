@@ -1,5 +1,6 @@
 package com.mirrorview.domain.user.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mirrorview.domain.user.domain.Member;
@@ -13,7 +14,8 @@ import lombok.RequiredArgsConstructor;
 public class MemberServiceImpl implements MemberService {
 
 	private final MemberRepository memberRepository;
-	// private final PasswordEncoder passwordEncoder;
+
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public boolean duplicatedUserId(String userId) {
@@ -25,9 +27,17 @@ public class MemberServiceImpl implements MemberService {
 		if (duplicatedUserId(joinDto.getUserId())) {
 			throw new IllegalArgumentException("아이디 확인이 필요합니다.");
 		}
+
+		String encoded = passwordEncoder.encode(joinDto.getPassword());
+		joinDto.setPassword(encoded);
 		Member joinMember = joinDto.toEntity();
 
 		memberRepository.save(joinMember);
+	}
+
+	@Override
+	public Member findByUserId(String userId) {
+		return memberRepository.findByUserId(userId);
 	}
 
 	@Override
