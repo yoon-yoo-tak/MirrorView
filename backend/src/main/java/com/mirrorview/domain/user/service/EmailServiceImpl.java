@@ -89,10 +89,59 @@ public class EmailServiceImpl implements EmailService {
 	private MimeMessage createMessage(String email, String key) throws Exception {
 		MimeMessage message = emailSender.createMimeMessage();
 		final String subject = "Mirror View 이메일 인증";
-		String msg = "<div style='border: 1px solid black; padding: 10px; font-family: verdana;'>";
-		msg += "<h2>안녕하세요? 미러뷰 입니다.</h2>";
-		msg += "<p>아래 인증 번호를 입력하시고 회원가입을 계속 진행해 주세요.</p>";
-		msg += "<p>인증번호 : <span style='color: blue;'>" + key + "</span></p></div>";
+		String msg = "<!DOCTYPE html>"
+			+ "<html>"
+			+ "<head>"
+			+ "<title>이메일 인증</title>"
+			+ "<style>"
+			+ "body {"
+			+ "font-family: 'Helvetica', Arial, sans-serif;"
+			+ "background-color: #f5f5f5;"
+			+ "display: flex;"
+			+ "justify-content: center;"
+			+ "align-items: center;"
+			+ "height: 100vh;"
+			+ "margin: 0;"
+			+ "}"
+			+ ".container {"
+			+ "max-width: 500px;"
+			+ "border: 2px solid #ccc;"
+			+ "border-radius: 8px;"
+			+ "background-color: #fff;"
+			+ "padding: 30px;"
+			+ "text-align: center;"
+			+ "box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"
+			+ "}"
+			+ "h2 {"
+			+ "color: #333;"
+			+ "margin-bottom: 20px;"
+			+ "}"
+			+ ".verification {"
+			+ "color: #007bff;"
+			+ "font-size: 18px;"
+			+ "font-weight: bold;"
+			+ "border: 2px solid #007bff;"
+			+ "padding: 8px 16px;"
+			+ "border-radius: 8px;"
+			+ "}"
+			+ "p {"
+			+ "margin: 10px 0;"
+			+ "}"
+			+ ".note {"
+			+ "font-size: 12px;"
+			+ "color: #777;"
+			+ "}"
+			+ "</style>"
+			+ "</head>"
+			+ "<body>"
+			+ "<div class='container'>"
+			+ "<h2>안녕하세요? 미러뷰입니다.</h2>"
+			+ "<p>아래 인증 번호를 입력하시고 회원가입을 계속 진행해주세요.</p>"
+			+ "<p>인증번호: <span class='verification'>"+key+"</span></p>"
+			+ "<p class='note'>* 인증번호는 10분간 유효합니다.</p>"
+			+ "</div>"
+			+ "</body>"
+			+ "</html>";
 
 		message.addRecipients(Message.RecipientType.TO, email);
 		message.setSubject(subject);
