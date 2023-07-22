@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mirrorview.domain.user.domain.Member;
+import com.mirrorview.domain.user.dto.FindMemberRequestDto;
 import com.mirrorview.domain.user.dto.JoinDto;
 import com.mirrorview.domain.user.service.EmailService;
 import com.mirrorview.domain.user.service.MemberService;
@@ -85,17 +87,33 @@ public class MemberController {
 	}
 
 	@GetMapping("/find/id")
-	public ResponseEntity<?> findUserId(@RequestBody Map<String, String> map) {
-		if (!map.containsKey("email")) {
+	public ResponseEntity<?> findUserId(@RequestBody FindMemberRequestDto requestDto) {
+
+		if (requestDto == null || requestDto.isBlankEmail()) {
 			return BaseResponse.fail("잘못된 데이터 형식입니다.", 500);
 		}
-		String email = map.get("email");
 		String findUserId;
 		try {
-			findUserId = memberService.findByEmail(email);
+			findUserId = memberService.findByEmail(requestDto.getEmail());
 		} catch (Exception e) {
 			return BaseResponse.fail(e.getMessage(), 400);
 		}
-		return BaseResponse.okWithData(HttpStatus.OK,"사용자 아이디 조회 완료",findUserId);
+		return BaseResponse.okWithData(HttpStatus.OK, "사용자 아이디 조회 완료", findUserId);
+	}
+
+	@GetMapping("/find/password")
+	public ResponseEntity<?> findPassword(@RequestBody FindMemberRequestDto requestDto) {
+		//todo email html 문장 변형하기
+
+		if (requestDto == null || requestDto.isBlankEmailAndUserId()) {
+			return BaseResponse.fail("잘못된 데이터 형식입니다.", 500);
+		}
+		try {
+			Member findMember = memberService.findPassword(requestDto);
+			emailService.sendEmail(findMember);
+		} catch (Exception e) {
+			return BaseResponse.fail(e.getMessage(), 400);
+		}
+		return BaseResponse.ok(HttpStatus.OK, "이메일 전송 완료");
 	}
 }

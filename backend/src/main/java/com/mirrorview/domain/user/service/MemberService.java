@@ -1,6 +1,7 @@
 package com.mirrorview.domain.user.service;
 
 import com.mirrorview.domain.user.domain.Member;
+import com.mirrorview.domain.user.dto.FindMemberRequestDto;
 import com.mirrorview.domain.user.dto.JoinDto;
 
 public interface MemberService {
@@ -13,4 +14,6 @@ public interface MemberService {
 	Member findByUserId(String userId);
 
 	String findByEmail(String email);
+
+	Member findPassword(FindMemberRequestDto requestDto);
 }

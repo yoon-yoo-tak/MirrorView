@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mirrorview.domain.user.domain.Member;
+import com.mirrorview.domain.user.dto.FindMemberRequestDto;
 import com.mirrorview.domain.user.dto.JoinDto;
 import com.mirrorview.domain.user.repository.MemberRepository;
 
@@ -47,6 +48,16 @@ public class MemberServiceImpl implements MemberService {
 		Optional<Member> findMemberByEmail = memberRepository.findByEmail(email);
 		return findMemberByEmail.map(member -> member.getUserId() + "***")
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
+	}
+
+	@Override
+	public Member findPassword(FindMemberRequestDto requestDto) {
+		Optional<Member> findMember = memberRepository.findByEmailAndUserId(requestDto.getEmail(),
+			requestDto.getUserId());
+		if (findMember.isEmpty()) {
+			throw new IllegalArgumentException("일치하는 계정이 존재하지 않습니다.");
+		}
+		return findMember.get();
 	}
 
 	@Override
