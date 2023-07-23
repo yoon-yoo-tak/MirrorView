@@ -1,5 +1,7 @@
 package com.mirrorview.domain.user.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,7 +12,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mirrorview.domain.essay.domain.Essay;
+import com.mirrorview.domain.essay.domain.EssayDetail;
+import com.mirrorview.domain.essay.service.EssayDetailService;
+import com.mirrorview.domain.essay.service.EssayService;
+import com.mirrorview.domain.feedback.domain.Feedback;
+import com.mirrorview.domain.feedback.service.FeedbackService;
+import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.service.MemberProfileService;
+import com.mirrorview.domain.user.service.MemberService;
 import com.mirrorview.global.response.BaseResponse;
 
 import io.swagger.annotations.Api;
@@ -23,70 +33,79 @@ import lombok.RequiredArgsConstructor;
 public class MyPageController {
 
 	private final MemberProfileService memberProfileService;
+	private final MemberService memberService;
+	private final EssayService essayService;
+	private final EssayDetailService essayDetailService;
+	private final FeedbackService feedbackService;
 
 	@PatchMapping("/image")
-	public ResponseEntity<?> updateImage(String userId, String photo){
+	public ResponseEntity<?> updateImage(String userId, String photo) {
 		memberProfileService.updatePhoto(userId, photo);
 		return BaseResponse.ok(HttpStatus.OK, "프로필 사진 수정 완료");
 	}
 
-
 	@PatchMapping("/nickname")
-	public ResponseEntity<?> updateNickname(String userId, String nickname){
+	public ResponseEntity<?> updateNickname(String userId, String nickname) {
 		try {
 			memberProfileService.updateNickname(userId, nickname);
-		}catch (IllegalArgumentException e){
+		} catch (IllegalArgumentException e) {
 			return BaseResponse.fail(e.getMessage(), 400);
 		}
 		return BaseResponse.ok(HttpStatus.OK, "닉네임 변경 완료");
 	}
 
 	@GetMapping("/feedbacks&roomid={roomid}")
-	public ResponseEntity<?> showFeedbacks(){
+	public ResponseEntity<?> showFeedbacks() {
 		return null;
 	}
 
 	@DeleteMapping("/feedbacks/{feedbackid}")
-	public ResponseEntity<?> deleteFeedbacks(){
+	public ResponseEntity<?> deleteFeedbacks() {
 		return null;
 	}
 
-
 	@GetMapping("/feedbacks?feedbackid={feedbackid}")
-	public ResponseEntity<?> detailFeedback(){
+	public ResponseEntity<?> detailFeedback() {
 		return null;
 	}
 
 	@GetMapping("/feedbacks")
-	public ResponseEntity<?> listFeedbacks(){
-		return null;
+	public ResponseEntity<?> listFeedbacks(String userId) {
+		// try {
+		// String testId = "test";
+		// System.out.println(testId);
+		Member member = memberService.findByUserId(userId);
+		Essay essay = essayService.findByMemberId(member.getId());
+		EssayDetail essayDetail = essayDetailService.findByEssayId(essay.getId());
+		List<Feedback> feedbackList = feedbackService.findAllByEssayDetailId(essayDetail.getId());
+		// } catch () {
+		//
+		// }
+		return BaseResponse.okWithData(HttpStatus.OK, "피드백들 불러오기 성공", feedbackList);
 	}
 
-
-
-
 	@PutMapping("/essays")
-	public ResponseEntity<?> updateEssays(){
+	public ResponseEntity<?> updateEssays() {
 		return null;
 	}
 
 	@PostMapping("/essays")
-	public ResponseEntity<?> createEssays(){
+	public ResponseEntity<?> createEssays() {
 		return null;
 	}
 
 	@GetMapping("/essays")
-	public ResponseEntity<?> showEssays(){
+	public ResponseEntity<?> showEssays() {
 		return null;
 	}
 
 	@GetMapping("/essays/{essay-id}")
-	public ResponseEntity<?> detailEssays(){
+	public ResponseEntity<?> detailEssays() {
 		return null;
 	}
 
 	@DeleteMapping("/essays/{essay-id}")
-	public ResponseEntity<?> deleteEssays(){
+	public ResponseEntity<?> deleteEssays() {
 		return null;
 	}
 }
