@@ -37,7 +37,7 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		http
-			.cors().disable()
+			.cors().configurationSource(corsConfigurationSource()).and()
 			.csrf().disable()
 			.httpBasic().disable()
 			.sessionManagement()
@@ -52,7 +52,11 @@ public class SecurityConfig {
 			// .antMatchers("/**").permitAll()
 			.antMatchers("/api/users/login").permitAll() //로그인
 			// .antMatchers("/").permitAll() // 메인페이지
-			.antMatchers("/api/users").permitAll() //회원 가입
+			.antMatchers("/api/users/**").permitAll() //회원 가입
+			.antMatchers("/ws/**").permitAll() // websocket
+			.antMatchers("/chats/**").permitAll() // websocket
+			.antMatchers("/app/**").permitAll() // websocket 이용
+			.antMatchers("/sub/**").permitAll() // 방등록
 			// .antMatchers("/hello").permitAll() //로그인
 			// .antMatchers("/hello").permitAll() //테스트
 			.anyRequest().authenticated()
@@ -98,7 +102,8 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowCredentials(true); // 쿠키를 받을건지
-		configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
+		//configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
+		configuration.addAllowedOriginPattern("*");
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE"));
 
 		configuration.addAllowedHeader("*");
