@@ -17,6 +17,7 @@ import com.mirrorview.domain.essay.domain.EssayDetail;
 import com.mirrorview.domain.essay.service.EssayDetailService;
 import com.mirrorview.domain.essay.service.EssayService;
 import com.mirrorview.domain.feedback.domain.Feedback;
+import com.mirrorview.domain.feedback.dto.FeedbackDto;
 import com.mirrorview.domain.feedback.service.FeedbackService;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.service.MemberProfileService;
@@ -33,9 +34,6 @@ import lombok.RequiredArgsConstructor;
 public class MyPageController {
 
 	private final MemberProfileService memberProfileService;
-	private final MemberService memberService;
-	private final EssayService essayService;
-	private final EssayDetailService essayDetailService;
 	private final FeedbackService feedbackService;
 
 	@PatchMapping("/image")
@@ -71,17 +69,9 @@ public class MyPageController {
 
 	@GetMapping("/feedbacks")
 	public ResponseEntity<?> listFeedbacks(String userId) {
-		// try {
-		// String testId = "test";
-		// System.out.println(testId);
-		Member member = memberService.findByUserId(userId);
-		Essay essay = essayService.findByMemberId(member.getId());
-		EssayDetail essayDetail = essayDetailService.findByEssayId(essay.getId());
-		List<Feedback> feedbackList = feedbackService.findAllByEssayDetailId(essayDetail.getId());
-		// } catch () {
-		//
-		// }
-		return BaseResponse.okWithData(HttpStatus.OK, "피드백들 불러오기 성공", feedbackList);
+		String test = "test";
+		List<FeedbackDto> list = feedbackService.findFeedbackByUserId(test);
+		return BaseResponse.okWithData(HttpStatus.OK, "피드백 불러오기 성공", list);
 	}
 
 	@PutMapping("/essays")
