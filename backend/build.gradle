@@ -1,4 +1,3 @@
-<<<<<<< backend/build.gradle
 buildscript {
 	ext {
 		queryDslVersion = "5.0.0"
