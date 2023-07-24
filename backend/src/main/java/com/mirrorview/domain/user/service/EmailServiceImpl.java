@@ -138,7 +138,7 @@ public class EmailServiceImpl implements EmailService {
 		message.addRecipients(Message.RecipientType.TO, email);
 		message.setSubject(subject);
 		message.setText(msg, "utf-8", "html");
-		message.setFrom(new InternetAddress("gsl0505@naver.com", "mirrorView"));
+		message.setFrom(new InternetAddress("chakunyou@naver.com", "mirrorView"));
 
 		return message;
 	}
