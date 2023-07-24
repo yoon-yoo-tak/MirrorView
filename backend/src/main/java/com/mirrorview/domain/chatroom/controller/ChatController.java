@@ -11,6 +11,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,14 +51,37 @@ public class ChatController {
 		return BaseResponse.ok(HttpStatus.OK, "채팅방이 생성되었습니다.");
 	}
 
-	// 채팅방 가져오기
+	// 나의 채팅방 가져오기
 	@GetMapping("/api/chats")
-	public ResponseEntity createChatRoom(@AuthenticationPrincipal UserDetails userDetails) {
-		log.info("방 가져오기");
+	public ResponseEntity<?> createChatRoom(@AuthenticationPrincipal UserDetails userDetails) {
+		log.info("나의 오픈 채팅 방 가져오기");
 		String userName = userDetails.getUsername();
 		List<ChatRoom> chatRoomList = userChatRoomService.findByUserChatRoom(userName);
+		System.out.println(chatRoomList);
 
-		return BaseResponse.ok(HttpStatus.OK, "채팅방이 생성되었습니다.");
+		return BaseResponse.okWithData(HttpStatus.OK, "방을 불러옵니다", chatRoomList);
+	}
+
+	// 모든 채팅방 가져오기
+	@GetMapping("/api/chats/open")
+	public ResponseEntity<?> createChatRoom() {
+		log.info("모든 오픈 채팅 방 가져오기");
+		List<ChatRoom> chatRoomList = chatRoomService.findAll();
+		return BaseResponse.okWithData(HttpStatus.OK, "모든 방을 불러옵니다", chatRoomList);
+	}
+
+	// 채팅방 입장
+	@PostMapping("/api/chats/join/{room}")
+	public ResponseEntity joinChatRoom(@PathVariable String room, @AuthenticationPrincipal UserDetails userDetails) {
+		userChatRoomService.joinChatRoom(userDetails.getUsername(), room);
+		return BaseResponse.ok(HttpStatus.OK, "채팅방을 들어갔습니다.");
+	}
+
+	// 채팅방 나가기
+	@DeleteMapping("/api/chats/quit/{room}")
+	public ResponseEntity quitChatRoom(@PathVariable String room, @AuthenticationPrincipal UserDetails userDetails) {
+		userChatRoomService.quitChatRoom(userDetails.getUsername(), room);
+		return BaseResponse.ok(HttpStatus.OK, "채팅방을 나갔습니다.");
 	}
 
 	// 채팅방에 채팅보내기
@@ -71,8 +95,6 @@ public class ChatController {
 		String key = "roomName:" + room;
 		template.opsForList().rightPush(key, message);
 
-		System.out.println(message);
-
 		return message;
 	}
 
@@ -85,7 +107,6 @@ public class ChatController {
 		String key = "roomName:" + room;
 		List<ChatMessage> history = template.opsForList().range(key, 0, -1);
 
-		System.out.println(history);
 		return ResponseEntity.ok(history);
 	}
 }

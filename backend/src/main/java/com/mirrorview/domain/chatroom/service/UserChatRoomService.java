@@ -8,4 +8,8 @@ public interface UserChatRoomService {
 
 	List<ChatRoom> findByUserChatRoom(String username);
 
+	void joinChatRoom(String username, String room);
+
+	void quitChatRoom(String username, String room);
+
 }
