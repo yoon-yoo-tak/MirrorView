@@ -60,9 +60,15 @@ public class MyPageController {
 		return BaseResponse.okWithData(HttpStatus.OK, "방별 피드백 불러오기 성공", list);
 	}
 
-	@DeleteMapping("/feedbacks/{feedbackid}")
-	public ResponseEntity<?> deleteFeedbacks() {
-		return null;
+	@DeleteMapping("/feedbacks/feedback/{feedbackId}")
+	public ResponseEntity<?> deleteFeedbacks(@PathVariable("feedbackId") Long feedbackId) {
+		try{
+			feedbackService.deleteFeedbackByFeedbackId(feedbackId);
+			return BaseResponse.ok(HttpStatus.OK, "피드백 삭제 성공");
+		}catch (Exception e){  // 추후 예외처리 수정
+			return BaseResponse.fail("피드백 삭제 실패", 400);
+		}
+
 	}
 
 	@GetMapping("/feedbacks/feedback/{feedbackId}")

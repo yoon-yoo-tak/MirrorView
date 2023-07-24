@@ -52,4 +52,11 @@ public class FeedbackRepositoryCustomImpl implements FeedbackRepositoryCustom {
 			.where(qFeedback.id.eq(feedbackId))
 			.fetchOne();
 	}
+
+	@Override
+	public void deleteFeedbackByFeedbackId(Long feedbackId) {
+		queryFactory.delete(qFeedback)
+			.where(qFeedback.id.eq(feedbackId))
+			.execute();
+	}
 }

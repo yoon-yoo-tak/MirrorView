@@ -2,6 +2,8 @@ package com.mirrorview.domain.feedback.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import com.mirrorview.domain.feedback.domain.Feedback;
@@ -29,5 +31,11 @@ public class FeedbackServiceImpl implements FeedbackService {
 	@Override
 	public FeedbackDto findFeedbackByFeedbackId(Long feedbackId) {
 		return feedbackRepository.findFeedbackByFeedbackId(feedbackId);
+	}
+
+	@Override
+	@Transactional
+	public void deleteFeedbackByFeedbackId(Long feedbackId) {
+		feedbackRepository.deleteFeedbackByFeedbackId(feedbackId);
 	}
 }
