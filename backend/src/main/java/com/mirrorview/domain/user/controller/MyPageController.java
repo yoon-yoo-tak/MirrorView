@@ -65,9 +65,10 @@ public class MyPageController {
 		return null;
 	}
 
-	@GetMapping("/feedbacks?feedbackid={feedbackid}")
-	public ResponseEntity<?> detailFeedback() {
-		return null;
+	@GetMapping("/feedbacks/feedback/{feedbackId}")
+	public ResponseEntity<?> detailFeedback(@PathVariable("feedbackId") Long feedbackId) {
+		FeedbackDto data = feedbackService.findFeedbackByFeedbackId(feedbackId);
+		return BaseResponse.okWithData(HttpStatus.OK, "피드백 단건 조회 성공", data);
 	}
 
 	@GetMapping("/feedbacks")

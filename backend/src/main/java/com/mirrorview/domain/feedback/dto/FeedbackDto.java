@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeedbackDto {
+	private Long id;
 	private String content;
 	private LocalDateTime createdTime;
 	private Long roomId;

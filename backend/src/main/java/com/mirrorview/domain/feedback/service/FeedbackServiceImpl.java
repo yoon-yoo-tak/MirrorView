@@ -25,4 +25,9 @@ public class FeedbackServiceImpl implements FeedbackService {
 	public List<FeedbackDto> findFeedbackByRoomId(Long roomId){
 		return feedbackRepository.findFeedbackByRoomId(roomId);
 	}
+
+	@Override
+	public FeedbackDto findFeedbackByFeedbackId(Long feedbackId) {
+		return feedbackRepository.findFeedbackByFeedbackId(feedbackId);
+	}
 }

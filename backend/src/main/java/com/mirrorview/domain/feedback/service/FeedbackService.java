@@ -9,4 +9,5 @@ public interface FeedbackService {
 
 	List<FeedbackDto> findFeedbackByUserId(String userId);
 	List<FeedbackDto> findFeedbackByRoomId(Long roomId);
+	FeedbackDto findFeedbackByFeedbackId(Long feedbackId);
 }
