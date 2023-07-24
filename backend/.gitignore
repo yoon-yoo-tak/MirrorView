@@ -11,11 +11,9 @@ src/main/resources/dist/
 HELP.md
 .gradle
 build/
-<<<<<<< HEAD
-gradle
-=======
->>>>>>> 13ce98b (chore: git 설정파일 추가)
-!gradle/wrapper/gradle-wrapper.jar
+
+#gradle
+#!gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
