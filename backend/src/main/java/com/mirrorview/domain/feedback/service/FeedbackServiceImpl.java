@@ -17,12 +17,12 @@ public class FeedbackServiceImpl implements FeedbackService {
 	private final FeedbackRepository feedbackRepository;
 
 	@Override
-	public List<Feedback> findAllByEssayDetailId(Long essayDetailId) {
-		return feedbackRepository.findAllByEssayDetailIdOrderByCreatedTimeDesc(essayDetailId);
+	public List<FeedbackDto> findFeedbackByUserId(String userId) {
+		return feedbackRepository.findFeedbackByUserId(userId);
 	}
 
 	@Override
-	public List<FeedbackDto> findFeedbackByUserId(String userId) {
-		return feedbackRepository.findFeedbackByUserId(userId);
+	public List<FeedbackDto> findFeedbackByRoomId(Long roomId){
+		return feedbackRepository.findFeedbackByRoomId(roomId);
 	}
 }

@@ -36,4 +36,12 @@ public class FeedbackRepositoryCustomImpl implements FeedbackRepositoryCustom {
 				.and(member.userId.eq(userId)))
 			.fetch();
 	}
+
+	@Override
+	public List<FeedbackDto> findFeedbackByRoomId(Long roomId) {
+		return queryFactory.select(Projections.constructor(FeedbackDto.class, qFeedback.content, qFeedback.createdTime, qFeedback.roomId))
+			.from(qFeedback)
+			.where(qFeedback.roomId.eq(roomId))
+			.fetch();
+	}
 }

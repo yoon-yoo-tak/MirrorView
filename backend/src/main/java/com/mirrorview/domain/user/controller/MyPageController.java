@@ -7,9 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mirrorview.domain.essay.domain.Essay;
@@ -52,9 +54,10 @@ public class MyPageController {
 		return BaseResponse.ok(HttpStatus.OK, "닉네임 변경 완료");
 	}
 
-	@GetMapping("/feedbacks&roomid={roomid}")
-	public ResponseEntity<?> showFeedbacks() {
-		return null;
+	@GetMapping("/feedbacks/{roomId}")
+	public ResponseEntity<?> showFeedbacks(@PathVariable("roomId") Long roomId) {
+		List<FeedbackDto> list = feedbackService.findFeedbackByRoomId(roomId);
+		return BaseResponse.okWithData(HttpStatus.OK, "방별 피드백 불러오기 성공", list);
 	}
 
 	@DeleteMapping("/feedbacks/{feedbackid}")

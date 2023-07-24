@@ -7,6 +7,6 @@ import com.mirrorview.domain.feedback.dto.FeedbackDto;
 
 public interface FeedbackService {
 
-	List<Feedback> findAllByEssayDetailId(Long essayDetailId);
 	List<FeedbackDto> findFeedbackByUserId(String userId);
+	List<FeedbackDto> findFeedbackByRoomId(Long roomId);
 }

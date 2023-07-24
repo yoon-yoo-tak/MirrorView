@@ -8,4 +8,5 @@ import com.mirrorview.domain.feedback.dto.FeedbackDto;
 public interface FeedbackRepositoryCustom {
 
 	List<FeedbackDto> findFeedbackByUserId(String userId);
+	List<FeedbackDto> findFeedbackByRoomId(Long roomId);
 }
