@@ -26,7 +26,7 @@ public class FeedbackRepositoryCustomImpl implements FeedbackRepositoryCustom {
 	QMember member = QMember.member;
 	@Override
 	public List<FeedbackDto> findFeedbackByUserId(String userId){
-		return queryFactory.select(Projections.constructor(FeedbackDto.class, qFeedback.content, qFeedback.createdTime))
+		return queryFactory.select(Projections.constructor(FeedbackDto.class, qFeedback.content, qFeedback.createdTime, qFeedback.roomId))
 			.from(qFeedback)
 			.join(qFeedback.essayDetail, essayDetail)
 			.join(essayDetail.essay, essay)
