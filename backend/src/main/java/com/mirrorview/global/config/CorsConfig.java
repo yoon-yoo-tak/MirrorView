@@ -18,7 +18,8 @@ public class CorsConfig {
 		config.setAllowCredentials(true);
 		//      config.addAllowedOrigin("*");
 		//      config.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
-		config.setAllowedOriginPatterns(Arrays.asList("http://localhost:8080"));
+		//		config.setAllowedOriginPatterns(Arrays.asList("http://localhost:8080"));
+		config.addAllowedOriginPattern("*");
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
 		source.registerCorsConfiguration("/**", config);
