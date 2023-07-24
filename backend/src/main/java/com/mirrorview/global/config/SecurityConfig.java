@@ -53,10 +53,7 @@ public class SecurityConfig {
 			.antMatchers("/api/users/login").permitAll() //로그인
 			// .antMatchers("/").permitAll() // 메인페이지
 			.antMatchers("/api/users/**").permitAll() //회원 가입
-			.antMatchers("/ws/**").permitAll() // websocket
-			.antMatchers("/chats/**").permitAll() // websocket
-			.antMatchers("/app/**").permitAll() // websocket 이용
-			.antMatchers("/sub/**").permitAll() // 방등록
+			.antMatchers("/ws/**").permitAll()
 			// .antMatchers("/hello").permitAll() //로그인
 			// .antMatchers("/hello").permitAll() //테스트
 			.anyRequest().authenticated()
