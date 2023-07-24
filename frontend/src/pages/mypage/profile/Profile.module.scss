@@ -1,0 +1,23 @@
+.profilePage {
+    // margin: 100px auto;
+    display: flex;
+    justify-content: center;
+}
+
+.profileWrap {
+    flex: 4;
+}
+
+.profileInfo {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.profileKey {
+    flex: 1;
+}
+
+.profileDetail {
+    flex: 2;
+}
