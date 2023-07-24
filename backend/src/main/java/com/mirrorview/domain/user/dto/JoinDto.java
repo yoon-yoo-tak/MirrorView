@@ -19,7 +19,7 @@ public class JoinDto {
 	private String password;
 	private String email;
 
-	public Member toEntity(){
+	public Member toEntity() {
 		return Member.builder()
 			.userId(userId)
 			.username(username)

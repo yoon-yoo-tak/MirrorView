@@ -38,9 +38,15 @@ public class Member {
 
 	private String photo;
 
-	public void updatePhoto(String updatePhoto){
+	public void updatePhoto(String updatePhoto) {
 		this.photo = updatePhoto;
 	}
 
-	public void updateNickName(String nickname){this.nickname = nickname;}
+	public void updateNickName(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public void updatePassword(String password) {
+		this.password = password;
+	}
 }
