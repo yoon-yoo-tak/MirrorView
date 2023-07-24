@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.mirrorview.domain.essay.domain.Essay;
 
 public interface EssayRepository extends JpaRepository<Essay, Long> {
-
+	Essay findByMemberId(Long memberId);
 
 }
