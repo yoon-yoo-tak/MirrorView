@@ -5,6 +5,7 @@ import Feedback from "./feedback/Feedback";
 import MyEssay from "./essay/MyEssay";
 import EssayCreate from "./essay/EssayCreate";
 import EssayDetail from "./essay/EssayDetail";
+import EssayUpdate from "./essay/EssayUpdate";
 import Profile from "./profile/Profile";
 import ChangeEmail from "./profile/ChangeEmail";
 import ChangeNickname from "./profile/ChangeNickname";
@@ -21,6 +22,10 @@ const MyPage = () => {
                 <Route path="myessay" element={<MyEssay />} />
                 <Route path="essaycreate" element={<EssayCreate />} />
                 <Route path="essaydetail/:id" element={<EssayDetail />} />
+                <Route
+                    path="essaydetail/:id/update"
+                    element={<EssayUpdate />}
+                />
                 <Route path="changepassword" element={<ChangePassword />} />
             </Routes>
         </div>

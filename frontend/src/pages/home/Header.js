@@ -1,22 +1,23 @@
 import React from "react";
 import classes from "./Header.module.scss";
+import logo from "../../assets/mirlogo.png";
 // import styled from "styled-components";
 
 const Header = () => {
-  return (
-    <div className={classes.header}>
-      <div className={classes.logo} />
-      <div className={classes.navMenu}>
-        <div className={classes.navItem}>About us</div>
-        <div className={classes.navItem}>Features</div>
-        <div className={classes.navItem}>Pricing</div>
-        <div className={classes.navItem}>Blog</div>
-        <div className={classes.loginNavItem}>
-          <div className={classes.navItem}>로그인</div>
+    return (
+        <div className={classes.header}>
+            <img src={logo} className={classes.logo} alt="Logo" />
+            <div className={classes.navMenu}>
+                <div className={classes.navItem}>About us</div>
+                <div className={classes.navItem}>Features</div>
+                <div className={classes.navItem}>Pricing</div>
+                <div className={classes.navItem}>Blog</div>
+                <div className={classes.loginNavItem}>
+                    <div className={classes.navItem}>로그인</div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 // const Logo = styled.div`

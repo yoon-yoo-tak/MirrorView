@@ -1,14 +1,51 @@
 .sidebarWrap {
-    width: 300px;
-    // height: 400px;
-    // margin-top: -15px;
-    // margin-right: 70px;
+    background-image: url(../../../public/sidebar-background.png);
+    width: 280px;
+    height: 855px;
     flex: 1;
 }
 
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+.nanumgothic * {
+    font-family: "Nanum Gothic", sans-serif;
+}
+
+.sideMenuWrap {
+    padding: 30px 0 0 20px;
+}
+
 .sideMenu {
-    // font-family: "Apple_Gothic_Neo_Mid";
-    text-align: left;
-    font-size: 24px;
+    // text-align: left;
+    height: 27px;
+    display: flex;
+    // align-items: left;
+    justify-content: left;
+    font-size: 15px;
     padding: 15px 5px;
+    display: flex;
+    align-items: center;
+    border-radius: 30px 0 0 30px;
+    font-family: "Nanum Gothic";
+}
+
+.sideMenuNow {
+    // text-align: left;
+    height: 27px;
+    display: flex;
+    // align-items: left;
+    justify-content: left;
+    font-size: 15px;
+    padding: 15px 5px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 30px 0 0 30px;
+    font-family: "Nanum Gothic";
+}
+
+.icons {
+    width: 20px;
+    height: 20px;
+    margin: 0 10px 0 10px;
 }
