@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,6 +39,15 @@ public class ChatController {
 	private final ChatRoomService chatRoomService;
 	private final UserChatRoomService userChatRoomService;
 	private final RedisTemplate<String, ChatMessage> template;
+
+	private final SimpMessagingTemplate simpMessagingTemplate;
+	
+	// 일대일 채팅
+	@MessageMapping("/chat/{userId}")
+	public void sendSpecific(@DestinationVariable String userId, String message) {
+		log.info("{} 에게, {}를 전송함", userId, message);
+		simpMessagingTemplate.convertAndSend("/queue/chat/" + userId, message);
+	}
 
 	// 채팅방 만들기
 	@PostMapping("/api/chats/open/{room}")

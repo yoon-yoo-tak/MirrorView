@@ -20,6 +20,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.SignatureGenerationException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 /**
  * jwt 토큰 유틸 정의.
@@ -43,6 +44,28 @@ public class JwtTokenUtil {
 			.require(Algorithm.HMAC512(secretKey.getBytes()))
 			.withIssuer(ISSUER)
 			.build();
+	}
+
+	public static JWTVerifier getVerifier(String token) {
+		return JWT
+			.require(Algorithm.HMAC512(secretKey.getBytes()))
+			.withIssuer(ISSUER)
+			.build();
+	}
+
+	public static boolean validateToken(String token) {
+		try {
+			JWTVerifier verifier = getVerifier(token);
+			verifier.verify(token);
+			return true;
+		} catch (JWTVerificationException ex) {
+			return false;
+		}
+	}
+
+	public static String getUsernameFromToken(String token) {
+		DecodedJWT jwt = JWT.decode(token);
+		return jwt.getSubject();
 	}
 
 	public static String getToken(String userId) {
