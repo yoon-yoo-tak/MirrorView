@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,6 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.mirrorview.domain.user.service.MemberService;
 import com.mirrorview.global.auth.jwt.CustomMemberDetailService;
 import com.mirrorview.global.auth.jwt.JwtAuthenticationFilter;
+import com.mirrorview.global.auth.jwt.RestAuthenticationEntryPoint;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +34,7 @@ public class SecurityConfig {
 	private final MemberService memberService;
 	private final CustomMemberDetailService customMemberDetailService;
 	private final PasswordEncoder passwordEncoder;
+	private final RedisTemplate<String, String> template;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,6 +43,7 @@ public class SecurityConfig {
 			.cors().configurationSource(corsConfigurationSource()).and()
 			.csrf().disable()
 			.httpBasic().disable()
+			.formLogin().disable()
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
@@ -57,8 +61,9 @@ public class SecurityConfig {
 			// .antMatchers("/hello").permitAll() //로그인
 			// .antMatchers("/hello").permitAll() //테스트
 			.anyRequest().authenticated()
-			.and() // 그 외 모든 요청에 대해 인증 필요
-			.formLogin().disable();
+			.and()
+			.exceptionHandling()
+			.authenticationEntryPoint(new RestAuthenticationEntryPoint()); // 그 외 모든 요청에 대해 인증 필요
 
 		return http.build();
 	}
@@ -125,7 +130,7 @@ public class SecurityConfig {
 		public void configure(HttpSecurity http) throws Exception {
 			AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
 			http
-				.addFilterBefore(new JwtAuthenticationFilter(authenticationManager, memberService),
+				.addFilterBefore(new JwtAuthenticationFilter(authenticationManager, memberService, template),
 					UsernamePasswordAuthenticationFilter.class);
 		}
 	}
