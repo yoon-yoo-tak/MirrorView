@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,11 +15,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.service.MemberService;
-import com.mirrorview.global.response.BaseResponse;
 import com.mirrorview.global.util.JwtTokenUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,19 +28,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 	private MemberService memberService;
+	private RedisTemplate<String, String> template;
 
-	public JwtAuthenticationFilter(AuthenticationManager authenticationManager, MemberService memberService) {
+	public JwtAuthenticationFilter(AuthenticationManager authenticationManager, MemberService memberService,
+		RedisTemplate<String, String> template) {
 		super(authenticationManager);
 		this.memberService = memberService;
+		this.template = template;
 	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 		throws ServletException, IOException {
-		// Read the Authorization header, where the JWT Token should be
+		// Header의 Key값을 통해 PREFIX를 받기
 		String header = request.getHeader(JwtTokenUtil.HEADER_STRING);
 
-		// If header does not contain BEARER or is null delegate to Spring impl and exit
+		// Header의 PREFIX가 일치하지 않는다면 다른 필터를 타도록 함
 		if (header == null || !header.startsWith(JwtTokenUtil.TOKEN_PREFIX)) {
 			filterChain.doFilter(request, response);
 			return;
@@ -49,10 +54,21 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 			Authentication authentication = getAuthentication(request);
 			// jwt 토큰으로 부터 획득한 인증 정보(authentication) 설정.
 			SecurityContextHolder.getContext().setAuthentication(authentication);
+		} catch (TokenExpiredException ex) {
+
+			// log.info("token expired!!");
+			// log.info("token = {}", request.getHeader(JwtTokenUtil.HEADER_STRING));
+			// String token = request.getHeader(JwtTokenUtil.HEADER_STRING);
+			// String userId = JWT.decode(token.replace(JwtTokenUtil.TOKEN_PREFIX, "")).getSubject();
+			// String refreshToken = template.opsForValue().get("refresh " + userId);
+			// log.info("refresh token = {}", refreshToken);
+			//
+			// JWTVerifier verifier = JwtTokenUtil.getVerifier();
+			// DecodedJWT decodedJWT = verifier.verify(refreshToken);
+			request.setAttribute("expired", ex);
+
 		} catch (Exception ex) {
-			// ResponseBodyWriteUtil.sendError(request, response, ex);
-			BaseResponse.fail("Unauthorized", 401);
-			return;
+			request.setAttribute("exception", ex.getMessage());
 		}
 
 		filterChain.doFilter(request, response);
@@ -78,7 +94,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 					// 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
 					CustomMemberDetails userDetails = new CustomMemberDetails(member);
 					UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(
-						userId,
+						userDetails,
 						null, userDetails.getAuthorities());
 					jwtAuthentication.setDetails(userDetails);
 					log.info("JWT Auth OK!");
