@@ -1,0 +1,35 @@
+@font-face {
+    font-family: "HakgyoansimWoojuR";
+    src: url("../../../fonts/HakgyoansimWoojuR.ttf") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+}
+
+.profilePage {
+    // margin: 100px auto;
+    display: flex;
+    justify-content: center;
+    font-family: "HakgyoansimWoojuR";
+}
+
+.profileWrap {
+    flex: 4;
+    margin: 30px 50px;
+}
+h2 {
+    margin: 0;
+}
+
+.profileInfo {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.profileKey {
+    flex: 1;
+}
+
+.profileDetail {
+    flex: 2;
+}

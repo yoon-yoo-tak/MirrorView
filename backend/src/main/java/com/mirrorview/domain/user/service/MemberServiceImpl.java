@@ -1,0 +1,67 @@
+package com.mirrorview.domain.user.service;
+
+import java.util.Optional;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.mirrorview.domain.user.domain.Member;
+import com.mirrorview.domain.user.dto.FindMemberRequestDto;
+import com.mirrorview.domain.user.dto.JoinDto;
+import com.mirrorview.domain.user.repository.MemberRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class MemberServiceImpl implements MemberService {
+
+	private final MemberRepository memberRepository;
+
+	private final PasswordEncoder passwordEncoder;
+
+	@Override
+	public boolean duplicatedUserId(String userId) {
+		return memberRepository.existsByUserId(userId);
+	}
+
+	@Override
+	public void save(JoinDto joinDto) {
+		if (duplicatedUserId(joinDto.getUserId())) {
+			throw new IllegalArgumentException("아이디 확인이 필요합니다.");
+		}
+
+		String encoded = passwordEncoder.encode(joinDto.getPassword());
+		joinDto.setPassword(encoded);
+		Member joinMember = joinDto.toEntity();
+
+		memberRepository.save(joinMember);
+	}
+
+	@Override
+	public Member findByUserId(String userId) {
+		return memberRepository.findByUserId(userId);
+	}
+
+	@Override
+	public String findByEmail(String email) {
+		Optional<Member> findMemberByEmail = memberRepository.findByEmail(email);
+		return findMemberByEmail.map(member -> member.getUserId() + "***")
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
+	}
+
+	@Override
+	public Member findPassword(FindMemberRequestDto requestDto) {
+		Optional<Member> findMember = memberRepository.findByEmailAndUserId(requestDto.getEmail(),
+			requestDto.getUserId());
+		if (findMember.isEmpty()) {
+			throw new IllegalArgumentException("일치하는 계정이 존재하지 않습니다.");
+		}
+		return findMember.get();
+	}
+
+	@Override
+	public boolean duplicatedNickname(String nickname) {
+		return memberRepository.existsByNickname(nickname);
+	}
+}
