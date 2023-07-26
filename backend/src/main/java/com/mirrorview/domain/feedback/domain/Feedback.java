@@ -35,8 +35,8 @@ public class Feedback {
 
 	private String content;
 
-	// @Column(name = "room_id")
-	// private Long roomId;
+	@Column(name = "room_id")
+	private Long roomId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "essay_detail_id")

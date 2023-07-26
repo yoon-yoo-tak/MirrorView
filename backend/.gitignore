@@ -1,20 +1,13 @@
 ### Secret ###
-<<<<<<< HEAD
-src/main/resources/application-secret.properties
+src/main/resources/application-secret.yml
 src/main/resources/email.properties
 src/main/generated/
 src/main/resources/dist/
-=======
-./src/main/resources/application-secret.properties
->>>>>>> 13ce98b (chore: git 설정파일 추가)
 
 HELP.md
 .gradle
 build/
-<<<<<<< HEAD
 gradle
-=======
->>>>>>> 13ce98b (chore: git 설정파일 추가)
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/

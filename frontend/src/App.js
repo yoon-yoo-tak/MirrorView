@@ -1,17 +1,32 @@
-import './App.css';
-import Home from './pages/Home/home'; 
-// import Header from './pages/Home/Header';
-import "./fonts/font.css";
-import About from './pages/Aboutus/about';
+// src/App.js
+import React from "react";
+// import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
-function App() { 
+import './App.css';
+import "./fonts/font.css";
+
+import Home from './pages/Home/home'; 
+import Login from "./pages/user/Login";
+import Signup from "./pages/user/Signup";
+import MyPage from "./pages/mypage/MyPage";
+import About from './pages/Aboutus/about';
+import Header from "./pages/home/Header";
+
+const App = () => {
   return (
-    <div> 
-      {/* <Home/> */}
-      <About />
+    <div>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/mypage/*" element={<MyPage />} />
+        <Route path="/about" element={<About />} />       
+      </Routes>
     </div>
     
   );
-}
+};
 
 export default App;
