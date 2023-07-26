@@ -1,33 +1,37 @@
 spring:
-  profiles:
-    active: secret
-
-  jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    open-in-view: false
-    hibernate:
-      ddl-auto: none
-      show_sql: true
-      format_sql: true
-      use_sql_comments: true
-
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ssafy_web_db?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: root
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE
+  oauth2:
+    client:
+      registration:
+        google:
+          client-id: # 발급 받은 client-id #
+          client-secret: # 발급 받은 client-secret #
+          scope: # 필요한 권한 #
+        kakao:
+          client-id: # 발급 받은 client-id #
+          client-secret: # 발급 받은 client-secret #
+          scope: # 필요한 권한 #
+          redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+          authorization-grant-type: authorization_code
+          client-name: kakao
+          client-authentication-method: POST
 
-springfox:
-  documentation:
-    swagger:
-      use-model-v3: false
+      provider:
+        kakao:
+          authorization-uri: https://kauth.kakao.com/oauth/authorize
+          token-uri: https://kauth.kakao.com/oauth/token
+          user-info-uri: https://kapi.kakao.com/v2/user/me
+          user-name-attribute: id
 
-
+jwt:
+  secret: 65ba2be11aa035c2f88cf8943ed801a018023ece51f138345230c60921c904904be83644cfb347af107cea40c94e4026b2df18e9254871ad200df5a0792b2136
+  access-expiration: 999999999 #1800000 # 30분
+  refresh-expiration: 1209600000 # 14일

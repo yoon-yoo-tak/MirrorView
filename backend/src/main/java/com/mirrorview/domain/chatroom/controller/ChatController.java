@@ -110,7 +110,7 @@ public class ChatController {
 	}
 
 	// 채팅방의 이전 채팅 기록 가져오기
-	@GetMapping("/chats/history/{room}")
+	@GetMapping("/api/chats/history/{room}")
 	@ApiOperation(value = "Get chat history", notes = "해당되는 채팅방의 이전 채팅 기록을 가져옵니다")
 	public ResponseEntity<List<ChatMessage>> getChatHistory(
 		@PathVariable @ApiParam(value = "Room name", required = true) String room) {
