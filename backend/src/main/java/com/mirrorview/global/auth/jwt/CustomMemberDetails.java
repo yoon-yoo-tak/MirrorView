@@ -28,6 +28,7 @@ public class CustomMemberDetails implements UserDetails {
 	public CustomMemberDetails(Member member) {
 		super();
 		this.member = member;
+		this.roles = new ArrayList<>(); //
 	}
 
 	public Member getUser() {

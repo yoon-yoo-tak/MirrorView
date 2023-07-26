@@ -52,7 +52,13 @@ public class JwtTokenUtil {
 			.require(Algorithm.HMAC512(secretKey.getBytes()))
 			.withIssuer(ISSUER)
 			.build();
+	}
 
+	public static JWTVerifier getVerifier(String token) {
+		return JWT
+			.require(Algorithm.HMAC512(secretKey.getBytes()))
+			.withIssuer(ISSUER)
+			.build();
 	}
 
 	public static String getAccessToken(String userId) {
@@ -64,6 +70,22 @@ public class JwtTokenUtil {
 			.withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
 			.sign(Algorithm.HMAC512(secretKey.getBytes()));
 	}
+
+	public static boolean validateToken(String token) {
+		try {
+			JWTVerifier verifier = getVerifier(token);
+			verifier.verify(token);
+			return true;
+		} catch (JWTVerificationException ex) {
+			return false;
+		}
+	}
+
+	public static String getUsernameFromToken(String token) {
+		DecodedJWT jwt = JWT.decode(token);
+		return jwt.getSubject();
+	}
+
 
 	public static String getRefreshToken(String userId) {
 		Date expires = JwtTokenUtil.getTokenExpiration(refreshExpirationTime);
