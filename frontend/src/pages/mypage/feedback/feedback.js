@@ -4,7 +4,7 @@ import { useState } from "react";
 import Sidebar from "../Sidebar";
 import FeedbackModal from "./FeedbackModal";
 
-import classes from "./Feedback.module.scss";
+import * as S from "../../../components/styledComponents/MyPageScomponents";
 
 const Feedback = () => {
     const nickname = useSelector((state) => state.auth.nickname);
@@ -33,10 +33,11 @@ const Feedback = () => {
 
     return (
         <div>
-            <div className={classes.archivePage}>
+            <S.page>
                 <Sidebar menu="feedback" />
-                <div className={classes.archiveWrap}>
-                    <div>{nickname}님의 아카이브</div>
+                <S.wrap>
+                    <h2>{nickname}님의 아카이브</h2>
+                    <hr />
                     <div className="archiveList"></div>
                     <div className="archiveList">
                         {archive.map((item, index) => (
@@ -57,8 +58,8 @@ const Feedback = () => {
                             </div>
                         ))}
                     </div>
-                </div>
-            </div>
+                </S.wrap>
+            </S.page>
         </div>
     );
 };

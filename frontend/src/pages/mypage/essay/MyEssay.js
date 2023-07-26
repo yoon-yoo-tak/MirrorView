@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // import axios from "axios";
 
-import classes from "./MyEssay.module.scss";
+import * as S from "../../../components/styledComponents/MyPageScomponents";
 
 const MyEssay = () => {
     const nickname = useSelector((state) => state.auth.nickname);
@@ -42,10 +42,11 @@ const MyEssay = () => {
 
     return (
         <div>
-            <div className={classes.essayPage}>
+            <S.page>
                 <Sidebar menu="essay" />
-                <div className={classes.essayWrap}>
-                    <div>{nickname}님의 자기소개서</div>
+                <S.wrap>
+                    <h2>자기소개서 관리</h2>
+
                     <hr />
                     <button onClick={essayCreate}>작성하기</button>
                     <div className="essayBox">
@@ -62,8 +63,8 @@ const MyEssay = () => {
                             ))}
                         </div>
                     </div>
-                </div>
-            </div>
+                </S.wrap>
+            </S.page>
         </div>
     );
 };

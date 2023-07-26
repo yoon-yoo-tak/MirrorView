@@ -1,13 +1,18 @@
 import Sidebar from "../Sidebar";
-import classes from "./ChangeEmail.module.scss";
+// import classes from "./ChangeEmail.module.scss";
+
+import * as S from "../../../components/styledComponents/MyPageScomponents";
 
 const ChangeEmail = () => {
     return (
         <div>
-            <div className={classes.changeEmailPage}>
+            <S.page>
                 <Sidebar menu="profile" />
-                <div className={classes.ChangeEmailWrap}>이메일 변경</div>
-            </div>
+                <S.wrap>
+                    <h2>이메일 변경하기</h2>
+                    <hr />
+                </S.wrap>
+            </S.page>
         </div>
     );
 };

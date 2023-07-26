@@ -2,7 +2,8 @@
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../Sidebar";
 
-import classes from "./Profile.module.scss";
+// import classes from "./Profile.module.scss";
+import * as S from "../../../components/styledComponents/MyPageScomponents";
 
 const Profile = () => {
     // const id = useSelector((state) => state.auth.id);
@@ -30,37 +31,37 @@ const Profile = () => {
 
     return (
         <div>
-            <div className={classes.profilePage}>
+            <S.profilePage>
                 <Sidebar menu="profile" />
-                <div className={classes.profileWrap}>
-                    <div className={classes.profileBox}>
+                <S.profileWrap>
+                    <S.profileBox>
                         <h2>{nickname}님 반갑습니다!</h2>
                         <hr />
-                        <div className="profileImage"></div>
-                        <div className={classes.profileInfo}>
-                            <div className={classes.profileKey}>
+                        <S.profileImage></S.profileImage>
+                        <S.profileInfo>
+                            <S.profileKey>
                                 <div>ID</div>
                                 <div>EMAIL</div>
                                 <div>닉네임</div>
-                            </div>
-                            <div className={classes.profileDetail}>
+                            </S.profileKey>
+                            <S.profileDetail>
                                 <div>{id}</div>
                                 <div>{email}</div>
                                 <div>{nickname}</div>
-                            </div>
-                            <div className="profileUpdate">
+                            </S.profileDetail>
+                            <S.profileUpdate>
                                 <div onClick={ChangeEmail}>버튼 ㄱ</div>
                                 <div onClick={ChangeNickname}>버튼 ㄱ</div>
-                            </div>
-                        </div>
+                            </S.profileUpdate>
+                        </S.profileInfo>
                         <br />
-                        <h2s>{nickname}님의 현재 평점</h2s>
+                        <h2>{nickname}님의 현재 평점</h2>
                         <hr />
-                    </div>
+                    </S.profileBox>
 
                     <div></div>
-                </div>
-            </div>
+                </S.profileWrap>
+            </S.profilePage>
         </div>
     );
 };

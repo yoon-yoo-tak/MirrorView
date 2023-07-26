@@ -1,24 +1,25 @@
 import Sidebar from "../Sidebar";
-import classes from "./EssayCreate.module.scss";
+
+import * as S from "../../../components/styledComponents/MyPageScomponents";
 
 const EssayCreate = () => {
     return (
         <div>
-            <div className={classes.essayCreatePage}>
-                <Sidebar />
-                <div className={classes.essayCreateWrap}>
+            <S.page>
+                <Sidebar menu="essay" />
+                <S.wrap>
                     <div>자기소개서 작성하기</div>
                     <button>작성하기</button>
-                    <div className={classes.essayCreateBox}>
-                        <div className={classes.essayTitle}>
+                    <div className="essayCreateBox">
+                        <div className="essayTitle">
                             <input />
                         </div>
-                        <div className={classes.essayContentBox}>
+                        <div className="essayContentBox">
                             <input />
                         </div>
                     </div>
-                </div>
-            </div>
+                </S.wrap>
+            </S.page>
         </div>
     );
 };

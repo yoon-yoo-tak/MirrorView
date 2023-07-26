@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
-import classes from "./FeedbackModal.module.scss";
+// import classes from "./FeedbackModal.module.scss";
+
+import * as S from "../../../components/styledComponents/MyPageScomponents";
 
 const FeedbackModal = ({ item, setModalStates }) => {
     const closeModal = () => {
@@ -26,16 +28,10 @@ const FeedbackModal = ({ item, setModalStates }) => {
     };
 
     return (
-        <div
-            ref={modalRef}
-            className={classes.container}
-            onClick={handleInsideClick}
-        >
-            <button className={classes.close} onClick={closeModal}>
-                X
-            </button>
+        <S.modalContainer ref={modalRef} onClick={handleInsideClick}>
+            <S.modalButton onClick={closeModal}>X</S.modalButton>
             <p>{item.time}</p>
-        </div>
+        </S.modalContainer>
     );
 };
 

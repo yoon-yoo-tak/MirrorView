@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import classes from "./EssayDetail.module.scss";
+// import classes from "./EssayDetail.module.scss";
 import Sidebar from "../Sidebar";
+
+import * as S from "../../../components/styledComponents/MyPageScomponents";
 
 const EssayDetail = () => {
     const navigate = useNavigate();
@@ -16,15 +18,15 @@ const EssayDetail = () => {
 
     return (
         <div>
-            <div className={classes.essayDetailPage}>
+            <S.page>
                 <Sidebar menu="essay" />
-                <div className={classes.essayWrap}>
+                <S.wrap>
                     <div>{nickname}님의 자기소개서</div>
                     <hr />
                     {/* <button onClick={essayUpdate}>수정하기</button> */}
                     <div className="essayBox"></div>
-                </div>
-            </div>
+                </S.wrap>
+            </S.page>
         </div>
     );
 };
