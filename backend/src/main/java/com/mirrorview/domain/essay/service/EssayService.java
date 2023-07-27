@@ -1,7 +1,12 @@
 package com.mirrorview.domain.essay.service;
 
-import com.mirrorview.domain.essay.domain.Essay;
+import java.util.List;
+
+import com.mirrorview.domain.essay.dto.EssayCreateDto;
+import com.mirrorview.domain.essay.dto.EssayDto;
 
 public interface EssayService {
-	Essay findByMemberId(Long id);
+	List<EssayDto> findEssayByUserId(String userId);
+
+	void insertEssayAndEssayDetails(EssayCreateDto essays, String userId);
 }
