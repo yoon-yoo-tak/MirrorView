@@ -8,14 +8,17 @@ const EssayCreate = () => {
             <S.page>
                 <Sidebar menu="essay" />
                 <S.wrap>
-                    <div>자기소개서 작성하기</div>
-                    <button>작성하기</button>
-                    <div className="essayCreateBox">
-                        <div className="essayTitle">
-                            <input />
-                        </div>
-                        <div className="essayContentBox">
-                            <input />
+                    <h2>자기소개서 작성하기</h2>
+                    <hr />
+                    <div>
+                        <S.btn theme="save">저장하기</S.btn>
+                        <div className="essayCreateBox">
+                            <div className="essayTitle">
+                                <input />
+                            </div>
+                            <div className="essayContentBox">
+                                <input />
+                            </div>
                         </div>
                     </div>
                 </S.wrap>

@@ -58,6 +58,7 @@ const authSlice = createSlice({
         setIdValid: (state, action) => {
             state.id = action.payload;
         },
+
         setEmailValid: (state, action) => {
             state.email = action.payload;
             state.emailValid =

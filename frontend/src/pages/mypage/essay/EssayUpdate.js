@@ -10,9 +10,9 @@ const EssayUpdate = () => {
             <S.page>
                 <Sidebar menu="essay" />
                 <S.wrap>
-                    <div>자기소개서 수정하기</div>
+                    <h2>자기소개서 수정하기</h2>
                     <hr />
-                    <button onClick={essayUpdateComplete}>수정하기</button>
+                    <button onClick={essayUpdateComplete}>저장하기</button>
                     <div className="essayBox"></div>
                 </S.wrap>
             </S.page>

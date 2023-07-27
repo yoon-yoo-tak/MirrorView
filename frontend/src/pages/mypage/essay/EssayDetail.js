@@ -21,7 +21,7 @@ const EssayDetail = () => {
             <S.page>
                 <Sidebar menu="essay" />
                 <S.wrap>
-                    <div>{nickname}님의 자기소개서</div>
+                    <h2>{nickname}님의 자기소개서</h2>
                     <hr />
                     {/* <button onClick={essayUpdate}>수정하기</button> */}
                     <div className="essayBox"></div>

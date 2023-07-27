@@ -4,7 +4,7 @@ import {
     setPassword,
     setPasswordValid,
     setPasswordCheckValid,
-    setNotAllow,
+    // setNotAllow,
 } from "../../store/auth";
 
 import * as S from "../styledComponents/MyPageScomponents";
@@ -37,7 +37,7 @@ const ChangePwComponent = () => {
             )
         );
         dispatch(setPasswordValid(value));
-        dispatch(setNotAllow());
+        // dispatch(setNotAllow());
     };
 
     const handleConfirmPassword = (e) => {

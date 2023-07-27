@@ -43,7 +43,6 @@ export const sideMenuNow = styled.div`
     justify-content: left;
     font-size: 15px;
     padding: 15px 5px;
-    display: flex;
     align-items: center;
     background-color: white;
     border-radius: 30px 0 0 30px;
@@ -94,6 +93,7 @@ export const es_icon = styled.div`
 export const page = styled.div`
     display: flex;
     justify-content: center;
+    height: 855px;
     font-family: "HakgyoansimWoojuR";
 `;
 
@@ -127,16 +127,17 @@ export const profileInfo = styled.div`
     display: flex;
     justify-content: center;
     flex-direction: row;
+    align-items: center;
     margin: 50px;
 `;
 
 export const profileKey = styled.div`
-    margin: 20px 20px 20px 50px;
+    margin: 20px 40px 20px 50px;
     flex: 1;
 `;
 
 export const profileDetail = styled.div`
-    margin: 20px;
+    margin: 20px 40px 20px 20px;
     flex: 3;
 `;
 
@@ -149,6 +150,13 @@ export const profileUpdate = styled.div`
     margin: 20px;
     flex: 3;
 `;
+
+export const vLine = styled.div`
+    border-left: thick solid #ffffff;
+    border: 0.01rem solid black;
+    height: 110px;
+`;
+
 export const profileBox = styled.div``;
 
 export const gradeGroup = styled.div`
@@ -169,12 +177,55 @@ export const grade = styled.div`
 
 export const gradeStar = styled.div``;
 
+export const newEmailForm = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+`;
+
+export const confirmBtn = styled.button`
+    text-align: right;
+    border: 0;
+
+    background: #a1b6ff;
+    // box-shadow: 0px 0px 15px #bdbdbd;
+    border-radius: 19px;
+    cursor: pointer;
+    &:hover {
+        background-color: #e9e4ff;
+    }
+`;
+
 // 마이페이지 - 피드백 아카이브
+
+export const fbComponent = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    // justify-content: center;
+    // flex-direction: row;
+    margin: 50px;
+`;
+
+export const fbThumbnail = styled.div`
+    box-sizing: border-box;
+
+    width: 217px;
+    height: 282px;
+    left: 0px;
+    top: 10px;
+
+    margin: 20px;
+    padding: 20px;
+
+    background: rgba(246, 252, 255, 0.55);
+    border: 2px solid #000000;
+    border-radius: 30px;
+`;
 
 export const modalContainer = styled.div`
     /* 모달창 크기 */
-    width: 300px;
-    height: 200px;
+    width: 600px;
+    height: 400px;
 
     /* 최상단 위치 */
     z-index: 999;
@@ -188,15 +239,48 @@ export const modalContainer = styled.div`
     transform: translate(-50%, -50%);
 
     /* 모달창 디자인 */
-    background-color: rgb(244, 242, 250);
-    // border: 5px solid rgb(83, 78, 156);
-    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0px 0px 15px #000000;
+    border-radius: 37px;
 `;
 
 export const modalButton = styled.button`
     position: absolute;
-    right: 10px;
-    top: 10px;
+    right: 20px;
+    top: 20px;
+    border: 0;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    // position: relative;
+    width: 50px;
+    height: 30px;
+
+    background: #fe8a8a;
+    box-shadow: 0px 0px 15px #bdbdbd;
+    border-radius: 19px;
+    cursor: pointer;
+    &:hover {
+        background-color: #ffe8e8;
+    }
+`;
+
+export const modalContent = styled.div`
+    padding: 50px;
+`;
+
+export const modalBackDrop = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 999;
 `;
 
 // 마이페이지 - 비밀번호 변경
@@ -216,6 +300,7 @@ export const changePwForm = styled.div`
 
 export const changePwFormEach = styled.div`
     margin-bottom: 15px;
+    // display: flex;
 `;
 
 export const changeBtn = styled.button`
@@ -239,6 +324,8 @@ export const changeBtn = styled.button`
     }
 `;
 
+export const changeFormExBtn = styled.div``;
+
 export const changeInput = styled.input`
     margin: 5px 0 5px 0;
     width: 400px;
@@ -250,4 +337,64 @@ export const changeInput = styled.input`
 
 export const errorMessageWrap = styled.div`
     margin-bottom: 20px;
+`;
+
+// 자기소개서
+
+export const essayComponent = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    // justify-content: center;
+    // flex-direction: row;
+    margin: 50px;
+`;
+
+export const essayThumbnail = styled.div`
+    box-sizing: border-box;
+
+    width: 300px;
+    height: 160px;
+
+    margin: 20px;
+    padding: 20px;
+
+    border-radius: 30px;
+    background: #ffffff;
+    box-shadow: 0px 0px 10px #000000;
+    border-radius: 37px;
+`;
+
+export const btn = styled.button`
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    width: 80px;
+    height: 35px;
+
+    // position: relative;
+    position: absolute;
+    right: 50px;
+    // top: 20px;
+
+    background: ${(props) =>
+        props.theme === "save"
+            ? "#a1b6ff"
+            : props.theme === "create"
+            ? "#FFFFFF"
+            : "#000000"};
+
+    box-shadow: 0px 0px 15px #bdbdbd;
+    border-radius: 19px;
+    cursor: pointer;
+    &:hover {
+        background-color: #e9e4ff;
+    }
+`;
+
+export const hidden = styled.div`
+    visibilit: hidden;
 `;

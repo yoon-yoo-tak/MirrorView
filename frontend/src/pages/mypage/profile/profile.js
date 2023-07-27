@@ -52,6 +52,7 @@ const Profile = () => {
                                 <S.profileContent>EMAIL</S.profileContent>
                                 <S.profileContent>닉네임</S.profileContent>
                             </S.profileKey>
+                            <S.vLine></S.vLine>
                             <S.profileDetail>
                                 <S.profileContent>{user.id}</S.profileContent>
                                 <S.profileContent>
