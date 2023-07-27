@@ -1,7 +1,6 @@
 package com.mirrorview.domain.interview.dto;
 
-import java.util.List;
-import java.util.Map;
+import com.mirrorview.domain.interview.domain.InterviewRoom;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,15 +21,15 @@ public class RoomResponseDto {
 	private Boolean havePassword;
 
 
-	public static RoomResponseDto build(String roomId, Map<Object, Object> entries) {
+	public static RoomResponseDto build(InterviewRoom room) {
 		return RoomResponseDto
 			.builder()
-			.roomId(roomId)
-			.title((String)entries.get("title"))
-			.category((String)entries.get("category"))
-			.maxMemberCount((Integer)entries.get("maxMemberCount"))
-			.currentMemberCount(((List<?>)entries.get("members")).size())
-			.havePassword(entries.containsKey("password"))
+			.roomId(room.getId())
+			.title(room.getTitle())
+			.category(room.getCategory())
+			.maxMemberCount(room.getMaxMemberCount())
+			.currentMemberCount(room.getCurrentCount())
+			.havePassword(room.havePassword())
 			.build();
 	}
 }
