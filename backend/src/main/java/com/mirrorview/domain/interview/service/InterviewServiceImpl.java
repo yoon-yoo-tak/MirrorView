@@ -2,10 +2,10 @@ package com.mirrorview.domain.interview.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -49,10 +49,20 @@ public class InterviewServiceImpl implements InterviewService {
 		System.out.println(interviewRepository.count());
 	}
 
-	private String findRoomId(Cursor<byte[]> keys) {
-		String key = new String(keys.next());
-		int index = key.indexOf(":");
-
-		return key.substring(index + 1);
+	@Override
+	@Transactional
+	public void exitRoom(String nickname, String roomId) {
+		Optional<InterviewRoom> findRoom = interviewRepository.findById(roomId);
+		if (findRoom.isPresent()) {
+			InterviewRoom interviewRoom = findRoom.get();
+			if (interviewRoom.getCurrentCount() == 1) {
+				interviewRepository.delete(interviewRoom);
+				return;
+			}
+			interviewRoom.exit(nickname);
+			interviewRepository.save(interviewRoom);
+			return;
+		}
+		throw new IllegalArgumentException("잘못된 정보입니다.");
 	}
 }

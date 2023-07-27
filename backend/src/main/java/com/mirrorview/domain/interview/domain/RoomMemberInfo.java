@@ -13,4 +13,8 @@ public class RoomMemberInfo {
 
 	private String nickname;
 	private boolean ready;
+
+	public boolean sameNickname(String nickname) {
+		return nickname.equals(this.nickname);
+	}
 }

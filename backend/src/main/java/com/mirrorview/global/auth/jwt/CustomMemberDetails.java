@@ -73,4 +73,8 @@ public class CustomMemberDetails implements UserDetails {
 	public void setAuthorities(List<GrantedAuthority> roles) {
 		this.roles = roles;
 	}
+
+	public String getNickname() {
+		return this.member.getNickname();
+	}
 }
