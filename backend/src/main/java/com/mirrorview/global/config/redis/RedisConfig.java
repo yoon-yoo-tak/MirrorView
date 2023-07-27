@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mirrorview.domain.chatroom.dto.ChatMessage;
+import com.mirrorview.domain.interview.domain.InterviewRoom;
 
 @Configuration
 @PropertySource("classpath:redis.properties")
@@ -24,6 +25,15 @@ public class RedisConfig {
 
 	@Value("${redis.port}")
 	private int port;
+
+	@Bean
+	public ObjectMapper objectMapper() {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+		mapper.registerModule(new JavaTimeModule());
+
+		return mapper;
+	}
 
 	@Bean
 	public LettuceConnectionFactory redisConnectionFactory() {
@@ -54,4 +64,17 @@ public class RedisConfig {
 
 		return template;
 	}
+
+	@Bean
+	public RedisTemplate<String, InterviewRoom> redisTemplate2() {
+		RedisTemplate<String, InterviewRoom> template = new RedisTemplate<>();
+		template.setConnectionFactory(redisConnectionFactory());
+		template.setKeySerializer(new StringRedisSerializer());
+		template.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
+		template.setHashKeySerializer(new StringRedisSerializer());
+		template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper()));
+
+		return template;
+	}
+
 }
