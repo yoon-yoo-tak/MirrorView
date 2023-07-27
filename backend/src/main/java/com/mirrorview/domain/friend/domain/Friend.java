@@ -1,4 +1,4 @@
-package com.mirrorview.db.entity;
+package com.mirrorview.domain.friend.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,7 +36,10 @@ public class Friend {
 	@JoinColumn(name = "to_member_id")
 	private Member to;
 
-	@Column(name = "is_connected",nullable = false,columnDefinition = "TINYINT(1)")
+	@Column(name = "is_connected", nullable = false, columnDefinition = "TINYINT(1)")
 	private Boolean isConnected;
 
+	public void acceptFriend() {
+		this.isConnected = true;
+	}
 }
