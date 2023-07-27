@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.mirrorview.domain.interview.domain.InterviewRoom;
+import com.mirrorview.domain.interview.domain.RoomMemberInfo;
 import com.mirrorview.domain.interview.dto.RoomRequestDto;
 import com.mirrorview.domain.interview.dto.RoomResponseDto;
 import com.mirrorview.domain.interview.repository.InterviewRepository;
@@ -59,10 +60,26 @@ public class InterviewServiceImpl implements InterviewService {
 				interviewRepository.delete(interviewRoom);
 				return;
 			}
-			interviewRoom.exit(nickname);
+			boolean exit = interviewRoom.exit(nickname);
+			if (!exit) {
+				throw new IllegalArgumentException("사용자가 존재하지 않습니다.");
+			}
 			interviewRepository.save(interviewRoom);
 			return;
 		}
 		throw new IllegalArgumentException("잘못된 정보입니다.");
+	}
+
+	@Override
+	@Transactional
+	public List<RoomMemberInfo> joinRoom(String nickname, String roomId) {
+		Optional<InterviewRoom> findRoom = interviewRepository.findById(roomId);
+		if (findRoom.isPresent()) {
+			InterviewRoom interviewRoom = findRoom.get();
+			interviewRoom.join(nickname);
+			interviewRepository.save(interviewRoom);
+			return interviewRoom.getMembers();
+		}
+		throw new IllegalArgumentException("방 정보가 존재하지 않습니다.");
 	}
 }

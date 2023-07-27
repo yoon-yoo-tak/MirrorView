@@ -1,5 +1,7 @@
 package com.mirrorview.domain.interview.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mirrorview.domain.interview.domain.RoomMemberInfo;
 import com.mirrorview.domain.interview.dto.RoomRequestDto;
 import com.mirrorview.domain.interview.service.InterviewService;
 import com.mirrorview.domain.user.domain.Member;
@@ -60,11 +63,12 @@ public class InterviewController {
 	public ResponseEntity<?> joinRoom(@AuthenticationPrincipal CustomMemberDetails member,
 		@PathVariable String roomId) {
 		String nickname = member.getNickname();
+		List<RoomMemberInfo> roomMemberInfos;
 		try {
-			interviewService.joinRoom(nickname, roomId);
+			roomMemberInfos = interviewService.joinRoom(nickname, roomId);
 		} catch (Exception e) {
 			return BaseResponse.fail(e.getMessage(), 400);
 		}
-		return BaseResponse.ok(HttpStatus.OK, "조인 완료");
+		return BaseResponse.okWithData(HttpStatus.OK, "조인 완료", roomMemberInfos);
 	}
 }

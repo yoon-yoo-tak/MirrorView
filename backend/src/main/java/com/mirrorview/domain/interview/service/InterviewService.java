@@ -2,6 +2,7 @@ package com.mirrorview.domain.interview.service;
 
 import java.util.List;
 
+import com.mirrorview.domain.interview.domain.RoomMemberInfo;
 import com.mirrorview.domain.interview.dto.RoomRequestDto;
 import com.mirrorview.domain.interview.dto.RoomResponseDto;
 
@@ -12,5 +13,5 @@ public interface InterviewService {
 
 	void exitRoom(String nickname, String roomId);
 
-	void joinRoom(String nickname, String roomId);
+	List<RoomMemberInfo> joinRoom(String nickname, String roomId);
 }
