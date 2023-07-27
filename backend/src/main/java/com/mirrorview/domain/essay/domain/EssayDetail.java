@@ -25,6 +25,7 @@ public class EssayDetail {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "essay_id")
 	private Essay essay;

@@ -20,11 +20,13 @@ import com.mirrorview.domain.user.domain.Member;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Essay {
@@ -39,10 +41,8 @@ public class Essay {
 
 	private String title;
 
-
 	@OneToMany(mappedBy = "essay")
 	private List<EssayDetail> essayDetails = new ArrayList<>();
-
 
 	@CreationTimestamp
 	@Column(name = "created_time")
