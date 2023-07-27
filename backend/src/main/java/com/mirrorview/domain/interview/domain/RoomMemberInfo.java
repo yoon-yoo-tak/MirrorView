@@ -17,4 +17,8 @@ public class RoomMemberInfo {
 	public boolean sameNickname(String nickname) {
 		return nickname.equals(this.nickname);
 	}
+
+	public void changeReady() {
+		ready = !ready;
+	}
 }

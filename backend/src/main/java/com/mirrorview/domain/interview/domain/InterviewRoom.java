@@ -65,4 +65,12 @@ public class InterviewRoom {
 	private void changeHost(String nickname) {
 		this.host = nickname;
 	}
+
+	public void changeReady(RoomMemberInfo memberInfo) {
+		members.forEach(member -> {
+			if (member.sameNickname(memberInfo.getNickname())) {
+				member.changeReady();
+			}
+		});
+	}
 }

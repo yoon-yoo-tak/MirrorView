@@ -53,7 +53,7 @@ public class InterviewServiceImpl implements InterviewService {
 	@Override
 	@Transactional
 	public void exitRoom(String nickname, String roomId) {
-		Optional<InterviewRoom> findRoom = interviewRepository.findById(roomId);
+		Optional<InterviewRoom> findRoom = findRoomById(roomId);
 		if (findRoom.isPresent()) {
 			InterviewRoom interviewRoom = findRoom.get();
 			if (interviewRoom.getCurrentCount() == 1) {
@@ -71,9 +71,14 @@ public class InterviewServiceImpl implements InterviewService {
 	}
 
 	@Override
+	public Optional<InterviewRoom> findRoomById(String roomId) {
+		return interviewRepository.findById(roomId);
+	}
+
+	@Override
 	@Transactional
 	public List<RoomMemberInfo> joinRoom(String nickname, String roomId) {
-		Optional<InterviewRoom> findRoom = interviewRepository.findById(roomId);
+		Optional<InterviewRoom> findRoom = findRoomById(roomId);
 		if (findRoom.isPresent()) {
 			InterviewRoom interviewRoom = findRoom.get();
 			interviewRoom.join(nickname);
@@ -81,5 +86,13 @@ public class InterviewServiceImpl implements InterviewService {
 			return interviewRoom.getMembers();
 		}
 		throw new IllegalArgumentException("방 정보가 존재하지 않습니다.");
+	}
+
+	@Override
+	@Transactional
+	public void changeReady(RoomMemberInfo memberInfo, InterviewRoom room) {
+		room.changeReady(memberInfo);
+		interviewRepository.save(room);
+
 	}
 }
