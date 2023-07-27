@@ -3,6 +3,7 @@ package com.mirrorview.domain.interview.domain;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
@@ -50,11 +51,18 @@ public class InterviewRoom {
 	public boolean exit(String nickname) {
 		List<RoomMemberInfo> memberInfoList = members.stream()
 			.filter(roomMemberInfo -> !roomMemberInfo.sameNickname(nickname))
-			.toList();
+			.collect(Collectors.toList());
 		if (memberInfoList.size() == members.size()) {
 			return false;
 		}
 		members = new ArrayList<>(memberInfoList);
+		if (nickname.equals(host)) {
+			changeHost(members.get(0).getNickname());
+		}
 		return true;
+	}
+
+	private void changeHost(String nickname) {
+		this.host = nickname;
 	}
 }
