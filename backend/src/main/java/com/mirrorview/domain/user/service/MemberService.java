@@ -3,6 +3,7 @@ package com.mirrorview.domain.user.service;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.dto.FindMemberRequestDto;
 import com.mirrorview.domain.user.dto.JoinDto;
+import com.mirrorview.domain.user.dto.RatingDto;
 
 public interface MemberService {
 	boolean duplicatedUserId(String userid);
@@ -16,4 +17,6 @@ public interface MemberService {
 	String findByEmail(String email);
 
 	Member findPassword(FindMemberRequestDto requestDto);
+
+	float saveScore(String username, RatingDto ratingDto);
 }
