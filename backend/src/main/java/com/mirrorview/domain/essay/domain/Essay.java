@@ -47,4 +47,8 @@ public class Essay {
 	@CreationTimestamp
 	@Column(name = "created_time")
 	private LocalDateTime createdTime;
+
+	public void updateEssayDetail(List<EssayDetail> essayDetails){
+		this.essayDetails = List.copyOf(essayDetails);
+	}
 }

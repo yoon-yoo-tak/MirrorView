@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.mirrorview.domain.essay.domain.EssayDetail;
 import com.mirrorview.domain.essay.domain.QEssay;
 import com.mirrorview.domain.essay.domain.QEssayDetail;
 import com.mirrorview.domain.feedback.domain.QFeedback;
 import com.mirrorview.domain.feedback.dto.FeedbackDto;
+import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.domain.QMember;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -57,6 +59,21 @@ public class FeedbackRepositoryCustomImpl implements FeedbackRepositoryCustom {
 	public void deleteFeedbackByFeedbackId(Long feedbackId) {
 		queryFactory.delete(qFeedback)
 			.where(qFeedback.id.eq(feedbackId))
+			.execute();
+	}
+
+	@Override
+	public void deleteFeedbackByEssayDetailIdAndUserId(EssayDetail essayDetail, Member member) {
+		queryFactory.delete(qFeedback)
+			.where(qFeedback.essayDetail.eq(essayDetail)
+				.and(qFeedback.writer.eq(member)))
+			.execute();
+	}
+
+	@Override
+	public void deleteFeedbacksByEssayDetailId(EssayDetail essayDetail) {
+		queryFactory.delete(qFeedback)
+			.where(qFeedback.essayDetail.eq(essayDetail))
 			.execute();
 	}
 }
