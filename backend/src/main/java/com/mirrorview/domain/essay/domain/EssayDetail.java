@@ -34,4 +34,9 @@ public class EssayDetail {
 
 	private String answer;
 
+	public void updateQnA(String question, String answer){
+		this.question = question;
+		this.answer = answer;
+	}
+
 }

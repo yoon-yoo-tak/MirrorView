@@ -1,6 +1,7 @@
 package com.mirrorview.domain.user.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mirrorview.domain.essay.domain.Essay;
 import com.mirrorview.domain.essay.dto.EssayCreateDto;
 import com.mirrorview.domain.essay.dto.EssayDetailDto;
 import com.mirrorview.domain.essay.dto.EssayDto;
+import com.mirrorview.domain.essay.dto.EssayUpdateDto;
 import com.mirrorview.domain.essay.service.EssayDetailService;
 import com.mirrorview.domain.essay.service.EssayService;
 import com.mirrorview.domain.feedback.dto.FeedbackDto;
@@ -86,9 +89,11 @@ public class MyPageController {
 		return BaseResponse.okWithData(HttpStatus.OK, "피드백 불러오기 성공", list);
 	}
 
-	@PutMapping("/essays") // 자소서안의 문항들 수정/삭제
-	public ResponseEntity<?> updateEssays() {
-		return null;
+	@PutMapping("/essays") // 자소서안의 문항들 수정/삭제와 같은 자소서 문항에 대한 변경
+	public ResponseEntity<?> updateEssays(@RequestBody EssayUpdateDto essays, @AuthenticationPrincipal
+		CustomMemberDetails member) {
+		essayDetailService.updateEssayDetails(essays, member.getUsername());
+		return BaseResponse.ok(HttpStatus.OK, "수정 완료");
 	}
 
 	@PostMapping("/essays") // 자소서 추가 완료
@@ -117,7 +122,12 @@ public class MyPageController {
 	}
 
 	@DeleteMapping("/essays/{essay-id}") // 자소서 삭제
-	public ResponseEntity<?> deleteEssays() {
-		return null;
+	public ResponseEntity<?> deleteEssays(@PathVariable("essay-id") Long essayId) {
+		try {
+			essayService.deleteByEssayId(essayId);
+			return BaseResponse.ok(HttpStatus.OK, "삭제 성공");
+		}catch (Exception e) {
+			return BaseResponse.fail("삭제 실패", 400);
+		}
 	}
 }
