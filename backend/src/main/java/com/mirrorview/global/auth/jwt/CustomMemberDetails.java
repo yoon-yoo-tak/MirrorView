@@ -28,6 +28,7 @@ public class CustomMemberDetails implements UserDetails {
 	public CustomMemberDetails(Member member) {
 		super();
 		this.member = member;
+		this.roles = new ArrayList<>(); //
 	}
 
 	public Member getUser() {
@@ -71,5 +72,9 @@ public class CustomMemberDetails implements UserDetails {
 
 	public void setAuthorities(List<GrantedAuthority> roles) {
 		this.roles = roles;
+	}
+
+	public String getNickname() {
+		return this.member.getNickname();
 	}
 }

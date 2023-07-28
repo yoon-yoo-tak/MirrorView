@@ -1,5 +1,6 @@
 package com.mirrorview.domain.chatroom.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,15 +19,22 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ChatRoomServiceImpl implements ChatRoomService {
 
-	ChatRoomRepository chatRoomRepository;
-	MemberRepository memberRepository;
-	UserChatRoomRepository userChatRoomRepository;
+	private final ChatRoomRepository chatRoomRepository;
+	private final MemberRepository memberRepository;
+	private final UserChatRoomRepository userChatRoomRepository;
 
 	@Override
 	public void createRoom(String title, String userId) {
 		Member member = memberRepository.findByUserId(userId);
-		ChatRoom chatRoom = ChatRoom.builder().title(title).build();
-		UserChatRoom userChatRoom = UserChatRoom.builder().chatroom(chatRoom).member(member).build();
+		ChatRoom chatRoom = ChatRoom.builder()
+			.title(title)
+			.build();
+		chatRoomRepository.save(chatRoom);
+
+		UserChatRoom userChatRoom = UserChatRoom.builder()
+			.chatroom(chatRoom)
+			.member(member)
+			.build();
 		userChatRoomRepository.save(userChatRoom);
 	}
 
@@ -36,5 +44,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 		if (chatRoom.isPresent())
 			throw new DataIntegrityViolationException("이미 채팅방 이름이 사용중 입니다.");
 		return true;
+	}
+
+	@Override
+	public List<ChatRoom> findAll() {
+		return chatRoomRepository.findAll();
 	}
 }

@@ -14,8 +14,6 @@ import {
 } from "../../store/auth";
 import axios from "axios";
 
-import classes from "./Signup.module.scss";
-
 const Signup = () => {
     const {
         id,

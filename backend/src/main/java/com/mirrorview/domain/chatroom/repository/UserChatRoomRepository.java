@@ -13,4 +13,6 @@ public interface UserChatRoomRepository extends JpaRepository<UserChatRoom, Long
 
 	@Query("SELECT ucr.chatroom FROM UserChatRoom ucr WHERE ucr.member.id = :memberId")
 	List<ChatRoom> findChatRoomsByUserId(@Param("memberId") Long memberId);
+
+	void deleteUserChatRoomByMemberAndChatroom(long MemberId, long chatRoomId);
 }

@@ -9,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +40,15 @@ public class ChatController {
 	private final UserChatRoomService userChatRoomService;
 	private final RedisTemplate<String, ChatMessage> template;
 
+	private final SimpMessagingTemplate simpMessagingTemplate;
+	
+	// 일대일 채팅
+	@MessageMapping("/chat/{userId}")
+	public void sendSpecific(@DestinationVariable String userId, String message) {
+		log.info("{} 에게, {}를 전송함", userId, message);
+		simpMessagingTemplate.convertAndSend("/queue/chat/" + userId, message);
+	}
+
 	// 채팅방 만들기
 	@PostMapping("/api/chats/open/{room}")
 	public ResponseEntity createChatRoom(@PathVariable String room, @AuthenticationPrincipal UserDetails userDetails) {
@@ -50,14 +61,37 @@ public class ChatController {
 		return BaseResponse.ok(HttpStatus.OK, "채팅방이 생성되었습니다.");
 	}
 
-	// 채팅방 가져오기
+	// 나의 채팅방 가져오기
 	@GetMapping("/api/chats")
-	public ResponseEntity createChatRoom(@AuthenticationPrincipal UserDetails userDetails) {
-		log.info("방 가져오기");
+	public ResponseEntity<?> createChatRoom(@AuthenticationPrincipal UserDetails userDetails) {
+		log.info("나의 오픈 채팅 방 가져오기");
 		String userName = userDetails.getUsername();
 		List<ChatRoom> chatRoomList = userChatRoomService.findByUserChatRoom(userName);
+		System.out.println(chatRoomList);
 
-		return BaseResponse.ok(HttpStatus.OK, "채팅방이 생성되었습니다.");
+		return BaseResponse.okWithData(HttpStatus.OK, "방을 불러옵니다", chatRoomList);
+	}
+
+	// 모든 채팅방 가져오기
+	@GetMapping("/api/chats/open")
+	public ResponseEntity<?> createChatRoom() {
+		log.info("모든 오픈 채팅 방 가져오기");
+		List<ChatRoom> chatRoomList = chatRoomService.findAll();
+		return BaseResponse.okWithData(HttpStatus.OK, "모든 방을 불러옵니다", chatRoomList);
+	}
+
+	// 채팅방 입장
+	@PostMapping("/api/chats/join/{room}")
+	public ResponseEntity joinChatRoom(@PathVariable String room, @AuthenticationPrincipal UserDetails userDetails) {
+		userChatRoomService.joinChatRoom(userDetails.getUsername(), room);
+		return BaseResponse.ok(HttpStatus.OK, "채팅방을 들어갔습니다.");
+	}
+
+	// 채팅방 나가기
+	@DeleteMapping("/api/chats/quit/{room}")
+	public ResponseEntity quitChatRoom(@PathVariable String room, @AuthenticationPrincipal UserDetails userDetails) {
+		userChatRoomService.quitChatRoom(userDetails.getUsername(), room);
+		return BaseResponse.ok(HttpStatus.OK, "채팅방을 나갔습니다.");
 	}
 
 	// 채팅방에 채팅보내기
@@ -72,12 +106,11 @@ public class ChatController {
 		template.opsForList().rightPush(key, message);
 
 		System.out.println(message);
-
 		return message;
 	}
 
 	// 채팅방의 이전 채팅 기록 가져오기
-	@GetMapping("/chats/history/{room}")
+	@GetMapping("/api/chats/history/{room}")
 	@ApiOperation(value = "Get chat history", notes = "해당되는 채팅방의 이전 채팅 기록을 가져옵니다")
 	public ResponseEntity<List<ChatMessage>> getChatHistory(
 		@PathVariable @ApiParam(value = "Room name", required = true) String room) {

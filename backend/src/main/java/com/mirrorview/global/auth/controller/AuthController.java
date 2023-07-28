@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.dto.LoginDto;
 import com.mirrorview.domain.user.service.MemberService;
+import com.mirrorview.global.auth.jwt.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 import com.mirrorview.global.util.JwtTokenUtil;
 
@@ -36,23 +38,8 @@ public class AuthController {
 	private final MemberService memberService;
 	private final RedisTemplate<String, String> template;
 
-	@GetMapping("/hello")
-
-	public String hello() {
-		String asd = "asdasd";
-		String encode = passwordEncoder.encode(asd);
-		return "Asd";
-	}
-
-	@GetMapping("/hello2")
-
-	public String hello2() {
-		String asd = "asdasd";
-		return "hello2";
-	}
-
 	@PostMapping("/api/users/login")
-	public ResponseEntity<?> signIn(@RequestBody LoginDto loginDto) {
+	public ResponseEntity<?> logIn(@RequestBody LoginDto loginDto) {
 		String userId = loginDto.getUserId();
 		String password = loginDto.getPassword();
 		log.info("login start with id = {}, pw = {}", userId, password);
@@ -76,7 +63,7 @@ public class AuthController {
 		return BaseResponse.fail("login fail", 401);
 	}
 
-	@PostMapping("/api/users/refresh")
+	@PostMapping("/api/users/reissue")
 	public ResponseEntity<?> reissueAccessToken(@RequestHeader("Authorization") String token) {
 		DecodedJWT decodedJwt = null;
 		final Map<String, Object> body = new LinkedHashMap<>();

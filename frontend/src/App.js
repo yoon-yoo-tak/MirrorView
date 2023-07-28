@@ -3,10 +3,10 @@ import React from "react";
 // import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 
-import './App.css';
+import "./App.css";
 import "./fonts/font.css";
 
-import Home from './pages/Home/home'; 
+import Home from "./pages/home/Home";
 import Login from "./pages/user/Login";
 import Signup from "./pages/user/Signup";
 import MyPage from "./pages/mypage/MyPage";
