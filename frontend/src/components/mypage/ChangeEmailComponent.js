@@ -1,25 +1,26 @@
 // import { useState } from "react";
-// import { useSelector, useDispatch } from "react-redux";
-// import { setEmail, setEmailValid } from "../../store/auth";
+import { useSelector, useDispatch } from "react-redux";
+import { setEmail, setEmailValid } from "../../store/auth";
 
 import * as S from "../styledComponents/MyPageScomponents";
+// import { useState } from "react";
 
 const ChangeEmailComponent = () => {
-    // const { email, emailValid } = useSelector((state) => state.auth);
+    const { email, emailValid } = useSelector((state) => state.auth);
 
-    // const dispatch = useDispatch();
-
+    const dispatch = useDispatch();
     // const [confirmEmail, setConfirmEmail] = useState("");
 
-    // const handleEmail = (e) => {
-    //     const value = e.target.value;
-    //     dispatch(setEmail(value));
-
-    //     dispatch(setEmailValid(value));
-    // };
+    const handleEmail = (e) => {
+        const value = e.target.value;
+        dispatch(setEmail(value));
+        dispatch(setEmailValid(value));
+    };
 
     const handleConfirm = () => {
-        // 이메일 인증 요청 전송ㅈ
+        // 이메일 인증 요청 전송 전에
+        // 이메일 중복 확인 먼저
+        // 인증 요청이 확인되면 store의 상태가 업데이트 되나? 아니면 그냥 ?
     };
 
     const correctStyle = {
@@ -45,26 +46,31 @@ const ChangeEmailComponent = () => {
                                 인증요청
                             </S.confirmBtn>
                         </S.newEmailForm>
-                        <S.changeInput type="text" />
+                        <S.changeInput type="email" onChange={handleEmail} />
                         <S.errorMessageWrap>
-                            {/* {!emailValid && email.length > 0 && ( */}
-                            <div style={failStyle}>
-                                사용할 수 없는 이메일입니다
-                            </div>
-                            {/* )} */}
-                            {/* {emailValid && email.length > 0 && (
+                            {!emailValid && email.length > 0 && (
+                                <div style={failStyle}>
+                                    이메일 양식이 아닙니다!
+                                </div>
+                            )}
+                            {emailValid && email.length > 0 && (
                                 <div style={correctStyle}>
-                                    사용할 수 있는 이메일입니다
+                                    이메일 양식에 적합합니다!
                                 </div>
                             )}
                             {email.length === 0 && (
                                 <div style={hiddenStyle}>숨김</div>
-                            )} */}
+                            )}
                         </S.errorMessageWrap>
                     </S.changePwFormEach>
                     <S.changePwFormEach>
-                        <div>인증번호 입력</div>
-                        <S.changeInput type="text" />
+                        <S.newEmailForm>
+                            <div>인증번호 입력</div>
+                            <S.confirmBtn onClick={handleConfirm}>
+                                인증확인
+                            </S.confirmBtn>
+                        </S.newEmailForm>
+                        <S.changeInput type="text" onChange={handleConfirm} />
                         <S.errorMessageWrap>
                             {/* {!emailValid && email.length > 0 && ( */}
                             <div style={correctStyle}>

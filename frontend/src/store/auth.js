@@ -59,8 +59,12 @@ const authSlice = createSlice({
             state.id = action.payload;
         },
 
-        setEmailValid: (state, action) => {
+        setEmail: (state, action) => {
             state.email = action.payload;
+        },
+
+        setEmailValid: (state, action) => {
+            // state.email = action.payload;
             state.emailValid =
                 /^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i.test(
                     action.payload
@@ -104,6 +108,7 @@ export const {
     setIdValid,
     setPasswordValid,
     setPasswordCheckValid,
+    setEmail,
     setEmailValid,
     setNicknameValid,
     setNotAllow,
