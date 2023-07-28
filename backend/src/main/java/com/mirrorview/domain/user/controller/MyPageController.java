@@ -1,11 +1,11 @@
 package com.mirrorview.domain.user.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mirrorview.domain.essay.domain.Essay;
 import com.mirrorview.domain.essay.dto.EssayCreateDto;
 import com.mirrorview.domain.essay.dto.EssayDetailDto;
 import com.mirrorview.domain.essay.dto.EssayDto;
@@ -25,7 +24,11 @@ import com.mirrorview.domain.essay.service.EssayDetailService;
 import com.mirrorview.domain.essay.service.EssayService;
 import com.mirrorview.domain.feedback.dto.FeedbackDto;
 import com.mirrorview.domain.feedback.service.FeedbackService;
+import com.mirrorview.domain.user.domain.Member;
+import com.mirrorview.domain.user.dto.ChangePasswordDto;
+import com.mirrorview.domain.user.dto.MemberProfileDto;
 import com.mirrorview.domain.user.service.MemberProfileService;
+import com.mirrorview.domain.user.service.MemberService;
 import com.mirrorview.global.auth.jwt.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 
@@ -42,6 +45,25 @@ public class MyPageController {
 	private final FeedbackService feedbackService;
 	private final EssayService essayService;
 	private final EssayDetailService essayDetailService;
+	private final MemberService memberService;
+	private final PasswordEncoder passwordEncoder;
+
+	@GetMapping
+	public ResponseEntity<?> getInfo(@AuthenticationPrincipal CustomMemberDetails member){
+		String userId = member.getUsername();
+		MemberProfileDto memberProfileDto = memberProfileService.findByUserId(userId);
+		return BaseResponse.okWithData(HttpStatus.OK, "회원정보 조회 성공", memberProfileDto);
+	}
+
+	@PostMapping("/password")
+	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto dto, @AuthenticationPrincipal CustomMemberDetails member){
+		try {
+			memberProfileService.changePassword(dto, member.getUsername());
+			return BaseResponse.ok(HttpStatus.OK, "비밀번호 변경 완료");
+		}catch (Exception e) {
+			return BaseResponse.fail("비밀번호 변경 실패", 400);
+		}
+	}
 
 	@PatchMapping("/image")
 	public ResponseEntity<?> updateImage(String userId, String photo) {
