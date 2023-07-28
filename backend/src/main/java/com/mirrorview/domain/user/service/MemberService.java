@@ -1,5 +1,7 @@
 package com.mirrorview.domain.user.service;
 
+import java.util.List;
+
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.dto.FindMemberRequestDto;
 import com.mirrorview.domain.user.dto.JoinDto;
@@ -19,4 +21,6 @@ public interface MemberService {
 	Member findPassword(FindMemberRequestDto requestDto);
 
 	float saveScore(String username, RatingDto ratingDto);
+
+	List<String> findMemberList(String userId);
 }

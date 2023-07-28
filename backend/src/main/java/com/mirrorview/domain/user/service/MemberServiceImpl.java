@@ -1,6 +1,8 @@
 package com.mirrorview.domain.user.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -88,6 +90,14 @@ public class MemberServiceImpl implements MemberService {
 		otherMember.updateAverageScore(count, newRating.getScore());
 
 		return otherMember.getAverageRating();
+	}
+
+	@Override
+	public List<String> findMemberList(String userId) {
+		return memberRepository.findByUserIdContaining(userId)
+			.stream()
+			.map(Member::getUserId)
+			.collect(Collectors.toList());
 	}
 
 	private long findCount(Member otherMember) {
