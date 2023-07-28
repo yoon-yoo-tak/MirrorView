@@ -11,18 +11,22 @@ import Login from "./pages/user/Login";
 import Signup from "./pages/user/Signup";
 import MyPage from "./pages/mypage/MyPage";
 import About from './pages/Aboutus/about';
-import Header from "./pages/home/Header";
+import Header from "./pages/Home/Header";
+import Notice from "./pages/notice/notice";
+import Noticepage from "./pages/notice/noticepage";
 
 const App = () => {
   return (
     <div>
-      <Header />
-      <Routes>
+      <Header></Header>
+      <Routes> 
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/mypage/*" element={<MyPage />} />
-        <Route path="/about" element={<About />} />       
+        <Route path="/about" element={<About />} />   
+        <Route path="/notice" element={<Notice />} />   
+        <Route path="/noticepage" element={<Noticepage />} />       
       </Routes>
     </div>
     

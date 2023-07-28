@@ -41,7 +41,7 @@ const About = () => {
               <Bubble5></Bubble5>
             </ImageWrapper6>
 
-        <Header></Header>
+        {/* <Header></Header> */}
         <Image src='/bground.png' alt='main_bg' />
 
         <Content1>
@@ -200,7 +200,7 @@ const Content2 = styled.div`
 
 const Content3 = styled.h2`
   position: absolute;
-  top: 50.2%;
+  top: 50.5%;
   left: 20%;
   transform: translate(-60%, -100%);
   text-align: justify;
@@ -238,7 +238,7 @@ const Comment1 = styled.h2`
 
 const Comment2 = styled.h2`
 position: absolute;
-top: 54.3%;
+top: 54.5%;
 left: 80.5%;
 transform: translate(-50%, -50%);
 text-align: center;
@@ -252,7 +252,7 @@ white-space: nowrap;
 
 const Comment3 = styled.h2`
 position: absolute;
-top: 73.5%;
+top: 74.5%;
 left: 34%;
 transform: translate(-60%, -100%);
 text-align: justify;
@@ -267,7 +267,7 @@ line-height : 1.5;
 
 const Comment4 = styled.h2`
 position: absolute;
-top: 80%;
+top: 80.2%;
 left: 86%;
 transform: translate(-60%, -100%);
 text-align: justify;
@@ -282,7 +282,7 @@ line-height : 1.5;
 
 const Comment5 = styled.h2`
 position: absolute;
-top: 92.7%;
+top: 93.4%;
 left: 31%;
 transform: translate(-60%, -100%);
 text-align: justify;

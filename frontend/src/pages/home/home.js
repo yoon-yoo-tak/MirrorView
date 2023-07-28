@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from "styled-components";
-import Header from './Header';
 
 const Home = () => {
   return (
     <Container>
-      <Header></Header>
-      <Image src='/bground.png' alt='main_bg' />
+      <Image src='/bground2.png' alt='main_bg' />
       <Content>
         <Title>청춘들의 면접 플랫폼</Title>
         <Title2>밀어:뷰</Title2>
@@ -54,6 +52,8 @@ const Image = styled.img`
   width: 100%;
   height: 210vh;
   object-fit: cover;
+  margin: 0;
+  padding: 0;
 `;
 
 const Content = styled.div`
