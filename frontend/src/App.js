@@ -10,22 +10,27 @@ import Home from "./pages/home/Home";
 import Login from "./pages/user/Login";
 import Signup from "./pages/user/Signup";
 import MyPage from "./pages/mypage/MyPage";
-import About from "./pages/Aboutus/about";
-import Header from "./pages/home/Header";
+import About from './pages/Aboutus/about';
+import Header from "./pages/Home/Header";
+import Notice from "./pages/notice/notice";
+import Noticepage from "./pages/notice/noticepage";
 
 const App = () => {
-    return (
-        <div>
-            <Header />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/mypage/*" element={<MyPage />} />
-                <Route path="/about" element={<About />} />
-            </Routes>
-        </div>
-    );
+  return (
+    <div>
+      <Header></Header>
+      <Routes> 
+        <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/mypage/*" element={<MyPage />} />
+        <Route path="/about" element={<About />} />   
+        <Route path="/notice" element={<Notice />} />   
+        <Route path="/noticepage" element={<Noticepage />} />       
+      </Routes>
+    </div>
+    
+  );
 };
 
 export default App;

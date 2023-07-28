@@ -1,8 +1,40 @@
+<<<<<<< frontend/src/pages/home/Header.js
+  import React from 'react';
+  import styled from 'styled-components';
+  import { Link } from 'react-router-dom';
+=======
 import React from "react";
 import styled from "styled-components";
+>>>>>>> frontend/src/pages/home/Header.js
 
 const Header = () => {
     return (
+<<<<<<< frontend/src/pages/home/Header.js
+      <Nav>
+      <Link to="/"> {/* 이 부분이 추가되었습니다 */}
+        <Logo></Logo>
+      </Link>
+        <NavMenu>
+          <NavItem>
+          <Link to="/about">About us</Link>
+            </NavItem>
+          <NavItem>
+          <Link to="/notice">Notice</Link>
+            </NavItem>
+          <NavItem>
+          <Link to="/about">StudyList</Link>
+            </NavItem>
+          <NavItem>
+          <Link to="/mypage/profile">MyPage</Link>
+            </NavItem>
+          <LoginNavItem>
+          <NavItem>
+          <Link to="/login">로그인</Link>
+          </NavItem>
+          </LoginNavItem>
+        </NavMenu>
+      </Nav>
+=======
         <Nav>
             <Logo></Logo>
             <NavMenu>
@@ -15,6 +47,7 @@ const Header = () => {
                 </LoginNavItem>
             </NavMenu>
         </Nav>
+>>>>>>> frontend/src/pages/home/Header.js
     );
 };
 
@@ -57,4 +90,4 @@ const LoginNavItem = styled(NavItem)`
     margin-right: 5rem;
 `;
 
-export default Header;
+export default Header;
