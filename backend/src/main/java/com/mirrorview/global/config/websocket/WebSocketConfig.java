@@ -50,6 +50,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 			.withSockJS();
 	}
 
+
+	// 클라 -> 서버 pub
+	// 서버 -> 클라 sub (구독)
+
+	// 클라 -> 서버 -> 클라
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
 		registry.enableSimpleBroker("/sub","/queue");
