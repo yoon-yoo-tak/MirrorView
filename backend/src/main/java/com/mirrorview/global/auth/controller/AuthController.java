@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -22,7 +20,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.dto.LoginDto;
 import com.mirrorview.domain.user.service.MemberService;
-import com.mirrorview.global.auth.jwt.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 import com.mirrorview.global.util.JwtTokenUtil;
 
@@ -45,7 +42,9 @@ public class AuthController {
 		log.info("login start with id = {}, pw = {}", userId, password);
 
 		Member member = memberService.findByUserId(userId);
-
+		if (member == null || member.getDelete()) {
+			return BaseResponse.fail("login fail", 401);
+		}
 		// 로그인 요청한 유저로부터 입력된 패스워드 와 디비에 저장된 유저의 암호화된 패스워드가 같은지 확인.(유효한 패스워드인지 여부 확인)
 		if (passwordEncoder.matches(password, member.getPassword())) {
 			log.info("login ok!");
@@ -65,7 +64,7 @@ public class AuthController {
 
 	@PostMapping("/api/users/reissue")
 	public ResponseEntity<?> reissueAccessToken(@RequestHeader("Authorization") String token) {
-		DecodedJWT decodedJwt = null;
+		DecodedJWT decodedJwt;
 		final Map<String, Object> body = new LinkedHashMap<>();
 		try {
 			decodedJwt = JwtTokenUtil.handleError(token);
@@ -84,7 +83,7 @@ public class AuthController {
 		String reissuedRefreshToken = null;
 		String reissuedAccessToken = JwtTokenUtil.getAccessToken(userId);
 
-		if (dbToken.equals(token.replace(JwtTokenUtil.TOKEN_PREFIX, ""))) {
+		if (dbToken!=null && dbToken.equals(token.replace(JwtTokenUtil.TOKEN_PREFIX, ""))) {
 
 			//refresh token 만료가 2일 이내라면 재발급
 			if (expiresAt.getTime() - new Date().getTime() < JwtTokenUtil.TWO_DAYS) {

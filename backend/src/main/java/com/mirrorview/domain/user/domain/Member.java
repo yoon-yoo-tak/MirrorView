@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,7 +13,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "member")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -40,6 +38,9 @@ public class Member {
 
 	private float averageRating;
 
+	@Column(name = "delete_member", nullable = false, columnDefinition = "TINYINT(1)")
+	private Boolean delete;
+
 	public void updatePhoto(String updatePhoto) {
 		this.photo = updatePhoto;
 	}
@@ -55,5 +56,9 @@ public class Member {
 	public void updateAverageScore(long count, float score) {
 		float allScore = averageRating * (count-1) + score;
 		averageRating = allScore / count;
+	}
+
+	public void delete() {
+		delete = true;
 	}
 }

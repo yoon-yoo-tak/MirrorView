@@ -23,4 +23,6 @@ public interface MemberService {
 	float saveScore(String username, RatingDto ratingDto);
 
 	List<String> findMemberList(String userId);
+
+	void deleteMember(String userId);
 }

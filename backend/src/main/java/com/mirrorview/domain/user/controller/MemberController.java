@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -148,7 +149,7 @@ public class MemberController {
 		}
 		String friendStatus = friendService.getFriendStatus(myUserId, userId);
 		Member findMember = memberService.findByUserId(userId);
-		if (findMember == null) {
+		if (findMember == null || findMember.getDelete()) {
 			return BaseResponse.fail("없는 정보입니다.", 400);
 		}
 		MemberResDto responseDto = MemberResDto.build(friendStatus, findMember);
@@ -159,5 +160,16 @@ public class MemberController {
 	@GetMapping("/findAll/{userId}")
 	public ResponseEntity<?> getMemberList(@PathVariable String userId) {
 		return BaseResponse.okWithData(HttpStatus.OK, "유저 리스트", memberService.findMemberList(userId));
+	}
+
+	@DeleteMapping("/{userId}")
+	public ResponseEntity<?> deleteUser(@PathVariable String userId) {
+		try {
+
+			memberService.deleteMember(userId);
+		} catch (Exception e) {
+			return BaseResponse.fail(e.getMessage(), 500);
+		}
+		return BaseResponse.ok(HttpStatus.OK, "삭제 완료");
 	}
 }

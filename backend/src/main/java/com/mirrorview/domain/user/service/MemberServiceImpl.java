@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.mirrorview.domain.friend.repository.FriendRepository;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.domain.Rating;
 import com.mirrorview.domain.user.dto.FindMemberRequestDto;
@@ -28,6 +29,7 @@ public class MemberServiceImpl implements MemberService {
 	private final PasswordEncoder passwordEncoder;
 
 	private final RatingRepository ratingRepository;
+	private final FriendRepository friendRepository;
 
 	@Override
 	public boolean duplicatedUserId(String userId) {
@@ -96,8 +98,21 @@ public class MemberServiceImpl implements MemberService {
 	public List<String> findMemberList(String userId) {
 		return memberRepository.findByUserIdContaining(userId)
 			.stream()
+			.filter(member -> !member.getDelete())
 			.map(Member::getUserId)
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	@Transactional
+	public void deleteMember(String userId) {
+
+		Member member = memberRepository.findByUserId(userId);
+		if (member == null || member.getDelete()) {
+			throw new IllegalArgumentException("잘못된 정보");
+		}
+		member.delete();
+		friendRepository.deleteByFromOrTo(member, member);
 	}
 
 	private long findCount(Member otherMember) {

@@ -26,6 +26,7 @@ public class JoinDto {
 			.nickname(nickname)
 			.password(password)
 			.email(email)
+			.delete(false)
 			.build();
 	}
 }
