@@ -23,8 +23,8 @@ import com.mirrorview.domain.essay.dto.EssayUpdateDto;
 import com.mirrorview.domain.essay.service.EssayDetailService;
 import com.mirrorview.domain.essay.service.EssayService;
 import com.mirrorview.domain.feedback.dto.FeedbackDto;
+import com.mirrorview.domain.feedback.dto.FeedbackSaveDto;
 import com.mirrorview.domain.feedback.service.FeedbackService;
-import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.dto.ChangePasswordDto;
 import com.mirrorview.domain.user.dto.MemberProfileDto;
 import com.mirrorview.domain.user.service.MemberProfileService;
@@ -49,18 +49,19 @@ public class MyPageController {
 	private final PasswordEncoder passwordEncoder;
 
 	@GetMapping
-	public ResponseEntity<?> getInfo(@AuthenticationPrincipal CustomMemberDetails member){
+	public ResponseEntity<?> getInfo(@AuthenticationPrincipal CustomMemberDetails member) {
 		String userId = member.getUsername();
 		MemberProfileDto memberProfileDto = memberProfileService.findByUserId(userId);
 		return BaseResponse.okWithData(HttpStatus.OK, "회원정보 조회 성공", memberProfileDto);
 	}
 
 	@PostMapping("/password")
-	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto dto, @AuthenticationPrincipal CustomMemberDetails member){
+	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto dto,
+		@AuthenticationPrincipal CustomMemberDetails member) {
 		try {
 			memberProfileService.changePassword(dto, member.getUsername());
 			return BaseResponse.ok(HttpStatus.OK, "비밀번호 변경 완료");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return BaseResponse.fail("비밀번호 변경 실패", 400);
 		}
 	}
@@ -148,8 +149,19 @@ public class MyPageController {
 		try {
 			essayService.deleteByEssayId(essayId);
 			return BaseResponse.ok(HttpStatus.OK, "삭제 성공");
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return BaseResponse.fail("삭제 실패", 400);
 		}
+	}
+
+	@PostMapping("/feedbacks/save")
+	public ResponseEntity<?> saveFeedback(@RequestBody FeedbackSaveDto dto) {
+		try {
+			feedbackService.saveFeedback(dto);
+			return BaseResponse.ok(HttpStatus.OK, "피드백 저장 성공");
+		} catch (Exception e) {
+			return BaseResponse.fail("피드백 저장 실패", 401);
+		}
+
 	}
 }
