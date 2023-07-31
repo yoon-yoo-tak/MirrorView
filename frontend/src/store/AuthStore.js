@@ -109,8 +109,8 @@ const authSlice = createSlice({
             state.id = action.payload;
         },
 
-        setEmail: (state, action) => {
-            state.email = action.payload;
+        setUserEmail: (state, action) => {
+            state.user.email = action.payload;
         },
 
         setEmailValid: (state, action) => {
@@ -152,6 +152,12 @@ const authSlice = createSlice({
         loginFailure: (state, action) => {
             state.user = null;
         },
+        logout:(state, action) =>{
+            state.user = null;
+            state.accessToken = null;
+            state.refreshToken = null;
+            state.loginDone = false;
+        }
     },
     extraReducers: {
         [login.pending]: (state, action) => {
@@ -187,7 +193,7 @@ export const {
     setIdValid,
     setPasswordValid,
     setPasswordCheckValid,
-    setEmail,
+    setUserEmail,
     setEmailValid,
     setNicknameValid,
     setNotAllow,

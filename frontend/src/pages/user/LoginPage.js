@@ -31,6 +31,9 @@ const Login = () => {
             })
         ).unwrap().then(({data})=>{
             dispatch(getUserInfo(data["access-token"]));
+        }).catch((error)=>{
+            console.log(error);
+            alert("회원 정보가 존재하지 않습니다."); //todo 이쁜 거로 바꾸기 sweetalert (?)
         })
     },[inputId,inputPassword]);
 
