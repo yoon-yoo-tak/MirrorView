@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useParams  } from "react-router-dom";
-import data from "./data";
+import data from "./Data";
 import * as S from "../../components/notice/NoticeDetailComponent";
 
 
