@@ -25,11 +25,11 @@ const Home = () => {
         <img src={process.env.PUBLIC_URL + '/동글.png'} />
         </ImageWrapper3>
         <Title4>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 몇번의 Click만으로 진행되는 온라인 면스 ! 
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 몇번의 Click만으로 진행되는 온라인 면스 !
           <br></br>
           <br></br>
           <br></br>
-         시간 제약 없이 가능한 온라인 면스 ! <br></br> 
+         시간 제약 없이 가능한 온라인 면스 ! <br></br>
           <br></br>
           <br></br>
           &nbsp; &nbsp; &nbsp; &nbsp; 나만의 피드백 아카이브로 성장 가능성 Up ↗
@@ -140,4 +140,3 @@ const ImageWrapper3 = styled.div`
 `;
 
 export default Home;
-

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import FeedbackModal from "./FeedbackModal";
+import FeedbackModal from "./FeedbackModalComponent";
 
-import * as S from "../styledComponents/MyPageScomponents";
+import * as S from "./MypageStyledComponents";
 
 const FeedbackComponent = () => {
     // 더미데이터
