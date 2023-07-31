@@ -2,6 +2,10 @@ import { styled } from "styled-components";
 
 import plusIcon from "../../assets/studylist/plus.png";
 
+export const hidden = styled.div`
+    visibility: hidden;
+`;
+
 export const page = styled.div`
     background-image: url(${process.env.PUBLIC_URL}/bground.png);
     width: 100%;
@@ -190,7 +194,9 @@ export const modalTitle = styled.div`
     margin: 15px 0;
 `;
 
-export const modalInputForm = styled.div``;
+export const modalInputForm = styled.div`
+    margin-top: 20px;
+`;
 export const modalInputList = styled.div`
     display: flex;
     align-items: center;
@@ -205,9 +211,29 @@ export const modalInputText = styled.input`
     background: #e6e6e6;
     border: 0;
     border-radius: 10px;
+    padding: 0;
 `;
 
 export const modalInputDropDown = styled.div``;
+
+export const modalOpenLabel = styled.label`
+    margin-right: 15px;
+`;
+
+export const modalOpenRadio = styled.input`
+    accent-color: black;
+`;
+
+export const modalCategory = styled.select`
+    margin: 5px 0 5px 0;
+    width: 18rem;
+    height: 40px;
+    background: #e6e6e6;
+    border: 0;
+    border-radius: 10px;
+
+    padding: 1px 2px;
+`;
 
 export const createCompleteButton = styled.button`
     margin: 5px;
