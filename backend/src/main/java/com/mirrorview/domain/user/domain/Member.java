@@ -52,8 +52,12 @@ public class Member {
 		this.password = password;
 	}
 
+	public void updateEmail(String email) {
+		this.email = email;
+	}
+
 	public void updateAverageScore(long count, float score) {
-		float allScore = averageRating * (count-1) + score;
+		float allScore = averageRating * (count - 1) + score;
 		averageRating = allScore / count;
 	}
 }

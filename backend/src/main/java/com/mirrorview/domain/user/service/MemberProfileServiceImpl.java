@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MemberProfileServiceImpl implements MemberProfileService{
+public class MemberProfileServiceImpl implements MemberProfileService {
 
 	private final MemberProfileRepository memberProfileRepository;
 	private final MemberRepository memberRepository;
@@ -60,5 +60,11 @@ public class MemberProfileServiceImpl implements MemberProfileService{
 		if (passwordEncoder.matches(origin, members.getPassword())) {
 			members.updatePassword(passwordEncoder.encode(dto.getNewPass()));
 		}
+	}
+
+	@Override
+	public void changeEmail(String email, String userId) {
+		Member members = memberRepository.findByUserId(userId);
+		members.updateEmail(email);
 	}
 }
