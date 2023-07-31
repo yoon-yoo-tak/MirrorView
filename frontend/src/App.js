@@ -12,23 +12,24 @@ import Header from "./components/common/HeaderComponent";
 import Home from "./pages/home/HomePage";
 import NoticePage from "./pages/notice/NoticePage";
 import NoticeDetail from "./pages/notice/NoticeDetailPage";
+import StudyRoomList from "./pages/studylist/StudyRoomListPage";
 
 const App = () => {
-  return (
-    <div>
-      <Header></Header>
-      <Routes> 
-        <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/mypage/*" element={<MyPage />} />
-        <Route path="/aboutus" element={<AboutusPage />} />   
-        <Route path="/notice" element={<NoticePage />} />    
-        <Route path="/noticedetail/:id" element={<NoticeDetail />} />  
-      </Routes>
-    </div>
-    
-  );
+    return (
+        <div>
+            <Header></Header>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/mypage/*" element={<MyPage />} />
+                <Route path="/aboutus" element={<AboutusPage />} />
+                <Route path="/notice" element={<NoticePage />} />
+                <Route path="/noticedetail/:id" element={<NoticeDetail />} />
+                <Route path="/studylist" element={<StudyRoomList />} />
+            </Routes>
+        </div>
+    );
 };
 
 export default App;
