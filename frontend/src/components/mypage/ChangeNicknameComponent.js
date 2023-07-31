@@ -10,7 +10,10 @@ const ChangeNicknameComponent = () => {
     const dispatch = useDispatch();
     const [newNickname,setNewNickname] = useState("");
     const [nicknameValid,setNicknameValid] = useState(null);
-    const {user} = useSelector((state)=> state.auth);
+    const {user,refreshToken} = useSelector((state)=> state.auth);
+    
+    axios.defaults.headers.common["Authorization"] = `Bearer ${refreshToken}`;
+
     const handleNickname = (e) => {
         setNewNickname(e.target.value);
     }
