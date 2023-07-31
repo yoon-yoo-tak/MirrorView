@@ -1,4 +1,6 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useCallback,useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import ChangePassword from "./ChangePasswordPage";
 import Feedback from "./feedback/FeedbackPage";
@@ -9,8 +11,24 @@ import EssayUpdate from "./essay/EssayUpdatePage";
 import Profile from "./profile/ProfilePage";
 import ChangeEmail from "./profile/ChangeEmailPage";
 import ChangeNickname from "./profile/ChangeNicknamePage";
+import { getUserInfo } from "../../store/AuthStore";
 
 const MyPage = () => {
+
+    const {user} = useSelector((state) => state.auth);
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if(!user){
+            navigate("/login");
+        }
+        return () =>{
+        }
+        
+    }, []);
+    
     return (
         <div>
             <Routes>

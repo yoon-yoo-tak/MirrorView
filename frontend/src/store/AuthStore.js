@@ -77,6 +77,27 @@ export const login = createAsyncThunk(
     }
 )
 
+export const getUserInfo = createAsyncThunk(
+    "getUserInfo",
+    async(accessToken,{rejectWithValue})=> {
+        console.log(accessToken);
+        try {
+            
+            axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+            const res = await axios.get("http://localhost:8080/api/mypage",{
+                withCredentials: true,
+            });
+
+            console.log(res);
+
+            return res.data;
+        } catch (error) {
+            console.error(error);
+            return rejectWithValue(error.response.data);
+        }
+    }
+)
+
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -145,10 +166,7 @@ const authSlice = createSlice({
             state.accessToken = payload.data["access-token"];
             
             state.refreshToken = payload.data["refresh-token"];
-            state.user = {
-                userid : payload.data["user-id"],
-                nickname: payload.data["nickname"],
-            };
+       
             
         },
         [login.rejected]: (state, action) => {
@@ -156,6 +174,9 @@ const authSlice = createSlice({
             state.loginDone = false;
             state.loginError = action.error;
         },
+        [getUserInfo.fulfilled]: (state,{payload}) => {
+            state.user = payload.data;
+        }
 
     }
 });

@@ -2,7 +2,8 @@
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../MypageSidebarPage";
 import StarRating from "../../../components/mypage/StarRatingComponent";
-
+import {user} from "../../../store/AuthStore"
+import { useSelector } from "react-redux";
 // import classes from "./Profile.module.scss";
 import * as S from "../../../components/mypage/MypageStyledComponents";
 
@@ -13,12 +14,7 @@ const Profile = () => {
     // user 자체를 가져오게 되면 state.auth.user
     // 대신 user가 자체적으로 정보를 가지고 있어야 함
 
-    const user = {
-        id: "ssafy1226",
-        nickname: "그로밋",
-        email: "ssafy1226@ssafy.com",
-        grade: 0.3,
-    };
+    const {user} = useSelector((state) => state.auth);
 
     // const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -54,7 +50,7 @@ const Profile = () => {
                             </S.profileKey>
                             <S.vLine></S.vLine>
                             <S.profileDetail>
-                                <S.profileContent>{user.id}</S.profileContent>
+                                <S.profileContent>{user.userId}</S.profileContent>
                                 <S.profileContent>
                                     {user.email}
                                 </S.profileContent>
@@ -78,9 +74,9 @@ const Profile = () => {
                         <h2>{user.nickname}님의 현재 평점</h2>
                         <hr />
                         <S.gradeGroup>
-                            <S.grade>{user.grade}</S.grade>
+                            <S.grade>{user.averageRating}</S.grade>
                             <S.gradeStar>
-                                <StarRating grade={user.grade} />
+                                <StarRating grade={user.averageRating} />
                             </S.gradeStar>
                         </S.gradeGroup>
                     </S.profileBox>
