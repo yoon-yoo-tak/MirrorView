@@ -164,4 +164,12 @@ public class MyPageController {
 		}
 
 	}
+
+	@PatchMapping("/email")
+	public ResponseEntity<?> changeEmail(@AuthenticationPrincipal
+		CustomMemberDetails member, String email) {
+		String userId = member.getUsername();
+		memberProfileService.changeEmail(email, userId);
+		return BaseResponse.ok(HttpStatus.OK, "이메일 변경 성공");
+	}
 }
