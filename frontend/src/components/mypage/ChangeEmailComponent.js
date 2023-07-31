@@ -1,8 +1,8 @@
 // import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setEmail, setEmailValid } from "../../store/auth";
+import { setEmail, setEmailValid } from "../../store/authStore";
 
-import * as S from "../styledComponents/MyPageScomponents";
+import * as S from "./MypageStyledComponents";
 // import { useState } from "react";
 
 const ChangeEmailComponent = () => {

@@ -1,20 +1,17 @@
 import React from "react";
-// import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
 import "./fonts/font.css";
 
-
-import Login from "./pages/user/login";
-import Signup from "./pages/user/Signup";
-import MyPage from "./pages/mypage/MyPage";
-import About from './pages/Aboutus/about';
-import Header from "./pages/Home/Header";
-import Notice from "./pages/notice/notice";
-import Noticepage from "./pages/notice/noticepage";
-import Home from "./pages/Home/home";
-
+import Login from "./pages/user/LoginPage";
+import Signup from "./pages/user/SignupPage";
+import MyPage from "./pages/mypage/MypagePage";
+import AboutusPage from "./pages/aboutus/AboutusPage";
+import Header from "./components/common/HeaderComponent";
+import Home from "./pages/home/HomePage";
+import NoticePage from "./pages/Notice/NoticePage";
+import NoticeDetail from "./pages/Notice/NoticeDetailPage";
 
 const App = () => {
   return (
@@ -25,9 +22,9 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/mypage/*" element={<MyPage />} />
-        <Route path="/about" element={<About />} />   
-        <Route path="/notice" element={<Notice />} />   
-        <Route path="/noticepage" element={<Noticepage />} />       
+        <Route path="/aboutus" element={<AboutusPage />} />   
+        <Route path="/notice" element={<NoticePage />} />    
+        <Route path="/noticedetail/:id" element={<NoticeDetail />} />  
       </Routes>
     </div>
     
