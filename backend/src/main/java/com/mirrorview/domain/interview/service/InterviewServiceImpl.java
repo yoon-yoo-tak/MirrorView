@@ -29,17 +29,8 @@ public class InterviewServiceImpl implements InterviewService {
 
 	@Override
 	public List<RoomResponseDto> findRoom() {
-
 		Iterable<InterviewRoom> rooms = interviewRepository.findAll();
-		List<RoomResponseDto> result = new ArrayList<>();
-		rooms.forEach(room -> {
-			if (room != null) {
-				RoomResponseDto roomResponseDto = RoomResponseDto.build(room);
-				result.add(roomResponseDto);
-			}
-		});
-
-		return result;
+		return toRoomResponseDtos(rooms);
 	}
 
 	@Override
@@ -94,5 +85,16 @@ public class InterviewServiceImpl implements InterviewService {
 		room.changeReady(memberInfo);
 		interviewRepository.save(room);
 
+	}
+
+	private List<RoomResponseDto> toRoomResponseDtos(Iterable<InterviewRoom> rooms) {
+		List<RoomResponseDto> result = new ArrayList<>();
+		rooms.forEach(room -> {
+			if (room != null) {
+				RoomResponseDto roomResponseDto = RoomResponseDto.build(room);
+				result.add(roomResponseDto);
+			}
+		});
+		return result;
 	}
 }

@@ -36,7 +36,7 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/mypage")
+@RequestMapping("/api/mypage")
 @RequiredArgsConstructor
 @Api(tags = "마이페이지")
 public class MyPageController {

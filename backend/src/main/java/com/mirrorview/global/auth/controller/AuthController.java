@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -22,7 +20,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.dto.LoginDto;
 import com.mirrorview.domain.user.service.MemberService;
-import com.mirrorview.global.auth.jwt.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 import com.mirrorview.global.util.JwtTokenUtil;
 
@@ -51,8 +48,6 @@ public class AuthController {
 			log.info("login ok!");
 			// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
 			Map<String, String> tokens = new LinkedHashMap<>();
-			tokens.put("user-id", member.getUserId());
-			tokens.put("nickname", member.getNickname());
 			tokens.put("access-token", JwtTokenUtil.getAccessToken(userId));
 			tokens.put("refresh-token", JwtTokenUtil.getRefreshToken(userId));
 
