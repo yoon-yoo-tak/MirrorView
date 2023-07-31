@@ -51,6 +51,8 @@ public class AuthController {
 			log.info("login ok!");
 			// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
 			Map<String, String> tokens = new LinkedHashMap<>();
+			tokens.put("user-id", member.getUserId());
+			tokens.put("nickname", member.getNickname());
 			tokens.put("access-token", JwtTokenUtil.getAccessToken(userId));
 			tokens.put("refresh-token", JwtTokenUtil.getRefreshToken(userId));
 
