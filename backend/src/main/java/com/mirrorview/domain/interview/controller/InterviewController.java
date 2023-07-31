@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mirrorview.domain.interview.domain.InterviewRoom;
@@ -38,7 +39,9 @@ public class InterviewController {
 	private final InterviewService interviewService;
 
 	@GetMapping("/rooms")
-	public ResponseEntity<?> getRooms() {
+	public ResponseEntity<?> getRooms(
+		@RequestParam(required = false) String jobType,
+		@RequestParam(required = false) String interviewType) {
 		return BaseResponse.okWithData(HttpStatus.OK, "방 정보 조회 완료", interviewService.findRoom());
 	}
 
@@ -80,13 +83,13 @@ public class InterviewController {
 	// ready
 	@MessageMapping("ready/{roomId}")
 	@SendTo("/sub/ready/{roomId}")
-	public ResponseEntity<?> changeReady(@DestinationVariable String roomId,RoomMemberInfo memberInfo ) {
+	public ResponseEntity<?> changeReady(@DestinationVariable String roomId, RoomMemberInfo memberInfo) {
 		//todo 저장하기
 		Optional<InterviewRoom> room = interviewService.findRoomById(roomId);
 		if (room.isEmpty()) {
-			return BaseResponse.fail("방정보 없음",400);
+			return BaseResponse.fail("방정보 없음", 400);
 		}
-		interviewService.changeReady(memberInfo,room.get());
+		interviewService.changeReady(memberInfo, room.get());
 		return BaseResponse.okWithData(HttpStatus.OK, "레디 변경", memberInfo);
 	}
 }

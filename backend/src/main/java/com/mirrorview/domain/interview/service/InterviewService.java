@@ -17,7 +17,7 @@ public interface InterviewService {
 
 	List<RoomMemberInfo> joinRoom(String nickname, String roomId);
 
-	void changeReady(RoomMemberInfo memberInfo,InterviewRoom room);
+	void changeReady(RoomMemberInfo memberInfo, InterviewRoom room);
 
 	Optional<InterviewRoom> findRoomById(String roomId);
 }
