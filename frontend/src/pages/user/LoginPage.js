@@ -9,17 +9,17 @@ import { useCallback, useState, useEffect } from "react";
 const Login = () => {
     const [inputId, setInputId] = useState("");
     const [inputPassword, setInputPassword] = useState("");
-    const { id, password,user,accessToken } = useSelector((state) => state.auth);
+    const { id, password,user } = useSelector((state) => state.auth);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(accessToken);
-        if (accessToken) {
+        console.log(user);
+        if (user) {
             navigate("/");
         }
-    }, [accessToken]);
+    }, [user]);
 
     const handleSubmit = useCallback((e) => {
         e.preventDefault();

@@ -141,13 +141,14 @@ const authSlice = createSlice({
         [login.fulfilled]: (state, {payload}) => {
             state.loginLoading = false;
             state.loginDone = true;
-            state.loginError = null;
-            console.log(payload);
-            console.log(state.accessToken);
+            state.loginError = null;            
             state.accessToken = payload.data["access-token"];
-            console.log(state.accessToken);
+            
             state.refreshToken = payload.data["refresh-token"];
-            state.user = payload.data.user;
+            state.user = {
+                userid : payload.data["user-id"],
+                nickname: payload.data["nickname"],
+            };
             
         },
         [login.rejected]: (state, action) => {
