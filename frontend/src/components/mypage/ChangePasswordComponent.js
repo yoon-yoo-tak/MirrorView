@@ -5,7 +5,7 @@ import {
     setPasswordValid,
     setPasswordCheckValid,
     // setNotAllow,
-} from "../../store/authStore";
+} from "../../store/AuthStore";
 
 import * as S from "./MypageStyledComponents";
 

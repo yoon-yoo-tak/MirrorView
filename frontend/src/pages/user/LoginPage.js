@@ -7,7 +7,7 @@ import {
     setNotAllow,
     loginSuccess,
     loginFailure,
-} from "../../store/authStore";
+} from "../../store/AuthStore";
 import axios from "axios";
 
 const Login = () => {

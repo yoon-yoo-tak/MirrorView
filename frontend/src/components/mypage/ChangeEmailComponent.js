@@ -1,6 +1,6 @@
 // import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setEmail, setEmailValid } from "../../store/authStore";
+import { setEmail, setEmailValid } from "../../store/AuthStore";
 
 import * as S from "./MypageStyledComponents";
 // import { useState } from "react";
