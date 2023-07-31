@@ -1,4 +1,4 @@
-package com.mirrorview.db.dto;
+package com.mirrorview.domain.category.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

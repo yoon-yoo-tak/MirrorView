@@ -20,5 +20,7 @@ public interface InterviewService {
 	void changeReady(RoomMemberInfo memberInfo, InterviewRoom room);
 
 	Optional<InterviewRoom> findRoomById(String roomId);
+
+	List<RoomResponseDto> findRoomByCategory(String category);
 }
 

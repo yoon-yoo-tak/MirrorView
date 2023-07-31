@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mirrorview.domain.interview.domain.InterviewRoom;
 import com.mirrorview.domain.interview.domain.RoomMemberInfo;
 import com.mirrorview.domain.interview.dto.RoomRequestDto;
+import com.mirrorview.domain.interview.dto.RoomResponseDto;
 import com.mirrorview.domain.interview.service.InterviewService;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.global.auth.jwt.CustomMemberDetails;
@@ -91,5 +92,11 @@ public class InterviewController {
 		}
 		interviewService.changeReady(memberInfo, room.get());
 		return BaseResponse.okWithData(HttpStatus.OK, "레디 변경", memberInfo);
+	}
+
+	@GetMapping("/rooms/{category}")
+	public ResponseEntity<?> searchRooms(@PathVariable("category") String category) {
+		List<RoomResponseDto> list = interviewService.findRoomByCategory(category);
+		return BaseResponse.okWithData(HttpStatus.OK, "카테고리로 조회 성공", list);
 	}
 }
