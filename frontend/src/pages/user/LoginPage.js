@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import  { authActions, login } from "../../store/AuthStore";
+import  { login, getUserInfo } from "../../store/AuthStore";
 import * as S from "../../components/auth/UserStyledComponents";
 import axios from "axios";
 
@@ -9,7 +9,7 @@ import { useCallback, useState, useEffect } from "react";
 const Login = () => {
     const [inputId, setInputId] = useState("");
     const [inputPassword, setInputPassword] = useState("");
-    const { id, password,user } = useSelector((state) => state.auth);
+    const { id, password,user,accessToken } = useSelector((state) => state.auth);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -19,6 +19,7 @@ const Login = () => {
         if (user) {
             navigate("/");
         }
+ 
     }, [user]);
 
     const handleSubmit = useCallback((e) => {
@@ -28,7 +29,12 @@ const Login = () => {
                 userId : inputId,
                 password : inputPassword
             })
-        );
+        ).unwrap().then(({data})=>{
+            dispatch(getUserInfo(data["access-token"]));
+        }).catch((error)=>{
+            console.log(error);
+            alert("회원 정보가 존재하지 않습니다."); //todo 이쁜 거로 바꾸기 sweetalert (?)
+        })
     },[inputId,inputPassword]);
 
     const handleId = useCallback((e)=>{
