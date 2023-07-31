@@ -58,7 +58,7 @@ public class MemberProfileServiceImpl implements MemberProfileService{
 		String origin = dto.getOriginPass();
 		Member members = memberRepository.findByUserId(userId);
 		if (passwordEncoder.matches(origin, members.getPassword())) {
-			members.updatePassword(dto.getNewPass());
+			members.updatePassword(passwordEncoder.encode(dto.getNewPass()));
 		}
 	}
 }
