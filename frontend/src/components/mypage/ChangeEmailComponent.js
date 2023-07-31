@@ -18,7 +18,7 @@ const ChangeEmailComponent = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     // const [confirmEmail, setConfirmEmail] = useState("");
-    axios.defaults.headers.common["Authorization"] = refreshToken;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${refreshToken}`;
     const handleEmail = (e) => {
         const value = e.target.value;
         const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
