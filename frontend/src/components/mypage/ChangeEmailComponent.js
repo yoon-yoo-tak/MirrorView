@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 // import { useState } from "react";
 
 const ChangeEmailComponent = () => {
-    const { user } = useSelector((state) => state.auth);
+    const { user,refreshToken } = useSelector((state) => state.auth);
     const [email, setEmail] = useState("");
     const [emailValid,setEmailValid] = useState(false);
     const [key,setKey] = useState("");
@@ -18,7 +18,7 @@ const ChangeEmailComponent = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     // const [confirmEmail, setConfirmEmail] = useState("");
-
+    axios.defaults.headers.common["Authorization"] = refreshToken;
     const handleEmail = (e) => {
         const value = e.target.value;
         const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
@@ -51,9 +51,8 @@ const ChangeEmailComponent = () => {
     }
 
     const handleConfirm = async (e) => {
-        await axios.patch("http://localhost:8080/api/mypage/email",{
-            userId : user.userId,
-            email : email
+        
+        await axios.patch(`http://localhost:8080/api/mypage/email?email=${email}`,{
         }).then((response)=>{
             console.log(response);
             dispatch(setUserEmail(email));
