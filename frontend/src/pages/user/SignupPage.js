@@ -11,7 +11,7 @@ import {
     setEmailValid,
     setNicknameValid,
     setNotAllow,
-} from "../../store/authStore";
+} from "../../store/AuthStore";
 import axios from "axios";
 
 const Signup = () => {

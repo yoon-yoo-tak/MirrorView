@@ -5,7 +5,7 @@ import { configureStore } from "@reduxjs/toolkit";
 // 기존의 리덕스에서는 스토어를 생성한 후 미들웨어가 한 개 이상이라면 여러 메소드를 통해 긴 코드를 작성해야 했다
 // 그치만 toolkit의  configureStore()를 사용하면
 // 별도의 메소드 없이 바로 미들웨어를 추가할 수 있음!!
-import authReducer from "./authStore";
+import authReducer from "./AuthStore";
 
 const store = configureStore({
   reducer: {

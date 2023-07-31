@@ -10,8 +10,8 @@ import MyPage from "./pages/mypage/MypagePage";
 import AboutusPage from "./pages/aboutus/AboutusPage";
 import Header from "./components/common/HeaderComponent";
 import Home from "./pages/home/HomePage";
-import NoticePage from "./pages/Notice/NoticePage";
-import NoticeDetail from "./pages/Notice/NoticeDetailPage";
+import NoticePage from "./pages/notice/NoticePage";
+import NoticeDetail from "./pages/notice/NoticeDetailPage";
 
 const App = () => {
   return (
