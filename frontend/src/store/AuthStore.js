@@ -140,7 +140,7 @@ const authSlice = createSlice({
             state.nickname = action.payload;
         },
         setNickname: (state, action) => {
-            state.nickname = action.payload;
+            state.user.nickname = action.payload;
         },
         setNotAllow: (state, action) => {
             state.notAllow = action.payload;
@@ -199,6 +199,7 @@ export const {
     setNotAllow,
     loginSuccess,
     loginFailure,
+    setNickname,
 } = authSlice.actions;
 
 export const authActions = authSlice.actions;
