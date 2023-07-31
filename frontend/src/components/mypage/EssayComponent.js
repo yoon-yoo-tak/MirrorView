@@ -1,4 +1,4 @@
-import * as S from "../styledComponents/MyPageScomponents";
+import * as S from "./MypageStyledComponents";
 import { useNavigate } from "react-router-dom";
 
 const EssayComponent = () => {
