@@ -10,8 +10,6 @@ import {
 } from "../../store/auth";
 import axios from "axios";
 
-import classes from "./Login.module.scss";
-
 const Login = () => {
     const { id, password, idValid, passwordValid, notAllow } = useSelector(
         (state) => state.auth

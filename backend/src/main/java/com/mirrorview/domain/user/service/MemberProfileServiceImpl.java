@@ -4,10 +4,14 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mirrorview.domain.user.domain.Member;
+import com.mirrorview.domain.user.dto.ChangePasswordDto;
+import com.mirrorview.domain.user.dto.MemberProfileDto;
 import com.mirrorview.domain.user.repository.MemberProfileRepository;
+import com.mirrorview.domain.user.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class MemberProfileServiceImpl implements MemberProfileService{
 
 	private final MemberProfileRepository memberProfileRepository;
+	private final MemberRepository memberRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public void updatePhoto(String userId, String photo) {
@@ -33,5 +39,26 @@ public class MemberProfileServiceImpl implements MemberProfileService{
 		Member member = memberProfileRepository.findByUserId(userId);
 		member.updateNickName(nickName);
 
+	}
+
+	@Override
+	public MemberProfileDto findByUserId(String userId) {
+		Member member = memberProfileRepository.findByUserId(userId);
+		MemberProfileDto memberProfileDto = new MemberProfileDto();
+		memberProfileDto.setUserId(member.getUserId());
+		memberProfileDto.setEmail(member.getEmail());
+		memberProfileDto.setNickname(member.getNickname());
+		memberProfileDto.setPhoto(member.getPhoto());
+		memberProfileDto.setAverageRating(member.getAverageRating());
+		return memberProfileDto;
+	}
+
+	@Override
+	public void changePassword(ChangePasswordDto dto, String userId) {
+		String origin = dto.getOriginPass();
+		Member members = memberRepository.findByUserId(userId);
+		if (passwordEncoder.matches(origin, members.getPassword())) {
+			members.updatePassword(dto.getNewPass());
+		}
 	}
 }

@@ -38,6 +38,8 @@ public class Member {
 
 	private String photo;
 
+	private float averageRating;
+
 	public void updatePhoto(String updatePhoto) {
 		this.photo = updatePhoto;
 	}
@@ -48,5 +50,10 @@ public class Member {
 
 	public void updatePassword(String password) {
 		this.password = password;
+	}
+
+	public void updateAverageScore(long count, float score) {
+		float allScore = averageRating * (count-1) + score;
+		averageRating = allScore / count;
 	}
 }

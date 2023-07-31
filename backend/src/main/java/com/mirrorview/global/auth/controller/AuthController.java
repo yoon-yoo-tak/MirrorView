@@ -38,30 +38,8 @@ public class AuthController {
 	private final MemberService memberService;
 	private final RedisTemplate<String, String> template;
 
-	@GetMapping("/hello")
-
-	public String hello() {
-		log.info(String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
-		log.info(String.valueOf(SecurityContextHolder.getContext().getAuthentication().getDetails()));
-		CustomMemberDetails principal = (CustomMemberDetails)SecurityContextHolder.getContext()
-			.getAuthentication()
-			.getPrincipal();
-		log.info("{}", principal.getUser());
-		log.info("{}", principal.getUsername());
-		String asd = "asdasd";
-		String encode = passwordEncoder.encode(asd);
-		return "Asd";
-	}
-
-	@GetMapping("/hello2")
-
-	public String hello2() {
-		String asd = "asdasd";
-		return "hello2";
-	}
-
 	@PostMapping("/api/users/login")
-	public ResponseEntity<?> signIn(@RequestBody LoginDto loginDto) {
+	public ResponseEntity<?> logIn(@RequestBody LoginDto loginDto) {
 		String userId = loginDto.getUserId();
 		String password = loginDto.getPassword();
 		log.info("login start with id = {}, pw = {}", userId, password);
@@ -85,7 +63,7 @@ public class AuthController {
 		return BaseResponse.fail("login fail", 401);
 	}
 
-	@PostMapping("/api/users/refresh")
+	@PostMapping("/api/users/reissue")
 	public ResponseEntity<?> reissueAccessToken(@RequestHeader("Authorization") String token) {
 		DecodedJWT decodedJwt = null;
 		final Map<String, Object> body = new LinkedHashMap<>();

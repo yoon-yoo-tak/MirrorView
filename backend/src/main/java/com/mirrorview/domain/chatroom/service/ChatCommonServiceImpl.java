@@ -16,10 +16,10 @@ public class ChatCommonServiceImpl {
 	private final WebSocketEvents webSocketEvents;
 
 	public int getUserCount() {
-		return webSocketEvents.getUsers().size();
+		return webSocketEvents.getTotalUsers().size();
 	}
 
 	public Set<String> getUserNames() {
-		return webSocketEvents.getUsers();
+		return webSocketEvents.getTotalUsers();
 	}
 }

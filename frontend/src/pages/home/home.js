@@ -1,12 +1,10 @@
-import React from 'react';
+import React from "react";
 import styled from "styled-components";
-import Header from './Header';
 
 const Home = () => {
   return (
     <Container>
-      <Header></Header>
-      <Image src='/bground.png' alt='main_bg' />
+      <Image src='/bground2.png' alt='main_bg' />
       <Content>
         <Title>청춘들의 면접 플랫폼</Title>
         <Title2>밀어:뷰</Title2>
@@ -42,101 +40,104 @@ const Home = () => {
   );
 };
 
-
 const Container = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border : none;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: none;
 `;
 
 const Image = styled.img`
+
   width: 100%;
   height: 210vh;
   object-fit: cover;
+  margin: 0;
+  padding: 0;
 `;
 
 const Content = styled.div`
-  position: absolute;
-  top: 30%;
-  left: 25%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  z-index:2;
+    position: absolute;
+    top: 30%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
 `;
 
 const Content2 = styled.div`
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  z-index:2;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
 `;
 
 const Content3 = styled.div`
-  position: absolute;
-  top: 93%;
-  left: 40%;
-  transform: translate(-60%, -100%);
-  text-align: justify;
-  z-index:2;
-  display: inline-block;
-  white-space: nowrap;
+    position: absolute;
+    top: 93%;
+    left: 40%;
+    transform: translate(-60%, -100%);
+    text-align: justify;
+    z-index: 2;
+    display: inline-block;
+    white-space: nowrap;
 `;
 
 const Title = styled.h2`
-  color: #033495;
-  font-size: 64px;
-  font-family : "DAE";
+    color: #033495;
+    font-size: 64px;
+    font-family: "DAE";
 `;
 
 const Title2 = styled.h2`
-  color: #6A9CFD  ;
-  font-size: 64px;
-  font-family : DAE;
+    color: #6a9cfd;
+    font-size: 64px;
+    font-family: DAE;
 `;
 
 const Title3 = styled.h2`
-  color: #6A9CFD  ;
-  font-size: 64px;
-  font-family : DAE;
+    color: #6a9cfd;
+    font-size: 64px;
+    font-family: DAE;
 `;
 
 const Title4 = styled.h2`
-  color: #F9D723;
-  font-size: 40px;
-  font-family : DAE;
+    color: #f9d723;
+    font-size: 40px;
+    font-family: DAE;
 `;
 
 const ImageWrapper = styled.div`
-  position: absolute;
-  top: 50%;
-  right: 70%;
-  transform: translate(700%, -130%);
-  z-index: 1; 
-  width : 100px;
-  height : 300px;
+    position: absolute;
+    top: 50%;
+    right: 70%;
+    transform: translate(700%, -130%);
+    z-index: 1;
+    width: 100px;
+    height: 300px;
 `;
 
 const ImageWrapper2 = styled.div`
-  position: absolute;
-  top: 210%;
-  right: 125%;
-  transform: translate(700%, -130%);
-  z-index: 1; 
-  width : 100px;
-  height : 300px;
+    position: absolute;
+    top: 210%;
+    right: 125%;
+    transform: translate(700%, -130%);
+    z-index: 1;
+    width: 100px;
+    height: 300px;
 `;
 
 const ImageWrapper3 = styled.div`
-  position: absolute;
-  top: 110%;
-  right: 67%;
-  transform: translate(700%, -130%);
-  z-index: 1; 
-  width : 100px;
-  height : 300px;
+    position: absolute;
+    top: 110%;
+    right: 67%;
+    transform: translate(700%, -130%);
+    z-index: 1;
+    width: 100px;
+    height: 300px;
 `;
 
 export default Home;
+

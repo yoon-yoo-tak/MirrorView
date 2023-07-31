@@ -1,13 +1,14 @@
 package com.mirrorview.domain.friend.repository;
 
-import static com.mirrorview.db.entity.QFriend.*;
+
+import static com.mirrorview.domain.friend.domain.QFriend.*;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import com.mirrorview.db.entity.QFriend;
+
 import com.mirrorview.domain.friend.domain.Friend;
 import com.mirrorview.domain.friend.dto.FriendDto;
 import com.querydsl.core.types.Projections;
@@ -85,13 +86,13 @@ public class FriendRepositoryCustomImpl implements FriendRepositoryCustom {
 		BooleanExpression subQuery = (friend.from.userId.eq(myUserId).and(friend.to.userId.eq(otherUserId)))
 			.or((friend.from.userId.eq(otherUserId).and(friend.to.userId.eq(myUserId))));
 
-		Friend friend = jpaQueryFactory
-			.select(Projections.constructor(Friend.class, QFriend.friend.id, QFriend.friend.from, QFriend.friend.to,
-				QFriend.friend.isConnected))
-			.from(QFriend.friend)
+		Friend findFriend = jpaQueryFactory
+			.select(Projections.constructor(Friend.class, friend.id, friend.from, friend.to,
+				friend.isConnected))
+			.from(friend)
 			.where(subQuery)
 			.fetchFirst();
 
-		return Optional.ofNullable(friend);
+		return Optional.ofNullable(findFriend);
 	}
 }

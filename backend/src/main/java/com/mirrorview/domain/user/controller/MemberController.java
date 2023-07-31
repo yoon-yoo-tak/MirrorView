@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,11 +12,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mirrorview.domain.friend.service.FriendService;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.dto.FindMemberRequestDto;
 import com.mirrorview.domain.user.dto.JoinDto;
+import com.mirrorview.domain.user.dto.MemberResDto;
+import com.mirrorview.domain.user.dto.RatingDto;
 import com.mirrorview.domain.user.service.EmailService;
 import com.mirrorview.domain.user.service.MemberService;
+import com.mirrorview.global.auth.jwt.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +32,7 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final EmailService emailService;
+	private final FriendService friendService;
 
 	@PostMapping
 	public ResponseEntity<?> join(@RequestBody JoinDto joinDto) {
@@ -115,5 +121,43 @@ public class MemberController {
 			return BaseResponse.fail(e.getMessage(), 400);
 		}
 		return BaseResponse.ok(HttpStatus.OK, "이메일 전송 완료");
+	}
+
+	@PostMapping("/rating/save")
+	public ResponseEntity<?> saveRating(@AuthenticationPrincipal CustomMemberDetails member,
+		@RequestBody RatingDto ratingDto) {
+		float currentScore;
+		try {
+			String userId = member.getUsername();
+			if (userId.equals(ratingDto.getUserId())) {
+				return BaseResponse.fail("나는 나를 평가 할 수 없다.", 500);
+			}
+			currentScore = memberService.saveScore(userId, ratingDto);
+		} catch (Exception e) {
+			return BaseResponse.fail(e.getMessage(), 400);
+		}
+		return BaseResponse.okWithData(HttpStatus.OK, "평점 남기기 완료", currentScore);
+	}
+
+	@GetMapping("/find/{userId}")
+	public ResponseEntity<?> getOtherMemberInfo(@PathVariable String userId,
+		@AuthenticationPrincipal CustomMemberDetails member) {
+		String myUserId = member.getUsername();
+		if (myUserId.equals(userId)) {
+			return BaseResponse.fail("잘못된 정보", 400);
+		}
+		String friendStatus = friendService.getFriendStatus(myUserId, userId);
+		Member findMember = memberService.findByUserId(userId);
+		if (findMember == null) {
+			return BaseResponse.fail("없는 정보입니다.", 400);
+		}
+		MemberResDto responseDto = MemberResDto.build(friendStatus, findMember);
+
+		return BaseResponse.okWithData(HttpStatus.OK, "상대 정보 열람", responseDto);
+	}
+
+	@GetMapping("/findAll/{userId}")
+	public ResponseEntity<?> getMemberList(@PathVariable String userId) {
+		return BaseResponse.okWithData(HttpStatus.OK, "유저 리스트", memberService.findMemberList(userId));
 	}
 }
