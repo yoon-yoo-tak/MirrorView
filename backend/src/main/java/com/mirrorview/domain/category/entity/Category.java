@@ -1,4 +1,4 @@
-package com.mirrorview.db.entity;
+package com.mirrorview.domain.category.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.mirrorview.db.dto.CategoryDto;
+import com.mirrorview.domain.category.dto.CategoryDto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

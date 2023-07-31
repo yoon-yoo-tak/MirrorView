@@ -1,4 +1,4 @@
-package com.mirrorview.db.controller;
+package com.mirrorview.domain.category.controller;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mirrorview.db.dto.CategoryDto;
-import com.mirrorview.db.service.CategoryService;
+import com.mirrorview.domain.category.dto.CategoryDto;
+import com.mirrorview.domain.category.service.CategoryService;
 import com.mirrorview.global.response.BaseResponse;
 
 import lombok.RequiredArgsConstructor;

@@ -3,6 +3,7 @@ package com.mirrorview.domain.interview.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -67,6 +68,14 @@ public class InterviewServiceImpl implements InterviewService {
 	}
 
 	@Override
+	public List<RoomResponseDto> findRoomByCategory(String category) {
+		return interviewRepository.findByCategory(category)
+			.stream()
+			.map(RoomResponseDto::build)
+			.collect(Collectors.toList());
+	}
+
+	@Override
 	@Transactional
 	public List<RoomMemberInfo> joinRoom(String nickname, String roomId) {
 		Optional<InterviewRoom> findRoom = findRoomById(roomId);
@@ -98,3 +107,4 @@ public class InterviewServiceImpl implements InterviewService {
 		return result;
 	}
 }
+

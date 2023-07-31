@@ -1,4 +1,4 @@
-package com.mirrorview.db.service;
+package com.mirrorview.domain.category.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,9 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mirrorview.db.dto.CategoryDto;
-import com.mirrorview.db.entity.Category;
-import com.mirrorview.db.repository.CategoryRepository;
+import com.mirrorview.domain.category.dto.CategoryDto;
+import com.mirrorview.domain.category.entity.Category;
+import com.mirrorview.domain.category.repository.CategoryRepository;
 
 import lombok.RequiredArgsConstructor;
 

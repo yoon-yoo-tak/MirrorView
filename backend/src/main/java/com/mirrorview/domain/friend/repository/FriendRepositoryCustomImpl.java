@@ -1,6 +1,6 @@
 package com.mirrorview.domain.friend.repository;
 
-import static com.mirrorview.db.entity.QFriend.*;
+import static com.mirrorview.domain.friend.domain.QFriend.*;
 
 import java.util.List;
 import java.util.Optional;
