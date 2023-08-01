@@ -1,14 +1,29 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 // import classes from "./FeedbackModal.module.scss";
 
 import * as S from "./MypageStyledComponents";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const FeedbackModal = ({ item, setModalStates }) => {
+    const { accessToken} = useSelector((state)=>state.auth);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
     const closeModal = () => {
         setModalStates(false);
     };
+    const [feedback,setFeedback] = useState({});
 
     const modalRef = useRef(null);
+
+    useEffect(()=>{
+        axios.get(`http://localhost:8080/api/mypage/feedbacks/feedback/${item.id}`)
+        .then(({data})=>{
+            console.log(data.data);
+            setFeedback(data.data);
+            console.log(feedback);
+        })
+    },[]);
 
     useEffect(() => {
         const handler = (e) => {
@@ -51,7 +66,10 @@ const FeedbackModal = ({ item, setModalStates }) => {
             <S.modalBackDrop>
                 <S.modalContainer ref={modalRef} onClick={handleInsideClick}>
                     <S.modalButton onClick={closeModal}>닫기</S.modalButton>
-                    <S.modalContent>피드백 정보 : {item.time}</S.modalContent>
+                    <S.modalContent>작성자 : {item.time}</S.modalContent>
+                    <S.modalContent>시간 : {feedback.createdTime}</S.modalContent>
+                    <S.modalContent>내용 : {feedback.content}</S.modalContent>
+                    <S.modalContent>방번호 : {feedback.roomId}</S.modalContent>
                 </S.modalContainer>
             </S.modalBackDrop>
         </div>

@@ -20,19 +20,19 @@ const MyPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if(!user){
-            navigate("/login");
-        }
-        return () =>{
-        }
+    // useEffect(() => {
+    //     if(!user){
+    //         navigate("/login");
+    //     }
+    //     return () =>{
+    //     }
         
-    }, []);
+    // }, []);
     
     return (
         <div>
             <Routes>
-                {user }
+                
                 {user ?(
                     <>
                 <Route path="changepassword" element={<ChangePassword />} />
