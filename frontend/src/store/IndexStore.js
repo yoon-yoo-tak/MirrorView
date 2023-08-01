@@ -6,10 +6,12 @@ import { configureStore } from "@reduxjs/toolkit";
 // 그치만 toolkit의  configureStore()를 사용하면
 // 별도의 메소드 없이 바로 미들웨어를 추가할 수 있음!!
 import authReducer from "./AuthStore";
+import interviewReducer from "./InterviewStore";
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
+    interview: interviewReducer,
   },
 });
 

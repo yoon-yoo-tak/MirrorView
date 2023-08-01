@@ -19,12 +19,13 @@ public class RoomResponseDto {
 	private Integer maxMemberCount;
 	private Integer currentMemberCount;
 	private Boolean havePassword;
-
+	private String host;
 
 	public static RoomResponseDto build(InterviewRoom room) {
 		return RoomResponseDto
 			.builder()
 			.roomId(room.getId())
+			.host(room.getHost())
 			.title(room.getTitle())
 			.category(room.getCategory())
 			.maxMemberCount(room.getMaxMemberCount())
