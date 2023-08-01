@@ -1,6 +1,7 @@
 package com.mirrorview.domain.user.controller;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -147,11 +148,11 @@ public class MemberController {
 			return BaseResponse.fail("잘못된 정보", 400);
 		}
 		String friendStatus = friendService.getFriendStatus(myUserId, userId);
-		Member findMember = memberService.findByUserId(userId);
-		if (findMember == null) {
+		Optional<Member> findMember = memberService.findByUserId(userId);
+		if (findMember.isEmpty()) {
 			return BaseResponse.fail("없는 정보입니다.", 400);
 		}
-		MemberResDto responseDto = MemberResDto.build(friendStatus, findMember);
+		MemberResDto responseDto = MemberResDto.build(friendStatus, findMember.get());
 
 		return BaseResponse.okWithData(HttpStatus.OK, "상대 정보 열람", responseDto);
 	}

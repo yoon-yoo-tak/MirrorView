@@ -1,5 +1,7 @@
 package com.mirrorview.global.auth.jwt;
 
+import java.util.Optional;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,9 +23,9 @@ public class CustomMemberDetailService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Member user = memberService.findByUserId(username);
-		if (user != null) {
-			CustomMemberDetails userDetails = new CustomMemberDetails(user);
+		Optional<Member> optionalMember = memberService.findByUserId(username);
+		if (optionalMember.isPresent()) {
+			CustomMemberDetails userDetails = new CustomMemberDetails(optionalMember.get());
 			return userDetails;
 		}
 		return null;

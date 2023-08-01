@@ -2,8 +2,10 @@ package com.mirrorview.global.auth.controller;
 
 import java.time.Duration;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,16 +13,20 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.dto.LoginDto;
 import com.mirrorview.domain.user.service.MemberService;
 import com.mirrorview.global.response.BaseResponse;
+import com.mirrorview.global.util.JwtOidcUtil;
 import com.mirrorview.global.util.JwtTokenUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -34,6 +40,21 @@ public class AuthController {
 	private final PasswordEncoder passwordEncoder;
 	private final MemberService memberService;
 	private final RedisTemplate<String, String> template;
+	private final JwtOidcUtil jwtOidcUtil;
+
+	@GetMapping("/api/users/login/kakao/code")
+	public ResponseEntity<?> getOauthCode(@RequestParam String code) {
+		log.info("kakao code = {}", code);
+		Map<String, String> body = new HashMap<>();
+		body.put("code", code);
+		return BaseResponse.okWithData(HttpStatus.OK, "retrun code", body);
+	}
+
+	@GetMapping("test")
+	public ResponseEntity<?> test(@RequestParam String code) throws JsonProcessingException {
+		jwtOidcUtil.decodeIdToken(code);
+		return BaseResponse.ok(HttpStatus.OK, "ok");
+	}
 
 	@PostMapping("/api/users/login")
 	public ResponseEntity<?> logIn(@RequestBody LoginDto loginDto) {
@@ -41,7 +62,13 @@ public class AuthController {
 		String password = loginDto.getPassword();
 		log.info("login start with id = {}, pw = {}", userId, password);
 
-		Member member = memberService.findByUserId(userId);
+		Optional<Member> optionalMember = memberService.findByUserId(userId);
+		Member member = null;
+		if (optionalMember.isPresent()) {
+			member = optionalMember.get();
+		} else {
+			return BaseResponse.fail("login fail", 401);
+		}
 
 		// 로그인 요청한 유저로부터 입력된 패스워드 와 디비에 저장된 유저의 암호화된 패스워드가 같은지 확인.(유효한 패스워드인지 여부 확인)
 		if (passwordEncoder.matches(password, member.getPassword())) {
