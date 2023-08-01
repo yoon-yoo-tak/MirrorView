@@ -1,124 +1,77 @@
 package com.mirrorview.domain.chatroom.controller;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
+import org.apache.catalina.UserDatabase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mirrorview.domain.chatroom.domain.ChatMessage;
 import com.mirrorview.domain.chatroom.domain.ChatRoom;
-import com.mirrorview.domain.chatroom.dto.ChatMessage;
-import com.mirrorview.domain.chatroom.service.ChatRoomService;
-import com.mirrorview.domain.chatroom.service.UserChatRoomService;
-import com.mirrorview.global.response.BaseResponse;
+import com.mirrorview.domain.chatroom.service.ChatService;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+	웹 소켓 api
+ */
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@Api(value = "Chat", tags = {"Chat Controller"}, description = "채팅 관련 API")
 public class ChatController {
 
-	private final ChatRoomService chatRoomService;
-	private final UserChatRoomService userChatRoomService;
-	private final RedisTemplate<String, ChatMessage> template;
-
 	private final SimpMessagingTemplate simpMessagingTemplate;
+	private final ChatService chatService;
+
+	// 전체 방 가져오기
+	@MessageMapping("/chatrooms.get")
+	public void getChatRooms(Principal principal) {
+		log.info("전체 방 가져오기");
+		List<ChatRoom> chatRooms = chatService.allRoom();
+		System.out.println(chatRooms);
+		simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/sub/chatrooms", chatRooms);
+	}
 	
-	// 일대일 채팅
-	@MessageMapping("/chat/{userId}")
-	public void sendSpecific(@DestinationVariable String userId, String message) {
-		log.info("{} 에게, {}를 전송함", userId, message);
-		simpMessagingTemplate.convertAndSend("/queue/chat/" + userId, message);
+	// 채팅 방 채팅기록
+	@MessageMapping("/chatrooms/{roomId}")
+	public void getChat(@DestinationVariable String roomId, Principal principal){
+		log.info("각 채팅방 채팅 기록");
+		List<ChatMessage> chatMessages = chatService.getChat(roomId);
+		simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/sub/chatrooms/"+roomId, chatMessages);
 	}
 
-	// 채팅방 만들기
-	@PostMapping("/api/chats/open/{room}")
-	public ResponseEntity createChatRoom(@PathVariable String room, @AuthenticationPrincipal UserDetails userDetails) {
-		log.info("방 만들기");
-		if (chatRoomService.findByRoom(room)) {
-			String userId = userDetails.getUsername();
-			chatRoomService.createRoom(room, userId);
-		}
-
-		return BaseResponse.ok(HttpStatus.OK, "채팅방이 생성되었습니다.");
+	// 채팅 보내기
+	@MessageMapping("/chatrooms.send/{roomId}")
+	public void sendChat(@DestinationVariable String roomId, ChatMessage chatMessage, Principal principal){
+		log.info("채팅 보내기" );
+		String userId = principal.getName();
+		chatService.addChatMessageToChatRoom(roomId, chatMessage);
+		simpMessagingTemplate.convertAndSend("/sub/chatrooms/"+roomId, chatMessage);
 	}
 
-	// 나의 채팅방 가져오기
-	@GetMapping("/api/chats")
-	public ResponseEntity<?> createChatRoom(@AuthenticationPrincipal UserDetails userDetails) {
-		log.info("나의 오픈 채팅 방 가져오기");
-		String userName = userDetails.getUsername();
-		List<ChatRoom> chatRoomList = userChatRoomService.findByUserChatRoom(userName);
-		System.out.println(chatRoomList);
-
-		return BaseResponse.okWithData(HttpStatus.OK, "방을 불러옵니다", chatRoomList);
+	// 방만들기
+	@MessageMapping("/chatrooms.create")
+	public void createChatRoom(ChatRoom chatRoom) {
+		System.out.println(chatRoom);
+		log.info("방만들기");
+		ChatRoom newChatRoom = chatService.createChatRoom(chatRoom.getId());
+		simpMessagingTemplate.convertAndSend("/sub/chatrooms.create", newChatRoom);
 	}
 
-	// 모든 채팅방 가져오기
-	@GetMapping("/api/chats/open")
-	public ResponseEntity<?> createChatRoom() {
-		log.info("모든 오픈 채팅 방 가져오기");
-		List<ChatRoom> chatRoomList = chatRoomService.findAll();
-		return BaseResponse.okWithData(HttpStatus.OK, "모든 방을 불러옵니다", chatRoomList);
-	}
 
-	// 채팅방 입장
-	@PostMapping("/api/chats/join/{room}")
-	public ResponseEntity joinChatRoom(@PathVariable String room, @AuthenticationPrincipal UserDetails userDetails) {
-		userChatRoomService.joinChatRoom(userDetails.getUsername(), room);
-		return BaseResponse.ok(HttpStatus.OK, "채팅방을 들어갔습니다.");
-	}
-
-	// 채팅방 나가기
-	@DeleteMapping("/api/chats/quit/{room}")
-	public ResponseEntity quitChatRoom(@PathVariable String room, @AuthenticationPrincipal UserDetails userDetails) {
-		userChatRoomService.quitChatRoom(userDetails.getUsername(), room);
-		return BaseResponse.ok(HttpStatus.OK, "채팅방을 나갔습니다.");
-	}
-
-	// 채팅방에 채팅보내기
-	@MessageMapping("/chats/{room}")
-	@SendTo("/sub/chats/{room}")
-	@ApiOperation(value = "Send a chat message", notes = "채팅방에 메시지를 보냅니다")
-	public ChatMessage handleChat(@DestinationVariable String room,
-		@ApiParam(value = "Chat message to send", required = true) ChatMessage message) {
-
-		message.setTimestamp(LocalDateTime.now());
-		String key = "roomName:" + room;
-		template.opsForList().rightPush(key, message);
-
-		System.out.println(message);
-		return message;
-	}
-
-	// 채팅방의 이전 채팅 기록 가져오기
-	@GetMapping("/api/chats/history/{room}")
-	@ApiOperation(value = "Get chat history", notes = "해당되는 채팅방의 이전 채팅 기록을 가져옵니다")
-	public ResponseEntity<List<ChatMessage>> getChatHistory(
-		@PathVariable @ApiParam(value = "Room name", required = true) String room) {
-
-		String key = "roomName:" + room;
-		List<ChatMessage> history = template.opsForList().range(key, 0, -1);
-
-		System.out.println(history);
-		return ResponseEntity.ok(history);
-	}
 }
