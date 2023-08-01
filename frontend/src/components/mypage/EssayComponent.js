@@ -27,7 +27,7 @@ const EssayComponent = () => {
         { id: 3, name: "하하", time: 50 },
     ];
 
-    const essayDetail = (id) => {
+    const essayDetail = (item) => {
         // axios
         //     .get(`/api/mypage/essays/${id}`)
         //     .then((response) => {
@@ -38,21 +38,21 @@ const EssayComponent = () => {
         //         // console.error("Error fetching essay:", error);
         //     });
         // e.preventDefault();
-        navigate(`/mypage/essaydetail/${id}`);
+        navigate(`/mypage/essaydetail/${item.id}`,{state: item.title});
     };
 
     return (
         <div>
             <S.essayComponent>
                 {/* <div className="essayList"> */}
-                {essay.map((item) => (
+                {essayList.map((item) => (
                     <S.essayThumbnail
                         // className="essay"
                         key={item.id}
-                        onClick={() => essayDetail(item.id)}
+                        onClick={() => essayDetail(item)}
                     >
-                        <div>{item.name}</div>
-                        <div>작성일시 : {item.time}</div>
+                        <div>{item.title}</div>
+                        <div>작성일시 : {item.createdTime.substring(0,10)}</div>
                     </S.essayThumbnail>
                 ))}
                 {/* </div> */}
