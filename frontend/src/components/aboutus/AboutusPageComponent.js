@@ -13,12 +13,16 @@ export const Container = styled.div`
     height: 100%;
     border: none;
     overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: hidden;
+
 `;
 
 export const Image = styled.img`
     width: 100%;
     height: 300vh;
     object-fit: cover;
+    display: flex;
 `;
 
 export const ImageWrapper = styled.div`

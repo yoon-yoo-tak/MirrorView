@@ -9,6 +9,7 @@ import Signup from "./pages/user/SignupPage";
 import MyPage from "./pages/mypage/MypagePage";
 import AboutusPage from "./pages/aboutus/AboutusPage";
 import Header from "./components/common/HeaderComponent";
+import Footer from "./components/common/FooterComponent";
 import Home from "./pages/home/HomePage";
 import NoticePage from "./pages/notice/NoticePage";
 import NoticeDetail from "./pages/notice/NoticeDetailPage";
@@ -37,8 +38,8 @@ const App = () => {
         <Route path="/noticedetail/:id" element={<NoticeDetail />} />
         <Route path="/studylist" element={<StudyRoomList />} />
         <Route path="/noticewritepage" element={<NoticeWritePage />} />
-
       </Routes>
+      <Footer></Footer>
     </div>
 
   );
