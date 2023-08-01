@@ -13,6 +13,7 @@ export const Image = styled.img`
   object-fit: cover;
   margin: 0;
   padding: 0;
+  display: flex;
 `;
 
 export const Noticebox = styled.div`
