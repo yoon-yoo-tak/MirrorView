@@ -129,6 +129,7 @@ const Signup = () => {
                             onChange={handleId}
                         />
                     </div>
+                    
                     <div className="errorMessageWrap">
                         {!idValid && id.length > 0 && (
                             <div>아이디를 입력하세요</div>

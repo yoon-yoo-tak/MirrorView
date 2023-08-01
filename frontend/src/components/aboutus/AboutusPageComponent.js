@@ -12,6 +12,7 @@ export const Container = styled.div`
     width: 100%;
     height: 100%;
     border: none;
+    overflow: scroll;
 `;
 
 export const Image = styled.img`
@@ -92,7 +93,7 @@ export const ImageWrapper6 = styled.div`
 
 export const Content1 = styled.div`
     position: absolute;
-    top: 15%;
+    top: 10%;
     left: 23%;
     transform: translate(-50%, -50%);
     text-align: center;
@@ -101,7 +102,7 @@ export const Content1 = styled.div`
 
 export const Content2 = styled.div`
     position: absolute;
-    top: 26%;
+    top: 23%;
     left: 63%;
     transform: translate(-50%, -50%);
     text-align: center;
@@ -112,7 +113,7 @@ export const Content2 = styled.div`
 
 export const Content3 = styled.h2`
   position: absolute;
-  top: 50.5%;
+  top: 49.5%;
   left: 20%;
   transform: translate(-60%, -100%);
   text-align: justify;
@@ -129,6 +130,7 @@ export const Title1 = styled.h2`
     color: #033495;
     font-size: 64px;
     font-family: "wooju";
+    word-wrap: break-word; 
 `;
 
 export const Title2 = styled.h2`
@@ -147,7 +149,7 @@ export const Comment1 = styled.h2`
 
 export const Comment2 = styled.h2`
 position: absolute;
-top: 54.5%;
+top: 53.3%;
 left: 80.5%;
 transform: translate(-50%, -50%);
 text-align: center;
@@ -161,7 +163,7 @@ white-space: nowrap;
 
 export const Comment3 = styled.h2`
 position: absolute;
-top: 74.5%;
+top: 73.5%;
 left: 34%;
 transform: translate(-60%, -100%);
 text-align: justify;
@@ -176,7 +178,7 @@ line-height : 1.5;
 
 export const Comment4 = styled.h2`
 position: absolute;
-top: 80.2%;
+top: 79.2%;
 left: 86%;
 transform: translate(-60%, -100%);
 text-align: justify;
@@ -191,7 +193,7 @@ line-height : 1.5;
 
 export const Comment5 = styled.h2`
 position: absolute;
-top: 93.4%;
+top: 92.5%;
 left: 31%;
 transform: translate(-60%, -100%);
 text-align: justify;

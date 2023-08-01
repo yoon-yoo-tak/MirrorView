@@ -12,6 +12,7 @@ import Header from "./components/common/HeaderComponent";
 import Home from "./pages/home/HomePage";
 import NoticePage from "./pages/notice/NoticePage";
 import NoticeDetail from "./pages/notice/NoticeDetailPage";
+import NoticeWritePage from "./pages/notice/NoticeWritePage";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/aboutus" element={<AboutusPage />} />   
         <Route path="/notice" element={<NoticePage />} />    
         <Route path="/noticedetail/:id" element={<NoticeDetail />} />  
+        <Route path="/noticewritepage" element={<NoticeWritePage />} />
       </Routes>
     </div>
     
