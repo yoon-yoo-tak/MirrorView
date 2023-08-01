@@ -200,6 +200,7 @@ export const {
     loginSuccess,
     loginFailure,
     setNickname,
+    logout,
 } = authSlice.actions;
 
 export const authActions = authSlice.actions;

@@ -1,8 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import {logout} from "../../store/AuthStore";
 const Header = () => {
+    const {user} = useSelector((state)=>state.auth);
+    const dispatch = useDispatch();
+    const onClickLogout = (e) =>{
+        dispatch(logout());
+    }
     return (
         <Nav>
             <Link to="/">
@@ -23,11 +29,23 @@ const Header = () => {
                 <NavItem>
                     <Link to="/mypage/profile">MyPage</Link>
                 </NavItem>
+                
+                    
                 <LoginNavItem>
+                {!user ? (    
+                    <>
                     <NavItem>
                         <Link to="/login">로그인</Link>
                     </NavItem>
+                    </>):(
+                        <NavItem>
+                            <Link to="/" onClick={onClickLogout}>로그아웃</Link>
+                        </NavItem>
+                        )}
                 </LoginNavItem>
+                
+                    
+                
             </NavMenu>
         </Nav>
     );
