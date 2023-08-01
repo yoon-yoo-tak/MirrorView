@@ -1,26 +1,50 @@
+import axios from "axios";
 import * as S from "./StudyStyledComponents";
 import { useState, useEffect } from "react";
+import useUpdateEffect from "../../lib/UseUpdateEffect";
+import { useDispatch } from "react-redux";
 
 const StudyRoomCategory = () => {
-    const [firstCategory, setFirstCategory] = useState("선택하세요");
-    const [secondCategory, setSecondCategory] = useState("선택하세요");
+    const [firstCategory, setFirstCategory] = useState([{id:0,name:"선택하세요"}]);
+    const [secondCategory, setSecondCategory] = useState([{id:0,name:"선택하세요"}]);
+    const defaultValue = [{id:0,name:"선택하세요"}];
+    const [firstValue,setFirstValue] = useState("선택하세요");
+    const [secondValue,setSecondValue] = useState("선택하세요");
+    const dispatch = useDispatch();
 
-    // 임의 카테고리 데이터
-    const firstCategories = ["선택하세요", "첫번째", "두번째", "세번쨰"];
+    useEffect(()=>{
+        axios.get("http://localhost:8080/api/category")
+        .then(({data})=>{
+            console.log(data);
+            setFirstCategory([...defaultValue,...data.data]);
+            console.log(firstCategory);
+            
+        })
+        .catch((error)=>{
+            console.error(error);
+        })
+    },[])
+    useUpdateEffect(()=>{
+        axios.get(`http://localhost:8080/api/category/${firstValue}`)
+        .then(({data})=>{
+            setSecondCategory([...defaultValue,...data.data]);
+        })
+        
+    },[firstValue])
+    
     const secondCategories = ["선택하세요", "first", "second", "third"];
 
-    useEffect(() => {
-        // 이 카테고리 컴포넌트가 실행될 때
-        // 부모 카테고리 목록 api 호출?
-    }, []);
-
     const handleFirstCategory = (e) => {
-        setFirstCategory(e.target.value);
+        console.log(e.target.value);
+        setFirstValue(e.target.value);
         // + 자식 카테고리 api 호출해서 지금 state에 자식 카테고리를 저장?
     };
+    const handleSecondCategory = (e) =>{
+        setSecondValue(e.target.value);
+    }
 
     const handleSubmit = () => {
-        // 입력된 카테고리에 따른 스터디 방 목록 조회
+        // dispatch(setRooms(secondValue));
     };
 
     return (
@@ -30,12 +54,12 @@ const StudyRoomCategory = () => {
                     <S.categoryDiv>
                         <div>상위 카테고리</div>
                         <S.categorySelect
-                            value={firstCategory}
+                            value={firstValue}
                             onChange={handleFirstCategory}
                         >
-                            {firstCategories.map((category) => (
-                                <option key={category} value={category}>
-                                    {category}
+                            {firstCategory.map((category) => (
+                                <option key={category.id} value={category.name}>
+                                    {category.name}
                                 </option>
                             ))}
                         </S.categorySelect>
@@ -43,12 +67,12 @@ const StudyRoomCategory = () => {
                     <S.categoryDiv>
                         <div>하위 카테고리</div>
                         <S.categorySelect
-                            value={secondCategory}
-                            onChange={(e) => setSecondCategory(e.target.value)}
+                            value={secondValue}
+                            onChange={handleSecondCategory}
                         >
-                            {secondCategories.map((category) => (
-                                <option key={category} value={category}>
-                                    {category}
+                            {secondCategory.map((category) => (
+                                <option key={category.id} value={category.name}>
+                                    {category.name}
                                 </option>
                             ))}
                         </S.categorySelect>
