@@ -1,10 +1,12 @@
-package com.mirrorview.domain.chatroom.dto;
+package com.mirrorview.domain.chatroom.domain;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,12 +16,10 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @ToString
-@RedisHash("ChatMessage")
 public class ChatMessage {
-	private String id;
-	private String room;
-	private String message;
 	private String userId;
+	private String message;
 	private LocalDateTime timestamp;
 }
