@@ -22,6 +22,7 @@ const NoticePage = () => {
 
   return (
     <S.Container>
+
       <S.Image src="/bground.png" alt="main_bg" />
       <S.Noticebox>{/* 공지사항 내용 */}</S.Noticebox>
       <S.Title>공지사항</S.Title>
@@ -39,7 +40,9 @@ const NoticePage = () => {
           containerClassName={"pagination"}
           activeClassName={"active"}
         />
+
       </S.PaginationContainer>
+
       <S.TableWrapper>
         <table>
           <thead>
@@ -61,6 +64,12 @@ const NoticePage = () => {
             ))}
           </tbody>
         </table>
+
+        <S.ButtonWrapper>
+          <Link to="/NoticeWritePage">
+            <S.Button>글 작성</S.Button>
+          </Link>
+      </S.ButtonWrapper>
       </S.TableWrapper>
     </S.Container>
   );

@@ -53,6 +53,7 @@ export const Title = styled.h2`
 export const Title2 = styled.h2`
     color: #6a9cfd;
     font-size: 64px;
+    // font-size: 5rem;
     font-family: DAE;
 `;
 

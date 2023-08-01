@@ -1,5 +1,7 @@
 import { styled } from "styled-components";
 
+import SendIcon from "@material-ui/icons/Send";
+
 export const Container = styled.div`
   position: relative;
   width: 100%;
@@ -78,6 +80,7 @@ export const TableWrapper = styled.div`
     overflow: hidden;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 
+    
     th {
       padding: 20px;
       text-align: center;
@@ -96,3 +99,16 @@ export const TableWrapper = styled.div`
     }
   }
 `;
+
+export const ButtonWrapper = styled.div`
+  position: absolute;
+  top: 18%; 
+  left: 85%;
+  transform: translateX(-50%);
+
+`;
+
+export const Button = styled.button`;
+  <el-button type="primary" icon="el-icon-edit"></el-button>
+  
+`
