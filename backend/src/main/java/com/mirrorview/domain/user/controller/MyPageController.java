@@ -32,13 +32,11 @@ import com.mirrorview.domain.user.service.MemberService;
 import com.mirrorview.global.auth.jwt.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 
-import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/mypage")
 @RequiredArgsConstructor
-@Api(tags = "마이페이지")
 public class MyPageController {
 
 	private final MemberProfileService memberProfileService;
@@ -106,9 +104,8 @@ public class MyPageController {
 	}
 
 	@GetMapping("/feedbacks")
-	public ResponseEntity<?> listFeedbacks(String userId) {
-		String test = "test"; // 나중에 지울것
-		List<FeedbackDto> list = feedbackService.findFeedbackByUserId(test);
+	public ResponseEntity<?> listFeedbacks(@AuthenticationPrincipal CustomMemberDetails member) {
+		List<FeedbackDto> list = feedbackService.findFeedbackByUserId(member.getUsername());
 		return BaseResponse.okWithData(HttpStatus.OK, "피드백 불러오기 성공", list);
 	}
 
