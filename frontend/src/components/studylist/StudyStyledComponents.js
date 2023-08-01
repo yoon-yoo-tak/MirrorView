@@ -7,8 +7,9 @@ export const hidden = styled.div`
 `;
 
 export const page = styled.div`
-    background-image: url(${process.env.PUBLIC_URL}/bground.png);
-    width: 100%;
+    background-image: url(${process.env.PUBLIC_URL}/background2.png);
+    background-size: cover;
+    width: auto;
     height: 855px;
     justify-content: center;
     display: flex;
@@ -54,7 +55,58 @@ export const categoryPage = styled.div`
     box-shadow: 0px 0px 10px #bdbdbd;
     border-radius: 10px;
     margin-right: 100px;
+    padding: 5px 10px;
 `;
+
+export const categoryWrap = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+export const categoryList = styled.div`
+    display: flex;
+    align-items: center;
+    flex: 3;
+    justify-content: space-evenly;
+`;
+export const categoryDiv = styled.div`
+    display: flex;
+    align-items: center;
+    display: grid;
+`;
+export const categorySelect = styled.select`
+    margin: 5px 0 5px 0;
+    width: 10rem;
+    height: 20px;
+    background: white;
+    border: 0;
+    border-radius: 10px;
+
+    padding: 1px 2px;
+`;
+
+export const categoryButton = styled.button`
+    margin: 3px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    position: relative;
+    width: 50px;
+    height: 30px;
+
+    background: lightblue;
+    box-shadow: 0px 0px 10px #bdbdbd;
+    border-radius: 13px;
+    cursor: pointer;
+    &:hover {
+        background-color: gray;
+    }
+`;
+
+// 방 생성 버튼
 
 export const createRoomButton = styled.button`
     background-image: url(${plusIcon});

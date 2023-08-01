@@ -5,7 +5,7 @@ import StudyRoomCreateModal from "../../components/studylist/StudyRoomCreateModa
 import { useState } from "react";
 
 const StudyRoomList = () => {
-    // 데이터화
+    // 데이터
     const roomInfo = [
         {
             id: 1,
@@ -56,8 +56,8 @@ const StudyRoomList = () => {
                         <StudyRoomCategory />
                     </S.studylistTop>
                     <S.studylistMain>
-                        {roomInfo.map((props) => (
-                            <StudyRoomThumbnail {...props} />
+                        {roomInfo.map((props, index) => (
+                            <StudyRoomThumbnail key={index} {...props} />
                         ))}
                     </S.studylistMain>
                 </S.studylistContainer>
