@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate,Navigate } from "react-router-dom";
 import { useCallback,useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -32,6 +32,9 @@ const MyPage = () => {
     return (
         <div>
             <Routes>
+                {user }
+                {user ?(
+                    <>
                 <Route path="changepassword" element={<ChangePassword />} />
                 <Route path="feedback" element={<Feedback />} />
                 <Route path="profile" element={<Profile />} />
@@ -45,6 +48,10 @@ const MyPage = () => {
                     element={<EssayUpdate />}
                 />
                 <Route path="changepassword" element={<ChangePassword />} />
+                </>
+                ):(
+                  <Route path="*" element={<Navigate replace to ="/login"/>}  />
+                )}
             </Routes>
         </div>
     );
