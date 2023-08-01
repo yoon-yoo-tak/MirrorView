@@ -1,29 +1,56 @@
 import { useEffect, useRef } from "react";
 import * as S from "./StudyStyledComponents";
 import { useState } from "react";
+import useUpdateEffect from "../../lib/UseUpdateEffect";
+import { useDispatch } from "react-redux";
+import axios from "axios";
 
 const StudyRoomCreateModal = ({ setModalStates }) => {
     const [open, setOpen] = useState(true);
-    const [firstCategory, setFirstCategory] = useState("선택하세요");
-    const [secondCategory, setSecondCategory] = useState("선택하세요");
 
+    const dispatch = useDispatch();
+
+    const [firstCategory, setFirstCategory] = useState([{id:0,name:"선택하세요"}]);
+    const [secondCategory, setSecondCategory] = useState([{id:0,name:"선택하세요"}]);
+    const defaultValue = [{id:0,name:"선택하세요"}];
+    const [firstValue,setFirstValue] = useState("선택하세요");
+    const [secondValue,setSecondValue] = useState("선택하세요");
+    
     const [title, setTitle] = useState("");
     const [max, setMax] = useState(0);
     const [password, setPassword] = useState("");
 
     // 임의 카테고리 설정
-    const firstCategories = ["선택하세요", "첫번째", "두번째", "세번쨰"];
-    const secondCategories = ["선택하세요", "first", "second", "third"];
 
     useEffect(() => {
-        // 이 카테고리 컴포넌트가 실행될 때
-        // 부모 카테고리 목록 api 호출?
+        axios.get("http://localhost:8080/api/category")
+        .then(({data})=>{
+            console.log(data);
+            setFirstCategory([...defaultValue,...data.data]);
+            console.log(firstCategory);
+            
+        })
+        .catch((error)=>{
+            console.error(error);
+        })
     }, []);
 
+    useUpdateEffect(()=>{
+        axios.get(`http://localhost:8080/api/category/${firstValue}`)
+        .then(({data})=>{
+            setSecondCategory([...defaultValue,...data.data]);
+        })
+        
+    },[firstValue])
+
     const handleFirstCategory = (e) => {
-        setFirstCategory(e.target.value);
+        setFirstValue(e.target.value);
         // + 설정된 카테고리에 따라 자식 카테고리 api 호출해서 지금 state에 자식 카테고리를 저장?
     };
+
+    const handleSecondCategory = (e) =>{
+        setSecondValue(e.target.value);
+    }
 
     // 모달창 관련
 
@@ -169,15 +196,15 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
                                 <div>
                                     <div>상위 카테고리</div>
                                     <S.modalCategory
-                                        value={firstCategory}
+                                        value={firstValue}
                                         onChange={handleFirstCategory}
                                     >
-                                        {firstCategories.map((category) => (
+                                        {firstCategory.map((category) => (
                                             <option
-                                                key={category}
-                                                value={category}
+                                                key={category.id}
+                                                value={category.name}
                                             >
-                                                {category}
+                                                {category.name}
                                             </option>
                                         ))}
                                     </S.modalCategory>
@@ -185,17 +212,15 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
                                 <div>
                                     <div>하위 카테고리</div>
                                     <S.modalCategory
-                                        value={secondCategory}
-                                        onChange={(e) =>
-                                            setSecondCategory(e.target.value)
-                                        }
+                                        value={secondValue}
+                                        onChange={handleSecondCategory}
                                     >
-                                        {secondCategories.map((category) => (
+                                        {secondCategory.map((category) => (
                                             <option
-                                                key={category}
-                                                value={category}
+                                                key={category.id}
+                                                value={category.name}
                                             >
-                                                {category}
+                                                {category.name}
                                             </option>
                                         ))}
                                     </S.modalCategory>
