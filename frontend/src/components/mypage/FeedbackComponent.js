@@ -13,8 +13,8 @@ const FeedbackComponent = () => {
 
     useEffect(()=>{
         axios.get(`http://localhost:8080/api/mypage/feedbacks?userId=${user.userId}`)
-        .then(({data})=>{
-            
+        .then((response)=>{
+            console.log(response);
             setFeedbacks(archive);
 
         })

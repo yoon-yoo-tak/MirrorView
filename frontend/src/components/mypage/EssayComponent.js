@@ -1,8 +1,25 @@
+import { useEffect, useState } from "react";
 import * as S from "./MypageStyledComponents";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const EssayComponent = () => {
     const navigate = useNavigate();
+    const {user, accessToken} = useSelector((state)=>state.auth);
+    const [essayList, setEssyList] = useState([]);
+
+    axios.defaults.headers.common["Authorization"] =  `Bearer ${accessToken}`;
+    
+    useEffect(()=>{
+        axios.get(`http://localhost:8080/api/mypage/essays?userId=${user.userId}`)
+        .then(({data})=>{
+            setEssyList(data.data);
+            console.log(data);
+        }).catch((error)=>{
+            console.error(error);
+        })
+    },[])
 
     const essay = [
         { id: 1, name: "히히", time: 10 },
