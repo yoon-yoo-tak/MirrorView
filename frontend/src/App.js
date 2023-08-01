@@ -14,26 +14,26 @@ import NoticePage from "./pages/notice/NoticePage";
 import NoticeDetail from "./pages/notice/NoticeDetailPage";
 import StudyRoomList from "./pages/studylist/StudyRoomListPage";
 import NoticeWritePage from "./pages/notice/NoticeWritePage";
+import StudyRoomPrepare from "./pages/studyroom/StudyRoomPreparePage";
 
 const App = () => {
-  return (
-    <div>
-      <Header></Header>
-      <Routes> 
-        <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/mypage/*" element={<MyPage />} />
-        <Route path="/aboutus" element={<AboutusPage />} />   
-        <Route path="/notice" element={<NoticePage />} />    
-        <Route path="/noticedetail/:id" element={<NoticeDetail />} />
-          <Route path="/studylist" element={<StudyRoomList />} />
-          <Route path="/noticewritepage" element={<NoticeWritePage />} />
-
-      </Routes>
-    </div>
-    
-  );
+    return (
+        <div>
+            <Header></Header>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/mypage/*" element={<MyPage />} />
+                <Route path="/aboutus" element={<AboutusPage />} />
+                <Route path="/notice" element={<NoticePage />} />
+                <Route path="/noticedetail/:id" element={<NoticeDetail />} />
+                <Route path="/studylist" element={<StudyRoomList />} />
+                <Route path="/noticewritepage" element={<NoticeWritePage />} />
+                <Route path="/studyprepare" element={<StudyRoomPrepare />} />
+            </Routes>
+        </div>
+    );
 };
 
 export default App;
