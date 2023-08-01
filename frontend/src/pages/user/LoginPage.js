@@ -30,6 +30,7 @@ const Login = () => {
                 password : inputPassword
             })
         ).unwrap().then(({data})=>{
+            console.log(data)
             dispatch(getUserInfo(data["access-token"]));
         }).catch((error)=>{
             console.log(error);

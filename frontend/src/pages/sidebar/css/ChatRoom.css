@@ -1,0 +1,80 @@
+/* ChatRoom.css */
+.chat-room-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.chat-message-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #e8eaff;
+  border-radius: 15px;
+  margin: 5px 0;
+  padding: 0.6rem;
+}
+
+.chat-user-id {
+  margin: 0;
+  font-size: 12px;
+  color: #555;
+}
+
+.chat-message {
+  margin: 2px 0;
+  font-size: 14px;
+}
+
+.chat-time {
+  align-self: flex-end;
+  font-size: 12px;
+  color: #aaa;
+}
+
+.back-button-container {
+  display: flex;
+  width: 24px;
+}
+
+.back-button {
+  background-color: transparent;
+  border: none;
+  z-index: 10;
+}
+
+.chat-title {
+  margin: 0;
+}
+
+.input-button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.chatInput {
+  flex-grow: 1;
+  width: calc(100% - 50px); /* Here we ensure that the input field always takes up the remaining space after subtracting the width of the send button */
+  margin-right: 1rem;
+}
+
+.sendButton {
+  width:50px; /* Set a fixed width for the send button */
+  padding: 3px 10px;
+}
