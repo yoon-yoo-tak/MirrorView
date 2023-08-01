@@ -1,6 +1,7 @@
 package com.mirrorview.global.auth.jwt;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -12,10 +13,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
@@ -26,13 +26,13 @@ import com.mirrorview.global.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private MemberService memberService;
 	private RedisTemplate<String, String> template;
 
 	public JwtAuthenticationFilter(AuthenticationManager authenticationManager, MemberService memberService,
 		RedisTemplate<String, String> template) {
-		super(authenticationManager);
+		// super(authenticationManager);
 		this.memberService = memberService;
 		this.template = template;
 	}
@@ -89,11 +89,12 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 			// If so, then grab user details and create spring auth token using username, pass, authorities/roles
 			if (userId != null) {
 				// jwt 토큰에 포함된 계정 정보(userId) 통해 실제 디비에 해당 정보의 계정이 있는지 조회.
-				Member member = memberService.findByUserId(userId);
+				Optional<Member> optionalMember = memberService.findByUserId(userId);
 
-				if (member != null) {
+
+				if (optionalMember.isPresent()) {
 					// 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
-					CustomMemberDetails userDetails = new CustomMemberDetails(member);
+					CustomMemberDetails userDetails = new CustomMemberDetails(optionalMember.get());
 					UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(
 						userDetails,
 						null, userDetails.getAuthorities());

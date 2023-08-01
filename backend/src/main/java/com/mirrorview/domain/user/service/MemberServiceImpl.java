@@ -40,16 +40,18 @@ public class MemberServiceImpl implements MemberService {
 			throw new IllegalArgumentException("아이디 확인이 필요합니다.");
 		}
 
-		String encoded = passwordEncoder.encode(joinDto.getPassword());
-		joinDto.setPassword(encoded);
+		if (joinDto.getPassword() != null) {
+			String encoded = passwordEncoder.encode(joinDto.getPassword());
+			joinDto.setPassword(encoded);
+		}
 		Member joinMember = joinDto.toEntity();
 
 		memberRepository.save(joinMember);
 	}
 
 	@Override
-	public Member findByUserId(String userId) {
-		return memberRepository.findByUserId(userId);
+	public Optional<Member> findByUserId(String userId) {
+		return Optional.ofNullable(memberRepository.findByUserId(userId));
 	}
 
 	@Override

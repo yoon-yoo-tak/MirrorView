@@ -75,10 +75,15 @@ public class SecurityConfig {
 		return daoAuthenticationProvider;
 	}
 
-	@Bean // 위에는 비 권장될 수도
+	//web.ignore 방식은 보안상 권장되지 않고 내가 만든 커스텀 필터에 대해서 동작하지 않음
+	//아래 구현된 방법을 이용하도록 함
+	@Bean
 	@Order(0)
 	public SecurityFilterChain resources(HttpSecurity http) throws Exception {
-		return http.requestMatchers(matchers -> matchers.antMatchers("/favicon.ico",
+		return http.requestMatchers(matchers -> matchers.antMatchers(
+				"/favicon.ico",
+				"/category/**",
+				"/rooms",
 				"/error",
 				"/swagger-resources/**",
 				"/swagger-ui/**",
