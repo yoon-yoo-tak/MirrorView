@@ -1,8 +1,13 @@
 import PrepareSection from "../../components/studyroom/PrepareSectionComponent";
 import SelectInterviewee from "../../components/studyroom/SelectIntervieweeComponent";
 import * as S from "../../components/studyroom/StudyRoomStyledComponents";
+// import { useSelector } from "react-redux";
 
 const StudyRoomPrepare = () => {
+    // useSelector로 불러서 가져오기
+    // const nickname = useSelector((state) => state.auth);
+    const nickname = "오늘 홈런친 보경이";
+
     return (
         <S.preparePage>
             <S.prepareWrap>
@@ -18,11 +23,11 @@ const StudyRoomPrepare = () => {
                     </S.readySection>
                     <S.myVideo>본인 화면 (WebRTC) </S.myVideo>
                     <S.selectSection>
-                        <SelectInterviewee />
+                        <SelectInterviewee nick={nickname} />
                     </S.selectSection>
                 </S.prepareSectionFirst>
                 <S.prepareSectionSecond>
-                    <PrepareSection />
+                    <PrepareSection nick={nickname} />
                 </S.prepareSectionSecond>
             </S.prepareWrap>
         </S.preparePage>

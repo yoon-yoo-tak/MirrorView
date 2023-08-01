@@ -78,25 +78,32 @@ export const myVideo = styled.div`
 
 // 면접자&면접관 전환 공간
 export const selectSection = styled.div`
-    border-radius: 13px;
-    margin: 20px 0 30px 0;
+    // border-radius: 13px;
+    // margin: 20px 0 30px 0;
+    // width: 335px;
+    // height: 300px;
+    // background-color: white;
+    // flex-direction: column;
+    // display: flex;
+
+    // padding: 15px;
+`;
+
+export const selectPage = styled.div`
+    margin: 20px 0;
+`;
+
+export const selectChild = styled.div`
+    border-radius: ${(props) =>
+        props.now === "wee" ? "13px 13px 0 0" : "0 0 13px 13px"};
+    margin: 3px 0;
     width: 335px;
-    height: 300px;
+    height: 150px;
     background-color: white;
     flex-direction: column;
     display: flex;
 
     padding: 15px;
-`;
-
-export const selectPage = styled.div`
-    // flex-direction: column;
-    // display: flex;
-    // width: 335px;
-`;
-
-export const selectChild = styled.div`
-    // flex: 1;
 `;
 
 export const nowText = styled.div`
@@ -121,7 +128,42 @@ export const inputHidden = styled.input`
     display: none;
 `;
 
-export const changeButton = styled.div``;
+export const changeButtonActive = styled.div`
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    position: relative;
+    width: 70px;
+    height: 30px;
+
+    color: white;
+    border-radius: 19px;
+    background: #7f6fe4;
+    &:hover {
+        background: #b1a7ee;
+    }
+`;
+
+export const changeButtonGray = styled.div`
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    position: relative;
+    width: 70px;
+    height: 30px;
+
+    color: white;
+    border-radius: 19px;
+    background: #d4d4d4;
+`;
 
 export const selectSectionTop = styled.div`
     display: flex;
@@ -135,18 +177,31 @@ export const selectSectionList = styled.div`
 
 export const personList = styled.div`
     padding: 5px;
+    font-weight: ${(props) => (props.isNickname ? "bold" : "normal")};
 `;
 
 // 스터디 방 우측 섹션
 export const prepareSectionSecond = styled.div`
     width: 835px;
 `;
+export const sectionPage = styled.div``;
 
 export const sectionWrap = styled.div`
     border-radius: 13px;
     background-color: white;
-    margin: 10px;
+    margin: 18px;
     padding: 10px;
-`;
 
-export const sectionSelectButton = styled.button``;
+    height: 550px;
+`;
+export const sectionSelectTaps = styled.div`
+    margin: 18px;
+    display: flex;
+    justify-content: space-between;
+`;
+export const sectionSelectTap = styled.div`
+    width: 185px;
+    height: 69px;
+    border-radius: 13px;
+    background-color: white;
+`;
