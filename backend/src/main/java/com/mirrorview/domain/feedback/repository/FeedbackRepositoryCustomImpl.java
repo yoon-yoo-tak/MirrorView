@@ -28,7 +28,14 @@ public class FeedbackRepositoryCustomImpl implements FeedbackRepositoryCustom {
 	QMember member = QMember.member;
 	@Override
 	public List<FeedbackDto> findFeedbackByUserId(String userId){
-		return queryFactory.select(Projections.constructor(FeedbackDto.class,qFeedback.id, qFeedback.content, qFeedback.createdTime, qFeedback.roomId))
+		return queryFactory.select(Projections.constructor(FeedbackDto.class,
+				qFeedback.id,
+				qFeedback.content,
+				qFeedback.createdTime,
+				qFeedback.roomId,
+				qFeedback.writer.nickname,
+				essayDetail.question,
+				essayDetail.answer))
 			.from(qFeedback)
 			.join(qFeedback.essayDetail, essayDetail)
 			.join(essayDetail.essay, essay)
@@ -41,7 +48,7 @@ public class FeedbackRepositoryCustomImpl implements FeedbackRepositoryCustom {
 
 	@Override
 	public List<FeedbackDto> findFeedbackByRoomId(Long roomId) {
-		return queryFactory.select(Projections.constructor(FeedbackDto.class, qFeedback.id ,qFeedback.content, qFeedback.createdTime, qFeedback.roomId))
+		return queryFactory.select(Projections.constructor(FeedbackDto.class, qFeedback.id ,qFeedback.content, qFeedback.createdTime, qFeedback.roomId, member.nickname))
 			.from(qFeedback)
 			.where(qFeedback.roomId.eq(roomId))
 			.fetch();
@@ -49,7 +56,7 @@ public class FeedbackRepositoryCustomImpl implements FeedbackRepositoryCustom {
 
 	@Override
 	public FeedbackDto findFeedbackByFeedbackId(Long feedbackId) {
-		return queryFactory.select(Projections.constructor(FeedbackDto.class, qFeedback.id,qFeedback.content, qFeedback.createdTime, qFeedback.roomId))
+		return queryFactory.select(Projections.constructor(FeedbackDto.class, qFeedback.id,qFeedback.content, qFeedback.createdTime, qFeedback.roomId, member.nickname))
 			.from(qFeedback)
 			.where(qFeedback.id.eq(feedbackId))
 			.fetchOne();

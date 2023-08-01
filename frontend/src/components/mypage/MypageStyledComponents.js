@@ -188,7 +188,7 @@ export const confirmBtn = styled.button`
     border: 0;
 
     background: #a1b6ff;
-    // box-shadow: 0px 0px 15px #bdbdbd;
+    box-shadow: 0px 0px 15px #bdbdbd;
     border-radius: 19px;
     cursor: pointer;
     &:hover {

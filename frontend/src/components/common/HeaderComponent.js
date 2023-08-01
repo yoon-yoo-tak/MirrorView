@@ -1,33 +1,35 @@
-  import React from 'react';
-  import styled from 'styled-components';
-  import { Link } from 'react-router-dom';
+import React from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Header = () => {
     return (
-      <Nav>
-      <Link to="/"> {/* 이 부분이 추가되었습니다 */}
-        <Logo></Logo>
-      </Link>
-        <NavMenu>
-          <NavItem>
-          <Link to="/aboutus">About us</Link>
-            </NavItem>
-          <NavItem>
-          <Link to="/notice">Notice</Link>
-            </NavItem>
-          <NavItem>
-          <Link to="/aboutus">StudyList</Link>
-            </NavItem>
-          <NavItem>
-          <Link to="/mypage/profile">MyPage</Link>
-            </NavItem>
-          <LoginNavItem>
-          <NavItem>
-          <Link to="/login">로그인</Link>
-          </NavItem>
-          </LoginNavItem>
-        </NavMenu>
-      </Nav>
+        <Nav>
+            <Link to="/">
+                {" "}
+                {/* 이 부분이 추가되었습니다 */}
+                <Logo></Logo>
+            </Link>
+            <NavMenu>
+                <NavItem>
+                    <Link to="/aboutus">About us</Link>
+                </NavItem>
+                <NavItem>
+                    <Link to="/notice">Notice</Link>
+                </NavItem>
+                <NavItem>
+                    <Link to="/studylist">StudyList</Link>
+                </NavItem>
+                <NavItem>
+                    <Link to="/mypage/profile">MyPage</Link>
+                </NavItem>
+                <LoginNavItem>
+                    <NavItem>
+                        <Link to="/login">로그인</Link>
+                    </NavItem>
+                </LoginNavItem>
+            </NavMenu>
+        </Nav>
     );
 };
 

@@ -16,4 +16,7 @@ public class FeedbackDto {
 	private String content;
 	private LocalDateTime createdTime;
 	private Long roomId;
+	private String nickname;
+	private String question;
+	private String answer;
 }
