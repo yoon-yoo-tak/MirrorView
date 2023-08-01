@@ -13,9 +13,8 @@ const FeedbackComponent = () => {
 
     useEffect(()=>{
         axios.get(`http://localhost:8080/api/mypage/feedbacks?userId=${user.userId}`)
-        .then((response)=>{
-            console.log(response);
-            setFeedbacks(archive);
+        .then(({data})=>{
+            setFeedbacks(data.data);
 
         })
         .catch((error)=>{
@@ -27,17 +26,17 @@ const FeedbackComponent = () => {
         setModalStates(feedbacks.map(()=>false));
     },[feedbacks])
     
-    const archive = [
-        { id: 1, nickname: "히히", time: 10 },
-        { id: 2, nickname: "헤헤", time: 20 },
-        { id: 3, nickname: "깍깍", time: 30 },
-        { id: 4, nickname: "메롱", time: 40 },
-        { id: 5, nickname: "졸려", time: 50 },
-        { id: 6, nickname: "랄랄", time: 60 },
-        { id: 7, nickname: "롤롤", time: 70 },
-        { id: 8, nickname: "률류", time: 80 },
-        { id: 9, nickname: "악악", time: 90 },
-    ];
+    // const archive = [
+    //     { id: 1, nickname: "히히", time: 10 },
+    //     { id: 2, nickname: "헤헤", time: 20 },
+    //     { id: 3, nickname: "깍깍", time: 30 },
+    //     { id: 4, nickname: "메롱", time: 40 },
+    //     { id: 5, nickname: "졸려", time: 50 },
+    //     { id: 6, nickname: "랄랄", time: 60 },
+    //     { id: 7, nickname: "롤롤", time: 70 },
+    //     { id: 8, nickname: "률류", time: 80 },
+    //     { id: 9, nickname: "악악", time: 90 },
+    // ];
 
     const [modalStates, setModalStates] = useState(feedbacks.map(() => false));
 
@@ -67,7 +66,7 @@ const FeedbackComponent = () => {
                         onClick={() => handleModal(index)}
                     >
                         <div>작성자 : {item.nickname}</div>
-                        <div>도착한 날짜 : {item.time}</div>
+                        <div>도착한 날짜 : {item.createdTime.substring(0,10)}</div>
                         {modalStates[index] && (
                             <FeedbackModal
                                 item={item}
