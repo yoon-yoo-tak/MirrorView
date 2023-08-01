@@ -170,10 +170,7 @@ const authSlice = createSlice({
             state.loginDone = true;
             state.loginError = null;            
             state.accessToken = payload.data["access-token"];
-            
             state.refreshToken = payload.data["refresh-token"];
-       
-            
         },
         [login.rejected]: (state, action) => {
             state.loginLoading = false;
