@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 // import classes from "./FeedbackModal.module.scss";
 
 import * as S from "./MypageStyledComponents";
 
 const FeedbackModal = ({ item, setModalStates }) => {
+
     const closeModal = () => {
         setModalStates(false);
     };
@@ -51,7 +52,14 @@ const FeedbackModal = ({ item, setModalStates }) => {
             <S.modalBackDrop>
                 <S.modalContainer ref={modalRef} onClick={handleInsideClick}>
                     <S.modalButton onClick={closeModal}>닫기</S.modalButton>
-                    <S.modalContent>피드백 정보 : {item.time}</S.modalContent>
+                    <S.modalContent>작성자 : {item.nickname}</S.modalContent>
+                    tiem : {item.createdTime.substring(0,10)}
+                    <br/>
+                    answer : {item.answer}
+                    <br/>
+                    question : {item.question}
+                    <br/>
+                    content : {item.content}
                 </S.modalContainer>
             </S.modalBackDrop>
         </div>
