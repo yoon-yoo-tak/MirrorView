@@ -59,6 +59,7 @@ public class ChatController {
 	@MessageMapping("/chatrooms.send/{roomId}")
 	public void sendChat(@DestinationVariable String roomId, ChatMessage chatMessage, Principal principal){
 		log.info("채팅 보내기" );
+		System.out.println(chatMessage);
 		String userId = principal.getName();
 		chatService.addChatMessageToChatRoom(roomId, chatMessage);
 		simpMessagingTemplate.convertAndSend("/sub/chatrooms/"+roomId, chatMessage);
