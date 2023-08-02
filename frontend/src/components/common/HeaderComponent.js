@@ -18,26 +18,26 @@ const Header = () => {
             </Link>
             <NavMenu>
                 <NavItem>
-                    <Link to="/aboutus">About us</Link>
+                    <StyledLink to="/aboutus">About us</StyledLink>
                 </NavItem>
                 <NavItem>
-                    <Link to="/notice">Notice</Link>
+                    <StyledLink to="/notice">Notice</StyledLink>
                 </NavItem>
                 <NavItem>
-                    <Link to="/studylist">StudyList</Link>
+                    <StyledLink to="/studylist">StudyList</StyledLink>
                 </NavItem>
                 <NavItem>
-                    <Link to="/mypage/profile">MyPage</Link>
+                    <StyledLink to="/mypage/profile">MyPage</StyledLink>
                 </NavItem>
                 <LoginNavItem>
                     {!user ? (
                         <>
                             <NavItem>
-                                <Link to="/login">로그인</Link>
+                                <StyledLink to="/login">로그인</StyledLink>
                             </NavItem>
                         </>):(
                         <NavItem>
-                            <Link to="/" onClick={onClickLogout}>로그아웃</Link>
+                            <StyledLink to="/" onClick={onClickLogout}>로그아웃</StyledLink>
                         </NavItem>
                     )}
                 </LoginNavItem>
