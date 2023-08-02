@@ -52,8 +52,8 @@ public class InterviewController {
 		Member user = member.getUser();
 		String nickname = user.getNickname();
 		System.out.println("nickname = " + nickname);
-		interviewService.create(nickname, requestDto);
-		return BaseResponse.ok(HttpStatus.OK, "테스트");
+		InterviewRoom interviewRoom = interviewService.create(member.getUsername(), nickname, requestDto);
+		return BaseResponse.okWithData(HttpStatus.OK, "테스트",interviewRoom);
 	}
 
 	@PostMapping("/exit/{roomId}")
@@ -72,13 +72,13 @@ public class InterviewController {
 	public ResponseEntity<?> joinRoom(@AuthenticationPrincipal CustomMemberDetails member,
 		@PathVariable String roomId) {
 		String nickname = member.getNickname();
-		List<RoomMemberInfo> roomMemberInfos;
+		InterviewRoom interview;
 		try {
-			roomMemberInfos = interviewService.joinRoom(nickname, roomId);
+			interview = interviewService.joinRoom(member.getUsername(), nickname, roomId);
 		} catch (Exception e) {
 			return BaseResponse.fail(e.getMessage(), 400);
 		}
-		return BaseResponse.okWithData(HttpStatus.OK, "조인 완료", roomMemberInfos);
+		return BaseResponse.okWithData(HttpStatus.OK, "조인 완료", interview);
 	}
 
 	// ready

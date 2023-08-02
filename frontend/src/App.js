@@ -14,7 +14,8 @@ import NoticePage from "./pages/notice/NoticePage";
 import NoticeDetail from "./pages/notice/NoticeDetailPage";
 import StudyRoomList from "./pages/studylist/StudyRoomListPage";
 import NoticeWritePage from "./pages/notice/NoticeWritePage";
-
+import axios from 'axios';
+axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 const App = () => {
   return (
     <div>

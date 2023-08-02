@@ -11,11 +11,11 @@ import com.mirrorview.domain.interview.dto.RoomResponseDto;
 public interface InterviewService {
 	List<RoomResponseDto> findRoom();
 
-	void create(String nickname, RoomRequestDto requestDto);
+	InterviewRoom create(String userId, String nickname, RoomRequestDto requestDto);
 
 	void exitRoom(String nickname, String roomId);
 
-	List<RoomMemberInfo> joinRoom(String nickname, String roomId);
+	InterviewRoom joinRoom(String userId, String nickname, String roomId);
 
 	void changeReady(RoomMemberInfo memberInfo, InterviewRoom room);
 

@@ -4,14 +4,15 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 const initialState = {
-    room :[]
+    room :[],
+    currentRoom:null,
 };
 
 export const getInterviewRoom = createAsyncThunk(
     "getInterViewRoom",
     async(_,{rejectWithValue}) => {
         try{
-            const res = await axios.get("http://localhost:8080/api/interviews/rooms",_,{
+            const res = await axios.get("/api/interviews/rooms",_,{
                 withCredentials: true,
             });
             return res.data;
@@ -30,7 +31,9 @@ const interviewSlice = createSlice({
     name:"interview",
     initialState,
     reducers:{
-
+        setCurrentRoom:(state,action)=>{
+            state.currentRoom = action.payload;
+        }
     },
     extraReducers:{
         [getInterviewRoom.fulfilled]:(state,{payload})=>{
@@ -38,6 +41,8 @@ const interviewSlice = createSlice({
         }
     }
 });
+
+export const {setCurrentRoom,} = interviewSlice.actions;
 
 export const interviewActions = interviewSlice.actions;
 

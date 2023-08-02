@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import com.mirrorview.domain.essay.dto.EssayListDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,10 +35,11 @@ public class InterviewRoom {
 	private boolean isStarted;
 	private LocalDateTime timestamp;
 
-	public void join(String nickname) {
+	public void join(String nickname, List<EssayListDto> essayList) {
 		members.add(RoomMemberInfo.builder()
 			.nickname(nickname)
 			.ready(false)
+			.essays(essayList)
 			.build());
 	}
 

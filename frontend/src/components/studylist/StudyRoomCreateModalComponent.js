@@ -3,11 +3,11 @@ import * as S from "./StudyStyledComponents";
 import { useState } from "react";
 import useUpdateEffect from "../../lib/UseUpdateEffect";
 import { useDispatch } from "react-redux";
+import {setCurrentRoom} from "../../store/InterviewStore"
 import axios from "axios";
 
 const StudyRoomCreateModal = ({ setModalStates }) => {
     const [open, setOpen] = useState(true);
-
     const dispatch = useDispatch();
 
     const [firstCategory, setFirstCategory] = useState([{id:0,name:"선택하세요"}]);
@@ -23,7 +23,7 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
     // 임의 카테고리 설정
 
     useEffect(() => {
-        axios.get("http://localhost:8080/api/category")
+        axios.get("/api/category")
         .then(({data})=>{
             console.log(data);
             setFirstCategory([...defaultValue,...data.data]);
@@ -36,7 +36,7 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
     }, []);
 
     useUpdateEffect(()=>{
-        axios.get(`http://localhost:8080/api/category/${firstValue}`)
+        axios.get(`/api/category/${firstValue}`)
         .then(({data})=>{
             setSecondCategory([...defaultValue,...data.data]);
         })
@@ -121,11 +121,10 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
 
     // 생성 클릭 시 모든 값들이 입력되었는지 확인
     const checkSubmit = () => {
-        // console.log(title);
-        // console.log(max);
-        // console.log(firstCategory);
-        // console.log(secondCategory);
-        // console.log(open);
+        console.log(title);
+        console.log(max);
+        console.log(secondValue);
+        console.log(open);
 
         if (!open) {
             // 비공개 상태
@@ -133,8 +132,8 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
             if (
                 title === "" ||
                 max === 0 ||
-                firstCategory === "선택하세요" ||
-                secondCategory === "선택하세요" ||
+                firstValue === "선택하세요" ||
+                secondValue === "선택하세요" ||
                 password === ""
             ) {
                 // 하나라도 값이 없다면
@@ -146,8 +145,8 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
             if (
                 title === "" ||
                 max === 0 ||
-                firstCategory === "선택하세요" ||
-                secondCategory === "선택하세요"
+                firstValue === "선택하세요" ||
+                secondValue === "선택하세요"
             ) {
                 // 하나라도 값이 없다면
                 alert("입력 항목을 확인해주세요");
@@ -158,9 +157,21 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
     };
 
     // 방 생성
-    const handleSubmit = () => {
+    const handleSubmit = async (e) => {
         if (window.confirm("면접방을 생성하시겠습니까?")) {
-            // 방 생성하기 및 생성된 방으로 이동
+            await axios.post("/api/interviews/create",{
+                title:title,
+                password:password,
+                category:secondValue,
+                maxMemberCount:max,
+            }).then((response)=>{
+                console.log(response);
+                dispatch(setCurrentRoom(response.data.data));
+                setModalStates(false);
+                // navigate("/studyroom/:roomId");
+            }).catch((error)=>{
+                console.error(error);
+            })
         }
     };
 

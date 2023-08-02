@@ -12,7 +12,7 @@ const EssayComponent = () => {
     axios.defaults.headers.common["Authorization"] =  `Bearer ${accessToken}`;
     
     useEffect(()=>{
-        axios.get(`http://localhost:8080/api/mypage/essays?userId=${user.userId}`)
+        axios.get(`/api/mypage/essays?userId=${user.userId}`)
         .then(({data})=>{
             setEssyList(data.data);
             console.log(data);

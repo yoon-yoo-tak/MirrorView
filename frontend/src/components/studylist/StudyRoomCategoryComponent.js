@@ -11,9 +11,9 @@ const StudyRoomCategory = () => {
     const [firstValue,setFirstValue] = useState("선택하세요");
     const [secondValue,setSecondValue] = useState("선택하세요");
     const dispatch = useDispatch();
-
+    
     useEffect(()=>{
-        axios.get("http://localhost:8080/api/category")
+        axios.get("/api/category")
         .then(({data})=>{
             console.log(data);
             setFirstCategory([...defaultValue,...data.data]);
@@ -23,13 +23,17 @@ const StudyRoomCategory = () => {
         .catch((error)=>{
             console.error(error);
         })
+        return(()=>{
+            setFirstCategory([...defaultValue]);
+        })
     },[])
     useUpdateEffect(()=>{
-        axios.get(`http://localhost:8080/api/category/${firstValue}`)
+        if(firstCategory.length!=1){
+        axios.get(`/api/category/${firstValue}`)
         .then(({data})=>{
             setSecondCategory([...defaultValue,...data.data]);
         })
-        
+    }
     },[firstValue])
     
     const secondCategories = ["선택하세요", "first", "second", "third"];

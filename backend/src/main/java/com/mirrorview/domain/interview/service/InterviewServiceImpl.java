@@ -10,6 +10,11 @@ import javax.transaction.Transactional;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.mirrorview.domain.essay.dto.EssayDetailDto;
+import com.mirrorview.domain.essay.dto.EssayDto;
+import com.mirrorview.domain.essay.dto.EssayListDto;
+import com.mirrorview.domain.essay.repository.EssayDetailRepository;
+import com.mirrorview.domain.essay.repository.EssayRepository;
 import com.mirrorview.domain.interview.domain.InterviewRoom;
 import com.mirrorview.domain.interview.domain.RoomMemberInfo;
 import com.mirrorview.domain.interview.dto.RoomRequestDto;
@@ -27,6 +32,8 @@ public class InterviewServiceImpl implements InterviewService {
 
 	private final RedisTemplate<String, InterviewRoom> template;
 	private final InterviewRepository interviewRepository;
+	private final EssayRepository essayRepository;
+	private final EssayDetailRepository essayDetailRepository;
 
 	@Override
 	public List<RoomResponseDto> findRoom() {
@@ -35,11 +42,13 @@ public class InterviewServiceImpl implements InterviewService {
 	}
 
 	@Override
-	public void create(String nickname, RoomRequestDto requestDto) {
+	public InterviewRoom create(String userId, String nickname, RoomRequestDto requestDto) {
 		InterviewRoom createRoom = requestDto.toEntity(nickname);
-		createRoom.join(nickname);
+		List<EssayListDto> essayList = getEssayListDtos(userId);
+		createRoom.join(nickname, essayList);
 		interviewRepository.save(createRoom);
 		System.out.println(interviewRepository.count());
+		return createRoom;
 	}
 
 	@Override
@@ -77,15 +86,27 @@ public class InterviewServiceImpl implements InterviewService {
 
 	@Override
 	@Transactional
-	public List<RoomMemberInfo> joinRoom(String nickname, String roomId) {
+	public InterviewRoom joinRoom(String userId, String nickname, String roomId) {
 		Optional<InterviewRoom> findRoom = findRoomById(roomId);
 		if (findRoom.isPresent()) {
 			InterviewRoom interviewRoom = findRoom.get();
-			interviewRoom.join(nickname);
+			List<EssayListDto> essayList = getEssayListDtos(userId);
+			interviewRoom.join(nickname, essayList);
 			interviewRepository.save(interviewRoom);
-			return interviewRoom.getMembers();
+			return interviewRoom;
 		}
 		throw new IllegalArgumentException("방 정보가 존재하지 않습니다.");
+	}
+
+	private List<EssayListDto> getEssayListDtos(String userId) {
+		List<EssayDto> essays = essayRepository.findEssayByUserId(userId);
+		List<EssayListDto> essayList = new ArrayList<>();
+		for (EssayDto essay : essays) {
+			List<EssayDetailDto> essayDetail = essayDetailRepository.findEssayByEssayId(essay.getId());
+			EssayListDto createEssay = EssayListDto.createEssay(essay, essayDetail);
+			essayList.add(createEssay);
+		}
+		return essayList;
 	}
 
 	@Override

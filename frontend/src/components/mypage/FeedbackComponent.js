@@ -12,7 +12,7 @@ const FeedbackComponent = () => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
     useEffect(()=>{
-        axios.get(`http://localhost:8080/api/mypage/feedbacks?userId=${user.userId}`)
+        axios.get(`/api/mypage/feedbacks?userId=${user.userId}`)
         .then(({data})=>{
             setFeedbacks(data.data);
 
