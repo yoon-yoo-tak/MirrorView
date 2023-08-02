@@ -21,10 +21,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.mirrorview.domain.user.service.MemberService;
-import com.mirrorview.global.auth.jwt.CustomMemberDetailService;
+import com.mirrorview.global.auth.security.CustomMemberDetailService;
 import com.mirrorview.global.auth.jwt.JwtAuthenticationFilter;
-import com.mirrorview.global.auth.jwt.RestAccessDeniedHandler;
-import com.mirrorview.global.auth.jwt.RestAuthenticationEntryPoint;
+import com.mirrorview.global.auth.security.RestAccessDeniedHandler;
+import com.mirrorview.global.auth.security.RestAuthenticationEntryPoint;
 
 import lombok.RequiredArgsConstructor;
 

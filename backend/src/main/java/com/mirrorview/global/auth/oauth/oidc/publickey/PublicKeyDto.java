@@ -1,4 +1,4 @@
-package com.mirrorview.global.auth.oauth.publickey;
+package com.mirrorview.global.auth.oauth.oidc.publickey;
 
 import java.math.BigInteger;
 import java.security.KeyFactory;

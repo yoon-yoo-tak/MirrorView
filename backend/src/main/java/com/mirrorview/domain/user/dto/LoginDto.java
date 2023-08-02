@@ -1,10 +1,6 @@
 package com.mirrorview.domain.user.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @Getter
@@ -12,6 +8,6 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 public class LoginDto {
-	String userId;
-	String password;
+    String userId;
+    String password;
 }

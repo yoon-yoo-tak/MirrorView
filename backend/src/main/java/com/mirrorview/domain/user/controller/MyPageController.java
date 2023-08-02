@@ -27,7 +27,7 @@ import com.mirrorview.domain.feedback.service.FeedbackService;
 import com.mirrorview.domain.user.dto.ChangePasswordDto;
 import com.mirrorview.domain.user.dto.MemberProfileDto;
 import com.mirrorview.domain.user.service.MemberProfileService;
-import com.mirrorview.global.auth.jwt.CustomMemberDetails;
+import com.mirrorview.global.auth.security.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 
 import lombok.RequiredArgsConstructor;

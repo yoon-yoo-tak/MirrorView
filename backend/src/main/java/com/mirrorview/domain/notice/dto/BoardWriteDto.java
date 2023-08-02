@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class BoardWriteDto {
-	private String title;
-	private String content;
+    private String title;
+    private String content;
 }

@@ -21,7 +21,7 @@ import com.mirrorview.domain.user.dto.MemberResDto;
 import com.mirrorview.domain.user.dto.RatingDto;
 import com.mirrorview.domain.user.service.EmailService;
 import com.mirrorview.domain.user.service.MemberService;
-import com.mirrorview.global.auth.jwt.CustomMemberDetails;
+import com.mirrorview.global.auth.security.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 
 import lombok.RequiredArgsConstructor;

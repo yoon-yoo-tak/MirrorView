@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EssayDetailCreateDto {
-	private String question;
-	private String answer;
+    private String question;
+    private String answer;
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ChangePasswordDto {
-	private String originPass;
-	private String newPass;
-	private String checkNewPass;
+    private String originPass;
+    private String newPass;
+    private String checkNewPass;
 }

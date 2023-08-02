@@ -1,4 +1,4 @@
-package com.mirrorview.global.config.redis;
+package com.mirrorview.global.config;
 
 import java.util.List;
 

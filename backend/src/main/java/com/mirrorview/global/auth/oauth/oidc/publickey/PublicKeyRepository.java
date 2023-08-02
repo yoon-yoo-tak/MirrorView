@@ -1,6 +1,4 @@
-package com.mirrorview.global.auth.oauth.publickey;
-
-import java.util.Optional;
+package com.mirrorview.global.auth.oauth.oidc.publickey;
 
 import org.springframework.data.repository.CrudRepository;
 

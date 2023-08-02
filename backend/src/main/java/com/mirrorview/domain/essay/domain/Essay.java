@@ -1,28 +1,13 @@
 package com.mirrorview.domain.essay.domain;
 
+import com.mirrorview.domain.user.domain.Member;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
-import org.hibernate.annotations.CreationTimestamp;
-
-import com.mirrorview.domain.user.domain.Member;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -31,24 +16,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Essay {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id")
-	private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-	private String title;
+    private String title;
 
-	@OneToMany(mappedBy = "essay")
-	private List<EssayDetail> essayDetails = new ArrayList<>();
+    @OneToMany(mappedBy = "essay")
+    private List<EssayDetail> essayDetails = new ArrayList<>();
 
-	@CreationTimestamp
-	@Column(name = "created_time")
-	private LocalDateTime createdTime;
+    @CreationTimestamp
+    @Column(name = "created_time")
+    private LocalDateTime createdTime;
 
-	public void updateEssayDetail(List<EssayDetail> essayDetails){
-		this.essayDetails = List.copyOf(essayDetails);
-	}
+    public void updateEssayDetail(List<EssayDetail> essayDetails) {
+        this.essayDetails = List.copyOf(essayDetails);
+    }
 }
