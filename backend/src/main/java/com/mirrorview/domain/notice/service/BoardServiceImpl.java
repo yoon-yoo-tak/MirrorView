@@ -63,7 +63,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void writeNotice(BoardWriteDto dto, String userId) {
-        Member member = memberRepository.findByUserId(userId);
+        Member member = memberRepository.findByUserId(userId).get();
         Board board = Board.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())

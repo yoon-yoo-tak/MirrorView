@@ -32,8 +32,8 @@ public class FriendServiceImpl implements FriendService {
             return false;
         }
         FriendRequestDto friendRequestDto = FriendRequestDto.builder()
-                .fromMember(memberRepository.findByUserId(myUserId))
-                .toMember(memberRepository.findByUserId(otherUserId))
+                .fromMember(memberRepository.findByUserId(myUserId).get())
+                .toMember(memberRepository.findByUserId(otherUserId).get())
                 .isConnected(false)
                 .build();
 

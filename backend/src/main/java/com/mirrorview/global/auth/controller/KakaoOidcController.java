@@ -57,7 +57,9 @@ public class KakaoOidcController {
             memberService.save(newMember);
             optionalMember = memberService.findByUserId(memberData.getSub());
         }
-
+        if (optionalMember.get().getDelete()){
+            return BaseResponse.fail("login fail",400);
+        }
         String userId = optionalMember.get().getUserId();
 
         // 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)

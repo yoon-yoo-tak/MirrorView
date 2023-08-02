@@ -17,7 +17,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mirrorview.global.auth.jwt.JwtHeaderDto;
 import com.mirrorview.global.auth.jwt.JwtPayloadDto;
-import com.mirrorview.global.auth.oauth.publickey.PublicKeyService;
+import com.mirrorview.global.auth.oauth.oidc.publickey.PublicKeyService;
 
 import lombok.extern.slf4j.Slf4j;
 

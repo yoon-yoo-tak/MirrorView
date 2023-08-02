@@ -60,6 +60,7 @@ public class OidcUtil {
         // JWTVerifier를 생성하고 토큰을 검증합니다.
         JWTVerifier verifier = JWT
                 .require(Algorithm.RSA256((RSAPublicKey) publicKey, null))
+                .ignoreIssuedAt()
                 .withIssuer(ISS)
                 .withAudience(aud)
                 .build();

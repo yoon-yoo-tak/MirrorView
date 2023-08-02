@@ -53,7 +53,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public Optional<Member> findByUserId(String userId) {
-		return Optional.ofNullable(memberRepository.findByUserId(userId));
+		return Optional.of(memberRepository.findByUserId(userId).get());
 	}
 
 	@Override
@@ -77,23 +77,23 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	public float saveScore(String userId, RatingDto ratingDto) {
 
-		Member member = memberRepository.findByUserId(userId);
-		Member otherMember = memberRepository.findByUserId(ratingDto.getUserId());
-		if (member == null || otherMember == null) {
+		Optional<Member> member = memberRepository.findByUserId(userId);
+		Optional<Member> otherMember = memberRepository.findByUserId(ratingDto.getUserId());
+		if (member.isEmpty() || otherMember.isEmpty()) {
 			throw new IllegalArgumentException("존재하지 않는 유저입니다.");
 		}
 		Rating newRating = Rating.builder()
-			.rater(member)
-			.rated(otherMember)
+			.rater(member.get())
+			.rated(otherMember.get())
 			.score(ratingDto.getScore())
 			.build();
 		ratingRepository.save(newRating);
 
-		long count = findCount(otherMember);
+		long count = findCount(otherMember.get());
 		System.out.println(count);
-		otherMember.updateAverageScore(count, newRating.getScore());
+		otherMember.get().updateAverageScore(count, newRating.getScore());
 
-		return otherMember.getAverageRating();
+		return otherMember.get().getAverageRating();
 	}
 
 	@Override
@@ -109,12 +109,13 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	public void deleteMember(String userId) {
 
-		Member member = memberRepository.findByUserId(userId);
-		if (member == null || member.getDelete()) {
+		Optional<Member> member = memberRepository.findByUserId(userId);
+		if (member.isEmpty()|| member.get().getDelete()) {
 			throw new IllegalArgumentException("잘못된 정보");
 		}
-		member.delete();
-		friendRepository.deleteByFromOrTo(member, member);
+		Member getMember = member.get();
+		getMember.delete();
+		friendRepository.deleteByFromOrTo(getMember, getMember);
 	}
 
 	private long findCount(Member otherMember) {

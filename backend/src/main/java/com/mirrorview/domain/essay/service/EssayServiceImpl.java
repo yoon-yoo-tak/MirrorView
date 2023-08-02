@@ -33,7 +33,7 @@ public class EssayServiceImpl implements EssayService {
 
     @Override
     public void insertEssayAndEssayDetails(EssayCreateDto essays, String userId) {
-        Member member1 = memberRepository.findByUserId(userId);
+        Member member1 = memberRepository.findByUserId(userId).get();
         Essay essay = Essay.builder()
                 .title(essays.getTitle())
                 .member(member1)

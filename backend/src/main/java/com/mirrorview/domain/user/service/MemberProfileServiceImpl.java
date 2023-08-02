@@ -54,7 +54,7 @@ public class MemberProfileServiceImpl implements MemberProfileService {
     @Override
     public void changePassword(ChangePasswordDto dto, String userId) {
         String origin = dto.getOriginPass();
-        Member members = memberRepository.findByUserId(userId);
+        Member members = memberRepository.findByUserId(userId).get();
         if (passwordEncoder.matches(origin, members.getPassword())) {
             members.updatePassword(passwordEncoder.encode(dto.getNewPass()));
         }
@@ -62,7 +62,7 @@ public class MemberProfileServiceImpl implements MemberProfileService {
 
     @Override
     public void changeEmail(String email, String userId) {
-        Member members = memberRepository.findByUserId(userId);
+        Member members = memberRepository.findByUserId(userId).get();
         members.updateEmail(email);
     }
 }

@@ -50,7 +50,7 @@ public class EssayDetailServiceImpl implements EssayDetailService {
                 }
                 Optional<EssayDetail> essayDetail = essayDetailRepository.findById(essay_detail_id);
                 if (dto.getIsDeleted()) { // isDeleted == true다 >> 삭제될 항목
-                    Member member = memberRepository.findByUserId(userId);
+                    Member member = memberRepository.findByUserId(userId).get();
                     feedbackRepository.deleteFeedbackByEssayDetailIdAndUserId(essayDetail.get(), member);
                     essayDetailRepository.deleteById(essay_detail_id);
                 } else {  // 내용 업데이트
