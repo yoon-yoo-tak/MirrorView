@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 // import classes from "./Profile.module.scss";
 import * as S from "../../../components/mypage/MypageStyledComponents";
 
+
+
 const Profile = () => {
     // const id = useSelector((state) => state.auth.id);
     // const nickname = useSelector((state) => state.auth.nickname);
@@ -63,10 +65,11 @@ const Profile = () => {
                                     숨김
                                 </S.profileContent>
                                 <S.profileContent onClick={ChangeEmail}>
-                                    버튼 ㄱ
+                                {/* <button variant="outlined">email 변경</button> */}
+                                <S.Button>e-mail 변경</S.Button>
                                 </S.profileContent>
                                 <S.profileContent onClick={ChangeNickname}>
-                                    버튼 ㄱ
+                                <S.Button>닉네임 변경</S.Button>
                                 </S.profileContent>
                             </S.profileUpdate>
                         </S.profileInfo>

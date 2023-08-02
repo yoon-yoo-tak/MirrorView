@@ -32,9 +32,19 @@ const AboutusPage = () => {
                 <S.SearchBar4></S.SearchBar4>
             </S.ImageWrapper5>
 
+            <S.ImageWrapper8>
+            <img
+                    src={process.env.PUBLIC_URL + "/bubble2.png"}
+                    alt="main_bg2"
+                />
+            </S.ImageWrapper8>
+
+
             <S.ImageWrapper6>
                 <S.SearchBar5></S.SearchBar5>
             </S.ImageWrapper6>
+
+
 
         <S.Image src='/bground.png' alt='main_bg' />
 
@@ -43,11 +53,14 @@ const AboutusPage = () => {
           <S.Title2>밀어:뷰</S.Title2>
         </S.Content1>
 
+
         <S.Content2>
             <S.Comment1>
-            준비해도 불안한 면접 어떻게 시작하지..? <br></br>
-            사람 구하고, 날짜 정하고, 플랫폼 정하고.. <br></br>
-            간단하게 면접 스터디 하는 방법 없을까?
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;면접 준비 어떻게 시작하지..? <br></br>
+            &nbsp;&nbsp;사람 구하고, 날짜 정하고, <br></br>플랫폼 정하고.. 너무 번거로워 ! <br></br>
+            &nbsp;&nbsp;&nbsp;&nbsp;쉽게할 수 있는 면접 스터디 <br></br> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;어디 없을까? <br></br>
+            
             </S.Comment1>
         </S.Content2>
 

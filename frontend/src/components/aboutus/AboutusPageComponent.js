@@ -35,6 +35,16 @@ export const ImageWrapper = styled.div`
     height: 600px;
 `;
 
+export const ImageWrapper8 = styled.div`
+    position: absolute;
+    top: 45%;
+    right: 92%;
+    transform: translate(700%, -130%);
+    z-index: 1;
+    width: 100px;
+    height: 600px;
+`;
+
 export const ImageWrapper1 = styled.div`
     position: absolute;
     top: 60%;
@@ -106,13 +116,13 @@ export const Content1 = styled.div`
 
 export const Content2 = styled.div`
     position: absolute;
-    top: 23%;
-    left: 63%;
+    top: 18.7%;
+    left: 64%;
     transform: translate(-50%, -50%);
-    text-align: center;
+    // text-align: center;
     z-index: 2;
     white-space: nowrap;
-    line-height: 1.5;
+    line-height: 1.6;
 `;
 
 export const Content3 = styled.h2`
@@ -145,10 +155,11 @@ export const Title2 = styled.h2`
 
 export const Comment1 = styled.h2`
     color: black;
-    font-size: 32px;
-    font-family: wooju;
+    font-size: 1.70rem;
+    font-family: KCC;
     top: 45%;
-    left: 23%;
+    left: 25%;
+    line-height: 2;
 `;
 
 export const Comment2 = styled.h2`
