@@ -1,5 +1,9 @@
 package com.mirrorview.domain.user.domain;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,6 +42,8 @@ public class Member {
 
 	private String photo;
 
+	private String roles;
+
 	private float averageRating;
 
 	public void updatePhoto(String updatePhoto) {
@@ -59,5 +65,12 @@ public class Member {
 	public void updateAverageScore(long count, float score) {
 		float allScore = averageRating * (count - 1) + score;
 		averageRating = allScore / count;
+	}
+
+	public List<String> getRoleList() {
+		if (this.roles.length() > 0) {
+			return Arrays.asList(this.roles.split(","));
+		}
+		return new ArrayList<>();
 	}
 }

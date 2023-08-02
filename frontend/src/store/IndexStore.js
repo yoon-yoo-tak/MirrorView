@@ -7,7 +7,6 @@ import { configureStore } from "@reduxjs/toolkit";
 // 별도의 메소드 없이 바로 미들웨어를 추가할 수 있음!!
 import authReducer from "./AuthStore";
 import chatRoomReducer from "store/ChatRoomStore";
-import chatLogReducer from "store/ChatLogStore";
 import chatViewReducer from "store/ChatViewStore";
 import webSocket from "store/WebSocketStore";
 
@@ -15,9 +14,8 @@ const store = configureStore({
   reducer: {
     auth: authReducer,
     webSocket,
-    chatRoom : chatRoomReducer,
-    chatLog : chatLogReducer,
-    chatView : chatViewReducer,
+    chatRoom: chatRoomReducer,
+    chatView: chatViewReducer,
   },
 });
 

@@ -40,7 +40,15 @@ public class FriendController {
 	public ResponseEntity<?> getFriendRequests(@AuthenticationPrincipal CustomMemberDetails member) {
 		String userId = member.getUsername();
 		List<FriendDto> friendRequests = friendService.getFriendRequests(userId);
-		return BaseResponse.okWithData(HttpStatus.OK, "ok", friendRequests);
+		return BaseResponse.okWithData(HttpStatus.OK, "내가 요청받은 목록 불러오기 완료", friendRequests);
+	}
+
+	@GetMapping("/wait")
+	public ResponseEntity<?> getSentFriendRequests(@AuthenticationPrincipal CustomMemberDetails memberDetails) {
+		String userId = memberDetails.getUsername();
+		List<FriendDto> sentFriendRequests = friendService.getSentFriendRequests(userId);
+		return BaseResponse.okWithData(HttpStatus.OK, "내가 요청한 목록 불러오기 완료", sentFriendRequests);
+
 	}
 
 	@GetMapping("/status/{userId}")
