@@ -1,13 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 import data from "./Data";
 
 import * as S from "../../components/notice/NoticePageComponent";
+import { useSelector } from "react-redux";
+import useUpdateEffect from "lib/UseUpdateEffect";
+import axios from "axios";
 
 const NoticePage = () => {
   const perPage = 5; // 한 페이지에 보여줄 데이터 개수
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 번호 상태(state)
+  const {user} = useSelector((state)=>state.auth);
+  const [notice, setNotice] = useState([]);
+  const [totalPages,setTotalPages] = useState(1);
+  useEffect(()=>{
+    axios.get(`/api/board?size=${perPage}&page=${currentPage}`)
+    .then(({data})=>{
+      console.log(data.data);
+      setNotice(data.data.content);
+      setTotalPages(data.data.totalPages);
+    }).catch((error)=>{
+      console.error(error);
+    })
+
+  },[currentPage])
 
   // 페이지 변경 시 처리할 함수
   const handlePageChange = (selectedPage) => {
@@ -18,7 +35,6 @@ const NoticePage = () => {
   const paginatedData = data.slice(currentPage * perPage, (currentPage + 1) * perPage);
 
   // 총 페이지 수 계산
-  const pageCount = Math.ceil(data.length / perPage);
 
   return (
     <S.Container>
@@ -33,7 +49,7 @@ const NoticePage = () => {
           nextLabel={">"}
           breakLabel={"..."}
           breakClassName={"break-me"}
-          pageCount={pageCount} // 총 페이지 수 동적으로 설정
+          pageCount={totalPages} // 총 페이지 수 동적으로 설정
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageChange}
@@ -53,23 +69,26 @@ const NoticePage = () => {
             </tr>
           </thead>
           <tbody>
-          {paginatedData.map((data) => (
+          {notice.map((data) => (
               <tr key={data.id}>
                 <td>{data.id}</td>
                 <td>
                   <Link to={`/noticedetail/${data.id}`}>{data.title}</Link>
                 </td>
-                <td>{data.date}</td>
+                <td>{data.createdTime.substring(0,10)}</td>
               </tr>
             ))}
           </tbody>
         </table>
-
+            {user && user.roles=="ADMIN" ? (
+              <>
         <S.ButtonWrapper>
           <Link to="/NoticeWritePage">
             <S.Button>작 성</S.Button>
           </Link>
       </S.ButtonWrapper>
+      </>
+        ):<></>}
       </S.TableWrapper>
     </S.Container>
   );

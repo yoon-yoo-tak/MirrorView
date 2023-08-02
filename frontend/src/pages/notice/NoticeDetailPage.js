@@ -1,15 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams  } from "react-router-dom";
 import data from "./Data";
 import * as S from "../../components/notice/NoticeDetailComponent";
+import axios from "axios";
 
 
 const NoticeDetail = () => {
 
   // 게시글의 ID를 매개변수로 가져오기
   const { id } = useParams();
+  useEffect(()=>{
+    axios.get(`/api/board/${id}`)
+    .then(({data})=>{
+      console.log(data);
+      setPost(data.data);
+    })
+  },[])
   // 게시글 ID에 해당하는 데이터 가져오기
-  const post = data.find((item) => item.id === parseInt(id));
+  const [post,setPost] =useState(null);
+  
 
   if(!post) {
     return <div>해당 게시글을 찾을 수 없습니다.</div>
@@ -24,9 +33,9 @@ const NoticeDetail = () => {
         <S.Title>{post.title}</S.Title>
         <S.InfoWrapper>
           <S.Info>
-            <S.Author>{post.author}</S.Author>
+            <S.Author>{post.userId}</S.Author>
             <S.Divider>|</S.Divider>
-            <S.Date>{post.date}</S.Date>
+            <S.Date>{post.createdTime.substring(0,10)}</S.Date>
           </S.Info>
           <S.InfoLine />
         </S.InfoWrapper>

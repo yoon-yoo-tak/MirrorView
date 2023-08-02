@@ -57,6 +57,10 @@ const Login = () => {
         );
     },[inputId,inputPassword]);
 
+    const onClickKakaoLogin = (e) =>{
+        window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`
+    }
+
     return (
         <S.loginForm>
             <form onSubmit={handleSubmit}>
@@ -95,6 +99,15 @@ const Login = () => {
                             >
                                 로그인
                             </S.submitButton>
+                            <hr/>
+                            <div>또는</div>
+                
+                            <img
+                            src={process.env.PUBLIC_URL + "/kakao_login_medium_narrow.png"}
+                            alt="kakao_login"
+                            onClick={onClickKakaoLogin}>
+                            </img>
+                
                         </div>
                     </S.wrap>
                 </S.page>

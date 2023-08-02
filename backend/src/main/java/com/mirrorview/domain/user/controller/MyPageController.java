@@ -66,7 +66,7 @@ public class MyPageController {
 		return BaseResponse.ok(HttpStatus.OK, "프로필 사진 수정 완료");
 	}
 
-	@PatchMapping("/nickname")
+	@PostMapping("/nickname")
 	public ResponseEntity<?> updateNickname(String userId, String nickname) {
 		try {
 			memberProfileService.updateNickname(userId, nickname);

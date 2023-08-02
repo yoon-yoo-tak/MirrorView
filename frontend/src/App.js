@@ -18,6 +18,7 @@ import NoticeWritePage from "./pages/notice/NoticeWritePage";
 import Sidebar from "pages/sidebar/SideBar";
 import ChatList from "pages/sidebar/ChatList";
 import PrivateChatRoom from "pages/sidebar/ChatRoom";
+import KakaoLoginRedirectPage from "pages/user/KakaoLoginRedirectPage";
 
 // axios 전역 설정
 import axios from 'axios';
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/noticedetail/:id" element={<NoticeDetail />} />
         <Route path="/studylist" element={<StudyRoomList />} />
         <Route path="/noticewritepage" element={<NoticeWritePage />} />
+        <Route path="/login/kakao/code" element={<KakaoLoginRedirectPage/>} />
       </Routes>
       <Footer></Footer>
     </div>

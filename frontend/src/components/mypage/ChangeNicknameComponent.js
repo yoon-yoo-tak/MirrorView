@@ -17,14 +17,17 @@ const ChangeNicknameComponent = () => {
 
     const handleNickname = (e) => {
         setNewNickname(e.target.value);
+        setNicknameValid(false);
     }
 
     const onClickVaildNickname = async (e) => {
         await axios.get(`/api/users/${newNickname}/check-nickname`)
         .then((response)=>{
+            alert("사용가능한 닉네임입니다.");
             setNicknameValid(true);
         }).catch((error)=>{
             console.error(error);
+            alert("사용 불가능한 아이디입니다.");
             setNicknameValid(false);
         })
     }
@@ -33,7 +36,7 @@ const ChangeNicknameComponent = () => {
             alert("중복확인 필요");
             return;
         }
-        await axios.patch(`/api/mypage/nickname?userId=${user.userId}&nickname=${newNickname}`)
+        await axios.post(`/api/mypage/nickname?userId=${user.userId}&nickname=${newNickname}`)
         .then((response)=>{
             dispatch(setNickname(newNickname));
             navigate("/mypage/profile")
@@ -43,9 +46,9 @@ const ChangeNicknameComponent = () => {
     }
     return (
         <div>
-            <S.changeInput2 placeholder=" 변경할 닉네임을 입력하세요"/>
-            <S.btn2>중복확인</S.btn2>
-            <S.btn3>변경</S.btn3>
+            <S.changeInput2 placeholder=" 변경할 닉네임을 입력하세요" onChange={handleNickname}/>
+            <S.btn2 onClick={onClickVaildNickname}>중복확인</S.btn2>
+            <S.btn3 disabled={!nicknameValid} onClick={changeNickname}>변경</S.btn3>
             <S.comment>
                 새로운 닉네임
             </S.comment>

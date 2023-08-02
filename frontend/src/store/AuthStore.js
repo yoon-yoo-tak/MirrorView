@@ -56,6 +56,7 @@ const initialState = {
     emailValid: false,
     notAllow: true,
     user: null,
+    provider:"",
 };
 // initialState를 통해 state의 처음 상태를 정의한다.
 
@@ -95,6 +96,25 @@ export const getUserInfo = createAsyncThunk(
             console.error(error);
             return rejectWithValue(error.response.data);
         }
+    }
+)
+export const kakaoLogin = createAsyncThunk(
+    "kakaoLogin",
+    async(accessToken,{rejectWithValue}) => {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+        try{
+        const res = await axios.post("/api/users/login/kakao",{
+            withCredentials:true,
+        });
+        console.log(res);
+
+        return res.data;
+        }
+        catch (error) {
+            console.error(error);
+            return rejectWithValue(error.response.data);
+        }
+
     }
 )
 
@@ -179,7 +199,25 @@ const authSlice = createSlice({
         },
         [getUserInfo.fulfilled]: (state, { payload }) => {
             state.user = payload.data;
-        }
+        },
+        [kakaoLogin.pending]: (state, action) => {
+            state.loginLoading = true;
+            state.loginDone = false;
+            state.loginError = null;
+        },
+        [kakaoLogin.fulfilled]: (state, {payload}) => {
+            state.loginLoading = false;
+            state.loginDone = true;
+            state.loginError = null;
+            state.provider ="kakao";
+            state.accessToken = payload.data["access-token"];
+            state.refreshToken = payload.data["refresh-token"];
+        },
+        [kakaoLogin.rejected]: (state, action) => {
+            state.loginLoading = false;
+            state.loginDone = false;
+            state.loginError = action.error;
+        },
 
     }
 });
