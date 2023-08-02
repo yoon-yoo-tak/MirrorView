@@ -13,7 +13,7 @@ const ChangeNickname = () => {
                     <h2>닉네임 변경하기</h2>
                     <hr />
                     <div>
-                        <div>닉네임 바꾸기 ㄱㄱ</div>
+                        <div>비속어가 포함되어 있는 닉네임을 사용시 제재당할 수 있습니다.</div>
                         <S.formComponent>
                             <ChangeNicknameComponent />
                         </S.formComponent>

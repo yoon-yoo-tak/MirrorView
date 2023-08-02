@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {setNickname} from "../../store/AuthStore"
+import * as S from "./MypageStyledComponents";
 
 const ChangeNicknameComponent = () => {
 
@@ -42,7 +43,12 @@ const ChangeNicknameComponent = () => {
     }
     return (
         <div>
-            <div></div>
+            <S.changeInput2 placeholder=" 변경할 닉네임을 입력하세요"/>
+            <S.btn2>중복확인</S.btn2>
+            <S.btn3>변경</S.btn3>
+            <S.comment>
+                새로운 닉네임
+            </S.comment>
         </div>
     );
 };
