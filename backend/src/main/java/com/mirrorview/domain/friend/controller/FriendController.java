@@ -70,6 +70,17 @@ public class FriendController {
 		return BaseResponse.fail("친구 요청 실패", 400);
 	}
 
+	// 여기 바꾸기
+	@DeleteMapping("/request/{userId}")
+	public ResponseEntity<?> cancelRequestFriend(@AuthenticationPrincipal CustomMemberDetails member,
+		@PathVariable("userId") String otherUserId) {
+		Boolean isSaved = friendService.save(member.getUsername(), otherUserId);
+		if (isSaved) {
+			return BaseResponse.ok(HttpStatus.OK, "친구 요청 성공");
+		}
+		return BaseResponse.fail("친구 요청 실패", 400);
+	}
+
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> deleteFriend(@AuthenticationPrincipal CustomMemberDetails member,
 		@PathVariable("userId") String otherUserId) {
