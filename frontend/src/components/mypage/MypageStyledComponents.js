@@ -398,3 +398,96 @@ export const btn = styled.button`
 export const hidden = styled.div`
     visibilit: hidden;
 `;
+
+// 버튼
+export const Button = styled.button`
+  padding: 10px 20px;
+  font-size: 15px;
+  background-color: #FFB8D0;
+  color: black;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: wooju;
+
+  &:hover {
+    background-color: #40a9ff;
+  }
+`;
+
+// NickName change 
+export const btn2 = styled.button`
+    margin: -45px;
+    margin-left: 730px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    width: 5rem;
+    height: 2.1875rem;
+
+    // position: absolute;
+    // right: 120px;
+
+    background: ${(props) =>
+        props.theme === "save"
+            ? "#a1b6ff"
+            : props.theme === "create"
+            ? "#FFFFFF"
+            : "#E3F1F8"};
+
+    box-shadow: 0px 0px 0px #bdbdbd;
+    border-radius: 19px;
+    cursor: pointer;
+    &:hover {
+        background-color: #e9e4ff;
+    }
+`;
+
+export const btn3 = styled.button`
+  margin: 150px;
+  margin-left: 30.625rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: 0;
+
+  width: 60px;
+  height: 35px;
+
+  background: #a1b6ff; 
+
+  box-shadow: 0px 0px 5px #bdbdbd;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: #e9e4ff;
+  }
+`;
+
+
+export const changeInput2 = styled.input`
+    margin: 60px 0 5px ;
+    width: 25rem;
+    height: 2.5rem;
+    background: #e6e6e6;
+    border: 0;
+    border-radius: 0.625rem;
+    margin-left: 18.75rem;
+
+    ::placeholder {
+        color: black; 
+        font-size: 1.875rem; 
+    }
+`;
+
+export const comment = styled.div`
+    margin-top: -21.875rem;
+    width: 25rem;
+    height: 2.5rem;
+    border-radius: 10px;
+    margin-left: 19.0625rem;
+`

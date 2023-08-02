@@ -67,7 +67,7 @@ const NoticePage = () => {
 
         <S.ButtonWrapper>
           <Link to="/NoticeWritePage">
-            <S.Button>글 작성</S.Button>
+            <S.Button>작 성</S.Button>
           </Link>
       </S.ButtonWrapper>
       </S.TableWrapper>
