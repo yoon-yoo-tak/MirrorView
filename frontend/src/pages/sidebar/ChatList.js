@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FaRocketchat } from "react-icons/fa";
 
-import { loadChatRooms,updateSelectedRoom } from "store/ChatRoomStore";
-import { fetchChatHistory } from "store/ChatLogStore";
+import { loadChatRooms, updateSelectedRoom } from "store/ChatRoomStore";
 import { switchView } from "store/ChatViewStore";
 
 import "pages/sidebar/css/ChatList.css";
@@ -16,13 +15,9 @@ function ChatList() {
     dispatch(loadChatRooms());
   }, [dispatch]);
 
-  const handleChatRoom = (title) => {
-    dispatch(fetchChatHistory(title));
-  };
-
   const handleJoinChat = (title) => {
-    dispatch(switchView("ChatRoom")); // view를 ChatRoom으로 변경
     dispatch(updateSelectedRoom(title));
+    dispatch(switchView("ChatRoom")); // view를 ChatRoom으로 변경
   };
 
   return (
@@ -35,7 +30,6 @@ function ChatList() {
           <button
             className="join-button"
             onClick={() => {
-              handleChatRoom(chatRoom.id);
               handleJoinChat(chatRoom.id);
             }}
           >

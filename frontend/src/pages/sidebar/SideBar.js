@@ -26,7 +26,7 @@ const Sidebar = () => {
   // 토글 기능
   const [isFriendsContentVisible, setFriendsContentVisible] = useState(true);
   const [isChatsContentVisible, setChatsContentVisible] = useState(true);
-  const [friendContent, setFriendContent] = useState("friendList");
+  const [friendContent, setFriendContent] = useState("null");
   const [chatContent, setChatContent] = useState("myChat");
   const friendsContentRef = useRef(null);
   const chatsContentRef = useRef(null);
@@ -46,17 +46,15 @@ const Sidebar = () => {
 
   // 토글 기능, web socket 연결
   const toggleSidebar = () => {
-    console.log("연결 시도 ", accessToken);
     console.log(webSocketState);
     const currentIsOpen = isOpen;
     setIsOpen(!currentIsOpen);
 
     if (currentIsOpen) {
-      console.log("disconnected");
       dispatch(closeWebSocket());
     } else {
-      console.log("connected");
       dispatch(initializeWebSocket(accessToken));
+      setFriendContent("friendList");
     }
   };
 

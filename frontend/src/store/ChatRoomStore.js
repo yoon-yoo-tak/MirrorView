@@ -10,8 +10,7 @@ const initialState = {
 export const createChatRoomAsync = createAsyncThunk(
   "chatRooms/createChatRoomAsync",
   async (title, { dispatch, getState }) => {
-    
-    console.log(title , "들어오는 room")
+    console.log(title, "들어오는 room");
 
     const client = getClient();
     if (!client) {
@@ -19,12 +18,12 @@ export const createChatRoomAsync = createAsyncThunk(
     }
 
     let roomOjb = {
-      id : title,
-      users : [],
-      messages : []
-    }
+      id: title,
+      users: [],
+      messages: [],
+    };
 
-    console.log(roomOjb, "만들어진 룸")
+    console.log(roomOjb, "만들어진 룸");
 
     await client.send("/app/chatrooms.create", {}, JSON.stringify(roomOjb));
     return roomOjb;
@@ -59,14 +58,14 @@ const chatRoomSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
-    .addCase("/user/sub/chatrooms", (state, action) => {
+    builder.addCase("/user/sub/chatrooms", (state, action) => {
       console.log(action.payload);
       state.chatRooms = action.payload;
     });
   },
 });
 
-export const { updateChatRooms, updateSelectedRoom, addChatRoom } = chatRoomSlice.actions;
+export const { updateChatRooms, updateSelectedRoom, addChatRoom } =
+  chatRoomSlice.actions;
 
 export default chatRoomSlice.reducer;
