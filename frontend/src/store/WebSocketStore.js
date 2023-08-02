@@ -5,7 +5,11 @@ import {
 } from "@reduxjs/toolkit";
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { createChatRoomAsync, updateChatRooms, addChatRoom } from "store/ChatRoomStore";
+import {
+  createChatRoomAsync,
+  updateChatRooms,
+  addChatRoom,
+} from "store/ChatRoomStore";
 
 // state에 client 객체를 직렬화 문제 때문에 저장할 수가 없다.
 let client;
@@ -17,10 +21,10 @@ export const initializeWebSocket = createAsyncThunk(
     // const accessToken = useSelector((state)=> state.auth.accessToken);
     const httpUrl = "http://localhost:8080/ws";
     const urlWithToken = `${httpUrl}?token=${accessToken}`;
-    console.log(urlWithToken)
-    try{
-    client = Stomp.over(() => new SockJS(urlWithToken));
-    }catch(error){
+    console.log(urlWithToken);
+    try {
+      client = Stomp.over(() => new SockJS(urlWithToken));
+    } catch (error) {
       console.error(error);
     }
     // Promise를 반환합니다.
@@ -33,13 +37,12 @@ export const initializeWebSocket = createAsyncThunk(
           // subscribes 목록
           client.subscribe("/sub/chatrooms.create", (message) => {
             const chatRoom = JSON.parse(message.body);
-            console.log(chatRoom)
-            console.log("새로운 방 생성 pub")
+            console.log(chatRoom);
+            console.log("새로운 방 생성 pub");
             dispatch(addChatRoom(chatRoom));
           });
           client.subscribe("/sub/chatRoom/delete", (message) => {
             const chatRoomId = JSON.parse(message.body);
-            
           });
           client.subscribe("/user/sub/chatrooms", (message) => {
             const chatRooms = JSON.parse(message.body);

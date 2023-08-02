@@ -59,7 +59,7 @@ public class ChatController {
 	@MessageMapping("/chatrooms.send/{roomId}")
 	public void sendChat(@DestinationVariable String roomId, ChatMessage chatMessage, Principal principal){
 		log.info("채팅 보내기" );
-		System.out.println(chatMessage);
+		chatMessage.setTimestamp(LocalDateTime.now());
 		String userId = principal.getName();
 		chatService.addChatMessageToChatRoom(roomId, chatMessage);
 		simpMessagingTemplate.convertAndSend("/sub/chatrooms/"+roomId, chatMessage);
@@ -68,7 +68,6 @@ public class ChatController {
 	// 방만들기
 	@MessageMapping("/chatrooms.create")
 	public void createChatRoom(ChatRoom chatRoom) {
-		System.out.println(chatRoom);
 		log.info("방만들기");
 		ChatRoom newChatRoom = chatService.createChatRoom(chatRoom.getId());
 		simpMessagingTemplate.convertAndSend("/sub/chatrooms.create", newChatRoom);

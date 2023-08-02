@@ -19,6 +19,10 @@ import Sidebar from "pages/sidebar/SideBar";
 import ChatList from "pages/sidebar/ChatList";
 import PrivateChatRoom from "pages/sidebar/ChatRoom";
 
+// axios 전역 설정
+import axios from 'axios';
+axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+
 const App = () => {
   return (
     <div>

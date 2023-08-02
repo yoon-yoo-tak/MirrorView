@@ -63,7 +63,8 @@ export const login = createAsyncThunk(
     "login",
     async(data,{rejectWithValue}) => {
         try {
-            const res = await axios.post("http://localhost:8080/api/users/login",data,{
+            console.log(axios.defaults.baseURL);
+            const res = await axios.post("/api/users/login",data,{
                 withCredentials: true,
             });
 
@@ -82,9 +83,9 @@ export const getUserInfo = createAsyncThunk(
     async(accessToken,{rejectWithValue})=> {
         console.log(accessToken);
         try {
-            
+
             axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-            const res = await axios.get("http://localhost:8080/api/mypage",{
+            const res = await axios.get("/api/mypage",{
                 withCredentials: true,
             });
 
