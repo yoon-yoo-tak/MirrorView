@@ -20,7 +20,7 @@ function FriendWait() {
     const handleAccept = (userId) => {
         axios.delete(`/${userId}`, {}, { headers: { Authorization: `Bearer ${accessToken}` } })
             .then((response) => {
-                setFriendRequests(friendRequests.filter(request => request.name !== userId)); 
+                setFriendRequests(friendRequests.filter(request => request.name !== userId));
                 console.log('Friend request accepted:', response);
             })
             .catch(error => {
