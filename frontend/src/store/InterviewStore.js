@@ -39,6 +39,21 @@ export const getInterviewRoomByCategory = createAsyncThunk(
 }
 )
 
+export const joinInterviewRoom = createAsyncThunk(
+    "joinInterviewRoom",
+    async(roomId,{rejectWithValue}) =>{
+        try{
+            const res = await axios.post(`/api/interviews/join/${roomId}`,{
+                withCredentials: true,
+            });
+            return res.data;
+        } catch (error) {
+            console.error(error);
+            return rejectWithValue(error.response.data);
+        }
+    }
+)
+
 const interviewSlice = createSlice({
     name:"interview",
     initialState,
@@ -53,6 +68,9 @@ const interviewSlice = createSlice({
         },
         [getInterviewRoomByCategory.fulfilled]:(state,{payload}) =>{
             state.room = payload.data;
+        },
+        [joinInterviewRoom.fulfilled]:(state,{payload}) =>{
+            state.currentRoom = payload.data;
         }
     }
 });

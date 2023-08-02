@@ -15,9 +15,7 @@ const StudyRoomCategory = () => {
     useEffect(()=>{
         axios.get("/api/category")
         .then(({data})=>{
-            console.log(data);
             setFirstCategory([...defaultValue,...data.data]);
-            console.log(firstCategory);
             
         })
         .catch((error)=>{
@@ -29,10 +27,14 @@ const StudyRoomCategory = () => {
     },[])
     useUpdateEffect(()=>{
         if(firstCategory.length!=1){
-        axios.get(`/api/category/${firstValue}`)
-        .then(({data})=>{
-            setSecondCategory([...defaultValue,...data.data]);
-        })
+            if(firstValue==="선택하세요"){
+                setSecondCategory(defaultValue);
+            }else {
+                axios.get(`/api/category/${firstValue}`)
+                .then(({data})=>{
+                    setSecondCategory([...defaultValue,...data.data]);
+                });
+            }
     }
     },[firstValue])
     

@@ -36,11 +36,16 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
     }, []);
 
     useUpdateEffect(()=>{
-        axios.get(`/api/category/${firstValue}`)
-        .then(({data})=>{
-            setSecondCategory([...defaultValue,...data.data]);
-        })
-        
+        if(firstCategory.length!=1){
+            if(firstValue==="선택하세요"){
+                setSecondCategory(defaultValue);
+            }else {
+                axios.get(`/api/category/${firstValue}`)
+                .then(({data})=>{
+                    setSecondCategory([...defaultValue,...data.data]);
+                });
+            }
+    }
     },[firstValue])
 
     const handleFirstCategory = (e) => {
