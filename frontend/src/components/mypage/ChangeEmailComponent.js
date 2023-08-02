@@ -27,7 +27,7 @@ const ChangeEmailComponent = () => {
     };
 
     const onClickSendKey = async (e) => {
-        await axios.get(`http://localhost:8080/api/users/${email}`)
+        await axios.get(`/api/users/${email}`)
         .then(()=>{
             alert("이메일 전송 완료");
             setCompleteSend(true);
@@ -36,7 +36,7 @@ const ChangeEmailComponent = () => {
         })
     }
     const onCheckKey = async (e) => {
-        await axios.post(`http://localhost:8080/api/users/${email}`,{key:key})
+        await axios.post(`/api/users/${email}`,{key:key})
         .then(()=>{
             alert("인증 확인 완료");
             setKeyValid(true);
@@ -52,7 +52,7 @@ const ChangeEmailComponent = () => {
 
     const handleConfirm = async (e) => {
         
-        await axios.patch(`http://localhost:8080/api/mypage/email?email=${email}`,{
+        await axios.patch(`/api/mypage/email?email=${email}`,{
         }).then((response)=>{
             console.log(response);
             dispatch(setUserEmail(email));

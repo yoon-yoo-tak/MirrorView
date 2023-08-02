@@ -1,33 +1,49 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import {logout} from "../../store/AuthStore";
 const Header = () => {
-  return (
-    <Nav>
-      <Link to="/">
-        {/* 이 부분이 추가되었습니다 */}
-        <Logo></Logo>
-      </Link>
-      <NavMenu>
-        <NavItem>
-          <StyledLink to="/aboutus">About us</StyledLink>
-        </NavItem>
-        <NavItem>
-          <StyledLink to="/notice">Notice</StyledLink>
-        </NavItem>
-        <NavItem>
-          <StyledLink to="/studylist">StudyList</StyledLink>
-        </NavItem>
-        <NavItem>
-          <StyledLink to="/mypage/profile">MyPage</StyledLink>
-        </NavItem>
-        <LoginNavItem>
-          <StyledLink to="/login">로그인</StyledLink>
-        </LoginNavItem>
-      </NavMenu>
-    </Nav>
-  );
+    const {user} = useSelector((state)=>state.auth);
+    const dispatch = useDispatch();
+    const onClickLogout = (e) =>{
+        dispatch(logout());
+    }
+    return (
+        <Nav>
+            <Link to="/">
+                {" "}
+                {/* 이 부분이 추가되었습니다 */}
+                <Logo></Logo>
+            </Link>
+            <NavMenu>
+                <NavItem>
+                    <Link to="/aboutus">About us</Link>
+                </NavItem>
+                <NavItem>
+                    <Link to="/notice">Notice</Link>
+                </NavItem>
+                <NavItem>
+                    <Link to="/studylist">StudyList</Link>
+                </NavItem>
+                <NavItem>
+                    <Link to="/mypage/profile">MyPage</Link>
+                </NavItem>
+                <LoginNavItem>
+                    {!user ? (
+                        <>
+                            <NavItem>
+                                <Link to="/login">로그인</Link>
+                            </NavItem>
+                        </>):(
+                        <NavItem>
+                            <Link to="/" onClick={onClickLogout}>로그아웃</Link>
+                        </NavItem>
+                    )}
+                </LoginNavItem>
+            </NavMenu>
+        </Nav>
+    );
 };
 
 const Logo = styled.div`

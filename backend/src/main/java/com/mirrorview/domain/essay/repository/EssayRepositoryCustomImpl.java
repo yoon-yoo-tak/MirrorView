@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.mirrorview.domain.essay.domain.QEssay;
-import com.mirrorview.domain.essay.domain.QEssayDetail;
-import com.mirrorview.domain.essay.dto.EssayDetailDto;
 import com.mirrorview.domain.essay.dto.EssayDto;
 import com.mirrorview.domain.user.domain.QMember;
 import com.querydsl.core.types.Projections;

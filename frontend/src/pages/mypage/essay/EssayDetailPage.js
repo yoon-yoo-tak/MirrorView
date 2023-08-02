@@ -15,7 +15,7 @@ const EssayDetail = () => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     useEffect(()=>{
         const id = pathname.substring(20)
-        axios.get(`http://localhost:8080/api/mypage/essays/${id}`)
+        axios.get(`/api/mypage/essays/${id}`)
         .then(({data})=>{
             setEssay(data.data);
         })

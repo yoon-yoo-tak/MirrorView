@@ -20,7 +20,7 @@ const ChangeNicknameComponent = () => {
     }
 
     const onClickVaildNickname = async (e) => {
-        await axios.get(`http://localhost:8080/api/users/${newNickname}/check-nickname`)
+        await axios.get(`/api/users/${newNickname}/check-nickname`)
         .then((response)=>{
             setNicknameValid(true);
         }).catch((error)=>{
@@ -33,7 +33,7 @@ const ChangeNicknameComponent = () => {
             alert("중복확인 필요");
             return;
         }
-        await axios.patch(`http://localhost:8080/api/mypage/nickname?userId=${user.userId}&nickname=${newNickname}`)
+        await axios.patch(`/api/mypage/nickname?userId=${user.userId}&nickname=${newNickname}`)
         .then((response)=>{
             dispatch(setNickname(newNickname));
             navigate("/mypage/profile")

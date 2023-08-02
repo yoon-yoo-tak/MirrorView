@@ -9,6 +9,7 @@ import authReducer from "./AuthStore";
 import chatRoomReducer from "store/ChatRoomStore";
 import chatViewReducer from "store/ChatViewStore";
 import webSocket from "store/WebSocketStore";
+import interviewReducer from "./InterviewStore";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     webSocket,
     chatRoom: chatRoomReducer,
     chatView: chatViewReducer,
+    interview: interviewReducer,
   },
 });
 

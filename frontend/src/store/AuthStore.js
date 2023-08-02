@@ -63,7 +63,6 @@ export const login = createAsyncThunk(
     "login",
     async(data,{rejectWithValue}) => {
         try {
-            console.log(axios.defaults.baseURL);
             const res = await axios.post("/api/users/login",data,{
                 withCredentials: true,
             });
@@ -198,6 +197,7 @@ export const {
     loginSuccess,
     loginFailure,
     setNickname,
+    logout,
 } = authSlice.actions;
 
 export const authActions = authSlice.actions;

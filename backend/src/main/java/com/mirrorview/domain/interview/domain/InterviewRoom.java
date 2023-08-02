@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
+
+import com.mirrorview.domain.essay.dto.EssayListDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,19 +27,22 @@ public class InterviewRoom {
 
 	@Id
 	private String id;
+	@Indexed
 	private String title;
 	private String host;
 	private List<RoomMemberInfo> members = new ArrayList<>();
 	private String password;
 	private Integer maxMemberCount;
+	@Indexed
 	private String category;
 	private boolean isStarted;
 	private LocalDateTime timestamp;
 
-	public void join(String nickname) {
+	public void join(String nickname, List<EssayListDto> essayList) {
 		members.add(RoomMemberInfo.builder()
 			.nickname(nickname)
 			.ready(false)
+			.essays(essayList)
 			.build());
 	}
 
