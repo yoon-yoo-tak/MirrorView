@@ -65,9 +65,19 @@ public class CustomMemberDetails implements UserDetails {
 		return this.enabled;
 	}
 
+	// @Override
+	// public Collection<? extends GrantedAuthority> getAuthorities() {
+	// 	return this.roles;
+	// }
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.roles;
+		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		member.getRoleList().forEach(r -> {
+			authorities.add(() -> {
+				return r;
+			});
+		});
+		return authorities;
 	}
 
 	public void setAuthorities(List<GrantedAuthority> roles) {

@@ -12,6 +12,8 @@ public interface FriendRepositoryCustom {
 
 	List<FriendDto> findFriendRequestsByUserId(String userId);
 
+	List<FriendDto> findSentFriendRequestsByUserId(String userId);
+
 	String findFriendStatusByUserIds(String myUserId, String otherUserId);
 
 	Optional<Friend> findByUserIds(String myUserId, String otherUserId);
