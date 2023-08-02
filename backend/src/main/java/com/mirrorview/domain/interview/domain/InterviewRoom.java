@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import com.mirrorview.domain.essay.dto.EssayListDto;
 
@@ -26,11 +27,13 @@ public class InterviewRoom {
 
 	@Id
 	private String id;
+	@Indexed
 	private String title;
 	private String host;
 	private List<RoomMemberInfo> members = new ArrayList<>();
 	private String password;
 	private Integer maxMemberCount;
+	@Indexed
 	private String category;
 	private boolean isStarted;
 	private LocalDateTime timestamp;

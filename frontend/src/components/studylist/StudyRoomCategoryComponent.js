@@ -3,7 +3,7 @@ import * as S from "./StudyStyledComponents";
 import { useState, useEffect } from "react";
 import useUpdateEffect from "../../lib/UseUpdateEffect";
 import { useDispatch } from "react-redux";
-
+import { getInterviewRoomByCategory } from "../../store/InterviewStore";
 const StudyRoomCategory = () => {
     const [firstCategory, setFirstCategory] = useState([{id:0,name:"선택하세요"}]);
     const [secondCategory, setSecondCategory] = useState([{id:0,name:"선택하세요"}]);
@@ -48,7 +48,7 @@ const StudyRoomCategory = () => {
     }
 
     const handleSubmit = () => {
-        // dispatch(setRooms(secondValue));
+        dispatch(getInterviewRoomByCategory(secondValue));
     };
 
     return (
@@ -82,7 +82,7 @@ const StudyRoomCategory = () => {
                         </S.categorySelect>
                     </S.categoryDiv>
                 </S.categoryList>
-                <S.categoryButton onChange={handleSubmit}>
+                <S.categoryButton onClick={handleSubmit}>
                     조회
                 </S.categoryButton>
             </S.categoryWrap>

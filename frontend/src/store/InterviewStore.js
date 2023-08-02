@@ -24,7 +24,19 @@ export const getInterviewRoom = createAsyncThunk(
 )
 
 export const getInterviewRoomByCategory = createAsyncThunk(
-
+"getInterviewRoomByCategory",
+ async(category,{rejectWithValue}) =>{
+    try{
+        const res = await axios.get(`/api/interviews/rooms/${category}`,{
+            withCredentials: true,
+        });
+        console.log(res);
+        return res.data;
+    }catch(error){
+        console.error(error);
+        return rejectWithValue(error.response.data);
+    }
+}
 )
 
 const interviewSlice = createSlice({
@@ -37,6 +49,9 @@ const interviewSlice = createSlice({
     },
     extraReducers:{
         [getInterviewRoom.fulfilled]:(state,{payload})=>{
+            state.room = payload.data;
+        },
+        [getInterviewRoomByCategory.fulfilled]:(state,{payload}) =>{
             state.room = payload.data;
         }
     }
