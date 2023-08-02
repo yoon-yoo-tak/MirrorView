@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,7 +27,6 @@ import com.mirrorview.domain.feedback.service.FeedbackService;
 import com.mirrorview.domain.user.dto.ChangePasswordDto;
 import com.mirrorview.domain.user.dto.MemberProfileDto;
 import com.mirrorview.domain.user.service.MemberProfileService;
-import com.mirrorview.domain.user.service.MemberService;
 import com.mirrorview.global.auth.jwt.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 
@@ -43,8 +41,6 @@ public class MyPageController {
 	private final FeedbackService feedbackService;
 	private final EssayService essayService;
 	private final EssayDetailService essayDetailService;
-	private final MemberService memberService;
-	private final PasswordEncoder passwordEncoder;
 
 	@GetMapping
 	public ResponseEntity<?> getInfo(@AuthenticationPrincipal CustomMemberDetails member) {
@@ -111,14 +107,14 @@ public class MyPageController {
 
 	@PutMapping("/essays") // 자소서안의 문항들 수정/삭제와 같은 자소서 문항에 대한 변경
 	public ResponseEntity<?> updateEssays(@RequestBody EssayUpdateDto essays, @AuthenticationPrincipal
-		CustomMemberDetails member) {
+	CustomMemberDetails member) {
 		essayDetailService.updateEssayDetails(essays, member.getUsername());
 		return BaseResponse.ok(HttpStatus.OK, "수정 완료");
 	}
 
 	@PostMapping("/essays") // 자소서 추가 완료
 	public ResponseEntity<?> createEssays(@RequestBody EssayCreateDto essays, @AuthenticationPrincipal
-		CustomMemberDetails member) {
+	CustomMemberDetails member) {
 		try {
 			essayService.insertEssayAndEssayDetails(essays, member.getUsername());
 			return BaseResponse.ok(HttpStatus.OK, "자소서 저장 성공!");
@@ -130,7 +126,7 @@ public class MyPageController {
 
 	@GetMapping("/essays") // 전체 자소서 목록 불러오기
 	public ResponseEntity<?> showEssays(@AuthenticationPrincipal
-		CustomMemberDetails member) {
+	CustomMemberDetails member) {
 		List<EssayDto> list = essayService.findEssayByUserId(member.getUsername());
 		return BaseResponse.okWithData(HttpStatus.OK, "에세이 목록 불러오기 성공", list);
 	}
@@ -164,7 +160,7 @@ public class MyPageController {
 
 	@PatchMapping("/email")
 	public ResponseEntity<?> changeEmail(@AuthenticationPrincipal
-		CustomMemberDetails member, String email) {
+	CustomMemberDetails member, String email) {
 		String userId = member.getUsername();
 		memberProfileService.changeEmail(email, userId);
 		return BaseResponse.ok(HttpStatus.OK, "이메일 변경 성공");

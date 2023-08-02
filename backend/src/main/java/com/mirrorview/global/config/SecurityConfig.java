@@ -23,6 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.mirrorview.domain.user.service.MemberService;
 import com.mirrorview.global.auth.jwt.CustomMemberDetailService;
 import com.mirrorview.global.auth.jwt.JwtAuthenticationFilter;
+import com.mirrorview.global.auth.jwt.RestAccessDeniedHandler;
 import com.mirrorview.global.auth.jwt.RestAuthenticationEntryPoint;
 
 import lombok.RequiredArgsConstructor;
@@ -53,15 +54,16 @@ public class SecurityConfig {
 
 		http
 			.authorizeRequests()
+			.antMatchers("/").permitAll() //테스트 페이지
 			.antMatchers("/api/users/login").permitAll() //로그인
-			.antMatchers("/").permitAll() //로그인
-			.antMatchers("/kauth.kakao.com/oauth/authorize/**").permitAll()
+			.antMatchers("/kauth.kakao.com/oauth/authorize/**").permitAll() //로그인
 			.antMatchers("/api/users/**").permitAll() //회원 가입
 			.antMatchers("/ws/**").permitAll()
 			.anyRequest().authenticated();
 
 		http
 			.exceptionHandling()
+			.accessDeniedHandler(new RestAccessDeniedHandler())
 			.authenticationEntryPoint(new RestAuthenticationEntryPoint()); // 그 외 모든 요청에 대해 인증 필요
 
 		return http.build();
@@ -102,7 +104,6 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowCredentials(true); // 쿠키를 받을건지
-		//configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
 		configuration.addAllowedOriginPattern("*");
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE"));
 

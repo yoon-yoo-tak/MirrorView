@@ -32,7 +32,6 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 		Object expiredException = request.getAttribute("expired");
 		if (expiredException instanceof TokenExpiredException) {
-			log.info("sdsdsdsd");
 			response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
 
 			body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
