@@ -9,7 +9,7 @@ import ChatList from "pages/sidebar/ChatList";
 import ChatRoom from "pages/sidebar/ChatRoom";
 
 import { useDispatch } from "react-redux"; // <-- useDispatch 불러오기
-import { initializeWebSocket, closeWebSocket, getClient, subscribeUserCount } from "store/WebSocketStore"; // <-- WebSocket 액션 불러오기
+import { initializeWebSocket, closeWebSocket, getClient, subscribeUserCount, subscribeChatRoomCreate, subscribeUserChatRooms } from "store/WebSocketStore"; // <-- WebSocket 액션 불러오기
 import { loadChatRooms } from "store/ChatRoomStore"; // loadRoom
 import ChatModal from "pages/sidebar/ChatModal"; // <-- 추가
 import { switchView } from "store/ChatViewStore";
@@ -65,6 +65,18 @@ const Sidebar = () => {
           const client = getClient();
           dispatch(subscribeUserCount(client));
         })
+        .then(() => {
+          const client = getClient();
+          dispatch(subscribeUserChatRooms(client));
+        })
+        .then(() => {
+          const client = getClient();
+          dispatch(subscribeChatRoomCreate(client));
+        })
+        // .then(() => {
+        //   const client = getClient();
+        //   dispatch(subscribeUserCount(client));
+        // })
       setFriendContent("friendList");
     }
   };
@@ -95,11 +107,6 @@ const Sidebar = () => {
       setChatsContentHeight("auto");
     }
   }, [isFriendsContentVisible, isChatsContentVisible]);
-
-  // web socket 상태 확인
-  useEffect(() => {
-    console.log(webSocketState);
-  }, [webSocketState]);
 
   // 친구 목록 기능
   function renderFriendContent() {

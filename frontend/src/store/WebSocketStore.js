@@ -33,20 +33,6 @@ export const initializeWebSocket = createAsyncThunk(
         { Authorization: `Bearer ${accessToken}` },
         (frame) => {
           console.log("WebSocket 연결 성공");
-
-          // subscribes 목록
-          client.subscribe("/sub/chatrooms.create", (message) => {
-            const chatRoom = JSON.parse(message.body);
-            dispatch(addChatRoom(chatRoom));
-          });
-          client.subscribe("/sub/chatRoom/delete", (message) => {
-            const chatRoomId = JSON.parse(message.body);
-          });
-          client.subscribe("/user/sub/chatrooms", (message) => {
-            const chatRooms = JSON.parse(message.body);
-            dispatch(updateChatRooms(chatRooms));
-          });
-
           resolve(true);
         },
         (error) => {
@@ -77,7 +63,46 @@ export const closeWebSocket = createAsyncThunk(
   }
 );
 
-// 유저 카운트
+// chat room 생성 구독 thunk
+export const subscribeChatRoomCreate = createAsyncThunk(
+  "webSocket/subscribeChatRoomCreate",
+  (client, { dispatch }) => {
+    if (client) {
+      client.subscribe("/sub/chatrooms.create", (message) => {
+        const chatRoom = JSON.parse(message.body);
+        dispatch(addChatRoom(chatRoom));
+      });
+    }
+  }
+);
+
+// chat room 삭제 구독 thunk
+export const subscribeChatRoomDelete = createAsyncThunk(
+  "webSocket/subscribeChatRoomDelete",
+  (client) => {
+    if (client) {
+      client.subscribe("/sub/chatRoom/delete", (message) => {
+        const chatRoomId = JSON.parse(message.body);
+        // 추가 작업 수행 (예: dispatch를 사용하여 상태 업데이트)
+      });
+    }
+  }
+);
+
+// 유저 chat rooms 구독 thunk
+export const subscribeUserChatRooms = createAsyncThunk(
+  "webSocket/subscribeUserChatRooms",
+  (client, { dispatch }) => {
+    if (client) {
+      client.subscribe("/user/sub/chatrooms", (message) => {
+        const chatRooms = JSON.parse(message.body);
+        dispatch(updateChatRooms(chatRooms));
+      });
+    }
+  }
+);
+
+// 유저 카운트 thunk
 export const subscribeUserCount = createAsyncThunk(
   "webSocket/subscribeUserCount",
   (client, { dispatch }) => {
