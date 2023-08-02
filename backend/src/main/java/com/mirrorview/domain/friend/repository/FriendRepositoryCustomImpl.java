@@ -1,7 +1,5 @@
 package com.mirrorview.domain.friend.repository;
 
-
-
 import static com.mirrorview.domain.friend.domain.QFriend.*;
 
 import java.util.List;
@@ -58,6 +56,20 @@ public class FriendRepositoryCustomImpl implements FriendRepositoryCustom {
 			.fetch();
 
 		return friendRequests;
+	}
+
+	@Override
+	public List<FriendDto> findSentFriendRequestsByUserId(String userId) {
+		List<FriendDto> friendSentRequests = jpaQueryFactory
+			.select(Projections.constructor(FriendDto.class,
+				friend.to.id, friend.to.nickname))
+			.from(friend)
+			.join(friend.to)
+			.where(friend.from.userId.eq(userId)
+				.and(friend.isConnected.isFalse()))
+			.fetch();
+
+		return friendSentRequests;
 	}
 
 	@Override

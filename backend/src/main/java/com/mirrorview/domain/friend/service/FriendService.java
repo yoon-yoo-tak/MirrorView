@@ -16,5 +16,7 @@ public interface FriendService {
 
 	List<FriendDto> getFriendRequests(String userId);
 
+	List<FriendDto> getSentFriendRequests(String userId);
+
 	String getFriendStatus(String myUserId, String otherUserId);
 }

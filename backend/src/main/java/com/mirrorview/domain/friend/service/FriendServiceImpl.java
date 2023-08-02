@@ -78,6 +78,11 @@ public class FriendServiceImpl implements FriendService {
 	}
 
 	@Override
+	public List<FriendDto> getSentFriendRequests(String userId) {
+		return friendRepository.findSentFriendRequestsByUserId(userId);
+	}
+
+	@Override
 	public String getFriendStatus(String myUserId, String otherUserId) {
 		return friendRepository.findFriendStatusByUserIds(myUserId, otherUserId);
 	}

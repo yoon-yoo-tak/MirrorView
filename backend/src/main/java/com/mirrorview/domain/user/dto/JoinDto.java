@@ -28,6 +28,7 @@ public class JoinDto {
 			.nickname(nickname)
 			.password(password)
 			.email(email)
+			.roles("ROLE_USER")
 			.build();
 	}
 }
