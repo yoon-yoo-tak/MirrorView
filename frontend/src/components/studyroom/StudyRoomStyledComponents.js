@@ -1,35 +1,55 @@
-import { styled } from "styled-components";
+import { styled, keyframes } from "styled-components";
 
 // 스터디 방 입장
 // 입장 후 스터디 시작 전 준비 화면
 
+const gradientAnimation = keyframes`
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+`;
+
 export const page = styled.div`
     font-family: "HakgyoansimWoojuR";
     min-height: 100vh;
+    min-width: 1200px;
     display: flex;
     justify-content: center;
-    background: rgb(29, 22, 60);
-    background: linear-gradient(
-        153deg,
-        rgba(29, 22, 60, 1) 0%,
-        rgba(28, 27, 55, 1) 36%,
-        rgba(29, 34, 70, 1) 68%,
-        rgba(27, 42, 66, 1) 100%
-    );
-    padding-top: 20px;
+    // background: rgb(29, 22, 60);
+    // background: linear-gradient(
+    //     153deg,
+    //     rgba(29, 22, 60, 1) 0%,
+    //     rgba(28, 27, 55, 1) 36%,
+    //     rgba(29, 34, 70, 1) 68%,
+    //     rgba(27, 42, 66, 1) 100%
+    // );
+    background: linear-gradient(-45deg, #30577b, #304a7b, #464b72, #474375);
+    animation: ${gradientAnimation} 15s ease infinite;
+    background-size: 400% 400%;
+    // padding: 5vh 0;
+`;
+
+export const prepareWrap = styled.div`
+    display: flex;
+    // height: 20rem;
+    // height: 80vh;
+    width: 80vw;
+    justify-content: center;
+    align-items: center;
 `;
 
 // 스터디방 좌측 섹션
 
 // 준비 상태 확인용
-
-export const prepareWrap = styled.div`
-    display: flex;
-    justify-content: center;
-`;
-
 export const prepareSectionFirst = styled.div`
     width: 365px;
+    // height: 80%;
     // color: white;
 `;
 export const readySection = styled.div`
@@ -46,7 +66,7 @@ export const readyButtonDiv = styled.div`
     display: flex;
 `;
 
-export const readyButton = styled.button`
+export const readyButton = styled.div`
     margin: 5px;
     display: flex;
     flex-direction: row;
@@ -73,6 +93,7 @@ export const myVideo = styled.div`
     width: 335px;
     height: 200px;
     background-color: white;
+    box-shadow: 0px 0px 10px #4e4e4e;
     border-radius: 13px;
 
     padding: 15px;
@@ -92,16 +113,17 @@ export const selectSection = styled.div`
 `;
 
 export const selectPage = styled.div`
-    margin: 20px 0;
+    margin: 15px 0;
 `;
 
 export const selectChild = styled.div`
     border-radius: ${(props) =>
         props.now === "wee" ? "13px 13px 0 0" : "0 0 13px 13px"};
-    margin: 3px 0;
+    margin-top: 3px;
     width: 335px;
-    height: 150px;
+    height: 103px;
     background-color: white;
+    // box-shadow: 0px 0px 10px #4e4e4e;
     flex-direction: column;
     display: flex;
 
@@ -187,27 +209,44 @@ export const prepareSectionSecond = styled.div`
     width: 835px;
 `;
 export const sectionPage = styled.div`
-    width: auto;
+    min-width: 700px;
+    display: flex;
 `;
 
 export const sectionWrap = styled.div`
     border-radius: 13px;
     background-color: white;
+    box-shadow: 0px 0px 10px #4e4e4e;
     margin: 18px;
     padding: 10px;
-    width: auto;
+    min-width: 500px;
     height: 550px;
+    flex: 8;
 `;
 export const sectionSelectTaps = styled.div`
-    margin: 18px;
+    margin: 18px 0;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
+    flex: 1;
 `;
-export const sectionSelectTap = styled.button`
-    width: 185px;
+export const sectionSelectTap = styled.div`
+    width: 70px;
+    height: 40px;
     border: 0;
-    height: 69px;
-    border-radius: 13px;
+    border-radius: 100px;
+    box-shadow: 0px 0px 10px #4e4e4e;
+
+    font-weight: bold;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    margin: 0 0 15px 0;
     background-color: ${(props) =>
         props.menu === "info"
             ? "#FFBFBF"
@@ -216,6 +255,35 @@ export const sectionSelectTap = styled.button`
             : props.menu === "myInfo"
             ? "#AEE4FF"
             : "#FF95B9"};
+
+    &:hover {
+        color: #ffffff;
+        cursor: pointer;
+    }
+`;
+
+export const exitRoom = styled.div`
+    width: 70px;
+    height: 40px;
+    border: 0;
+    border-radius: 100px;
+    background-color: #fe6666;
+
+    box-shadow: 0px 0px 10px #4e4e4e;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        color: #ffffff;
+        cursor: pointer;
+    }
 `;
 
 // 스터디 방 우측 섹션 - 참가자 정보 및 자소서 조회
@@ -252,10 +320,16 @@ export const peopleName = styled.div`
 export const contentTap = styled.div`
     padding: 10px;
     font-size: large;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        color: #929292;
+    }
 `;
 
 export const contentTapWrap = styled.div`
-    flex: 4;
+    flex: 5;
     padding: 20px;
 `;
 
@@ -265,9 +339,11 @@ export const contentTapList = styled.div`
 
 export const contentDetail = styled.div`
     height: 450px;
-    border: 0.2rem solid #c7c7c7;
+    // border: 0.2rem solid #c7c7c7;
     border-radius: 15px;
     padding: 10px;
+
+    background-color: #e9f2ff;
 `;
 
 export const enterList = styled.div``;
@@ -296,17 +372,28 @@ export const profileContent = styled.div`
 `;
 
 export const vLine = styled.div`
-    border-left: 0.15rem solid #c7c7c7;
+    border-left: 0.15rem solid white;
     height: 110px;
 `;
 export const essayDetailWrap = styled.div`
-    margin: 10px;
-    height: 425px;
+    // margin: 10px;
+    height: 450px;
     overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #a6b6ce;
+    }
+    &::-webkit-scrollbar-track {
+        background: #ededed;
+        border-radius: 3px;
+    }
 `;
 
 export const essayDetailEach = styled.div`
-    margin: 10px 0 15px 0;
+    margin: 10px 0 20px 0;
 `;
 
 export const essayDetailQuest = styled.div`
@@ -319,6 +406,12 @@ export const essayDetailContent = styled.div`
     font-size: 18px;
     margin: 10px;
     padding: 0 10px;
+
+    border-radius: 10px;
+    background-color: white;
+
+    line-height: 1.5;
+    padding: 5px;
 `;
 
 // 스터디 방 우측 섹션 - 사전 질문지 작성
@@ -337,6 +430,17 @@ export const questionIntro = styled.div`
 export const questionListWrap = styled.div`
     height: 400px;
     overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #a6b6ce;
+    }
+    &::-webkit-scrollbar-track {
+        background: #ededed;
+        border-radius: 3px;
+    }
 `;
 
 export const questionEach = styled.div`
@@ -383,7 +487,7 @@ export const questionButton = styled.button`
 export const myEssayWrap = styled.div`
     justify-content: center;
     padding: 20px;
-    height: auto;
+    height: 510px;
 `;
 
 export const myEssayIntro = styled.div`
@@ -392,7 +496,24 @@ export const myEssayIntro = styled.div`
     font-weight: bold;
 `;
 
-export const myEssayContentWrap = styled.div``;
+export const myEssayContentWrap = styled.div`
+    overflow-y: auto;
+    max-height: 90%;
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #a6b6ce;
+    }
+    &::-webkit-scrollbar-track {
+        background: #ededed;
+        border-radius: 3px;
+    }
+`;
+export const essaySet = styled.div`
+    margin-bottom: 25px;
+`;
 
 export const myQuestion = styled.div`
     margin: 15px 10px;
@@ -403,4 +524,57 @@ export const myQuestion = styled.div`
 export const myAnswer = styled.div`
     margin: 15px 10px;
     font-size: 18px;
+    background-color: #e9f2ff;
+    border-radius: 10px;
+    line-height: 1.5;
+    padding: 5px;
+`;
+
+// 면접 시작 ~
+
+// 면접관의 화면
+
+export const interviewerWrap = styled.div`
+    display: flex;
+    width: 80vw;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const videoSection = styled.div`
+    flex: 3;
+`;
+export const mainContainer = styled.div`
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+`;
+
+export const mainVideo = styled.div`
+    background-color: white;
+    border-radius: 13px;
+
+    // padding: 15px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+`;
+
+export const lastVideos = styled.div`
+    display: flex;
+    overflow-x: auto;
+`;
+
+export const lastVideoEach = styled.div`
+    background-color: white;
+    border-radius: 13px;
+
+    padding: 15px;
+`;
+
+export const SecondSection = styled.div`
+    flex: 2;
 `;

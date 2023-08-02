@@ -27,6 +27,8 @@ const PrepareSection = (props) => {
         setSection("chat");
     };
 
+    const handleExit = () => {};
+
     return (
         <S.sectionPage>
             <S.sectionWrap>
@@ -43,18 +45,21 @@ const PrepareSection = (props) => {
                 {section === "chat" && <StudyChatting />}
             </S.sectionWrap>
             <S.sectionSelectTaps>
-                <S.sectionSelectTap onClick={handleInfo} menu="info">
-                    정보
-                </S.sectionSelectTap>
-                <S.sectionSelectTap onClick={handleQuest} menu="quest">
-                    질문
-                </S.sectionSelectTap>
-                <S.sectionSelectTap onClick={handleMyInfo} menu="myInfo">
-                    내정보
-                </S.sectionSelectTap>
-                <S.sectionSelectTap onClick={handleChat} menu="chat">
-                    채팅
-                </S.sectionSelectTap>
+                <div>
+                    <S.sectionSelectTap onClick={handleInfo} menu="info">
+                        INFO
+                    </S.sectionSelectTap>
+                    <S.sectionSelectTap onClick={handleQuest} menu="quest">
+                        Q.
+                    </S.sectionSelectTap>
+                    <S.sectionSelectTap onClick={handleMyInfo} menu="myInfo">
+                        MY
+                    </S.sectionSelectTap>
+                    <S.sectionSelectTap onClick={handleChat} menu="chat">
+                        CHAT
+                    </S.sectionSelectTap>
+                </div>
+                <S.exitRoom onClick={handleExit}>나가기</S.exitRoom>
             </S.sectionSelectTaps>
         </S.sectionPage>
     );

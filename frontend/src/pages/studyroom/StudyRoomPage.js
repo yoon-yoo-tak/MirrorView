@@ -4,6 +4,7 @@ import * as S from "../../components/studyroom/StudyRoomStyledComponents";
 import StudyRoomBefore from "../../components/studyroom/StudyRoomBeforeComponent";
 // import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import StudyRoomInterviewer from "../../components/studyroom/StudyRoomInterviewerComponent";
 
 const StudyRoom = () => {
     // 참가자 더미데이터 (자신 제외)
@@ -72,6 +73,11 @@ const StudyRoom = () => {
                 setQuestionList={setQuestionList}
                 peopleList={peopleList}
             />
+            {/* <StudyRoomInterviewer
+                questionList={questionList}
+                setQuestionList={setQuestionList}
+                peopleList={peopleList}
+            /> */}
         </div>
     );
 };

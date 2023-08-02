@@ -3,7 +3,7 @@ import { useState } from "react";
 
 const StudyQustionList = ({ questionList, setQuestionList }) => {
     // const [newQuestionList, setNewQuestionList] = useState([]);
-    const [newQuestion, setNewQuestion] = useState();
+    const [newQuestion, setNewQuestion] = useState("");
 
     const handleQuestion = (e) => {
         setNewQuestion(e.target.value);
@@ -22,7 +22,10 @@ const StudyQustionList = ({ questionList, setQuestionList }) => {
                     스터디를 시작하기 전 질문지를 미리 작성해보세요!
                 </S.questionIntro>
                 <S.questionSubmitWrap>
-                    <S.questionInput onChange={handleQuestion} />
+                    <S.questionInput
+                        value={newQuestion}
+                        onChange={handleQuestion}
+                    />
                     <S.questionButton onClick={submitQuestion}>
                         등록
                     </S.questionButton>
