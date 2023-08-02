@@ -17,5 +17,6 @@ public class MemberProfileDto {
 	private String nickname;
 	private String email;
 	private String photo;
+	private String roles;
 	private float averageRating;
 }

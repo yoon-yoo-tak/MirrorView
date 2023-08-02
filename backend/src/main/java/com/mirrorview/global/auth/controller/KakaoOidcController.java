@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/users/login/kakao")
-public class KaKaoOAuthController {
+public class KakaoOidcController {
 	private final KakaoPublicKeyService kakaoPublicKeyService;
 	private final PublicKeyRepository publicKeyRepository;
 	private final JwtOidcUtil jwtOidcUtil;

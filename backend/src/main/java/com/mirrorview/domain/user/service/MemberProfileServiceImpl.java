@@ -49,6 +49,7 @@ public class MemberProfileServiceImpl implements MemberProfileService {
 		memberProfileDto.setEmail(member.getEmail());
 		memberProfileDto.setNickname(member.getNickname());
 		memberProfileDto.setPhoto(member.getPhoto());
+		memberProfileDto.setRoles(member.getRoles().replace("ROLE_", ""));
 		memberProfileDto.setAverageRating(member.getAverageRating());
 		return memberProfileDto;
 	}
