@@ -1,7 +1,7 @@
 import { useState } from "react";
 // import { useSelector } from "react-redux";
 
-import * as S from "./StudyRoomStyledComponents";
+import * as S from "../StudyRoomStyledComponents";
 
 const SelectInterviewee = (props) => {
     const [interviewee, setInterviewee] = useState(true);
@@ -11,7 +11,7 @@ const SelectInterviewee = (props) => {
     // 더미데이터
     const [intervieweeList, setIntervieweeList] = useState([
         // 입장 시 유저의 기본값은 면접자로 설정
-        { name: `${props.nick}` },
+        { name: `${props.username}` },
         { name: "최고심" },
         { name: "춘식이" },
         { name: "빤쮸토끼" },
@@ -24,13 +24,13 @@ const SelectInterviewee = (props) => {
 
     const changeToInterviewee = () => {
         if (!interviewee) {
-            console.log("나는 면접자야");
+            // console.log("나는 면접자야");
             setInterviewee(true);
             setInterviewerList((prevList) =>
-                prevList.filter((item) => item.name !== props.nick)
+                prevList.filter((item) => item.name !== props.username)
             );
             setIntervieweeList((prevList) => [
-                { name: props.nick },
+                { name: props.username },
                 ...prevList,
             ]);
         } else return;
@@ -38,13 +38,13 @@ const SelectInterviewee = (props) => {
 
     const changeToInterviewer = () => {
         if (interviewee) {
-            console.log("나는 면접관이야");
+            // console.log("나는 면접관이야");
             setInterviewee(false);
             setIntervieweeList((prevList) =>
-                prevList.filter((item) => item.name !== props.nick)
+                prevList.filter((item) => item.name !== props.username)
             );
             setInterviewerList((prevList) => [
-                { name: props.nick },
+                { name: props.username },
                 ...prevList,
             ]);
         } else return;
@@ -78,7 +78,7 @@ const SelectInterviewee = (props) => {
                 <S.selectSectionList>
                     {intervieweeList.map((items, index) => (
                         <S.personList
-                            isNickname={items.name === props.nick}
+                            checkname={items.name === props.username}
                             key={index}
                         >
                             {items.name}
@@ -113,7 +113,7 @@ const SelectInterviewee = (props) => {
                 <S.selectSectionList>
                     {interviewerList.map((items, index) => (
                         <S.personList
-                            isNickname={items.name === props.nick}
+                            checkname={items.name === props.username}
                             key={index}
                         >
                             {items.name}

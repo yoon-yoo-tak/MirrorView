@@ -14,7 +14,7 @@ import NoticePage from "./pages/notice/NoticePage";
 import NoticeDetail from "./pages/notice/NoticeDetailPage";
 import StudyRoomList from "./pages/studylist/StudyRoomListPage";
 import NoticeWritePage from "./pages/notice/NoticeWritePage";
-import StudyRoomPrepare from "./pages/studyroom/StudyRoomPreparePage";
+import StudyRoom from "./pages/studyroom/StudyRoomPage";
 
 const App = () => {
     return (
@@ -30,7 +30,7 @@ const App = () => {
                 <Route path="/noticedetail/:id" element={<NoticeDetail />} />
                 <Route path="/studylist" element={<StudyRoomList />} />
                 <Route path="/noticewritepage" element={<NoticeWritePage />} />
-                <Route path="/studyprepare" element={<StudyRoomPrepare />} />
+                <Route path="/studyroom" element={<StudyRoom />} />
             </Routes>
         </div>
     );
