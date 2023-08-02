@@ -37,8 +37,6 @@ export const initializeWebSocket = createAsyncThunk(
           // subscribes 목록
           client.subscribe("/sub/chatrooms.create", (message) => {
             const chatRoom = JSON.parse(message.body);
-            console.log(chatRoom);
-            console.log("새로운 방 생성 pub");
             dispatch(addChatRoom(chatRoom));
           });
           client.subscribe("/sub/chatRoom/delete", (message) => {
@@ -79,16 +77,41 @@ export const closeWebSocket = createAsyncThunk(
   }
 );
 
+// 유저 카운트
+export const subscribeUserCount = createAsyncThunk(
+  "webSocket/subscribeUserCount",
+  (client, { dispatch }) => {
+    if (client) {
+      client.subscribe("/sub/count", (message) => {
+        const userCount = message.body
+        dispatch(updateUserCount(userCount)); // 액션 디스패치로 유저 수 업데이트
+      });
+    }
+  }
+);
+
+// 유저 수 업데이트 액션 정의
+const updateUserCount = (count) => ({
+  type: "webSocket/updateUserCount",
+  payload: count,
+});
+
+
 // 웹소켓 슬라이스 정의
 const webSocketSlice = createSlice({
   name: "webSocket",
   initialState: {
     isConnected: false,
     error: null,
+    userCount: 0,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase("webSocket/updateUserCount", (state, action) => {
+        console.log(action.payload)
+        state.userCount = action.payload;
+      })
       .addCase(initializeWebSocket.pending, (state) => {
         state.isConnected = false;
       })

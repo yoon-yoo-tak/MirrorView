@@ -9,7 +9,7 @@ import ChatList from "pages/sidebar/ChatList";
 import ChatRoom from "pages/sidebar/ChatRoom";
 
 import { useDispatch } from "react-redux"; // <-- useDispatch 불러오기
-import { initializeWebSocket, closeWebSocket } from "store/WebSocketStore"; // <-- WebSocket 액션 불러오기
+import { initializeWebSocket, closeWebSocket, getClient, subscribeUserCount } from "store/WebSocketStore"; // <-- WebSocket 액션 불러오기
 import { loadChatRooms } from "store/ChatRoomStore"; // loadRoom
 import ChatModal from "pages/sidebar/ChatModal"; // <-- 추가
 import { switchView } from "store/ChatViewStore";
@@ -21,6 +21,8 @@ const Sidebar = () => {
   const dispatch = useDispatch(); // <-- dispatch 함수 가져오기
   const webSocketState = useSelector((state) => state.webSocket);
   const accessToken = useSelector((state) => state.auth.accessToken);
+  const { user } = useSelector((state) => state.auth);
+  const userCount = useSelector((state) => state.webSocket.userCount);
   const [isOpen, setIsOpen] = useState(false);
 
   // 토글 기능
@@ -46,6 +48,11 @@ const Sidebar = () => {
 
   // 토글 기능, web socket 연결
   const toggleSidebar = () => {
+    if (user === null) {
+      alert("로그인 필요")
+      return;
+    }
+
     console.log(webSocketState);
     const currentIsOpen = isOpen;
     setIsOpen(!currentIsOpen);
@@ -53,7 +60,11 @@ const Sidebar = () => {
     if (currentIsOpen) {
       dispatch(closeWebSocket());
     } else {
-      dispatch(initializeWebSocket(accessToken));
+      dispatch(initializeWebSocket(accessToken))
+        .then(() => {
+          const client = getClient();
+          dispatch(subscribeUserCount(client));
+        })
       setFriendContent("friendList");
     }
   };
@@ -158,9 +169,8 @@ const Sidebar = () => {
           </div>
           <div className="underline"></div>
           <div
-            className={`section-content ${
-              isFriendsContentVisible ? "" : "collapsed"
-            }`}
+            className={`section-content ${isFriendsContentVisible ? "" : "collapsed"
+              }`}
             style={{
               maxHeight: isFriendsContentVisible
                 ? "none"
@@ -192,15 +202,15 @@ const Sidebar = () => {
         <div className="sidebar-section">
           <div className="section-title">
             <h4>채팅</h4>
+            접속 인원: {userCount}
             <button onClick={toggleChatsContent}>
               {isChatsContentVisible ? <FaChevronUp /> : <FaChevronDown />}
             </button>
           </div>
           <div className="underline"></div>
           <div
-            className={`section-content ${
-              isChatsContentVisible ? "" : "collapsed"
-            }`}
+            className={`section-content ${isChatsContentVisible ? "" : "collapsed"
+              }`}
             style={{
               maxHeight: isChatsContentVisible ? "none" : chatsContentHeight,
             }}

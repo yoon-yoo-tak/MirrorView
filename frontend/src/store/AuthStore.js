@@ -48,7 +48,7 @@ const initialState = {
     nickname: "",
     email: "",
     accessToken: "",
-    refreshToken:"",
+    refreshToken: "",
     idValid: false,
     passwordValid: false,
     passwordCheckValid: false,
@@ -61,14 +61,14 @@ const initialState = {
 
 export const login = createAsyncThunk(
     "login",
-    async(data,{rejectWithValue}) => {
+    async (data, { rejectWithValue }) => {
         try {
             const res = await axios.post("/api/users/login",data,{
                 withCredentials: true,
             });
 
             console.log(res);
-            
+
             return res.data;
         } catch (error) {
             console.error(error);
@@ -79,12 +79,12 @@ export const login = createAsyncThunk(
 
 export const getUserInfo = createAsyncThunk(
     "getUserInfo",
-    async(accessToken,{rejectWithValue})=> {
+    async (accessToken, { rejectWithValue }) => {
         console.log(accessToken);
         try {
 
             axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-            const res = await axios.get("/api/mypage",{
+            const res = await axios.get("/api/mypage", {
                 withCredentials: true,
             });
 
@@ -145,14 +145,14 @@ const authSlice = createSlice({
         setNotAllow: (state, action) => {
             state.notAllow = action.payload;
         },
-        signInSuccess: (state, action) => {},
+        signInSuccess: (state, action) => { },
         loginSuccess: (state, action) => {
             state.user = action.payload;
         },
         loginFailure: (state, action) => {
             state.user = null;
         },
-        logout:(state, action) =>{
+        logout: (state, action) => {
             state.user = null;
             state.accessToken = null;
             state.refreshToken = null;
@@ -165,10 +165,10 @@ const authSlice = createSlice({
             state.loginDone = false;
             state.loginError = null;
         },
-        [login.fulfilled]: (state, {payload}) => {
+        [login.fulfilled]: (state, { payload }) => {
             state.loginLoading = false;
             state.loginDone = true;
-            state.loginError = null;            
+            state.loginError = null;
             state.accessToken = payload.data["access-token"];
             state.refreshToken = payload.data["refresh-token"];
         },
@@ -177,7 +177,7 @@ const authSlice = createSlice({
             state.loginDone = false;
             state.loginError = action.error;
         },
-        [getUserInfo.fulfilled]: (state,{payload}) => {
+        [getUserInfo.fulfilled]: (state, { payload }) => {
             state.user = payload.data;
         }
 
