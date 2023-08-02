@@ -52,7 +52,7 @@ public class AuthController {
 
         Optional<Member> optionalMember = memberService.findByUserId(userId);
         Member member = null;
-        if (optionalMember.isPresent()) {
+        if (optionalMember.isPresent() && !optionalMember.get().getDelete()) {
             member = optionalMember.get();
         } else {
             return BaseResponse.fail("login fail", 401);

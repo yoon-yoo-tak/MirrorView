@@ -9,19 +9,21 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberService {
-    boolean duplicatedUserId(String userid);
+	boolean duplicatedUserId(String userid);
 
-    void save(JoinDto joinDto);
+	void save(JoinDto joinDto);
 
-    boolean duplicatedNickname(String nickname);
+	boolean duplicatedNickname(String nickname);
 
-    Optional<Member> findByUserId(String userId);
+	Optional<Member> findByUserId(String userId);
 
-    String findByEmail(String email);
+	String findByEmail(String email);
 
-    Member findPassword(FindMemberRequestDto requestDto);
+	Member findPassword(FindMemberRequestDto requestDto);
 
-    float saveScore(String userId, RatingDto ratingDto);
+	float saveScore(String userId, RatingDto ratingDto);
 
-    List<String> findMemberList(String userId);
+	List<String> findMemberList(String userId);
+
+	void deleteMember(String userId);
 }

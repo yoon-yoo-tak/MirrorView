@@ -3,6 +3,7 @@ package com.mirrorview.domain.user.domain;
 import lombok.*;
 
 import javax.persistence.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,52 +16,59 @@ import java.util.List;
 @AllArgsConstructor
 public class Member {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "userid")
-    private String userId;
+	@Column(name = "userid")
+	private String userId;
 
-    private String username;
+	private String username;
 
-    private String password;
+	private String password;
 
-    private String nickname;
+	private String nickname;
 
-    private String email;
+	private String email;
 
-    private String photo;
+	private String photo;
 
-    private String roles;
+	private String roles;
 
-    private float averageRating;
+	private float averageRating;
 
-    public void updatePhoto(String updatePhoto) {
-        this.photo = updatePhoto;
-    }
+	@Column(name = "delete_member", nullable = false, columnDefinition = "TINYINT(1)")
+	private Boolean delete;
 
-    public void updateNickName(String nickname) {
-        this.nickname = nickname;
-    }
+	public void updatePhoto(String updatePhoto) {
+		this.photo = updatePhoto;
+	}
 
-    public void updatePassword(String password) {
-        this.password = password;
-    }
+	public void updateNickName(String nickname) {
+		this.nickname = nickname;
+	}
 
-    public void updateEmail(String email) {
-        this.email = email;
-    }
+	public void updatePassword(String password) {
+		this.password = password;
+	}
 
-    public void updateAverageScore(long count, float score) {
-        float allScore = averageRating * (count - 1) + score;
-        averageRating = allScore / count;
-    }
+	public void updateEmail(String email) {
+		this.email = email;
+	}
 
-    public List<String> getRoleList() {
-        if (this.roles.length() > 0) {
-            return Arrays.asList(this.roles.split(","));
-        }
-        return new ArrayList<>();
-    }
+	public void updateAverageScore(long count, float score) {
+		float allScore = averageRating * (count - 1) + score;
+		averageRating = allScore / count;
+	}
+
+	public List<String> getRoleList() {
+		if (this.roles.length() > 0) {
+			return Arrays.asList(this.roles.split(","));
+		}
+		return new ArrayList<>();
+	}
+
+	public void delete() {
+		delete = true;
+	}
 }
