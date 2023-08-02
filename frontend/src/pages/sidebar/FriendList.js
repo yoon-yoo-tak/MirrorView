@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 function FriendList() {
     const [friends, setFriends] = useState([]);
+    const accessToken = useSelector(state => state.auth.accessToken);
 
     useEffect(() => {
-        axios.get('/api/friends')
+        axios.get('/api/friends', { headers: { Authorization: `Bearer ${accessToken}` } })
             .then(response => {
                 console.log(response.data.data); 
                 setFriends(response.data.data); 
