@@ -1,17 +1,27 @@
-FROM node:16.13.0
+FROM node:16.13.0-alpine as builder
 
-RUN npm -i -g yarn
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+
+COPY . /app
+
+RUN npm install
+
+RUN npm install -g yarn
+
+RUN yarn install
 
 RUN yarn build
 
-RUN yarn global add serve
+#nginx
+FROM nginx:latest
+RUN rm -rf /etc/nginx/conf.d
+COPY conf /etc/nginx
 
-RUN mkdir ./build
+COPY --from=builder /app/build /usr/share/nginx/html
 
-COPY ./build ./build
-
-EXPOSE 3000
-ENTRYPOINT ["serve","-s","build"]
+EXPOSE 80
+ENTRYPOINT ["nginx","-g","daemon off;"]
 
 
 
