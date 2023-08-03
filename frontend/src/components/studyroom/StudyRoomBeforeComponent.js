@@ -1,18 +1,36 @@
 import PrepareSection from "./studyroombefore/PrepareSectionComponent";
 import SelectInterviewee from "./studyroombefore/SelectIntervieweeComponent";
 import * as S from "./StudyRoomStyledComponents";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const StudyRoomBefore = (props) => {
     const nickname = "오늘 홈런친 보경이";
     // 스터디룸 페이지에서 가져온 peopleList
-    const { questionList, setQuestionList, peopleList } = props;
+    const { questionList, setQuestionList, peopleList, streamManager } = props;
     const [ready, setReady] = useState(false);
 
     const handleReady = () => {
         setReady(true);
         // 준비상태 반영 api 호출
     };
+    const videoRef = React.createRef();
+
+    useEffect(()=>{
+        componentDidUpdate(props);
+        componentDidMount();
+    },[])
+
+    const componentDidUpdate =(props) => {
+        if (props && !!videoRef) {
+            streamManager.addVideoElement(videoRef.current);
+        }
+    }
+
+    const componentDidMount = () =>{
+        if (props && !!videoRef) {
+            streamManager.addVideoElement(videoRef.current);
+        }
+    }
 
     return (
         <S.page>
@@ -43,7 +61,10 @@ const StudyRoomBefore = (props) => {
                             </S.readyButton>
                         </S.readyButtonDiv>
                     </S.readySection>
-                    <S.myVideo>본인 화면 (WebRTC) </S.myVideo>
+                    <S.myVideo>
+                        본인 화면 (WebRTC)
+                        <video autoPlay = {true} ref={videoRef} />
+                         </S.myVideo>
                     <S.selectSection>
                         <SelectInterviewee username={nickname} />
                     </S.selectSection>
