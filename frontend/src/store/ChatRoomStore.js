@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getClient } from "store/WebSocketStore";
 
 const initialState = {
-  chatRooms: [],
+  chatRooms: [], // 내부 객체 방
   selectedRoom: "",
 };
 
@@ -18,6 +18,7 @@ export const createChatRoomAsync = createAsyncThunk(
       id: title,
       users: [],
       messages: [],
+      count : 0
     };
     await client.send("/app/chatrooms.create", {}, JSON.stringify(roomOjb));
     return roomOjb;

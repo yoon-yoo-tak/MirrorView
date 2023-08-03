@@ -23,5 +23,5 @@ public class ChatRoom {
     private Set<String> users = new HashSet<>();
     @Builder.Default
     private List<ChatMessage> messages = new ArrayList<>();
-
+    private int count;
 }

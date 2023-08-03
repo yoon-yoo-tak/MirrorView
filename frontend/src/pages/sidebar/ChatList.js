@@ -25,7 +25,7 @@ function ChatList() {
       {chatRooms.map((chatRoom) => (
         <div className="chat-room-item" key={chatRoom.id}>
           <div className="chat-room-title">
-            <FaRocketchat className="icon" /> <p>{chatRoom.id}</p>
+            <FaRocketchat className="icon" /> <p>{chatRoom.id} / 참여인원: {chatRoom.count}</p>
           </div>
           <button
             className="join-button"
