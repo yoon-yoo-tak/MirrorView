@@ -48,7 +48,7 @@ const ChangePwComponent = () => {
 
     const onClickChangePassword = async (e) => {
         try {
-            const response = await axios.post("http://localhost:8080/api/mypage/password",{
+            const response = await axios.post("/api/mypage/password",{
                 originPass: currentPassword,
                 newPass : newPassword,
                 checkNewPass: confirmPassword

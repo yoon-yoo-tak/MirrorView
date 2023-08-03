@@ -2,10 +2,19 @@ import * as S from "../../components/studylist/StudyStyledComponents";
 import StudyRoomCategory from "../../components/studylist/StudyRoomCategoryComponent";
 import StudyRoomThumbnail from "../../components/studylist/StudyRoomThumbnailComponent";
 import StudyRoomCreateModal from "../../components/studylist/StudyRoomCreateModalComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useUpdateEffect from "../../lib/UseUpdateEffect";
+import { useDispatch, useSelector } from "react-redux";
+import { getInterviewRoom } from "../../store/InterviewStore";
 
 const StudyRoomList = () => {
     // 데이터
+    const dispatch = useDispatch();
+    const {room} = useSelector((state)=>state.interview);
+    useEffect(()=>{
+        dispatch(getInterviewRoom())
+    },[])
+
     const roomInfo = [
         {
             id: 1,
@@ -56,7 +65,7 @@ const StudyRoomList = () => {
                         <StudyRoomCategory />
                     </S.studylistTop>
                     <S.studylistMain>
-                        {roomInfo.map((props, index) => (
+                        {room.map((props, index) => (
                             <StudyRoomThumbnail key={index} {...props} />
                         ))}
                     </S.studylistMain>

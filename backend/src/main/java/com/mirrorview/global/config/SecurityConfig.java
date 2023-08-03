@@ -7,6 +7,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,14 +21,16 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.mirrorview.domain.user.service.MemberService;
-import com.mirrorview.global.auth.jwt.CustomMemberDetailService;
+import com.mirrorview.global.auth.security.CustomMemberDetailService;
 import com.mirrorview.global.auth.jwt.JwtAuthenticationFilter;
-import com.mirrorview.global.auth.jwt.RestAuthenticationEntryPoint;
+import com.mirrorview.global.auth.security.RestAccessDeniedHandler;
+import com.mirrorview.global.auth.security.RestAuthenticationEntryPoint;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
 	private final MemberService memberService;
@@ -51,15 +54,16 @@ public class SecurityConfig {
 
 		http
 			.authorizeRequests()
+			.antMatchers("/").permitAll() //테스트 페이지
 			.antMatchers("/api/users/login").permitAll() //로그인
-			.antMatchers("/").permitAll() //로그인
-			.antMatchers("/kauth.kakao.com/oauth/authorize/**").permitAll()
+			.antMatchers("/kauth.kakao.com/oauth/authorize/**").permitAll() //로그인
 			.antMatchers("/api/users/**").permitAll() //회원 가입
 			.antMatchers("/ws/**").permitAll()
 			.anyRequest().authenticated();
 
 		http
 			.exceptionHandling()
+			.accessDeniedHandler(new RestAccessDeniedHandler())
 			.authenticationEntryPoint(new RestAuthenticationEntryPoint()); // 그 외 모든 요청에 대해 인증 필요
 
 		return http.build();
@@ -75,10 +79,15 @@ public class SecurityConfig {
 		return daoAuthenticationProvider;
 	}
 
-	@Bean // 위에는 비 권장될 수도
+	//web.ignore 방식은 보안상 권장되지 않고 내가 만든 커스텀 필터에 대해서 동작하지 않음
+	//아래 구현된 방법을 이용하도록 함
+	@Bean
 	@Order(0)
 	public SecurityFilterChain resources(HttpSecurity http) throws Exception {
-		return http.requestMatchers(matchers -> matchers.antMatchers("/favicon.ico",
+		return http.requestMatchers(matchers -> matchers.antMatchers(
+				"/favicon.ico",
+				"/category/**",
+				"/rooms",
 				"/error",
 				"/swagger-resources/**",
 				"/swagger-ui/**",
@@ -95,10 +104,8 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowCredentials(true); // 쿠키를 받을건지
-		//configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
 		configuration.addAllowedOriginPattern("*");
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE"));
-
 		configuration.addAllowedHeader("*");
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

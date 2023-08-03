@@ -1,10 +1,10 @@
 package com.mirrorview.domain.essay.repository;
 
-import java.util.List;
-
 import com.mirrorview.domain.essay.dto.EssayDto;
 
+import java.util.List;
+
 public interface EssayRepositoryCustom {
-	List<EssayDto> findEssayByUserId(String userId);
+    List<EssayDto> findEssayByUserId(String userId);
 
 }

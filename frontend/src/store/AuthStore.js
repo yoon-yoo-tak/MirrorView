@@ -48,7 +48,7 @@ const initialState = {
     nickname: "",
     email: "",
     accessToken: "",
-    refreshToken:"",
+    refreshToken: "",
     idValid: false,
     passwordValid: false,
     passwordCheckValid: false,
@@ -56,19 +56,20 @@ const initialState = {
     emailValid: false,
     notAllow: true,
     user: null,
+    provider:"",
 };
 // initialState를 통해 state의 처음 상태를 정의한다.
 
 export const login = createAsyncThunk(
     "login",
-    async(data,{rejectWithValue}) => {
+    async (data, { rejectWithValue }) => {
         try {
-            const res = await axios.post("http://localhost:8080/api/users/login",data,{
+            const res = await axios.post("/api/users/login",data,{
                 withCredentials: true,
             });
 
             console.log(res);
-            
+
             return res.data;
         } catch (error) {
             console.error(error);
@@ -79,12 +80,12 @@ export const login = createAsyncThunk(
 
 export const getUserInfo = createAsyncThunk(
     "getUserInfo",
-    async(accessToken,{rejectWithValue})=> {
+    async (accessToken, { rejectWithValue }) => {
         console.log(accessToken);
         try {
-            
+
             axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-            const res = await axios.get("http://localhost:8080/api/mypage",{
+            const res = await axios.get("/api/mypage", {
                 withCredentials: true,
             });
 
@@ -95,6 +96,25 @@ export const getUserInfo = createAsyncThunk(
             console.error(error);
             return rejectWithValue(error.response.data);
         }
+    }
+)
+export const kakaoLogin = createAsyncThunk(
+    "kakaoLogin",
+    async(accessToken,{rejectWithValue}) => {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+        try{
+        const res = await axios.post("/api/users/login/kakao",{
+            withCredentials:true,
+        });
+        console.log(res);
+
+        return res.data;
+        }
+        catch (error) {
+            console.error(error);
+            return rejectWithValue(error.response.data);
+        }
+
     }
 )
 
@@ -145,14 +165,14 @@ const authSlice = createSlice({
         setNotAllow: (state, action) => {
             state.notAllow = action.payload;
         },
-        signInSuccess: (state, action) => {},
+        signInSuccess: (state, action) => { },
         loginSuccess: (state, action) => {
             state.user = action.payload;
         },
         loginFailure: (state, action) => {
             state.user = null;
         },
-        logout:(state, action) =>{
+        logout: (state, action) => {
             state.user = null;
             state.accessToken = null;
             state.refreshToken = null;
@@ -165,24 +185,39 @@ const authSlice = createSlice({
             state.loginDone = false;
             state.loginError = null;
         },
-        [login.fulfilled]: (state, {payload}) => {
+        [login.fulfilled]: (state, { payload }) => {
             state.loginLoading = false;
             state.loginDone = true;
-            state.loginError = null;            
+            state.loginError = null;
             state.accessToken = payload.data["access-token"];
-            
             state.refreshToken = payload.data["refresh-token"];
-       
-            
         },
         [login.rejected]: (state, action) => {
             state.loginLoading = false;
             state.loginDone = false;
             state.loginError = action.error;
         },
-        [getUserInfo.fulfilled]: (state,{payload}) => {
+        [getUserInfo.fulfilled]: (state, { payload }) => {
             state.user = payload.data;
-        }
+        },
+        [kakaoLogin.pending]: (state, action) => {
+            state.loginLoading = true;
+            state.loginDone = false;
+            state.loginError = null;
+        },
+        [kakaoLogin.fulfilled]: (state, {payload}) => {
+            state.loginLoading = false;
+            state.loginDone = true;
+            state.loginError = null;
+            state.provider ="kakao";
+            state.accessToken = payload.data["access-token"];
+            state.refreshToken = payload.data["refresh-token"];
+        },
+        [kakaoLogin.rejected]: (state, action) => {
+            state.loginLoading = false;
+            state.loginDone = false;
+            state.loginError = action.error;
+        },
 
     }
 });
@@ -200,6 +235,7 @@ export const {
     loginSuccess,
     loginFailure,
     setNickname,
+    logout,
 } = authSlice.actions;
 
 export const authActions = authSlice.actions;

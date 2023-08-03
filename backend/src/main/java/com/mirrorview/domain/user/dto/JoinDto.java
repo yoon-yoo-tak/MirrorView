@@ -2,15 +2,13 @@ package com.mirrorview.domain.user.dto;
 
 import com.mirrorview.domain.user.domain.Member;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class JoinDto {
 
 	private String userId;
@@ -26,6 +24,8 @@ public class JoinDto {
 			.nickname(nickname)
 			.password(password)
 			.email(email)
+			.roles("ROLE_USER")
+			.delete(false)
 			.build();
 	}
 }

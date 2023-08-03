@@ -1,10 +1,12 @@
 package com.mirrorview.domain.user.controller;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +22,7 @@ import com.mirrorview.domain.user.dto.MemberResDto;
 import com.mirrorview.domain.user.dto.RatingDto;
 import com.mirrorview.domain.user.service.EmailService;
 import com.mirrorview.domain.user.service.MemberService;
-import com.mirrorview.global.auth.jwt.CustomMemberDetails;
+import com.mirrorview.global.auth.security.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -36,7 +38,6 @@ public class MemberController {
 
 	@PostMapping
 	public ResponseEntity<?> join(@RequestBody JoinDto joinDto) {
-		//todo check되어있는지 확인하기
 		try {
 			// emailService.checkEmail(joinDto.getEmail());
 			memberService.save(joinDto);
@@ -147,11 +148,11 @@ public class MemberController {
 			return BaseResponse.fail("잘못된 정보", 400);
 		}
 		String friendStatus = friendService.getFriendStatus(myUserId, userId);
-		Member findMember = memberService.findByUserId(userId);
-		if (findMember == null) {
+		Optional<Member> findMember = memberService.findByUserId(userId);
+		if (findMember.isEmpty() || findMember.get().getDelete()) {
 			return BaseResponse.fail("없는 정보입니다.", 400);
 		}
-		MemberResDto responseDto = MemberResDto.build(friendStatus, findMember);
+		MemberResDto responseDto = MemberResDto.build(friendStatus, findMember.get());
 
 		return BaseResponse.okWithData(HttpStatus.OK, "상대 정보 열람", responseDto);
 	}
@@ -159,5 +160,16 @@ public class MemberController {
 	@GetMapping("/findAll/{userId}")
 	public ResponseEntity<?> getMemberList(@PathVariable String userId) {
 		return BaseResponse.okWithData(HttpStatus.OK, "유저 리스트", memberService.findMemberList(userId));
+	}
+
+	@DeleteMapping("/{userId}")
+	public ResponseEntity<?> deleteUser(@PathVariable String userId) {
+		try {
+
+			memberService.deleteMember(userId);
+		} catch (Exception e) {
+			return BaseResponse.fail(e.getMessage(), 500);
+		}
+		return BaseResponse.ok(HttpStatus.OK, "삭제 완료");
 	}
 }

@@ -15,6 +15,7 @@ export const Image = styled.img`
   object-fit: cover;
   margin: 0;
   padding: 0;
+  display: flex;
 `;
 
 export const Title = styled.h2`
@@ -102,13 +103,28 @@ export const TableWrapper = styled.div`
 
 export const ButtonWrapper = styled.div`
   position: absolute;
-  top: 18%; 
-  left: 85%;
+  top: 16%; 
+  left: 87%;
   transform: translateX(-50%);
 
 `;
 
-export const Button = styled.button`;
-  <el-button type="primary" icon="el-icon-edit"></el-button>
+// export const Button = styled.button`;
+//   <el-button type="primary" icon="el-icon-edit"></el-button>
   
-`
+// `
+
+export const Button = styled.button`
+  padding: 10px 20px;
+  font-size: 15px;
+  background-color: #033495;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: wooju;
+
+  &:hover {
+    background-color: #40a9ff;
+  }
+`;

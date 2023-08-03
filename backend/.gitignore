@@ -1,6 +1,7 @@
 ### Secret ###
 src/main/resources/application-secret.yml
 src/main/resources/email.properties
+src/main/resources/redis.properties
 src/main/generated/
 src/main/resources/dist/
 

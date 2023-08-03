@@ -1,17 +1,8 @@
 package com.mirrorview.domain.user.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.*;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -21,19 +12,19 @@ import lombok.NoArgsConstructor;
 @Builder
 public class EmailKey {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	private String email;
+    private String email;
 
-	@Column(name = "code")
-	private String key;
+    @Column(name = "code")
+    private String key;
 
-	@Column(nullable = false, columnDefinition = "TINYINT(1)")
-	private Boolean checked;
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    private Boolean checked;
 
-	public void check() {
-		this.checked = true;
-	}
+    public void check() {
+        this.checked = true;
+    }
 }

@@ -1,17 +1,12 @@
 package com.mirrorview.domain.user.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.*;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import javax.persistence.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Entity
 @Table(name = "member")
@@ -38,7 +33,12 @@ public class Member {
 
 	private String photo;
 
+	private String roles;
+
 	private float averageRating;
+
+	@Column(name = "delete_member", nullable = false, columnDefinition = "TINYINT(1)")
+	private Boolean delete;
 
 	public void updatePhoto(String updatePhoto) {
 		this.photo = updatePhoto;
@@ -59,5 +59,16 @@ public class Member {
 	public void updateAverageScore(long count, float score) {
 		float allScore = averageRating * (count - 1) + score;
 		averageRating = allScore / count;
+	}
+
+	public List<String> getRoleList() {
+		if (this.roles.length() > 0) {
+			return Arrays.asList(this.roles.split(","));
+		}
+		return new ArrayList<>();
+	}
+
+	public void delete() {
+		delete = true;
 	}
 }

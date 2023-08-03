@@ -1,26 +1,27 @@
 package com.mirrorview.domain.chatroom.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-@Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@Setter
 @Builder
+@RedisHash("ChatRoom")
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class ChatRoom {
+    @Id
+    private String id;
+    @Builder.Default
+    private Set<String> users = new HashSet<>();
+    @Builder.Default
+    private List<ChatMessage> messages = new ArrayList<>();
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	private String title;
 }

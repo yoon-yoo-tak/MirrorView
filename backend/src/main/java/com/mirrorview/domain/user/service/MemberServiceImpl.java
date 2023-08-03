@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.mirrorview.domain.friend.repository.FriendRepository;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.domain.Rating;
 import com.mirrorview.domain.user.dto.FindMemberRequestDto;
@@ -28,6 +29,7 @@ public class MemberServiceImpl implements MemberService {
 	private final PasswordEncoder passwordEncoder;
 
 	private final RatingRepository ratingRepository;
+	private final FriendRepository friendRepository;
 
 	@Override
 	public boolean duplicatedUserId(String userId) {
@@ -40,16 +42,18 @@ public class MemberServiceImpl implements MemberService {
 			throw new IllegalArgumentException("아이디 확인이 필요합니다.");
 		}
 
-		String encoded = passwordEncoder.encode(joinDto.getPassword());
-		joinDto.setPassword(encoded);
+		if (joinDto.getPassword() != null) {
+			String encoded = passwordEncoder.encode(joinDto.getPassword());
+			joinDto.setPassword(encoded);
+		}
 		Member joinMember = joinDto.toEntity();
 
 		memberRepository.save(joinMember);
 	}
 
 	@Override
-	public Member findByUserId(String userId) {
-		return memberRepository.findByUserId(userId);
+	public Optional<Member> findByUserId(String userId) {
+		return Optional.of(memberRepository.findByUserId(userId).get());
 	}
 
 	@Override
@@ -73,31 +77,45 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	public float saveScore(String userId, RatingDto ratingDto) {
 
-		Member member = memberRepository.findByUserId(userId);
-		Member otherMember = memberRepository.findByUserId(ratingDto.getUserId());
-		if (member == null || otherMember == null) {
+		Optional<Member> member = memberRepository.findByUserId(userId);
+		Optional<Member> otherMember = memberRepository.findByUserId(ratingDto.getUserId());
+		if (member.isEmpty() || otherMember.isEmpty()) {
 			throw new IllegalArgumentException("존재하지 않는 유저입니다.");
 		}
 		Rating newRating = Rating.builder()
-			.rater(member)
-			.rated(otherMember)
+			.rater(member.get())
+			.rated(otherMember.get())
 			.score(ratingDto.getScore())
 			.build();
 		ratingRepository.save(newRating);
 
-		long count = findCount(otherMember);
+		long count = findCount(otherMember.get());
 		System.out.println(count);
-		otherMember.updateAverageScore(count, newRating.getScore());
+		otherMember.get().updateAverageScore(count, newRating.getScore());
 
-		return otherMember.getAverageRating();
+		return otherMember.get().getAverageRating();
 	}
 
 	@Override
 	public List<String> findMemberList(String userId) {
 		return memberRepository.findByUserIdContaining(userId)
 			.stream()
+			.filter(member -> !member.getDelete())
 			.map(Member::getUserId)
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	@Transactional
+	public void deleteMember(String userId) {
+
+		Optional<Member> member = memberRepository.findByUserId(userId);
+		if (member.isEmpty()|| member.get().getDelete()) {
+			throw new IllegalArgumentException("잘못된 정보");
+		}
+		Member getMember = member.get();
+		getMember.delete();
+		friendRepository.deleteByFromOrTo(getMember, getMember);
 	}
 
 	private long findCount(Member otherMember) {
