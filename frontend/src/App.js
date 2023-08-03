@@ -15,6 +15,7 @@ import NoticePage from "./pages/notice/NoticePage";
 import NoticeDetail from "./pages/notice/NoticeDetailPage";
 import StudyRoomList from "./pages/studylist/StudyRoomListPage";
 import NoticeWritePage from "./pages/notice/NoticeWritePage";
+import StudyRoom from "./pages/studyroom/StudyRoomPage";
 import Sidebar from "pages/sidebar/SideBar";
 import ChatList from "pages/sidebar/ChatList";
 import PrivateChatRoom from "pages/sidebar/ChatRoom";
@@ -43,6 +44,7 @@ const App = () => {
         <Route path="/noticedetail/:id" element={<NoticeDetail />} />
         <Route path="/studylist" element={<StudyRoomList />} />
         <Route path="/noticewritepage" element={<NoticeWritePage />} />
+        <Route path="/studyroom/:id" element={<StudyRoom />} />
         <Route path="/login/kakao/code" element={<KakaoLoginRedirectPage/>} />
       </Routes>
       <Footer></Footer>
