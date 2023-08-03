@@ -17,8 +17,10 @@ const gradientAnimation = keyframes`
 
 export const page = styled.div`
     font-family: "HakgyoansimWoojuR";
-    min-height: 100vh;
-    min-width: 1200px;
+    // min-height: 100vh;
+    // min-width: 1200px;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
     // background: rgb(29, 22, 60);
@@ -220,7 +222,7 @@ export const sectionWrap = styled.div`
     box-shadow: 0px 0px 10px #4e4e4e;
     margin: 18px;
     padding: 10px;
-    min-width: ${(props) => (props.menu === "viewer" ? "200px" : "500px")};
+    min-width: ${(props) => (props.menu === "viewer" ? "400px" : "500px")};
     height: 550px;
     flex: 8;
 `;
@@ -543,36 +545,47 @@ export const myAnswer = styled.div`
 
 export const interviewerWrap = styled.div`
     display: flex;
-    width: 80vw;
+    // width: 80vw;
     justify-content: center;
+    flex-direction: row;
     align-items: center;
+    // margin: 0 100px;
+    padding: 0 200px;
 `;
 
 export const videoSection = styled.div`
-    flex: 3;
-    min-width: 600px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+`;
+
+export const videoWrap = styled.div`
+    max-width: 800px;
+    flex: 1;
     height: 628px;
-    margin: 5px;
+    // margin: 5px;
 `;
 export const mainContainer = styled.div`
     width: 100%;
     height: 400px;
+    flex: 1;
 `;
 
 export const mainVideo = styled.div`
     background-color: white;
     border-radius: 13px;
-    width: 100%;
+    // width: 80%;
     height: 400px;
     // margin: 10px;
 `;
 
 export const lastVideos = styled.div`
     display: flex;
+    flex-wrap: nowrap;
     overflow-x: auto;
-    width: 100%;
-    margin: 15px 0;
-    justify-content: space-between;
+    // width: 80%;
+    margin-top: 15px;
+    // justify-content: space-between;
     &::-webkit-scrollbar {
         height: 7px;
     }
@@ -591,14 +604,16 @@ export const lastVideoEach = styled.div`
     border-radius: 13px;
 
     padding: 15px;
-    margin: 0 15px;
+    // margin: 0 15px;
     width: 280px;
     height: 120px;
 
     flex-shrink: 0;
 `;
 
-export const secondSection = styled.div``;
+export const secondSection = styled.div`
+    flex: 1;
+`;
 
 export const selectTapsWrap = styled.div`
     display: flex;
@@ -644,14 +659,15 @@ export const tapsInterviewer = styled.div`
 `;
 
 export const interviewerSectionWrap = styled.div`
-    width: 30vw;
+    width: 80%;
     min-width: 400px;
+    display: flex;
 `;
 
 // 스터디 종료 후 평점 부여 페이지? 컴포넌트? 모달?
 
 export const ratingPage = styled.div`
-    width: 400px;
+    width: 300px;
     height: 500px;
     z-index: 999;
 
@@ -669,15 +685,50 @@ export const ratingPage = styled.div`
 
 export const ratingWrap = styled.div`
     padding: 15px;
+    text-align: center;
+    height: 100%;
 `;
 
 export const ratingTitle = styled.div`
     font-weight: bold;
     font-size: large;
-    margin: 15px 0;
+    margin: 15px 0 30px 0;
+    text-align: center;
 `;
 
-export const ratingContent = styled.div``;
+export const ratingSection = styled.div`
+    margin: 30px 0;
+    height: 68%;
+`;
+
+export const ratingContent = styled.div`
+    margin: 20px 20px;
+    text-align: center;
+`;
+
+export const ratingButton = styled.button`
+    width: 70px;
+    height: 30px;
+    border: 0;
+    border-radius: 100px;
+    box-shadow: 0px 0px 11px #afafaf;
+
+    font-weight: bold;
+
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    margin: 0 0 15px 0;
+    background-color: #a1e5fa;
+
+    font-family: "HakgyoansimWoojuR";
+
+    &:hover {
+        background-color: #58c8eb;
+    }
+`;
 
 export const ratingText = styled.div``;
 
@@ -767,4 +818,43 @@ export const leftBox = styled.div`
         // background: #ededed;
         border-radius: 3px;
     }
+`;
+
+// 피드백 작성하기
+
+export const feedbackEach = styled.div``;
+
+export const feedbackInput = styled.input`
+    margin: 5px;
+    width: 70%;
+    height: 30px;
+    background: #e6e6e6;
+    border: 0;
+    // box-shadow: 0px 0px 5px #c7c7c7;
+    border-radius: 10px;
+`;
+
+export const feedbackButton = styled.button`
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    position: relative;
+    width: 60px;
+    height: 30px;
+
+    background: #a1b6ff;
+    box-shadow: 0px 0px 5px #c7c7c7;
+    border-radius: 10px;
+    cursor: pointer;
+    &:hover {
+        background-color: #e9e4ff;
+    }
+`;
+
+export const feedbackInputWrap = styled.div`
+    display: flex;
 `;

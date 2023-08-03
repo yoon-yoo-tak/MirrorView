@@ -47,7 +47,7 @@ const InterviewerSection = (props) => {
                     )}
                     {section === "chat" && <ChattingSection />}
                 </S.sectionWrap>
-                <S.selectTapsWrap>
+                {/* <S.selectTapsWrap>
                     <S.selectTapsHorizon>
                         <S.tapsInterviewer onClick={handleInfo} menu="info">
                             INFO
@@ -63,7 +63,21 @@ const InterviewerSection = (props) => {
                         나가기
                     </S.exitRoom>
                     {modalStates && <StudyRating peopleList={peopleList} />}
-                </S.selectTapsWrap>
+                </S.selectTapsWrap> */}
+                <S.sectionSelectTaps>
+                    <div>
+                        <S.sectionSelectTap onClick={handleInfo} menu="info">
+                            INFO
+                        </S.sectionSelectTap>
+                        <S.sectionSelectTap onClick={handleQuest} menu="quest">
+                            Q.
+                        </S.sectionSelectTap>
+                        <S.sectionSelectTap onClick={handleChat} menu="chat">
+                            CHAT
+                        </S.sectionSelectTap>
+                    </div>
+                    <S.exitRoom onClick={handleExit}>나가기</S.exitRoom>
+                </S.sectionSelectTaps>
             </S.interviewerSectionWrap>
         </div>
     );

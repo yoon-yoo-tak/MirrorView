@@ -26,10 +26,11 @@ const StudyRating = ({ peopleList }) => {
         if (ratingData.length === peopleList.length - 1) {
             ratingData.forEach((item) => {
                 // 각 데이터에 대한 api 호출
-                console.log(`${item.nickname}  호춝ㄱ`);
+                // console.log(`${item.nickname}  호춝ㄱ`);
+                // navigate()
             });
         } else {
-            alert("모든 사람의 평점을 누르라고");
+            alert("모든 참여자에 대해 별점을 눌러주세요!");
         }
     };
 
@@ -37,8 +38,10 @@ const StudyRating = ({ peopleList }) => {
         <S.ratingBackDrop>
             <S.ratingPage>
                 <S.ratingWrap>
-                    <S.ratingTitle>면접 잘 참여했는지 평점 ㄱㄱ</S.ratingTitle>
-                    <div>
+                    <S.ratingTitle>
+                        <div>참여자들에게 별점을 남겨주세요!</div>
+                    </S.ratingTitle>
+                    <S.ratingSection>
                         {peopleList.map((person, index) => (
                             <S.ratingContent>
                                 <div>{person.name}님</div>
@@ -56,8 +59,10 @@ const StudyRating = ({ peopleList }) => {
                                 />
                             </S.ratingContent>
                         ))}
-                    </div>
-                    <button onClick={handleSubmit}>제출하기</button>
+                    </S.ratingSection>
+                    <S.ratingButton onClick={handleSubmit}>
+                        제출하기
+                    </S.ratingButton>
                 </S.ratingWrap>
             </S.ratingPage>
         </S.ratingBackDrop>
