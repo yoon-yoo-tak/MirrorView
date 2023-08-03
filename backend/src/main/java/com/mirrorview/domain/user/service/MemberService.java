@@ -23,7 +23,7 @@ public interface MemberService {
 
 	float saveScore(String userId, RatingDto ratingDto);
 
-	List<String> findMemberList(String userId);
+	List<String> findMemberList(String input);
 
 	void deleteMember(String userId);
 }

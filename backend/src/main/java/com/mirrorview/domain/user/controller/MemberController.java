@@ -95,7 +95,7 @@ public class MemberController {
 
 	@GetMapping("/find/id")
 	public ResponseEntity<?> findUserId(@RequestBody FindMemberRequestDto requestDto) {
-
+		System.out.println("requestDto.getEmail() = " + requestDto.getEmail());
 		if (requestDto == null || requestDto.isBlankEmail()) {
 			return BaseResponse.fail("잘못된 데이터 형식입니다.", 500);
 		}
@@ -147,19 +147,19 @@ public class MemberController {
 		if (myUserId.equals(userId)) {
 			return BaseResponse.fail("잘못된 정보", 400);
 		}
-		String friendStatus = friendService.getFriendStatus(myUserId, userId);
 		Optional<Member> findMember = memberService.findByUserId(userId);
 		if (findMember.isEmpty() || findMember.get().getDelete()) {
 			return BaseResponse.fail("없는 정보입니다.", 400);
 		}
+		String friendStatus = friendService.getFriendStatus(myUserId, userId);
 		MemberResDto responseDto = MemberResDto.build(friendStatus, findMember.get());
 
 		return BaseResponse.okWithData(HttpStatus.OK, "상대 정보 열람", responseDto);
 	}
 
-	@GetMapping("/findAll/{userId}")
-	public ResponseEntity<?> getMemberList(@PathVariable String userId) {
-		return BaseResponse.okWithData(HttpStatus.OK, "유저 리스트", memberService.findMemberList(userId));
+	@GetMapping("/findAll/{input}")
+	public ResponseEntity<?> getMemberList(@PathVariable String input) {
+		return BaseResponse.okWithData(HttpStatus.OK, "유저 리스트", memberService.findMemberList(input));
 	}
 
 	@DeleteMapping("/{userId}")
