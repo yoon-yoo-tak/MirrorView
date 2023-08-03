@@ -39,30 +39,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         // Header의 Key값을 통해 PREFIX를 받기
+        log.info("jwt filter on");
         String header = request.getHeader(JwtTokenUtil.HEADER_STRING);
 
-        // Header의 PREFIX가 일치하지 않는다면 다른 필터를 타도록 함
+        // Header의 PREFIX가 일치하지 않는다면 다른 필터를 타도록
         if (header == null || !header.startsWith(JwtTokenUtil.TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
 
         try {
+            // 다른 로그인 방식이 없기 때문에 Exception 발생
             // If header is present, try grab user principal from database and perform authorization
             Authentication authentication = getAuthentication(request);
             // jwt 토큰으로 부터 획득한 인증 정보(authentication) 설정.
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (TokenExpiredException ex) {
-
-            // log.info("token expired!!");
-            // log.info("token = {}", request.getHeader(JwtTokenUtil.HEADER_STRING));
-            // String token = request.getHeader(JwtTokenUtil.HEADER_STRING);
-            // String userId = JWT.decode(token.replace(JwtTokenUtil.TOKEN_PREFIX, "")).getSubject();
-            // String refreshToken = template.opsForValue().get("refresh " + userId);
-            // log.info("refresh token = {}", refreshToken);
-            //
-            // JWTVerifier verifier = JwtTokenUtil.getVerifier();
-            // DecodedJWT decodedJWT = verifier.verify(refreshToken);
             request.setAttribute("expired", ex);
 
         } catch (Exception ex) {
