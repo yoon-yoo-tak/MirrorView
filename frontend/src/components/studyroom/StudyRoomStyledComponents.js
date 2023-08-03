@@ -30,7 +30,7 @@ export const page = styled.div`
     //     rgba(27, 42, 66, 1) 100%
     // );
     background: linear-gradient(-45deg, #30577b, #304a7b, #464b72, #474375);
-    animation: ${gradientAnimation} 15s ease infinite;
+    animation: ${gradientAnimation} 10s ease infinite;
     background-size: 400% 400%;
     // padding: 5vh 0;
 `;
@@ -270,7 +270,12 @@ export const exitRoom = styled.div`
     border-radius: 100px;
     background-color: #fe6666;
 
-    margin: ${(props) => (props.menu === "viewer" ? "0 10px" : "")};
+    margin: ${(props) =>
+        props.menu === "viewer"
+            ? "0 10px"
+            : props.menu === "viewee"
+            ? "10px 20px"
+            : ""};
     box-shadow: 0px 0px 10px #4e4e4e;
 
     font-weight: bold;
@@ -567,6 +572,18 @@ export const lastVideos = styled.div`
     overflow-x: auto;
     width: 100%;
     margin: 15px 0;
+    justify-content: space-between;
+    &::-webkit-scrollbar {
+        height: 7px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #a6b6ce;
+    }
+    &::-webkit-scrollbar-track {
+        background: #ededed;
+        border-radius: 3px;
+    }
 `;
 
 export const lastVideoEach = styled.div`
@@ -574,7 +591,7 @@ export const lastVideoEach = styled.div`
     border-radius: 13px;
 
     padding: 15px;
-    margin-right: 15px;
+    margin: 0 15px;
     width: 280px;
     height: 120px;
 
@@ -629,4 +646,125 @@ export const tapsInterviewer = styled.div`
 export const interviewerSectionWrap = styled.div`
     width: 30vw;
     min-width: 400px;
+`;
+
+// 스터디 종료 후 평점 부여 페이지? 컴포넌트? 모달?
+
+export const ratingPage = styled.div`
+    width: 400px;
+    height: 500px;
+    z-index: 999;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background: #ffffff;
+    box-shadow: 0px 0px 15px #000000;
+    border-radius: 37px;
+
+    font-family: "HakgyoansimWoojuR";
+`;
+
+export const ratingWrap = styled.div`
+    padding: 15px;
+`;
+
+export const ratingTitle = styled.div`
+    font-weight: bold;
+    font-size: large;
+    margin: 15px 0;
+`;
+
+export const ratingContent = styled.div``;
+
+export const ratingText = styled.div``;
+
+export const ratingBackDrop = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+`;
+
+// 면접 시작
+
+// 면접자의 화면
+
+export const mainWrap = styled.div`
+    position: relative;
+    width: 100%;
+    // height: 350px;
+    // max-height: 80vh;
+    overflow: auto;
+    &::-webkit-scrollbar {
+        width: 9px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #a6b6ce;
+    }
+    &::-webkit-scrollbar-track {
+        // background: #ededed;
+        border-radius: 3px;
+    }
+`;
+
+export const vieweeWrap = styled.div`
+    display: flex;
+    // height: 20rem;
+    justify-content: center;
+    // align-items: center;
+
+    margin: 50px 100px;
+    position: relative;
+    align-content: center;
+
+    height: 100vh;
+    max-height: 100%;
+`;
+
+export const boxes = styled.div`
+    margin: 20px;
+    width: 250px;
+    height: 150px;
+    background-color: white;
+    box-shadow: 0px 0px 10px #4e4e4e;
+    border-radius: 13px;
+
+    padding: 15px;
+`;
+
+export const mainBox = styled.div`
+    margin: 20px;
+    width: 600px;
+    height: 380px;
+    background-color: white;
+    box-shadow: 0px 0px 10px #4e4e4e;
+    border-radius: 13px;
+
+    padding: 15px;
+`;
+
+export const leftBox = styled.div`
+    flex-shrink: 0;
+    max-height: 80%;
+
+    flex-direction: column;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 9px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #a6b6ce;
+    }
+    &::-webkit-scrollbar-track {
+        // background: #ededed;
+        border-radius: 3px;
+    }
 `;
