@@ -19,7 +19,7 @@ export const initializeWebSocket = createAsyncThunk(
   "webSocket/initialize",
   async (accessToken, { dispatch }) => {
     // const accessToken = useSelector((state)=> state.auth.accessToken);
-    const httpUrl = "http://localhost:8080/ws";
+    const httpUrl = process.env.REACT_APP_WEBSOCKET_URL;
     const urlWithToken = `${httpUrl}?token=${accessToken}`;
     console.log(urlWithToken);
     try {
