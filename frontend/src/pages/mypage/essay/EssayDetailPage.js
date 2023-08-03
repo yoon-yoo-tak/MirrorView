@@ -14,6 +14,7 @@ const EssayDetail = () => {
     const[essay,setEssay] = useState([]);
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     useEffect(()=>{
+        console.log(pathname);
         const id = pathname.substring(20)
         axios.get(`/api/mypage/essays/${id}`)
         .then(({data})=>{
@@ -22,7 +23,7 @@ const EssayDetail = () => {
         .catch((error)=>{
             console.error(error);
         })
-    })
+    },[])
 
     // const essayUpdate = (e) => {
     //     e.preventDefault();

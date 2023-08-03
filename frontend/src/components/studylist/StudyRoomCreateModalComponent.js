@@ -5,11 +5,12 @@ import useUpdateEffect from "../../lib/UseUpdateEffect";
 import { useDispatch } from "react-redux";
 import {setCurrentRoom} from "../../store/InterviewStore"
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const StudyRoomCreateModal = ({ setModalStates }) => {
     const [open, setOpen] = useState(true);
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     const [firstCategory, setFirstCategory] = useState([{id:0,name:"선택하세요"}]);
     const [secondCategory, setSecondCategory] = useState([{id:0,name:"선택하세요"}]);
     const defaultValue = [{id:0,name:"선택하세요"}];
@@ -173,7 +174,7 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
                 console.log(response);
                 dispatch(setCurrentRoom(response.data.data));
                 setModalStates(false);
-                // navigate("/studyroom/:roomId");
+                navigate(`/studyroom/${response.data.data.id}`);
             }).catch((error)=>{
                 console.error(error);
             })

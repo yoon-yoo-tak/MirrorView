@@ -36,7 +36,7 @@ const ChangeNicknameComponent = () => {
             alert("중복확인 필요");
             return;
         }
-        await axios.post(`/api/mypage/nickname?userId=${user.userId}&nickname=${newNickname}`)
+        await axios.post(`/api/mypage/nickname?nickname=${newNickname}`)
         .then((response)=>{
             dispatch(setNickname(newNickname));
             navigate("/mypage/profile")
