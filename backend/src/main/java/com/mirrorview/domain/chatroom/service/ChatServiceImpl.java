@@ -26,13 +26,12 @@ import lombok.Getter;
 @Getter
 public class ChatServiceImpl implements ChatService{
 
-	private final ChatRepository chatRepository;
-	private Map<String, String> userRoomMap = new ConcurrentHashMap<>();
-	private AtomicInteger totalUserCount = new AtomicInteger(0);
 	private final SimpMessagingTemplate template;
+	private final ChatRepository chatRepository;
+	private final Map<String, String> userRoomMap = new ConcurrentHashMap<>();
+	private AtomicInteger totalUserCount = new AtomicInteger(0);
 
 	public List<ChatRoom> allRoom(){
-
 		return (List<ChatRoom>)chatRepository.findAll();
 	}
 
@@ -50,6 +49,7 @@ public class ChatServiceImpl implements ChatService{
 			.id(roomId)
 			.users(users)
 			.messages(messages)
+			.count(0)
 			.build();
 		chatRepository.save(chatRoom);
 		return chatRoom;
@@ -111,7 +111,7 @@ public class ChatServiceImpl implements ChatService{
 			List<ChatMessage> chatMessages = chatRoom.get().getMessages();
 			return chatMessages;
 		}else
-			throw new RuntimeException("방이 없음");
+			throw new RuntimeException("방이 존재하지 않습니다.");
 	}
 
 
@@ -130,6 +130,10 @@ public class ChatServiceImpl implements ChatService{
 		return userRoomMap.get(userId);
 	}
 
+	public void userInRoomSet(String userId, String roomId){
+		userRoomMap.put(userId, roomId);
+	}
+
 	@Override
 	public void incrementUserCount(String userid) {
 		log.info("입장한 유저: {}, 현재 접속 인원: {}", userid, totalUserCount.incrementAndGet());
@@ -146,6 +150,35 @@ public class ChatServiceImpl implements ChatService{
 	public long totalUserCount(){
 		template.convertAndSend("/sub/count", totalUserCount.get());
 		return 0;
+	}
+
+	@Override
+	public void incrementRoomCount(String userId, String roomId) {
+		Optional<ChatRoom> chatRoomOptional = chatRepository.findById(roomId);
+		if(chatRoomOptional.isPresent()){
+			ChatRoom chatRoom = chatRoomOptional.get();
+			chatRoom.setCount(chatRoom.getCount() + 1);
+			userRoomMap.put(userId, roomId);
+			chatRepository.save(chatRoom);
+		} else {
+			throw new RuntimeException("방이 존재하지 않습니다.");
+		}
+	}
+
+	@Override
+	public void decrementRoomCount(String userId, String roomId) {
+		if(!userRoomMap.containsKey(userId))
+			return;
+
+		Optional<ChatRoom> chatRoomOptional = chatRepository.findById(roomId);
+		if(chatRoomOptional.isPresent()){
+			ChatRoom chatRoom = chatRoomOptional.get();
+			chatRoom.setCount(chatRoom.getCount() - 1);
+			userRoomMap.remove(userId);
+			chatRepository.save(chatRoom);
+		} else {
+			throw new RuntimeException("방이 존재하지 않습니다.");
+		}
 	}
 
     // public Optional<ChatRoom> findChatRoomById(String roomId) {

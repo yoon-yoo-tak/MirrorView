@@ -28,10 +28,16 @@ public interface ChatService {
 
     String userInRoom(String userId);
 
+    void userInRoomSet(String userId, String roomId);
+
     void incrementUserCount(String userid);
 
     void decrementUserCount(String userid);
 
     long totalUserCount();
+
+    void incrementRoomCount(String userId, String roomId);
+
+    void decrementRoomCount(String userId, String roomId);
 
 }
