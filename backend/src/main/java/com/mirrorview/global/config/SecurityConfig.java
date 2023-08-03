@@ -106,7 +106,6 @@ public class SecurityConfig {
 		configuration.setAllowCredentials(true); // 쿠키를 받을건지
 		configuration.addAllowedOriginPattern("*");
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE"));
-
 		configuration.addAllowedHeader("*");
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
