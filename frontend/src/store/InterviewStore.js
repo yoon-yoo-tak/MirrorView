@@ -46,6 +46,7 @@ export const joinInterviewRoom = createAsyncThunk(
             const res = await axios.post(`/api/interviews/join/${roomId}`,{
                 withCredentials: true,
             });
+            console.log(res.data);
             return res.data;
         } catch (error) {
             console.error(error);
