@@ -1,38 +1,48 @@
 package com.mirrorview.domain.essay.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.*;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mirrorview.domain.essay.dto.GptRequestDto;
+import com.mirrorview.domain.essay.dto.GptResponseDto;
+import com.mirrorview.global.util.JwtTokenUtil;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
+@Slf4j
 public class OpenAIController {
+    private static final String GPT_URL = "https://api.openai.com/v1/chat/completions";
 
     private final RestTemplate restTemplate;
     private final HttpHeaders headers;
 
-    public OpenAIController() {
+    @Autowired
+    public OpenAIController(@Value("${gpt.key}") String key) {
         this.restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters()
-                .add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
-        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        // restTemplate.getMessageConverters()
+        //         .add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+        // restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
         this.headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.set("Authorization", "Bearer " + "your-api-key"); // key
+        headers.set(JwtTokenUtil.HEADER_STRING, JwtTokenUtil.TOKEN_PREFIX + key);
     }
 
     @PostMapping("/api/createQuestions")
@@ -40,30 +50,50 @@ public class OpenAIController {
         try {
             String introduction = body.get("introduction");
             String job = body.get("job");
-            String prompt = introduction + "\n직무: " + job + "\n\n이 정보에 기반한 질문 5개:\n1. ";
-            String requestBody = "{ \"model\": \"gpt-4.0-turbo\", \"prompt\": \"" + prompt + "\", \"max_tokens\": 250 }";
 
+            String prompt = "지원 직무 : " + job + "\n"
+                + "자기소개서 시작 \n" + introduction + "\n 끝";
+
+            List<Map<String, String>> messages = new ArrayList<>();
+            Map<String, String> gptMessage = new LinkedHashMap<>();
+            gptMessage.put("role", "system");
+            gptMessage.put("content", "너는 유명한 기업의 면접관이야 전달받은 자기소개서를 기반으로 질문을 5개 만들어줘");
+            Map<String, String> userMessage = new LinkedHashMap<>();
+            userMessage.put("role", "user");
+            userMessage.put("content", prompt);
+            GptRequestDto gptRequestDto = GptRequestDto.builder()
+                .model("gpt-3.5-turbo")
+                .messages(List.of(gptMessage, userMessage))
+                .build();
+            log.info("gptdto = {}", gptRequestDto);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String requestBody = objectMapper.writeValueAsString(gptRequestDto);
+            log.info("req body = {}", requestBody);
             HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+            log.info("entity = {}", entity);
+            log.info("요청 보낸다!");
             ResponseEntity<String> response = restTemplate.exchange(
-                    "https://api.openai.com/v1/engines/gpt-4.0-turbo/completions",
-                    HttpMethod.POST,
-                    entity,
-                    String.class);
+                "https://api.openai.com/v1/chat/completions",
+                HttpMethod.POST,
+                entity,
+                String.class);
+            log.info("response = {}", response);
+            log.info("response code = {}", response.getStatusCode());
 
             if (response.getStatusCode() == HttpStatus.OK) {
+                log.info("200!!!!!!!!!!!!!!!!!!!!!");
                 ObjectMapper mapper = new ObjectMapper();
-                JsonNode rootNode = mapper.readTree(response.getBody());
-                JsonNode choicesNode = rootNode.path("choices");
-                JsonNode textNode = choicesNode.get(0).path("text");
-                String generatedText = textNode.asText();
-
-                List<String> questions = Arrays.asList(generatedText.split("\n"));
-                return new ResponseEntity<>(questions, HttpStatus.OK);
+                GptResponseDto gptResponseDto = objectMapper.readValue(response.getBody(), GptResponseDto.class);
+                return new ResponseEntity<>(List.of(gptResponseDto.getContent()), HttpStatus.OK);
             } else {
+                log.info("Server Error");
                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (Exception e) {
+            log.info("exception = {}", e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
