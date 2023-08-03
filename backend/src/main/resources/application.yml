@@ -1,12 +1,10 @@
 spring:
   profiles:
     active: secret
-server:
 
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  port: 8000
 
 logging:
   level:
