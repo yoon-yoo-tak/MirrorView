@@ -78,13 +78,14 @@ export const readyButton = styled.div`
     width: 70px;
     height: 30px;
 
-    background: ${(props) => (!props.status ? "#FF6980" : "#D4D4D4")};
+    background: ${(props) => (props.status === "true" ? "#FF6980" : "#D4D4D4")};
     // box-shadow: 0px 0px 10px #bdbdbd;
     border-radius: 19px;
     cursor: pointer;
     color: white;
     &:hover {
-        background-color: ${(props) => (!props.status ? "#FFD0D7" : "#D4D4D4")};
+        background-color: ${(props) =>
+            props.status === "true" ? "#FFD0D7" : "#D4D4D4"};
     }
 `;
 
@@ -201,7 +202,7 @@ export const selectSectionList = styled.div`
 
 export const personList = styled.div`
     padding: 5px;
-    font-weight: ${(props) => (props.checkname ? "bold" : "normal")};
+    font-weight: ${(props) => (props.checkname === "true" ? "bold" : "normal")};
 `;
 
 // 스터디 방 우측 섹션
@@ -219,7 +220,7 @@ export const sectionWrap = styled.div`
     box-shadow: 0px 0px 10px #4e4e4e;
     margin: 18px;
     padding: 10px;
-    min-width: 500px;
+    min-width: ${(props) => (props.menu === "viewer" ? "200px" : "500px")};
     height: 550px;
     flex: 8;
 `;
@@ -269,6 +270,7 @@ export const exitRoom = styled.div`
     border-radius: 100px;
     background-color: #fe6666;
 
+    margin: ${(props) => (props.menu === "viewer" ? "0 10px" : "")};
     box-shadow: 0px 0px 10px #4e4e4e;
 
     font-weight: bold;
@@ -543,29 +545,28 @@ export const interviewerWrap = styled.div`
 
 export const videoSection = styled.div`
     flex: 3;
+    min-width: 600px;
+    height: 628px;
+    margin: 5px;
 `;
 export const mainContainer = styled.div`
-    position: relative;
     width: 100%;
-    padding-top: 56.25%;
+    height: 400px;
 `;
 
 export const mainVideo = styled.div`
     background-color: white;
     border-radius: 13px;
-
-    // padding: 15px;
-
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
+    height: 400px;
+    // margin: 10px;
 `;
 
 export const lastVideos = styled.div`
     display: flex;
     overflow-x: auto;
+    width: 100%;
+    margin: 15px 0;
 `;
 
 export const lastVideoEach = styled.div`
@@ -573,8 +574,59 @@ export const lastVideoEach = styled.div`
     border-radius: 13px;
 
     padding: 15px;
+    margin-right: 15px;
+    width: 280px;
+    height: 120px;
+
+    flex-shrink: 0;
 `;
 
-export const SecondSection = styled.div`
-    flex: 2;
+export const secondSection = styled.div``;
+
+export const selectTapsWrap = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin: 15px;
+`;
+
+export const selectTapsHorizon = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+export const tapsInterviewer = styled.div`
+    width: 70px;
+    height: 40px;
+    border: 0;
+    border-radius: 100px;
+    box-shadow: 0px 0px 10px #4e4e4e;
+
+    font-weight: bold;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    margin: 0 10px;
+    background-color: ${(props) =>
+        props.menu === "info"
+            ? "#FFBFBF"
+            : props.menu === "quest"
+            ? "#6A9CFD"
+            : props.menu === "myInfo"
+            ? "#AEE4FF"
+            : "#FF95B9"};
+
+    &:hover {
+        color: #ffffff;
+        cursor: pointer;
+    }
+`;
+
+export const interviewerSectionWrap = styled.div`
+    width: 30vw;
+    min-width: 400px;
 `;

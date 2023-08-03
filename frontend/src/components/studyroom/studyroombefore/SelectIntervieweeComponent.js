@@ -78,7 +78,9 @@ const SelectInterviewee = (props) => {
                 <S.selectSectionList>
                     {intervieweeList.map((items, index) => (
                         <S.personList
-                            checkname={items.name === props.username}
+                            checkname={
+                                items.name === props.username ? "true" : ""
+                            }
                             key={index}
                         >
                             {items.name}
@@ -113,7 +115,9 @@ const SelectInterviewee = (props) => {
                 <S.selectSectionList>
                     {interviewerList.map((items, index) => (
                         <S.personList
-                            checkname={items.name === props.username}
+                            checkname={
+                                items.name === props.username ? "true" : ""
+                            }
                             key={index}
                         >
                             {items.name}

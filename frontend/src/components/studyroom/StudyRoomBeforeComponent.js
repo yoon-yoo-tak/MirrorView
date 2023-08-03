@@ -36,7 +36,7 @@ const StudyRoomBefore = (props) => {
                         <S.readyButtonDiv>
                             <S.readyButton
                                 onClick={handleReady}
-                                status={ready}
+                                status={!ready ? "true" : ""}
                                 disabled={ready}
                             >
                                 준비완료

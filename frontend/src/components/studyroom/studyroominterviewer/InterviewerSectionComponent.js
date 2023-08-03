@@ -26,8 +26,8 @@ const InterviewerSection = (props) => {
     const handleExit = () => {};
     return (
         <div>
-            <div>
-                <S.sectionWrap>
+            <S.interviewerSectionWrap>
+                <S.sectionWrap menu="viewer">
                     {section === "info" && (
                         <EssayInfoSection peopleList={peopleList} />
                     )}
@@ -39,21 +39,23 @@ const InterviewerSection = (props) => {
                     )}
                     {section === "chat" && <ChattingSection />}
                 </S.sectionWrap>
-                <S.sectionSelectTaps>
-                    <div>
-                        <S.sectionSelectTap onClick={handleInfo} menu="info">
+                <S.selectTapsWrap>
+                    <S.selectTapsHorizon>
+                        <S.tapsInterviewer onClick={handleInfo} menu="info">
                             INFO
-                        </S.sectionSelectTap>
-                        <S.sectionSelectTap onClick={handleQuest} menu="quest">
+                        </S.tapsInterviewer>
+                        <S.tapsInterviewer onClick={handleQuest} menu="quest">
                             Q.
-                        </S.sectionSelectTap>
-                        <S.sectionSelectTap onClick={handleChat} menu="chat">
+                        </S.tapsInterviewer>
+                        <S.tapsInterviewer onClick={handleChat} menu="chat">
                             CHAT
-                        </S.sectionSelectTap>
-                    </div>
-                    <S.exitRoom onClick={handleExit}>나가기</S.exitRoom>
-                </S.sectionSelectTaps>
-            </div>
+                        </S.tapsInterviewer>
+                    </S.selectTapsHorizon>
+                    <S.exitRoom menu="viewer" onClick={handleExit}>
+                        나가기
+                    </S.exitRoom>
+                </S.selectTapsWrap>
+            </S.interviewerSectionWrap>
         </div>
     );
 };

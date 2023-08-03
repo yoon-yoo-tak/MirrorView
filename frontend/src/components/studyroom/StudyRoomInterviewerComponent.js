@@ -17,14 +17,13 @@ const StudyRoomInterviewer = (props) => {
                         <S.lastVideoEach>기타 사람 3</S.lastVideoEach>
                     </S.lastVideos>
                 </S.videoSection>
-                <S.SecondSection>
+                <S.secondSection>
                     <InterviewerSection
                         peopleList={peopleList}
                         questionList={questionList}
                         setQuestionList={setQuestionList}
                     />
-                    <div>버튼들</div>
-                </S.SecondSection>
+                </S.secondSection>
             </S.interviewerWrap>
         </S.page>
     );
