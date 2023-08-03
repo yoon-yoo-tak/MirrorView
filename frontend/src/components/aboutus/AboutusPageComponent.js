@@ -1,4 +1,14 @@
-import { styled } from "styled-components";
+import { styled, css, keyframes } from "styled-components";
+
+const fadeInLeft = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
 
 export const GrayWave = styled.div`
   width: 1450%;
@@ -11,7 +21,7 @@ export const Container = styled.div`
     position: relative;
     width: 100%;
     height: 100%;
-    border: none;
+    border: none; 
     overflow: scroll;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -56,6 +66,8 @@ export const ImageWrapper1 = styled.div`
 `;
 
 export const ImageWrapper2 = styled.div`
+    opacity: ${(props) => (props.show ? 1 : 0)};
+    animation: ${(props) => (props.show ? css`${fadeInLeft} 3s ease` : "none")};
     position: absolute;
     top: 63%;
     right: 135%;
@@ -66,6 +78,8 @@ export const ImageWrapper2 = styled.div`
 `;
 
 export const ImageWrapper3 = styled.div`
+    opacity: ${(props) => (props.show ? 1 : 0)};
+    animation: ${(props) => (props.show ? css`${fadeInLeft} 3s ease` : "none")};
     position: absolute;
     top: 70%;
     right: 75.5%;
@@ -76,6 +90,8 @@ export const ImageWrapper3 = styled.div`
 `;
 
 export const ImageWrapper4 = styled.div`
+    opacity: ${(props) => (props.show ? 1 : 0)};
+    animation: ${(props) => (props.show ? css`${fadeInLeft} 3.0s ease` : "none")};
     position: absolute;
     top: 77%;
     right: 135%;
@@ -86,6 +102,8 @@ export const ImageWrapper4 = styled.div`
 `;
 
 export const ImageWrapper5 = styled.div`
+    opacity: ${(props) => (props.show ? 1 : 0)};
+    animation: ${(props) => (props.show ? css`${fadeInLeft} 3.0s ease` : "none")};
     position: absolute;
     top: 95%;
     right: 68%;
@@ -96,6 +114,8 @@ export const ImageWrapper5 = styled.div`
 `;
 
 export const ImageWrapper6 = styled.div`
+    opacity: ${(props) => (props.show ? 1 : 0)};
+    animation: ${(props) => (props.show ? css`${fadeInLeft} 3.0s ease` : "none")};
     position: absolute;
     top: 100%;
     right: 135%;
@@ -126,18 +146,21 @@ export const Content2 = styled.div`
 `;
 
 export const Content3 = styled.h2`
-  position: absolute;
-  top: 49.5%;
-  left: 20%;
-  transform: translate(-60%, -100%);
-  text-align: justify;
-  z-index:2;
-  display: inline-block;
-  white-space: nowrap;
-  color: #black;
-  font-size: 30px;
-  font-family : wooju;
-  line-height : 1.5;
+opacity: ${(props) => (props.show ? 1 : 0)};
+animation: ${(props) => (props.show ? css`${fadeInLeft} 3s ease` : "none")};
+position: absolute;
+top: 47.5%;
+left: 18%;
+transform: translate(-50%, -50%); /* 수정: 가운데 정렬 */
+text-align: justify;
+z-index: 2;
+display: inline-block;
+white-space: nowrap;
+color: black;
+font-size: 31px;
+font-family: wooju;
+line-height: 1.5;
+
 `;
 
 export const Title1 = styled.h2`
@@ -163,6 +186,8 @@ export const Comment1 = styled.h2`
 `;
 
 export const Comment2 = styled.h2`
+opacity: ${(props) => (props.show ? 1 : 0)};
+animation: ${(props) => (props.show ? css`${fadeInLeft} 3.0s ease` : "none")};
 position: absolute;
 top: 53.3%;
 left: 80.5%;
@@ -177,6 +202,8 @@ white-space: nowrap;
 `;
 
 export const Comment3 = styled.h2`
+opacity: ${(props) => (props.show ? 1 : 0)};
+animation: ${(props) => (props.show ? css`${fadeInLeft} 3.0s ease` : "none")};
 position: absolute;
 top: 73.5%;
 left: 34%;
@@ -192,6 +219,8 @@ line-height : 1.5;
 `;
 
 export const Comment4 = styled.h2`
+opacity: ${(props) => (props.show ? 1 : 0)};
+animation: ${(props) => (props.show ? css`${fadeInLeft} 3.0s ease` : "none")};
 position: absolute;
 top: 79.2%;
 left: 86%;
@@ -207,6 +236,8 @@ line-height : 1.5;
 `;
 
 export const Comment5 = styled.h2`
+opacity: ${(props) => (props.show ? 1 : 0)};
+animation: ${(props) => (props.show ? css`${fadeInLeft} 3.0s ease` : "none")};
 position: absolute;
 top: 92.5%;
 left: 31%;
