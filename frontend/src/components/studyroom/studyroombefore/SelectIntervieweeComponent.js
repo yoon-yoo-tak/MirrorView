@@ -1,13 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { useSelector } from "react-redux";
-
+import {useSelector} from "react-redux"
 import * as S from "../StudyRoomStyledComponents";
 
 const SelectInterviewee = (props) => {
     const [interviewee, setInterviewee] = useState(true);
+    const members = useSelector((state)=>state.interview.currentRoom.members);
+    const nickname = useSelector((state) => state.auth.nickname);
+    useEffect(()=>{
+        console.log(members);
 
-    // const nickname = useSelector((state) => state.auth.nickname);
-
+        const interviewee = [];
+        const interviewer = [];
+        members.forEach(member => {
+            if (member.role ==="interviewee") {
+                if(member.nickname == nickname){
+                    setInterviewee(true);
+                }   
+                interviewee.push({name:member.nickname});
+            } else {
+                if(member.nickname == nickname){
+                    setInterviewee(false);
+                }
+                interviewer.push({name:member.nickname});
+            }
+                 
+        });
+        setIntervieweeList(interviewee);
+        setInterviewerList(interviewer);
+    },[members]);
     // 더미데이터
     const [intervieweeList, setIntervieweeList] = useState([
         // 입장 시 유저의 기본값은 면접자로 설정

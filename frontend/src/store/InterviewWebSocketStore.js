@@ -14,7 +14,7 @@ const initialState = {
         nickname: "",
         ready: false,
         essays: [],
-        role: "",
+        role: "", //interviewer : 면접관 interviewee : 면접자
       },
     ],
     password: "",

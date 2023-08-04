@@ -2,15 +2,24 @@ import PrepareSection from "./studyroombefore/PrepareSectionComponent";
 import SelectInterviewee from "./studyroombefore/SelectIntervieweeComponent";
 import * as S from "./StudyRoomStyledComponents";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const StudyRoomBefore = (props) => {
-    const nickname = "오늘 홈런친 보경이";
     // 스터디룸 페이지에서 가져온 peopleList
     const { questionList, setQuestionList, peopleList, streamManager } = props;
     const [ready, setReady] = useState(false);
-
+    const memberList = useSelector((state)=>state.interview.currentRoom.members);
+    const nickname = useSelector((state)=>state.auth.user.nickname);
+    useEffect(()=>{
+        memberList.forEach(member => {
+            if (member.nickname==nickname) {
+                setReady(member.ready);
+                return;
+            }
+        });
+    },[memberList])
     const handleReady = () => {
-        setReady(true);
+        setReady(!ready);
         // 준비상태 반영 api 호출
     };
     const videoRef = React.createRef();
@@ -72,7 +81,7 @@ const StudyRoomBefore = (props) => {
                 <S.prepareSectionSecond>
                     <PrepareSection
                         username={nickname}
-                        peopleList={peopleList}
+                        peopleList={memberList}
                         questionList={questionList}
                         setQuestionList={setQuestionList}
                     />
