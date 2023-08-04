@@ -16,6 +16,7 @@ public class JoinDto {
 	private String nickname;
 	private String password;
 	private String email;
+	private String photo;
 
 	public Member toEntity() {
 		return Member.builder()
@@ -27,5 +28,18 @@ public class JoinDto {
 			.roles("ROLE_USER")
 			.delete(false)
 			.build();
+	}
+
+	public Member toEntityWithPhoto() {
+		return Member.builder()
+				.userId(userId)
+				.username(username)
+				.nickname(nickname)
+				.password(password)
+				.email(email)
+				.photo(photo)
+				.roles("ROLE_USER")
+				.delete(false)
+				.build();
 	}
 }
