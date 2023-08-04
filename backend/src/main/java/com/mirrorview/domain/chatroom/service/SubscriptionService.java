@@ -38,6 +38,12 @@ public class SubscriptionService {
 		userIdToSubscriptionMap
 			.computeIfAbsent(userId, k -> new ConcurrentHashMap<>())
 			.put(subscriptionId, roomId);
+
+		// 면접방
+		if(roomId.length() > 25)
+			return;
+
+		// 채팅
 		incrementRoomCount(userId, roomId);
 	}
 	

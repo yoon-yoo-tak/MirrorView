@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendMessage } from "store/InterviewWebSocketStore"; // 경로 수정 필요
 import {
@@ -10,6 +10,7 @@ import {
 } from "cha/StudyRoomChatStyleComponent";
 
 const StudyChatting = () => {
+  const chatWindowRef = useRef(null);
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
   const { user } = useSelector((state) => state.auth);
@@ -30,7 +31,7 @@ const StudyChatting = () => {
 
   const handleSendClick = () => {
     if (message.trim() === "") return; // 빈 메시지 무시
-  
+
     const messageToSend = {
       type: "CHAT",
       roomId: interviewRoomId,
@@ -40,20 +41,18 @@ const StudyChatting = () => {
       },
     };
 
-    console.log(messageToSend);
-
     dispatch(sendMessage(messageToSend)); // 액션 디스패치
     setMessage("");
   };
 
+  // 채팅 메시지가 변경될 때마다 스크롤을 맨 아래로 이동
   useEffect(() => {
-    console.log("컴포넌트가 마운트되었습니다.");
-    console.log(messages);
-  }, [messages]); // messages가 변경될 때마다 로그 출력
+    chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+  }, [messages]); // messages가 변경될 때마다 실행
 
   return (
     <ChatContainer>
-      <ChatWindow>
+      <ChatWindow ref={chatWindowRef}> {/* 참조 추가 */}
         {messages &&
           messages.map((msg, index) => (
             <div key={index}>
@@ -73,11 +72,11 @@ const StudyChatting = () => {
           ))}
       </ChatWindow>
       <ChatInputContainer>
-      <MessageInput
+        <MessageInput
           type="text"
           value={message}
           onChange={handleInputChange}
-          onKeyDown={handleKeyPress} 
+          onKeyDown={handleKeyPress}
         />
         <SendButton onClick={handleSendClick}>보내기</SendButton>
       </ChatInputContainer>
