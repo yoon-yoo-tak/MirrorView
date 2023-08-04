@@ -125,6 +125,14 @@ const StudyRoom = () => {
         joinSession();
     },[])
 
+    useEffect(()=>{
+      window.addEventListener('beforeunload', leaveSession);
+      return () => {
+        leaveSession();
+        window.removeEventListener('beforeunload', leaveSession);
+      };
+    },[session])
+
     const deleteIsSperker = (connectionId) => {
         let prevIsSpeakList = isSpeakList;
         let index = prevIsSpeakList.indexOf(connectionId, 0);
@@ -234,6 +242,15 @@ const StudyRoom = () => {
         connection();
 
     }
+
+    const leaveSession = () => {
+      if (!session) return;
+      session?.disconnect();
+  
+      // Empty all properties...
+      setPublisher(null);
+      setSubscribers([]);
+    };
 
   useEffect(() => {
     localStorage.setItem("questionList", JSON.stringify(questionList));

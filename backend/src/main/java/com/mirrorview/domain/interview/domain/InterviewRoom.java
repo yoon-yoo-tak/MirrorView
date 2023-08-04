@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
 import com.mirrorview.domain.essay.dto.EssayListDto;
+import com.mirrorview.domain.user.domain.Member;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,9 +39,11 @@ public class InterviewRoom {
     private boolean isStarted;
     private LocalDateTime timestamp;
 
-    public void join(String nickname, List<EssayListDto> essayList) {
+    public void join(Member member, List<EssayListDto> essayList) {
         members.add(RoomMemberInfo.builder()
-                .nickname(nickname)
+                .nickname(member.getNickname())
+                .email(member.getEmail())
+                .rating(member.getAverageRating())
                 .ready(false)
                 .essays(essayList)
                 .role("interviewee")

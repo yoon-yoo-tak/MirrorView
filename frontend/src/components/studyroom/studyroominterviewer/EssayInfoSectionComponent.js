@@ -30,7 +30,7 @@ const EssayInfoSection = ({ peopleList }) => {
                                 참여자를 클릭해 정보를 확인하세요!
                             </S.profileContent>
                         ) : (
-                            <StudyEssayDetail essay={checkEssay} />
+                            <StudyEssayDetail essays={checkEssay} />
                         )}
                     </S.contentDetail>
                 </S.contentTapWrap>

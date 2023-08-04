@@ -46,6 +46,8 @@ const initialState = {
       },
     ],
   },
+  questions:[],
+
 };
 
 export const interviewThunk = createAsyncThunk(
@@ -97,6 +99,9 @@ export const chatSlice = createSlice({
     readyStatus: (state, action) => {
       state.readyStatus = action.payload;
     },
+    addQuestion : (state, action) =>{
+      state.questions = [...state.questions, action.payload];
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(interviewThunk.fulfilled, (state, action) => {
@@ -105,7 +110,7 @@ export const chatSlice = createSlice({
   },
 });
 
-export const { sendMessage, receiveMessage, enterRoom, readyStatus } =
+export const { sendMessage, receiveMessage, enterRoom, readyStatus,addQuestion } =
   chatSlice.actions;
 export const selectMessages = (state) => state.chat.currentRoom.messages;
 

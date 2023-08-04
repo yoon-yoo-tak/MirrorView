@@ -8,16 +8,16 @@ const StudyRoomBefore = (props) => {
     // 스터디룸 페이지에서 가져온 peopleList
     const { questionList, setQuestionList, peopleList, streamManager } = props;
     const [ready, setReady] = useState(false);
-    const memberList = useSelector((state)=>state.interview.currentRoom.members);
+    const {members} = useSelector((state)=>state.interview.currentRoom);
     const nickname = useSelector((state)=>state.auth.user.nickname);
     useEffect(()=>{
-        memberList.forEach(member => {
+        members.forEach(member => {
             if (member.nickname==nickname) {
                 setReady(member.ready);
                 return;
             }
         });
-    },[memberList])
+    },[members])
     const handleReady = () => {
         setReady(!ready);
         // 준비상태 반영 api 호출
@@ -81,7 +81,7 @@ const StudyRoomBefore = (props) => {
                 <S.prepareSectionSecond>
                     <PrepareSection
                         username={nickname}
-                        peopleList={memberList}
+                        peopleList={members}
                         questionList={questionList}
                         setQuestionList={setQuestionList}
                     />

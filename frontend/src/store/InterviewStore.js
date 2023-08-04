@@ -62,6 +62,9 @@ const interviewSlice = createSlice({
     reducers:{
         setCurrentRoom:(state,action)=>{
             state.currentRoom = action.payload;
+        },
+        exitCurrentRoom:(state, action)=>{
+            state.currentRoom = null;
         }
     },
     extraReducers:{
@@ -78,7 +81,7 @@ const interviewSlice = createSlice({
     }
 });
 
-export const {setCurrentRoom,} = interviewSlice.actions;
+export const {setCurrentRoom,exitCurrentRoom} = interviewSlice.actions;
 
 export const interviewActions = interviewSlice.actions;
 
