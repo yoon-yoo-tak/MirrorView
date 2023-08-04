@@ -26,7 +26,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/mypage")
 @RequiredArgsConstructor
-@Slf4j
 public class MyPageController {
 
     private final MemberProfileService memberProfileService;
@@ -128,12 +127,12 @@ public class MyPageController {
         }
     }
 
-    @GetMapping("/essays") // 전체 자소서 목록 불러오기
-    public ResponseEntity<?> showEssays(@AuthenticationPrincipal
-                                        CustomMemberDetails member) {
-        List<EssayDto> list = essayService.findEssayByUserId(member.getUsername());
-        return BaseResponse.okWithData(HttpStatus.OK, "에세이 목록 불러오기 성공", list);
-    }
+	@GetMapping("/essays") // 전체 자소서 목록 불러오기
+	public ResponseEntity<?> showEssays(@AuthenticationPrincipal
+	        CustomMemberDetails member) {
+		List<EssayDto> list = essayService.findEssayByUserId(member.getUsername());
+		return BaseResponse.okWithData(HttpStatus.OK, "에세이 목록 불러오기 성공", list);
+	}
 
     @GetMapping("/essays/{essay-id}")  // 자소서 상세 보기
     public ResponseEntity<?> detailEssays(@PathVariable("essay-id") Long essayId) {
