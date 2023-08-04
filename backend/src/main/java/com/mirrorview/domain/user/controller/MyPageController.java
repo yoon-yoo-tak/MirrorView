@@ -7,6 +7,7 @@ import com.mirrorview.domain.essay.dto.EssayUpdateDto;
 import com.mirrorview.domain.essay.service.EssayDetailService;
 import com.mirrorview.domain.essay.service.EssayService;
 import com.mirrorview.domain.feedback.dto.FeedbackDto;
+import com.mirrorview.domain.feedback.dto.FeedbackListDto;
 import com.mirrorview.domain.feedback.dto.FeedbackSaveDto;
 import com.mirrorview.domain.feedback.service.FeedbackService;
 import com.mirrorview.domain.user.dto.ChangePasswordDto;
@@ -15,7 +16,7 @@ import com.mirrorview.domain.user.service.MemberProfileService;
 import com.mirrorview.global.auth.security.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -67,46 +68,76 @@ public class MyPageController {
         }
         return BaseResponse.ok(HttpStatus.OK, "닉네임 변경 완료");
     }
-
-    @PostMapping("/feedbacks/save")
-    public ResponseEntity<?> saveFeedback(@RequestBody FeedbackSaveDto dto) {
+    @PostMapping("/feedbacks/save") // 피드백 저장하기
+    public ResponseEntity<?> saveFeedback(@RequestBody FeedbackSaveDto dto, @AuthenticationPrincipal CustomMemberDetails member){
         try {
-            feedbackService.saveFeedback(dto);
+            feedbackService.saveFeedback(dto, member.getUsername());
             return BaseResponse.ok(HttpStatus.OK, "피드백 저장 성공");
-        } catch (Exception e) {
-            return BaseResponse.fail("피드백 저장 실패", 401);
+        }catch (Exception e){
+            return BaseResponse.fail(e.getMessage(), 400);
         }
-
     }
 
-    @GetMapping("/feedbacks/{roomId}")
-    public ResponseEntity<?> showFeedbacks(@PathVariable("roomId") Long roomId) {
+    @GetMapping("/feedbacks") // 전체 피드백 목록
+    public ResponseEntity<?> getFeedbackList(@AuthenticationPrincipal CustomMemberDetails member){
+        List<FeedbackListDto> list = feedbackService.findFeedbackByUserId(member.getUsername());
+        return BaseResponse.okWithData(HttpStatus.OK, "전체 피드백 목록 조회 성공", list);
+    }
+
+    @GetMapping("/feedbacks/{roomId}") // 피드백 방마다 피드백들
+    public ResponseEntity<?> getFeedback(@PathVariable("roomId") Long roomId){
         List<FeedbackDto> list = feedbackService.findFeedbackByRoomId(roomId);
-        return BaseResponse.okWithData(HttpStatus.OK, "방별 피드백 불러오기 성공", list);
+        return BaseResponse.okWithData(HttpStatus.OK, "피드백 조회 성공", list);
     }
 
-    @DeleteMapping("/feedbacks/feedback/{feedbackId}")
-    public ResponseEntity<?> deleteFeedbacks(@PathVariable("feedbackId") Long feedbackId) {
-        try {
-            feedbackService.deleteFeedbackByFeedbackId(feedbackId);
-            return BaseResponse.ok(HttpStatus.OK, "피드백 삭제 성공");
-        } catch (Exception e) {  // 추후 예외처리 수정
-            return BaseResponse.fail("피드백 삭제 실패", 400);
+    @DeleteMapping("/feedbacks/{roomId}")
+    public ResponseEntity<?> deleteFeedback(@PathVariable("roomId") Long roomId){
+        try{
+            feedbackService.deleteByRoomId(roomId);
+            return BaseResponse.ok(HttpStatus.OK, "삭제 성공");
+        }catch (Exception e){
+            return BaseResponse.fail("삭제 실패", 400);
         }
-
     }
 
-    @GetMapping("/feedbacks/feedback/{feedbackId}")
-    public ResponseEntity<?> detailFeedback(@PathVariable("feedbackId") Long feedbackId) {
-        FeedbackDto data = feedbackService.findFeedbackByFeedbackId(feedbackId);
-        return BaseResponse.okWithData(HttpStatus.OK, "피드백 단건 조회 성공", data);
-    }
-
-    @GetMapping("/feedbacks")
-    public ResponseEntity<?> listFeedbacks(@AuthenticationPrincipal CustomMemberDetails member) {
-        List<FeedbackDto> list = feedbackService.findFeedbackByUserId(member.getUsername());
-        return BaseResponse.okWithData(HttpStatus.OK, "피드백 불러오기 성공", list);
-    }
+    // @PostMapping("/feedbacks/save")
+    // public ResponseEntity<?> saveFeedback(@RequestBody FeedbackSaveDto dto) {
+    //     try {
+    //         feedbackService.saveFeedback(dto);
+    //         return BaseResponse.ok(HttpStatus.OK, "피드백 저장 성공");
+    //     } catch (Exception e) {
+    //         return BaseResponse.fail("피드백 저장 실패", 401);
+    //     }
+    // }
+    //
+    // @GetMapping("/feedbacks/{roomId}")
+    // public ResponseEntity<?> showFeedbacks(@PathVariable("roomId") Long roomId) {
+    //     List<FeedbackDto> list = feedbackService.findFeedbackByRoomId(roomId);
+    //     return BaseResponse.okWithData(HttpStatus.OK, "방별 피드백 불러오기 성공", list);
+    // }
+    //
+    // @DeleteMapping("/feedbacks/feedback/{feedbackId}")
+    // public ResponseEntity<?> deleteFeedbacks(@PathVariable("feedbackId") Long feedbackId) {
+    //     try {
+    //         feedbackService.deleteFeedbackByFeedbackId(feedbackId);
+    //         return BaseResponse.ok(HttpStatus.OK, "피드백 삭제 성공");
+    //     } catch (Exception e) {  // 추후 예외처리 수정
+    //         return BaseResponse.fail("피드백 삭제 실패", 400);
+    //     }
+    //
+    // }
+    //
+    // @GetMapping("/feedbacks/feedback/{feedbackId}")
+    // public ResponseEntity<?> detailFeedback(@PathVariable("feedbackId") Long feedbackId) {
+    //     FeedbackDto data = feedbackService.findFeedbackByFeedbackId(feedbackId);
+    //     return BaseResponse.okWithData(HttpStatus.OK, "피드백 단건 조회 성공", data);
+    // }
+    //
+    // @GetMapping("/feedbacks")
+    // public ResponseEntity<?> listFeedbacks(@AuthenticationPrincipal CustomMemberDetails member) {
+    //     List<FeedbackDto> list = feedbackService.findFeedbackByUserId(member.getUsername());
+    //     return BaseResponse.okWithData(HttpStatus.OK, "피드백 불러오기 성공", list);
+    // }
 
     @PutMapping("/essays") // 자소서안의 문항들 수정/삭제와 같은 자소서 문항에 대한 변경
     public ResponseEntity<?> updateEssays(@RequestBody EssayUpdateDto essays, @AuthenticationPrincipal
