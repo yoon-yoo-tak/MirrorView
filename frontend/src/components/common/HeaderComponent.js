@@ -47,9 +47,9 @@ const Header = () => {
 };
 
 const Logo = styled.div`
-  width: 300px;
-  height: 100px;
-  margin-top: 10px;
+  width: 18.75rem;
+  height: 6.25rem;
+  margin-top: 0.625rem;
   margin-left: 3rem;
   background-image: url(${process.env.PUBLIC_URL}/mirlogo.png);
   background-size: contain;
@@ -61,7 +61,7 @@ const Nav = styled.nav`
   display: flex;
   align-items: center;
   padding: 0.5rem;
-  background-color: #white;
+  background-color: white;
 `;
 
 const NavMenu = styled.ul`
@@ -73,6 +73,7 @@ const NavMenu = styled.ul`
 
 const NavItem = styled.li`
   margin-right: auto;
+//   margin-right : 80px;
   margin-left: 5rem;
   cursor: pointer;
 `;
