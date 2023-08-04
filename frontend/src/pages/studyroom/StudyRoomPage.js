@@ -7,10 +7,9 @@ import { useState, useEffect } from "react";
 import StudyRoomInterviewer from "../../components/studyroom/StudyRoomInterviewerComponent";
 import { useLocation } from "react-router";
 import { OpenVidu } from "openvidu-browser";
-import { async } from "q";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { MS } from "stylis";
+
 
 const StudyRoom = () => {
     // 참가자 더미데이터 (자신 제외)
@@ -58,15 +57,54 @@ const StudyRoom = () => {
             ],
         },
     ];
+
+    const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8000/';
     const {user} = useSelector((state)=>state.auth);
     const [questionList, setQuestionList] = useState([]);
     const [OV, setOV] = useState(null);
-    const [session, setSession] = useState("");
+
+    const [OVForScreenSharing, setOVForScreenSharing] = useState();
+    const [sessionForScreenSharing, setSessionForScreenSharing] = useState();
+
+    const [session, setSession] = useState(null);
+
     const [mySession, setMySession] = useState("");
-    const [subscribers, setSubscribers] = useState([]);
     const [currentVideoDevice,setCurrentVideoDevice] = useState(null);
-    const [mainStreamManager, setMainStreamManger] = useState(null);
-    const [publisher, setPublisher] = useState(null);
+    const [mainStreamManager, setMainStreamManager] = useState(null);
+
+  const [initScreenData, setInitScreenData] = useState({
+    mySessionId: mySession+ '_screen',
+    myScreenName: user.nickname + '님의 화면',
+  });
+
+
+  const [publisher, setPublisher] = useState(null);
+  const [subscribers, setSubscribers] = useState([]);
+  const [isSpeakList, setIsSpeakList] = useState([]);
+  const [publisherForScreenSharing, setPublisherForScreenSharing] = useState(null);
+
+  const [isAudioOn, setIsAudioOn] = useState(true);
+  const [isVideoOn, setIsVideoOn] = useState(true);
+
+  const [doScreenSharing, setDoScreenSharing] = useState(false);
+  const [doStartScreenSharing, setDoStartScreenSharing] =
+    useState(false);
+  const [doStopScreenSharing, setDoStopScreenSharing] =
+    useState(false);
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
+  const [doPauseScreenSharing, setDoPauseScreenSharing] =
+    useState(false);
+  const [checkMyScreen, setCheckMyScreen] = useState(false);
+  const [destroyedStream, setDestroyedStream] = useState(
+    null
+  );
+
+  const [choiceScreen, setChoiceScreen] = useState('');
+  const [openScreenModal, setOpenScreenModal] = useState(false);
+  const [isHideCam, setIsHideCam] = useState(false);
+
+
+    
     useEffect(() => {
         const storedList = localStorage.getItem("questionList");
         if (storedList) {
@@ -74,66 +112,119 @@ const StudyRoom = () => {
         }
     }, []);
     const {pathname} = useLocation();
+    
     useEffect(() =>{
         setMySession(pathname.substring(11));
         joinSession();
     },[])
 
+    const deleteIsSperker = (connectionId) => {
+        let prevIsSpeakList = isSpeakList;
+        let index = prevIsSpeakList.indexOf(connectionId, 0);
+        if (index > -1) {
+          prevIsSpeakList.splice(index, 1);
+          setIsSpeakList([...prevIsSpeakList]);
+        }
+      };
+
+    
     const joinSession = () =>{
-        setOV(new OpenVidu());
-        setSession(OV.initSession())
-        .then(()=>{
-            const ms = session;
+        const newOpenVidu = new OpenVidu();
+        newOpenVidu.enableProdMode();
+        const newSession = newOpenVidu.initSession();
+        
+        setOV(newOpenVidu);
+        setSession(newSession);
 
-            ms.on('streamCreated', (event)=>{
-                var subscriber = ms.subscribe(event.strea,undefined);
-                var subs = subscribers;
-                subs.push(subscriber);
+        const connection = () =>{
+            
+            newSession.on('streamCreated', (event) => {
+                const newSubscriber = newSession.subscribe(
+                  event.stream,
+                  JSON.parse(event.stream.connection.data).clientData
+                );
+                if (newSubscriber.stream.typeOfVideo === 'CUSTOM') {
+                  const newSubscribers = subscribers;
+                  newSubscribers.push(newSubscriber);
+        
+                  setSubscribers([...newSubscribers]);
+                } else {
+                  // 비디오인 경우 화면 공유 스트림
+                  setMainStreamManager(newSubscriber);
+                  setIsScreenSharing(true);
+                  setDoPauseScreenSharing(true);
+                }
+              });
+        
+              newSession.on('streamDestroyed', (event) => {
+                if (event.stream.typeOfVideo === 'CUSTOM') {
+                  deleteSubscriber(event.stream.streamManager);
+                } else {
+                  setDestroyedStream(event.stream.streamManager);
+                  setCheckMyScreen(true);
+                }
+              });
+        
+              newSession.on('publisherStartSpeaking', (event) => {
+                const newIsSpeakList = isSpeakList;
+                newIsSpeakList.push(event.connection.connectionId);
+                setIsSpeakList([...newIsSpeakList]);
+              });
+        
+              newSession.on('publisherStopSpeaking', (event) => {
+                deleteIsSperker(event.connection.connectionId);
+              });
 
-                setSubscribers(subs);
-            });
-
-            ms.on('streamDestroyed',(event)=>{
-
-                deleteSubscriber(event.stream.streamManger);
-            });
-
-            ms.on('exception', (exception)=>{
+              
+        
+              // newSession.on('sessionDisconnected', (event) => {
+              //   console.log(event);
+              // });
+        
+              newSession.on('exception', (exception) => {
                 console.warn(exception);
-            });
+              });
 
             getToken().then((token)=>{
-                ms.connect(token, {clientData:user.nickname})
+                newSession.connect(token, {clientData:user.nickname})
                 .then(async () =>{
-                    let pub = await OV.initPublisherAsync(undefined,{
-                        audioSource: undefined, // The source of audio. If undefined default microphone
-                        videoSource: undefined, // The source of video. If undefined default webcam
-                        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-                        publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                        resolution: '640x480', // The resolution of your video
-                        frameRate: 30, // The frame rate of your video
-                        insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-                        mirror: false, // Whether to mirror your local video or not
+                    await newOpenVidu.getUserMedia({
+                        audioSource: false,
+                        videoSource: undefined,
+                        resolution: '330x180',
+                        frameRate: 10,
+                    })
+                    .then((mediaStream)=>{
+                        var videoTrack = mediaStream.getVideoTracks()[0];
+
+                        var newPublisher = newOpenVidu.initPublisher(
+                            user.nickname,
+                            {
+                                audioSource: undefined,
+                                videoSource: videoTrack,
+                                publishAudio: isAudioOn,
+                                publishVideo: isVideoOn,
+                                // resolution: '1280x720',
+                                // frameRate: 10,
+                                insertMode: 'APPEND',
+                                mirror: true,
+                            }
+                        );
+
+                        newPublisher.once('accessAllowed',()=>{
+                            newSession.publish(newPublisher);
+                            setPublisher(newPublisher);
+                            console.log(newPublisher);
+                        });
+                    }).catch((error)=>{
+                        console.log(error);
                     });
-
-                    ms.publish(pub);
-
-                    var devices = await OV.getDevices();
-                    var videoDevices = devices.filter(device => device.kind === 'videoinput');
-                    var currentVideoDeviceId = publisher.stream.getMediaStream().getVideoTracks()[0].getSettings().deviceId;
-                    var cvd = videoDevices.find(device => device.deviceId === currentVideoDeviceId);
-
-                    setCurrentVideoDevice(cvd);
-                    setMainStreamManger(pub);
-                    setPublisher(pub);
-
-                })
-                .catch((error)=>{
-                    console.log(error.code, error.message);
                 });
             });
-        },
-        );
+
+            
+        };
+        connection();
 
     }
 
@@ -151,19 +242,20 @@ const StudyRoom = () => {
     }
 
     const getToken = async() => {
-        const sId = await createSession(mySession);
-        return await createToken(sId);
+        return createSession(mySession).then((sId)=>
+        createToken(sId)
+        );
     };
 
     const createSession = async(sessionId) => {
-        const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/sessions`,{customSessionId : sessionId},{
+        const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions`,{customSessionId : sessionId},{
             headers : {'Content-Type':'application/json',},
         });
         return response.data;
     };
 
     const createToken = async(sessionId) => {
-        const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/sessions/${sessionId}/connections`,{},{
+        const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions/${sessionId}/connections`,{},{
             headers: {'Content-Type':'application/json',},
         });
         return response.data;

@@ -1,6 +1,7 @@
 server:
   port: 8000
-
+  ssl:
+    enabled: false
 spring:
   profiles:
     active: secret
@@ -23,3 +24,5 @@ springfox:
   documentation:
     swagger:
       use-model-v3: false
+
+

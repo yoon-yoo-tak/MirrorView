@@ -16,18 +16,18 @@ const StudyRoomBefore = (props) => {
     const videoRef = React.createRef();
 
     useEffect(()=>{
-        componentDidUpdate(props);
+        componentDidUpdate();
         componentDidMount();
-    },[])
+    },[streamManager])
 
-    const componentDidUpdate =(props) => {
-        if (props && !!videoRef) {
+    const componentDidUpdate =() => {
+        if (streamManager && !!videoRef) {
             streamManager.addVideoElement(videoRef.current);
         }
     }
 
     const componentDidMount = () =>{
-        if (props && !!videoRef) {
+        if (streamManager && !!videoRef) {
             streamManager.addVideoElement(videoRef.current);
         }
     }
