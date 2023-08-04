@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 import store,{persistor} from "./store/IndexStore";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
-
+import register from "RegisterServiceWorker";
 const rootElement = document.getElementById("root");
 
 ReactDOM.createRoot(rootElement).render(
@@ -23,3 +23,4 @@ ReactDOM.createRoot(rootElement).render(
         </BrowserRouter>
     // </React.StrictMode>
 );
+register();
