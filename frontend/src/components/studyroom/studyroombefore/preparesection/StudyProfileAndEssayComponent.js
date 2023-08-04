@@ -21,14 +21,15 @@ const StudyProfileAndEssay = ({ peopleList }) => {
         setTap("essay");
     };
 
-    const handleCheckWho = (name) => {
-        const target = peopleList.find((person) => person.name === name);
+    const handleCheckWho = (index) => {
+        const target = peopleList[index];
+        console.log(target);
         setCheckProfile({
-            name: target.name,
-            rate: target.rate,
+            name: target.nickname,
+            // rate: target.rate,
             email: target.email,
         });
-        setCheckEssay(target.essay);
+        // setCheckEssay(target.essay);
     };
 
     return (
@@ -41,9 +42,9 @@ const StudyProfileAndEssay = ({ peopleList }) => {
                         <div>
                             {peopleList.map((people, index) => (
                                 <S.peopleName
-                                    onClick={() => handleCheckWho(people.name)}
+                                    onClick={() => handleCheckWho(index)}
                                 >
-                                    {people.name}
+                                    {people.nickname}
                                 </S.peopleName>
                             ))}
                         </div>
