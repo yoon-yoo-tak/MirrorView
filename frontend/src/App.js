@@ -22,7 +22,7 @@ import PrivateChatRoom from "pages/sidebar/ChatRoom";
 import KakaoLoginRedirectPage from "pages/user/KakaoLoginRedirectPage";
 
 // axios 전역 설정
-import axios from 'axios';
+import axios from "axios";
 axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const App = () => {
@@ -45,11 +45,10 @@ const App = () => {
         <Route path="/studylist" element={<StudyRoomList />} />
         <Route path="/noticewritepage" element={<NoticeWritePage />} />
         <Route path="/studyroom/:id" element={<StudyRoom />} />
-        <Route path="/login/kakao/code" element={<KakaoLoginRedirectPage/>} />
+        <Route path="/login/kakao/code" element={<KakaoLoginRedirectPage />} />
       </Routes>
       <Footer></Footer>
     </div>
-    
   );
 };
 

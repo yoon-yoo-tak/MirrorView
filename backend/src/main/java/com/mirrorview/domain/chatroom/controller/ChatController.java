@@ -8,7 +8,9 @@ import java.util.Map;
 
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mirrorview.domain.chatroom.domain.ChatMessage;
@@ -63,12 +65,11 @@ public class ChatController {
 		simpMessagingTemplate.convertAndSend("/sub/chatrooms.create", newChatRoom);
 	}
 
-	@MessageMapping("/count")
-	public void countUsers(){
-		long userCount = chatService.totalUserCount();
-		Map<String, Long> response = new HashMap<>();
-		response.put("userCount", userCount);
-		simpMessagingTemplate.convertAndSend("/sub/count", response);
-	}
-
+	// @MessageMapping("/count")
+	// public void countUsers(){
+	// 	long userCount = chatService.totalUserCount();
+	// 	Map<String, Long> response = new HashMap<>();
+	// 	response.put("userCount", userCount);
+	// 	simpMessagingTemplate.convertAndSend("/sub/count", response);
+	// }
 }

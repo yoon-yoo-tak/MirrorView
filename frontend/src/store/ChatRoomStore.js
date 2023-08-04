@@ -18,7 +18,7 @@ export const createChatRoomAsync = createAsyncThunk(
       id: title,
       users: [],
       messages: [],
-      count : 0
+      count: 0,
     };
     await client.send("/app/chatrooms.create", {}, JSON.stringify(roomOjb));
     return roomOjb;

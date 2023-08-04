@@ -63,6 +63,7 @@ public class InterviewController {
     @PostMapping("join/{roomId}")
     public ResponseEntity<?> joinRoom(@AuthenticationPrincipal CustomMemberDetails member,
                                       @PathVariable String roomId) {
+        log.info("db 가져오기");
         String nickname = member.getNickname();
         InterviewRoom interview;
         try {
@@ -71,19 +72,6 @@ public class InterviewController {
             return BaseResponse.fail(e.getMessage(), 400);
         }
         return BaseResponse.okWithData(HttpStatus.OK, "조인 완료", interview);
-    }
-
-    // ready
-    @MessageMapping("ready/{roomId}")
-    @SendTo("/sub/ready/{roomId}")
-    public ResponseEntity<?> changeReady(@DestinationVariable String roomId, RoomMemberInfo memberInfo) {
-        //todo 저장하기
-        Optional<InterviewRoom> room = interviewService.findRoomById(roomId);
-        if (room.isEmpty()) {
-            return BaseResponse.fail("방정보 없음", 400);
-        }
-        interviewService.changeReady(memberInfo, room.get());
-        return BaseResponse.okWithData(HttpStatus.OK, "레디 변경", memberInfo);
     }
 
     @GetMapping("/rooms/{category}")
