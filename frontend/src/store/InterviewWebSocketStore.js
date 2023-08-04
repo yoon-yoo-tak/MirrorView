@@ -58,7 +58,7 @@ export const interviewThunk = createAsyncThunk(
           console.log("메시지 수신")
           dispatch(receiveMessage(parsedMessage));
           break;
-        case "ENTER_ROOM":
+        case "JOIN":
           dispatch(enterRoom(parsedMessage));
           break;
         case "READY_STATUS":
@@ -88,7 +88,11 @@ export const chatSlice = createSlice({
       state.currentRoom.messages.push(action.payload);
     },
     enterRoom: (state, action) => {
-      state.roomStatus = action.payload;
+      state.currentRoom.members.push(action.payload);
+    },
+    exitRoom:(state, action) => {
+      const userId = action.payload.userId;
+      state.currentRoom.members.filter(member => member.id !== userId);
     },
     readyStatus: (state, action) => {
       state.readyStatus = action.payload;

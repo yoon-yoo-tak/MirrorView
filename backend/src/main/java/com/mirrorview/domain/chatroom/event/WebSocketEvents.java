@@ -58,6 +58,13 @@ public class WebSocketEvents {
 			String roomId = channel.split("/")[3];  // URL에서 roomId 추출
 			subscriptionService.handleSubscribe(userId,  subscriptionId, roomId);
 		}
+
+		if(channel.startsWith("/sub/interviewrooms/")){
+			log.info("면접방 입장 {}", userId );
+			String roomId = channel.split("/")[3];  // URL에서 interview room id 추출
+			subscriptionService.handleSubscribe(userId,  subscriptionId, roomId);
+		}
+
 	}
 
 	@EventListener
