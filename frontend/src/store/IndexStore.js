@@ -8,8 +8,9 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "./AuthStore";
 import chatRoomReducer from "store/ChatRoomStore";
 import chatViewReducer from "store/ChatViewStore";
-import webSocket from "store/WebSocketStore";
+import WebSocketStoreReducer from "store/WebSocketStore";
 import interviewReducer from "./InterviewStore";
+import interviewWebSocketStore from "store/InterviewWebSocketStore";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
@@ -20,13 +21,14 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  webSocket,
+  webSocket: WebSocketStoreReducer,
   chatRoom: chatRoomReducer,
   chatView: chatViewReducer,
   interview: interviewReducer,
+  interviewWebSocket: interviewWebSocketStore,
 });
 
-const persistedReducer =  persistReducer(persistConfig,rootReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persistedReducer,

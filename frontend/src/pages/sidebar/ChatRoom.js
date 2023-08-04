@@ -33,12 +33,16 @@ function ChatRoom() {
   // 이전 채팅
   const getPreviousChats = () => {
     const client = getClient();
+    if (client == null) return;
+
     client.send(`/app/chatrooms/${roomId}`);
   };
 
   // 채팅 보내기
   const sendMessage = () => {
     const client = getClient();
+    if (client == null) return;
+
     client.send(
       `/app/chatrooms.send/${roomId}`,
       {},
@@ -49,8 +53,8 @@ function ChatRoom() {
 
   useEffect(() => {
     getPreviousChats();
-
     const client = getClient();
+    if (client == null) return;
     console.log("선택방 ", roomId);
     const historySubscription = client.subscribe(
       `/user/sub/chatrooms/${roomId}`, // 이전 채팅 기록을 가져오는 엔드포인트
@@ -103,8 +107,7 @@ function ChatRoom() {
           <div className="chat-message-container" key={index}>
             <p
               className="chat-user-id"
-              style={{ color: getUserIdColor(chatMessage.userId) }}
-            >
+              style={{ color: getUserIdColor(chatMessage.userId) }}>
               <strong>{chatMessage.userId}</strong>
             </p>
             <p className="chat-message">{chatMessage.message}</p>

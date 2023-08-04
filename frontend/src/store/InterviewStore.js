@@ -71,6 +71,7 @@ const interviewSlice = createSlice({
             state.room = payload.data;
         },
         [joinInterviewRoom.fulfilled]:(state,{payload}) =>{
+            console.log("get11", payload.data);
             state.currentRoom = payload.data;
         }
     }

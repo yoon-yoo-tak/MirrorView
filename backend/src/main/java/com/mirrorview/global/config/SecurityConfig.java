@@ -58,7 +58,7 @@ public class SecurityConfig {
 			.antMatchers("/api/users/login").permitAll() //로그인
 			.antMatchers("/kauth.kakao.com/oauth/authorize/**").permitAll() //로그인
 			.antMatchers("/api/users/**").permitAll() //회원 가입
-			.antMatchers("/ws/**").permitAll()
+			.antMatchers("/api/ws/**").permitAll()
 			.anyRequest().authenticated();
 
 		http
