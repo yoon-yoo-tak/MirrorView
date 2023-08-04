@@ -39,11 +39,14 @@ public class MemberServiceImpl implements MemberService {
             throw new IllegalArgumentException("아이디 확인이 필요합니다.");
         }
 
-        if (joinDto.getPassword() != null) {
+        Member joinMember;
+        if (joinDto.getPassword() != null) { //일반 로그인
             String encoded = passwordEncoder.encode(joinDto.getPassword());
             joinDto.setPassword(encoded);
+            joinMember = joinDto.toEntity();
+        } else { //OAuth 로그인
+            joinMember = joinDto.toEntityWithPhoto();
         }
-        Member joinMember = joinDto.toEntity();
 
         memberRepository.save(joinMember);
     }
