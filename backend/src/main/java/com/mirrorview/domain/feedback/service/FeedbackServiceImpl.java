@@ -8,7 +8,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.mirrorview.domain.essay.repository.EssayDetailRepository;
 import com.mirrorview.domain.feedback.domain.Feedback;
 import com.mirrorview.domain.feedback.dto.FeedbackDto;
 import com.mirrorview.domain.feedback.dto.FeedbackListDto;
@@ -36,25 +35,19 @@ public class FeedbackServiceImpl implements FeedbackService {
 			.collect(Collectors.toList())).orElse(null);
 	}
 
-	//
-	// @Override
-	// public FeedbackDto findFeedbackByFeedbackId(Long feedbackId) {
-	// 	return feedbackRepository.findFeedbackByFeedbackId(feedbackId);
-	// }
-	//
-	//
 	@Override
 	public void saveFeedback(FeedbackSaveDto dto, String senderId) {
-		Optional<Member> member = memberRepository.findByUserId(dto.getReader());
+		Optional<Member> member = memberRepository.findByUserId(dto.getReceiver());
 		Optional<Member> sender = memberRepository.findByUserId(senderId);
-		if(member.isPresent() && sender.isPresent()){
+		if (member.isPresent() && sender.isPresent()) {
 			feedbackRepository.save(Feedback.builder()
-					.roomId(dto.getRoomId())
-					.receiver(member.get())
-					.content(dto.getContent())
-					.sender(sender.get())
+				.roomId(dto.getRoomId())
+				.receiver(member.get())
+				.content(dto.getContent())
+				.roomTitle(dto.getRoomTitle())
+				.sender(sender.get())
 				.build());
-		}else{
+		} else {
 			throw new IllegalArgumentException("존재하지않는 사용자 입니다.");
 		}
 	}
