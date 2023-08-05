@@ -20,12 +20,21 @@ public class RoomMemberInfo {
     private boolean ready;
     private List<EssayListDto> essays = new ArrayList<>();
     private String role;
+    private float rating;
 
 	public boolean sameNickname(String nickname) {
 		return nickname.equals(this.nickname);
 	}
 
-	public void changeReady() {
-		ready = !ready;
-	}
+    public void changeReady() {
+        ready = !ready;
+    }
+
+    public void changeRole(){
+        if (role.equals("INTERVIEWEE")) {
+            role = "INTERVIEWER";
+        } else if (role.equals("INTERVIEWER")) {
+            role = "INTERVIEWEE";
+        }
+    }
 }

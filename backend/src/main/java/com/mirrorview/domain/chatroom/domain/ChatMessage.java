@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 public class ChatMessage {
-    private String userId;
+    private String userNickname;
     private String message;
     private LocalDateTime timestamp;
 }

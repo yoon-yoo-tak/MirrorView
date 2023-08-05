@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { MdArrowBack } from "react-icons/md";
 import { getClient } from "store/WebSocketStore";
-
+import { subscribeRoomCountAsync } from "store/ChatRoomStore";
 import "pages/sidebar/css/ChatRoom.css";
 
-function getUserIdColor(userId) {
+// 닉네임에 색주기
+function getNicknameColor(userNickname) {
   let hash = 0;
-  for (let i = 0; i < userId.length; i++) {
-    hash = userId.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < userNickname.length; i++) {
+    hash = userNickname.charCodeAt(i) + ((hash << 5) - hash);
   }
 
   const c = (hash & 0x00ffffff).toString(16).toUpperCase();
@@ -16,6 +17,7 @@ function getUserIdColor(userId) {
 }
 
 function ChatRoom() {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const roomId = useSelector((state) => state.chatRoom.selectedRoom);
 
@@ -46,7 +48,7 @@ function ChatRoom() {
     client.send(
       `/app/chatrooms.send/${roomId}`,
       {},
-      JSON.stringify({ userId: user.nickname, message })
+      JSON.stringify({ userNickname: user.nickname, message })
     );
     setMessage("");
   };
@@ -107,8 +109,8 @@ function ChatRoom() {
           <div className="chat-message-container" key={index}>
             <p
               className="chat-user-id"
-              style={{ color: getUserIdColor(chatMessage.userId) }}>
-              <strong>{chatMessage.userId}</strong>
+              style={{ color: getNicknameColor(chatMessage.userNickname) }}>
+              <strong>{chatMessage.userNickname}</strong>
             </p>
             <p className="chat-message">{chatMessage.message}</p>
             <span className="chat-time">

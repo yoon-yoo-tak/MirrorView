@@ -22,5 +22,11 @@ public interface InterviewService {
     Optional<InterviewRoom> findRoomById(String roomId);
 
     List<RoomResponseDto> findRoomByCategory(String category);
+
+    RoomMemberInfo toggleReadyStatus(String roomId, String userNickname);
+
+    RoomMemberInfo toggleRoleStatus(String roomId, String username);
+
+    void systemMessage(String userId, String roomId, String suffix);
 }
 

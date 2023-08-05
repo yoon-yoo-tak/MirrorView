@@ -8,75 +8,75 @@ import { useDispatch, useSelector } from "react-redux";
 import { getInterviewRoom } from "../../store/InterviewStore";
 
 const StudyRoomList = () => {
-    // 데이터
-    const dispatch = useDispatch();
-    const {room} = useSelector((state)=>state.interview);
-    useEffect(()=>{
-        dispatch(getInterviewRoom())
-    },[])
+  // 데이터
+  const dispatch = useDispatch();
+  const { room } = useSelector((state) => state.interview);
+  useEffect(() => {
+    dispatch(getInterviewRoom());
+  }, []);
 
-    const roomInfo = [
-        {
-            id: 1,
-            title: "방 제목이지롱 1",
-            host: "김싸피",
-            maxPerson: 6,
-            nowPerson: 3,
-        },
-        {
-            id: 2,
-            title: "방 제목이지롱 2",
-            host: "박싸피",
-            maxPerson: 5,
-            nowPerson: 4,
-        },
-        {
-            id: 3,
-            title: "방 제목이지롱 3",
-            host: "윤해밍",
-            maxPerson: 4,
-            nowPerson: 3,
-        },
-        {
-            id: 4,
-            title: "방 제목이지롱 4",
-            host: "에베베",
-            maxPerson: 7,
-            nowPerson: 5,
-        },
-    ];
+  const roomInfo = [
+    {
+      id: 1,
+      title: "방 제목이지롱 1",
+      host: "김싸피",
+      maxPerson: 6,
+      nowPerson: 3,
+    },
+    {
+      id: 2,
+      title: "방 제목이지롱 2",
+      host: "박싸피",
+      maxPerson: 5,
+      nowPerson: 4,
+    },
+    {
+      id: 3,
+      title: "방 제목이지롱 3",
+      host: "윤해밍",
+      maxPerson: 4,
+      nowPerson: 3,
+    },
+    {
+      id: 4,
+      title: "방 제목이지롱 4",
+      host: "에베베",
+      maxPerson: 7,
+      nowPerson: 5,
+    },
+  ];
 
-    const [modalStates, setModalStates] = useState(false);
+  const [modalStates, setModalStates] = useState(false);
 
-    const handleModal = () => {
-        setModalStates(true);
-    };
+  const handleModal = () => {
+    setModalStates(true);
+  };
 
-    const handleModalClose = () => {
-        setModalStates(false);
-    };
+  const handleModalClose = () => {
+    setModalStates(false);
+  };
 
-    return (
-        <div>
-            <S.page>
-                <S.studylistContainer>
-                    <S.studylistTop>
-                        <S.studyNowText>현재 진행중인 스터디</S.studyNowText>
-                        <StudyRoomCategory />
-                    </S.studylistTop>
-                    <S.studylistMain>
-                        {room.map((props, index) => (
-                            <StudyRoomThumbnail key={index} {...props} />
-                        ))}
-                    </S.studylistMain>
-                </S.studylistContainer>
-            </S.page>
-            <S.createRoomButton onClick={handleModal}></S.createRoomButton>
-            {modalStates && (
-                <StudyRoomCreateModal setModalStates={handleModalClose} />
-            )}
-        </div>
-    );
+  return (
+    <div>
+      <S.page>
+        <S.studylistContainer>
+          <S.studylistTop>
+            <S.studyNowText>현재 진행중인 스터디</S.studyNowText>
+            <StudyRoomCategory />
+          </S.studylistTop>
+          <S.studylistMain>
+            {room.map((props, index) => (
+              <StudyRoomThumbnail key={index} {...props} />
+            ))}
+          </S.studylistMain>
+        </S.studylistContainer>
+      </S.page>
+      <S.createRoomButton onClick={handleModal}></S.createRoomButton>
+      {modalStates && (
+        <StudyRoomCreateModal setModalStates={handleModalClose} />
+      )}
+    </div>
+  );
 };
 
 export default StudyRoomList;

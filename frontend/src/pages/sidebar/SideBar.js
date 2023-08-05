@@ -9,8 +9,15 @@ import ChatList from "pages/sidebar/ChatList";
 import ChatRoom from "pages/sidebar/ChatRoom";
 
 import { useDispatch } from "react-redux"; // <-- useDispatch 불러오기
-import { initializeWebSocket, closeWebSocket, getClient, subscribeUserCount, subscribeChatRoomCreate, subscribeUserChatRooms } from "store/WebSocketStore"; // <-- WebSocket 액션 불러오기
-import { loadChatRooms } from "store/ChatRoomStore"; // loadRoom
+import {
+  initializeWebSocket,
+  closeWebSocket,
+  getClient,
+  subscribeUserCount,
+  subscribeChatRoomCreate,
+  subscribeUserChatRooms,
+} from "store/WebSocketStore"; // <-- WebSocket 액션 불러오기
+import { loadChatRooms, subscribeRoomCountAsync } from "store/ChatRoomStore"; // loadRoom
 import ChatModal from "pages/sidebar/ChatModal"; // <-- 추가
 import { switchView } from "store/ChatViewStore";
 
@@ -49,7 +56,7 @@ const Sidebar = () => {
   // 토글 기능, web socket 연결
   const toggleSidebar = () => {
     if (user === null) {
-      alert("로그인 필요")
+      alert("로그인 필요");
       return;
     }
 
@@ -73,10 +80,10 @@ const Sidebar = () => {
           const client = getClient();
           dispatch(subscribeChatRoomCreate(client));
         })
-        // .then(() => {
-        //   const client = getClient();
-        //   dispatch(subscribeUserCount(client));
-        // })
+        .then(() => {
+          const client = getClient();
+          dispatch(subscribeRoomCountAsync());
+        });
       setFriendContent("friendList");
     }
   };
@@ -161,8 +168,7 @@ const Sidebar = () => {
       <div id="mySidebar" className={`sidebar ${isOpen ? "open" : ""}`}>
         <button
           className={`openbtn ${isOpen ? "open" : ""}`}
-          onClick={toggleSidebar}
-        >
+          onClick={toggleSidebar}>
           ☰
         </button>
 
@@ -176,23 +182,22 @@ const Sidebar = () => {
           </div>
           <div className="underline"></div>
           <div
-            className={`section-content ${isFriendsContentVisible ? "" : "collapsed"
-              }`}
+            className={`section-content ${
+              isFriendsContentVisible ? "" : "collapsed"
+            }`}
             style={{
               maxHeight: isFriendsContentVisible
                 ? "none"
                 : friendsContentHeight,
             }}
-            ref={friendsContentRef}
-          >
+            ref={friendsContentRef}>
             <div className="nav-btn">
               <button onClick={() => handleFriendContentChange("friendList")}>
                 {" "}
                 친구목록{" "}
               </button>
               <button
-                onClick={() => handleFriendContentChange("friendRecieve")}
-              >
+                onClick={() => handleFriendContentChange("friendRecieve")}>
                 {" "}
                 친구요청{" "}
               </button>
@@ -216,13 +221,13 @@ const Sidebar = () => {
           </div>
           <div className="underline"></div>
           <div
-            className={`section-content ${isChatsContentVisible ? "" : "collapsed"
-              }`}
+            className={`section-content ${
+              isChatsContentVisible ? "" : "collapsed"
+            }`}
             style={{
               maxHeight: isChatsContentVisible ? "none" : chatsContentHeight,
             }}
-            ref={chatsContentRef}
-          >
+            ref={chatsContentRef}>
             <div className="nav-btn">
               <button onClick={() => handleChatContentChange("myChat")}>
                 내 채팅
