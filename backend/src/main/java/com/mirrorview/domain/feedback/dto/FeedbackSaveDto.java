@@ -10,8 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeedbackSaveDto {
-    private String content;
-    private Long roomId;
-    private Long essayDetailId;
-    private Long userId;
+	private String content;
+	private Long roomId;
+	private String roomTitle;
+	private String receiver;
 }

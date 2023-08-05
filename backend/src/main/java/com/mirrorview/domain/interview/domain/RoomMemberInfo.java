@@ -1,13 +1,14 @@
 package com.mirrorview.domain.interview.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mirrorview.domain.essay.dto.EssayListDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,11 +21,11 @@ public class RoomMemberInfo {
     private List<EssayListDto> essays = new ArrayList<>();
     private String role;
 
-    public boolean sameNickname(String nickname) {
-        return nickname.equals(this.nickname);
-    }
+	public boolean sameNickname(String nickname) {
+		return nickname.equals(this.nickname);
+	}
 
-    public void changeReady() {
-        ready = !ready;
-    }
+	public void changeReady() {
+		ready = !ready;
+	}
 }

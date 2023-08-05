@@ -63,9 +63,6 @@ public class EssayServiceImpl implements EssayService {
         // FeedBack 삭제 > Essay_detail 삭제 > Essay 삭제
         Optional<Essay> essay = essayRepository.findById(id);
         if (essay.isPresent()) {
-            for (EssayDetail essayDetail : essay.get().getEssayDetails()) {
-                feedbackRepository.deleteFeedbacksByEssayDetailId(essayDetail); // Feedback 삭제 끝
-            }
             essayDetailRepository.deleteEssayDetailByEssayId(essay.get()); // essayDetail 삭제 끝
             essayRepository.deleteById(id);
         }
