@@ -21,6 +21,9 @@ import com.mirrorview.domain.interview.domain.RoomMemberInfo;
 import com.mirrorview.domain.interview.dto.MemberDto;
 import com.mirrorview.domain.interview.dto.MessageDto;
 import com.mirrorview.domain.interview.service.InterviewService;
+import com.mirrorview.domain.user.domain.Member;
+import com.mirrorview.domain.user.service.MemberService;
+import com.mirrorview.domain.user.service.MemberServiceImpl;
 import com.mirrorview.global.auth.security.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 
@@ -33,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 public class InterviewWebSocketController {
 
 	private final InterviewService interviewService;
+	private final MemberService memberService;
 	private final SimpMessagingTemplate simpMessagingTemplate;
 
 
@@ -53,7 +57,21 @@ public class InterviewWebSocketController {
 			/** 멤버에 대한 처리 (JOIN, EXIT, READY_CHANGE, ROLE_CHANGE) */
 
 			case "JOIN": // sub 하면서 터뜨리기
-				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
+				Optional<Member> byUser = memberService.findByUserId(user.getUsername());
+				if(byUser.isPresent()){
+					Member member = byUser.get();
+
+					Map<String, Object> data = new HashMap<>();
+					data.put("nickname", member.getNickname());
+					data.put("email", member.getEmail());
+					data.put("rating", member.getAverageRating());
+					data.put("ready", false);
+					//member.put("essays", member.get());
+					data.put("role", "interviewee");
+
+					messageDto.setData(data);
+					simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
+				}
 				break;
 			case "EXIT": // unsub, unconnected
 				interviewService.exitRoom(user.getNickname(), roomId);

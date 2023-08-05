@@ -287,20 +287,19 @@ const StudyRoom = () => {
         dispatch(interviewThunk({ client, interviewRoomId }));
       })
       .then(() => {
-        const userJoinData = {
-          type: "JOIN",
-          data: {
-            nickname: user.nickname,
-            ready: false,
-            essays: {},
-            role: "interviewee",
-          },
-        };
-
-        dispatch(userJoinRoom({ interviewRoomId, userJoinData }));
+        // const userJoinData = {
+        //   type: "JOIN",
+        //   data: {
+        //     nickname: user.nickname,
+        //     ready: false,
+        //     essays: {},
+        //     role: "interviewee",
+        //   },
+        // };
+        //dispatch(userJoinRoom({ interviewRoomId })); //userJoinData
       })
       .catch(() => {
-        console.log("웹소켓 연결 --> 구독 --> user join 터뜨리기 가.. 실패!");
+        console.log("웹소켓 연결 --> 구독이.. 실패!");
       });
 
     return () => {

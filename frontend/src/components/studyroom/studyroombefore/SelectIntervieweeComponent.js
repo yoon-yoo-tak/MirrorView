@@ -29,9 +29,7 @@ const SelectInterviewee = (props) => {
       }
     });
     setIntervieweeList(interviewee);
-    console.log(interviewee + " 면접자들");
     setInterviewerList(interviewer);
-    console.log(interviewee + " 면접관들");
   }, [members]);
   // 더미데이터
   const [intervieweeList, setIntervieweeList] = useState([

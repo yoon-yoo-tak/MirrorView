@@ -15,7 +15,7 @@ const StudyChatting = () => {
   const [message, setMessage] = useState("");
   const { user } = useSelector((state) => state.auth);
   const interviewRoomId = useSelector(
-    (state) => state.interview.currentRoom.id
+    (state) => state.interviewWebSocket.currentRoom.id
   );
   const messages = useSelector(
     (state) => state.interviewWebSocket.currentRoom.messages
