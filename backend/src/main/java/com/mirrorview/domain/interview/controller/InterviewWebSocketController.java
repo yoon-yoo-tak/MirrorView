@@ -1,6 +1,7 @@
 package com.mirrorview.domain.interview.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -66,7 +67,7 @@ public class InterviewWebSocketController {
 					data.put("email", member.getEmail());
 					data.put("rating", member.getAverageRating());
 					data.put("ready", false);
-					//member.put("essays", member.get());
+					data.put("essays", new ArrayList<>());
 					data.put("role", "interviewee");
 
 					messageDto.setData(data);
