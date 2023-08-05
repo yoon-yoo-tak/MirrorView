@@ -4,46 +4,25 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 const initialState = {
-    room :[],
-    currentRoom:null,
+    room: [],
+    currentRoom: null,
+    // ------------------------------
+    feedbackList: [
+        {
+            name: "",
+            feedbacks: { question: [], feedback: [] },
+        },
+    ],
+    myRole: "interviewee",
+    isStarted: false,
+    //-------------------------------
 };
 
 export const getInterviewRoom = createAsyncThunk(
     "getInterViewRoom",
-    async(_,{rejectWithValue}) => {
-        try{
-            const res = await axios.get("/api/interviews/rooms",_,{
-                withCredentials: true,
-            });
-            return res.data;
-        } catch(error){
-            console.error(error);
-            return rejectWithValue(error.response.data);
-        }
-    }
-)
-
-export const getInterviewRoomByCategory = createAsyncThunk(
-"getInterviewRoomByCategory",
- async(category,{rejectWithValue}) =>{
-    try{
-        const res = await axios.get(`/api/interviews/rooms/${category}`,{
-            withCredentials: true,
-        });
-        console.log(res);
-        return res.data;
-    }catch(error){
-        console.error(error);
-        return rejectWithValue(error.response.data);
-    }
-}
-)
-
-export const joinInterviewRoom = createAsyncThunk(
-    "joinInterviewRoom",
-    async(roomId,{rejectWithValue}) =>{
-        try{
-            const res = await axios.post(`/api/interviews/join/${roomId}`,{
+    async (_, { rejectWithValue }) => {
+        try {
+            const res = await axios.get("/api/interviews/rooms", _, {
                 withCredentials: true,
             });
             return res.data;
@@ -52,30 +31,72 @@ export const joinInterviewRoom = createAsyncThunk(
             return rejectWithValue(error.response.data);
         }
     }
-)
+);
 
-const interviewSlice = createSlice({
-    name:"interview",
-    initialState,
-    reducers:{
-        setCurrentRoom:(state,action)=>{
-            state.currentRoom = action.payload;
-        }
-    },
-    extraReducers:{
-        [getInterviewRoom.fulfilled]:(state,{payload})=>{
-            state.room = payload.data;
-        },
-        [getInterviewRoomByCategory.fulfilled]:(state,{payload}) =>{
-            state.room = payload.data;
-        },
-        [joinInterviewRoom.fulfilled]:(state,{payload}) =>{
-            state.currentRoom = payload.data;
+export const getInterviewRoomByCategory = createAsyncThunk(
+    "getInterviewRoomByCategory",
+    async (category, { rejectWithValue }) => {
+        try {
+            const res = await axios.get(`/api/interviews/rooms/${category}`, {
+                withCredentials: true,
+            });
+            console.log(res);
+            return res.data;
+        } catch (error) {
+            console.error(error);
+            return rejectWithValue(error.response.data);
         }
     }
+);
+
+export const joinInterviewRoom = createAsyncThunk(
+    "joinInterviewRoom",
+    async (roomId, { rejectWithValue }) => {
+        try {
+            const res = await axios.post(`/api/interviews/join/${roomId}`, {
+                withCredentials: true,
+            });
+            return res.data;
+        } catch (error) {
+            console.error(error);
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+const interviewSlice = createSlice({
+    name: "interview",
+    initialState,
+    reducers: {
+        setCurrentRoom: (state, action) => {
+            state.currentRoom = action.payload;
+        },
+        // ---------------------------------
+        updateFeedbacks: (state, action) => {
+            state.feedbackList = action.payload;
+        },
+        setMyRoll: (state, action) => {
+            state.myRole = action.payload;
+        },
+        updateStarted: (state, action) => {
+            state.isStarted = action.payload;
+        },
+        // -----------------------------------
+    },
+    extraReducers: {
+        [getInterviewRoom.fulfilled]: (state, { payload }) => {
+            state.room = payload.data;
+        },
+        [getInterviewRoomByCategory.fulfilled]: (state, { payload }) => {
+            state.room = payload.data;
+        },
+        [joinInterviewRoom.fulfilled]: (state, { payload }) => {
+            state.currentRoom = payload.data;
+        },
+    },
 });
 
-export const {setCurrentRoom,} = interviewSlice.actions;
+export const { setCurrentRoom } = interviewSlice.actions;
 
 export const interviewActions = interviewSlice.actions;
 

@@ -3,7 +3,7 @@ import { useState } from "react";
 import * as S from "../StudyRoomStyledComponents";
 import StudyEssayDetail from "../studyroombefore/preparesection/studypreparedetail/StudyEssayDetailComponent";
 
-const EssayInfoSection = ({ peopleList }) => {
+const EssayInfoSection = ({ peopleList, questionList }) => {
     const [checkEssay, setCheckEssay] = useState([]);
 
     const handleCheckWho = (name) => {
@@ -30,7 +30,7 @@ const EssayInfoSection = ({ peopleList }) => {
                                 참여자를 클릭해 정보를 확인하세요!
                             </S.profileContent>
                         ) : (
-                            <StudyEssayDetail essay={checkEssay} />
+                            <StudyEssayDetail essay={checkEssay} onAir={true} />
                         )}
                     </S.contentDetail>
                 </S.contentTapWrap>

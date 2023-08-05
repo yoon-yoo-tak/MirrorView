@@ -2,12 +2,18 @@ import PrepareSection from "../../components/studyroom/studyroombefore/PrepareSe
 import SelectInterviewee from "../../components/studyroom/studyroombefore/SelectIntervieweeComponent";
 import * as S from "../../components/studyroom/StudyRoomStyledComponents";
 import StudyRoomBefore from "../../components/studyroom/StudyRoomBeforeComponent";
-// import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import StudyRoomInterviewer from "../../components/studyroom/StudyRoomInterviewerComponent";
 import StudyRoomInterviewee from "components/studyroom/StudyRoomIntervieweeComponent";
+import { interviewActions } from "../../store/InterviewStore";
 
 const StudyRoom = () => {
+    const dispatch = useDispatch();
+    // const feedbackList = useSelector((state) => state.interview);
+    const isStarted = useSelector((state) => state.interview.isStarted);
+    const role = useSelector((state) => state.interview.myRole);
+
     // 참가자 더미데이터 (자신 제외)
     const peopleList = [
         {
@@ -54,7 +60,19 @@ const StudyRoom = () => {
         },
     ];
 
-    const [questionList, setQuestionList] = useState([]);
+    // const [questionList, setQuestionList] = useState([]);
+
+    const qlist = peopleList.map((person) => ({
+        name: person.name,
+        questions: [],
+    }));
+    // const fblist = peopleList.map((person) => ({
+    //     name: person.name,
+    //     feedbacks: [{ question: "", feedback: "" }],
+    // }));
+
+    const [questionList, setQuestionList] = useState(qlist);
+    // const [feedbackList, setFeedbackList] = useState(fblist);
 
     useEffect(() => {
         const storedList = localStorage.getItem("questionList");
@@ -67,19 +85,67 @@ const StudyRoom = () => {
         localStorage.setItem("questionList", JSON.stringify(questionList));
     }, [questionList]);
 
+    useEffect(() => {
+        // 더미데이터대로 일단 추가
+        const updatedFeedbackList = [
+            {
+                name: "최고심",
+                feedbacks: [{ question: [], feedback: [] }],
+            },
+            {
+                name: "춘식이",
+                feedbacks: [{ question: [], feedback: [] }],
+            },
+            {
+                name: "빤쮸토끼",
+                feedbacks: [{ question: [], feedback: [] }],
+            },
+        ];
+        dispatch(interviewActions.updateFeedbacks(updatedFeedbackList));
+    }, [dispatch]);
+
     return (
         <div>
-            {/* <StudyRoomBefore
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-                peopleList={peopleList}
-            /> */}
-            <StudyRoomInterviewer
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-                peopleList={peopleList}
-            />
-            {/* <StudyRoomInterviewee peopleList={peopleList} /> */}
+            {/* {isStarted && role === "interviewer" && (
+                <StudyRoomInterviewer
+                    questionList={questionList}
+                    setQuestionList={setQuestionList}
+                    // feedbackList={feedbackList}
+                    // setFeedbackList={setFeedbackList}
+                    peopleList={peopleList}
+                />
+            )}
+            {isStarted && role === "interviewee" && (
+                <StudyRoomInterviewee peopleList={peopleList} />
+            )}
+            {!isStarted && (
+                <StudyRoomBefore
+                    questionList={questionList}
+                    setQuestionList={setQuestionList}
+                    peopleList={peopleList}
+                />
+            )} */}
+            {!isStarted ? (
+                <StudyRoomBefore
+                    questionList={questionList}
+                    setQuestionList={setQuestionList}
+                    peopleList={peopleList}
+                />
+            ) : role === "interviewer" ? (
+                <StudyRoomInterviewer
+                    questionList={questionList}
+                    setQuestionList={setQuestionList}
+                    // feedbackList={feedbackList}
+                    // setFeedbackList={setFeedbackList}
+                    peopleList={peopleList}
+                />
+            ) : (
+                <StudyRoomInterviewee
+                    questionList={questionList}
+                    setQuestionList={setQuestionList}
+                    peopleList={peopleList}
+                />
+            )}
         </div>
     );
 };

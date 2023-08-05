@@ -18,7 +18,7 @@ const gradientAnimation = keyframes`
 export const page = styled.div`
     font-family: "HakgyoansimWoojuR";
     // min-height: 100vh;
-    // min-width: 1200px;
+    min-width: 1280px;
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -41,9 +41,10 @@ export const prepareWrap = styled.div`
     display: flex;
     // height: 20rem;
     // height: 80vh;
-    width: 80vw;
+    // width: 80vw;
     justify-content: center;
     align-items: center;
+    position: relative;
 `;
 
 // 스터디방 좌측 섹션
@@ -81,6 +82,29 @@ export const readyButton = styled.div`
     height: 30px;
 
     background: ${(props) => (props.status === "true" ? "#FF6980" : "#D4D4D4")};
+    // box-shadow: 0px 0px 10px #bdbdbd;
+    border-radius: 19px;
+    cursor: pointer;
+    color: white;
+    &:hover {
+        background-color: ${(props) =>
+            props.status === "true" ? "#FFD0D7" : "#D4D4D4"};
+    }
+`;
+
+export const startButton = styled.div`
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    position: relative;
+    width: 70px;
+    height: 30px;
+
+    background: ${(props) => (props.status === "true" ? "#61E7EF" : "#D4D4D4")};
     // box-shadow: 0px 0px 10px #bdbdbd;
     border-radius: 19px;
     cursor: pointer;
@@ -209,7 +233,8 @@ export const personList = styled.div`
 
 // 스터디 방 우측 섹션
 export const prepareSectionSecond = styled.div`
-    width: 835px;
+    width: 700px;
+    // overflow-x: auto;
 `;
 export const sectionPage = styled.div`
     min-width: 700px;
@@ -353,9 +378,27 @@ export const contentDetail = styled.div`
     padding: 10px;
 
     background-color: #e9f2ff;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #a6b6ce;
+    }
+    &::-webkit-scrollbar-track {
+        background: #ededed;
+        border-radius: 3px;
+    }
 `;
 
 export const enterList = styled.div``;
+export const profileWrap = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 450px;
+`;
 
 export const profileInfo = styled.div`
     display: flex;
@@ -368,6 +411,10 @@ export const profileInfo = styled.div`
 export const profileKey = styled.div`
     margin: 10px;
     flex: 1;
+`;
+
+export const questInputText = styled.div`
+    margin: 0 16px;
 `;
 
 export const profileDetail = styled.div`
@@ -384,6 +431,7 @@ export const vLine = styled.div`
     border-left: 0.15rem solid white;
     height: 110px;
 `;
+
 export const essayDetailWrap = styled.div`
     // margin: 10px;
     height: 450px;
@@ -423,11 +471,27 @@ export const essayDetailContent = styled.div`
     padding: 5px;
 `;
 
+export const essayAI = styled.div`
+    text-align: end;
+    margin: 0 10px;
+    cursor: pointer;
+`;
+
 // 스터디 방 우측 섹션 - 사전 질문지 작성
 export const questionWrap = styled.div`
     justify-content: center;
-    padding: 20px;
-    height: auto;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #a6b6ce;
+    }
+    &::-webkit-scrollbar-track {
+        background: #ededed;
+        border-radius: 3px;
+    }
 `;
 
 export const questionIntro = styled.div`
@@ -453,19 +517,23 @@ export const questionListWrap = styled.div`
 `;
 
 export const questionEach = styled.div`
-    margin: 15px 10px;
+    margin: 15px 10px 5px 10px;
     font-size: 18px;
 `;
 
 export const questionSubmitWrap = styled.div`
     display: flex;
 `;
+export const questSubmit = styled.div`
+    display: flex;
+    justify-content: center;
+`;
 
 export const questionInput = styled.input`
     margin: 10px;
-    width: 100%;
-    height: 40px;
-    background: #e6e6e6;
+    width: 72%;
+    height: 35px;
+    background: #white;
     border: 0;
     // box-shadow: 0px 0px 5px #c7c7c7;
     border-radius: 10px;
@@ -478,17 +546,19 @@ export const questionButton = styled.button`
     justify-content: center;
     align-items: center;
     border: 0;
+    font-family: "HakgyoansimWoojuR";
 
     position: relative;
-    width: 70px;
-    height: 40px;
+    width: 55px;
+    height: 35px;
+    color: white;
 
-    background: #a1b6ff;
+    background: #5878eb;
     box-shadow: 0px 0px 5px #c7c7c7;
     border-radius: 10px;
     cursor: pointer;
     &:hover {
-        background-color: #e9e4ff;
+        background-color: #aabbfa;
     }
 `;
 
@@ -505,9 +575,20 @@ export const myEssayIntro = styled.div`
     font-weight: bold;
 `;
 
+export const myEssaySide = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+export const myEssayMain = styled.div`
+    margin: 5px 10px;
+    display: flex;
+    align-items: end;
+`;
+
 export const myEssayContentWrap = styled.div`
     overflow-y: auto;
-    max-height: 90%;
+    max-height: 78%;
     &::-webkit-scrollbar {
         width: 7px;
     }
@@ -538,6 +619,33 @@ export const myAnswer = styled.div`
     line-height: 1.5;
     padding: 5px;
 `;
+export const questListWrap = styled.div`
+    padding: 20px;
+`;
+export const questListTitle = styled.div`
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 15px;
+`;
+
+export const questList = styled.div`
+    overflow-y: auto;
+`;
+
+export const questEach = styled.div`
+    display: flex;
+    margin: 10px 0;
+    font-size: 17px;
+`;
+export const deleteQuest = styled.div`
+    padding: 6px;
+`;
+
+export const questText = styled.div`
+    background-color: white;
+    border-radius: 8px;
+    padding: 6px;
+`;
 
 // 면접 시작 ~
 
@@ -550,11 +658,13 @@ export const interviewerWrap = styled.div`
     flex-direction: row;
     align-items: center;
     // margin: 0 100px;
-    padding: 0 200px;
+    // padding: 0 200px;
+    position: relative;
 `;
 
 export const videoSection = styled.div`
-    flex: 1;
+    // flex: 1;
+    max-width: 700px;
     display: flex;
     flex-direction: column;
 `;
@@ -618,7 +728,7 @@ export const secondSection = styled.div`
 export const selectTapsWrap = styled.div`
     display: flex;
     justify-content: space-between;
-    margin: 15px;
+    // margin: 15px;
 `;
 
 export const selectTapsHorizon = styled.div`
@@ -765,6 +875,12 @@ export const mainWrap = styled.div`
     }
 `;
 
+export const roomTitle = styled.div`
+    font-size: 22px;
+    margin: 20px;
+    color: white;
+`;
+
 export const vieweeWrap = styled.div`
     display: flex;
     // height: 20rem;
@@ -776,7 +892,8 @@ export const vieweeWrap = styled.div`
     align-content: center;
 
     height: 100vh;
-    max-height: 100%;
+    max-height: 80%;
+    position: relative;
 `;
 
 export const boxes = styled.div`
@@ -803,7 +920,7 @@ export const mainBox = styled.div`
 
 export const leftBox = styled.div`
     flex-shrink: 0;
-    max-height: 80%;
+    max-height: 100%;
 
     flex-direction: column;
     overflow-y: auto;
@@ -825,16 +942,24 @@ export const leftBox = styled.div`
 export const feedbackEach = styled.div``;
 
 export const feedbackInput = styled.input`
-    margin: 5px;
-    width: 70%;
+    margin: 10px;
+    width: 88%;
     height: 30px;
-    background: #e6e6e6;
+    background: white;
     border: 0;
     // box-shadow: 0px 0px 5px #c7c7c7;
     border-radius: 10px;
 `;
 
+export const buttonWrap = styled.div`
+    display: flex;
+    justify-content: end;
+    margin-right: 13px;
+`;
+
 export const feedbackButton = styled.button`
+    font-family: "HakgyoansimWoojuR";
+    font-weight: bold;
     margin: 5px;
     display: flex;
     flex-direction: row;
@@ -843,18 +968,21 @@ export const feedbackButton = styled.button`
     border: 0;
 
     position: relative;
-    width: 60px;
+    width: 50px;
     height: 30px;
 
-    background: #a1b6ff;
+    color: white;
+
+    background: #5878eb;
     box-shadow: 0px 0px 5px #c7c7c7;
-    border-radius: 10px;
+    border-radius: 13px;
     cursor: pointer;
     &:hover {
-        background-color: #e9e4ff;
+        background-color: #aac0fa;
     }
 `;
 
 export const feedbackInputWrap = styled.div`
     display: flex;
+    justify-content: center;
 `;

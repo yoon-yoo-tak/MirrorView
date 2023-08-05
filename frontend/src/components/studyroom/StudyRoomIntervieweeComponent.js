@@ -6,6 +6,7 @@ const StudyRoomInterviewee = ({ peopleList }) => {
             <S.vieweeWrap>
                 <S.mainWrap>
                     <S.mainBox></S.mainBox>
+                    <S.roomTitle>면접방 제목</S.roomTitle>
                     <S.exitRoom menu="viewee">나가기</S.exitRoom>
                 </S.mainWrap>
 

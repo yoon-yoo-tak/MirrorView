@@ -1,12 +1,13 @@
-import { useState } from "react";
-// import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { interviewActions } from "store/InterviewStore";
 
 import * as S from "../StudyRoomStyledComponents";
 
 const SelectInterviewee = (props) => {
     const [interviewee, setInterviewee] = useState(true);
-
-    // const nickname = useSelector((state) => state.auth.nickname);
+    const [myRole, setMyRole] = useState("interviewee");
+    const dispatch = useDispatch();
 
     // 더미데이터
     const [intervieweeList, setIntervieweeList] = useState([
@@ -24,7 +25,9 @@ const SelectInterviewee = (props) => {
 
     const changeToInterviewee = () => {
         if (!interviewee) {
-            // console.log("나는 면접자야");
+            console.log("나는 면접자야");
+            setMyRole("interviewee");
+            // dispatch(interviewActions.setMyRoll(myRole));
             setInterviewee(true);
             setInterviewerList((prevList) =>
                 prevList.filter((item) => item.name !== props.username)
@@ -39,6 +42,8 @@ const SelectInterviewee = (props) => {
     const changeToInterviewer = () => {
         if (interviewee) {
             // console.log("나는 면접관이야");
+            setMyRole("interviewer");
+            // dispatch(interviewActions.setMyRoll(myRole));
             setInterviewee(false);
             setIntervieweeList((prevList) =>
                 prevList.filter((item) => item.name !== props.username)
@@ -49,6 +54,10 @@ const SelectInterviewee = (props) => {
             ]);
         } else return;
     };
+
+    useEffect(() => {
+        dispatch(interviewActions.setMyRoll(myRole));
+    }, myRole);
 
     return (
         <S.selectPage>
