@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
+// (내 채팅)즐겨찾기에 사용될 repository
 @Repository
 public class UserChatRoomsRepository {
 

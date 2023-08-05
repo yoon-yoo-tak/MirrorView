@@ -46,19 +46,23 @@ public class KakaoOidcController {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+        log.info("kakao login data = {}", memberData);
+        log.info("kakao picture = {}", memberData.getPicture());
         Optional<Member> optionalMember = memberService.findByUserId(memberData.getSub());
         JoinDto newMember;
         if (optionalMember.isEmpty()) {
             newMember = JoinDto.builder()
                     .userId(memberData.getSub())
                     .nickname(memberData.getNickname())
+                    .photo(memberData.getPicture())
                     .email(memberData.getEmail())
                     .build();
+            log.info("members photo = {}", newMember.getPhoto());
             memberService.save(newMember);
             optionalMember = memberService.findByUserId(memberData.getSub());
         }
-        if (optionalMember.get().getDelete()){
-            return BaseResponse.fail("login fail",400);
+        if (optionalMember.get().getDelete()) {
+            return BaseResponse.fail("login fail", 400);
         }
         String userId = optionalMember.get().getUserId();
 

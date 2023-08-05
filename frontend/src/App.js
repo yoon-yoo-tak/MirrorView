@@ -23,9 +23,13 @@ import KakaoLoginRedirectPage from "pages/user/KakaoLoginRedirectPage";
 
 // axios 전역 설정
 import axios from 'axios';
+import { useSelector } from "react-redux";
+
 axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const App = () => {
+  const {accessToken} = useSelector((state)=>state.auth);
+  axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
   return (
     <div>
       <Sidebar>
@@ -45,11 +49,10 @@ const App = () => {
         <Route path="/studylist" element={<StudyRoomList />} />
         <Route path="/noticewritepage" element={<NoticeWritePage />} />
         <Route path="/studyroom/:id" element={<StudyRoom />} />
-        <Route path="/login/kakao/code" element={<KakaoLoginRedirectPage/>} />
+        <Route path="/login/kakao/code" element={<KakaoLoginRedirectPage />} />
       </Routes>
       <Footer></Footer>
     </div>
-    
   );
 };
 

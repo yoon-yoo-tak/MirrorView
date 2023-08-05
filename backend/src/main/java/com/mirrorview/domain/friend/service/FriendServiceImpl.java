@@ -4,6 +4,7 @@ import com.mirrorview.domain.friend.domain.Friend;
 import com.mirrorview.domain.friend.dto.FriendDto;
 import com.mirrorview.domain.friend.dto.FriendRequestDto;
 import com.mirrorview.domain.friend.repository.FriendRepository;
+import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +28,21 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public Boolean save(String myUserId, String otherUserId) {
+
+        Optional<Member> optionalMember1 = memberRepository.findByUserId(myUserId);
+        Optional<Member> optionalMember2 = memberRepository.findByUserId(otherUserId);
+        if (optionalMember1.isEmpty() || optionalMember2.isEmpty()) {
+            return false;
+        }
+
         //이미 친구면 false 리턴
         if (isFriend(myUserId, otherUserId)) {
             return false;
         }
+
         FriendRequestDto friendRequestDto = FriendRequestDto.builder()
-                .fromMember(memberRepository.findByUserId(myUserId).get())
-                .toMember(memberRepository.findByUserId(otherUserId).get())
+                .fromMember(optionalMember1.get())
+                .toMember(optionalMember2.get())
                 .isConnected(false)
                 .build();
 

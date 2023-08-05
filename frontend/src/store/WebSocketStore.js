@@ -18,7 +18,6 @@ let client;
 export const initializeWebSocket = createAsyncThunk(
   "webSocket/initialize",
   async (accessToken, { dispatch }) => {
-    // const accessToken = useSelector((state)=> state.auth.accessToken);
     const httpUrl = process.env.REACT_APP_WEBSOCKET_URL;
     const urlWithToken = `${httpUrl}?token=${accessToken}`;
     console.log(urlWithToken);
@@ -108,7 +107,7 @@ export const subscribeUserCount = createAsyncThunk(
   (client, { dispatch }) => {
     if (client) {
       client.subscribe("/sub/count", (message) => {
-        const userCount = message.body
+        const userCount = message.body;
         dispatch(updateUserCount(userCount)); // 액션 디스패치로 유저 수 업데이트
       });
     }
@@ -120,7 +119,6 @@ const updateUserCount = (count) => ({
   type: "webSocket/updateUserCount",
   payload: count,
 });
-
 
 // 웹소켓 슬라이스 정의
 const webSocketSlice = createSlice({
@@ -134,7 +132,7 @@ const webSocketSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase("webSocket/updateUserCount", (state, action) => {
-        console.log(action.payload)
+        console.log(action.payload);
         state.userCount = action.payload;
       })
       .addCase(initializeWebSocket.pending, (state) => {
