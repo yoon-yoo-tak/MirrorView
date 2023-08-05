@@ -22,13 +22,13 @@ import PrivateChatRoom from "pages/sidebar/ChatRoom";
 import KakaoLoginRedirectPage from "pages/user/KakaoLoginRedirectPage";
 
 // axios 전역 설정
-import axios from 'axios';
+import axios from "axios";
 import { useSelector } from "react-redux";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const App = () => {
-  const {accessToken} = useSelector((state)=>state.auth);
+  const { accessToken } = useSelector((state) => state.auth);
   axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
   return (
     <div>

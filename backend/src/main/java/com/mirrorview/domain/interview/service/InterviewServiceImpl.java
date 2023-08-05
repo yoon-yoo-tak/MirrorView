@@ -92,6 +92,10 @@ public class InterviewServiceImpl implements InterviewService {
     @Override
     @Transactional
     public InterviewRoom joinRoom(Member member, String roomId) {
+
+        System.out.println(member.getNickname() + " " + roomId);
+        System.out.println(" 몇번 call 되는지 궁금함 ");
+
         Optional<InterviewRoom> findRoom = findRoomById(roomId);
         if (findRoom.isPresent()) {
             InterviewRoom interviewRoom = findRoom.get();

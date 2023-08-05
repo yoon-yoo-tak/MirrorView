@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
@@ -37,7 +38,7 @@ public class InterviewWebSocketController {
 
 	// 채널 하나만 구독해서 전부 처리할거임
 	@MessageMapping("/interviewrooms/{roomId}")
-	public void sendToAll(@DestinationVariable String roomId, MessageDto messageDto, Principal principal) {
+	public void sendToAll(@DestinationVariable String roomId, @Payload MessageDto messageDto, Principal principal) {
 		log.info("interview - {} 동작, {}", messageDto.getType(), messageDto);
 
 		Authentication authentication = (Authentication) principal;
@@ -51,17 +52,11 @@ public class InterviewWebSocketController {
 
 			/** 멤버에 대한 처리 (JOIN, EXIT, READY_CHANGE, ROLE_CHANGE) */
 
-			case "JOIN":
-				MemberDto joinMember = (MemberDto)messageDto.getData();
-				// (redis) 들어온 멤버를 해당 방에서 등록
-				interviewService.joinRoom(principal.getName(), joinMember.getNickname(), roomId);
-				// 들어온 멤버를 pub
+			case "JOIN": // sub 하면서 터뜨리기
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 				break;
-			case "EXIT":
-				MemberDto exitMember = (MemberDto)messageDto.getData();
-				// (redis) 나간 멤버를 해당 방에서 지운다.
-				interviewService.exitRoom(principal.getName(), roomId);
+			case "EXIT": // unsub, unconnected
+				interviewService.exitRoom(user.getNickname(), roomId);
 				// 나간 멤버를 pub
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 			case "READY_CHANGE":
