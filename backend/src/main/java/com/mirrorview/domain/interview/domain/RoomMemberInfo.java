@@ -22,7 +22,6 @@ public class RoomMemberInfo {
     private boolean ready;
     private List<EssayListDto> essays = new ArrayList<>();
     private String role;
-    private float rating;
 
 	public boolean sameNickname(String nickname) {
 		return nickname.equals(this.nickname);

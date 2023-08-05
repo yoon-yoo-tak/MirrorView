@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.mirrorview.domain.chatroom.domain.ChatRoom;
 import com.mirrorview.domain.chatroom.repository.ChatRepository;
 import com.mirrorview.domain.interview.dto.MessageDto;
+import com.mirrorview.domain.interview.service.InterviewService;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +67,7 @@ public class SubscriptionService {
 	private final ConcurrentMap<String, ConcurrentMap<String, String>> userIdToSubscriptionMap = new ConcurrentHashMap<>();
 	private final Set<String> subscribedUsers = Collections.synchronizedSet(new HashSet<>());
 	private final ChatRepository chatRepository;
+	private final InterviewService interviewService;
 
 	public void handleChatRoomSubscribe(String userId, String subscriptionId, String roomId) {
 		addSubscription(userId, subscriptionId, roomId);
@@ -88,6 +90,7 @@ public class SubscriptionService {
 				String roomId = userSubscriptions.get(subscriptionId);
 				if (roomId != null && roomId.startsWith("interviewRoom")) {
 					handleUnsubscribe(userId, subscriptionId);
+					interviewRoomForceExit(userId, roomId);
 					interviewRoomSystemMessage(userId, roomId, "님이 퇴장하셨습니다.");
 				}
 			}
@@ -165,6 +168,26 @@ public class SubscriptionService {
 				simpMessagingTemplate.convertAndSend("/sub/count", subscribedUsers.size());
 			}
 		}
+	}
+
+	public void interviewRoomForceExit(String userId, String roomId){
+		System.out.println(roomId);
+		if (!roomId.startsWith("interviewRoom")) {
+			// roomId가 "interviewRoom"으로 시작하지 않으면 메서드를 종료
+			return;
+		}
+
+		interviewService.exitRoom(userId, roomId);
+
+		Map<String, Object> data = new HashMap<>();
+		data.put("nickname", userId);
+
+		MessageDto messageDto = MessageDto.builder()
+			.type("EXIT")
+			.data(data)
+			.build();
+
+		simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 	}
 
 	public void interviewRoomSystemMessage(String userId, String roomId, String suffix){

@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { setCurrentRoomWebSocket } from "./InterviewWebSocketStore";
+import { useDispatch } from "react-redux";
 
 axios.defaults.withCredentials = true;
 
@@ -27,21 +29,21 @@ const initialState = {
         type: "CHAT",
         data: {
           memberId: "testuser1",
-          message: "하이하이하이하이1111111하이",
+          message: "cccccchhhhaattt",
         },
       },
       {
         type: "SYSTEM",
         data: {
           memberId: "testuser1",
-          message: "하이하이하이하이하이",
+          message: "syasss",
         },
       },
       {
         type: "CHAT",
         data: {
           memberId: "testuser1",
-          message: "하이하12312123123이하이하이하이",
+          message: "cccccchhhhaattt123123",
         },
       },
     ],
@@ -55,6 +57,7 @@ export const getInterviewRoom = createAsyncThunk(
       const res = await axios.get("/api/interviews/rooms", _, {
         withCredentials: true,
       });
+
       return res.data;
     } catch (error) {
       console.error(error);
@@ -79,18 +82,19 @@ export const getInterviewRoomByCategory = createAsyncThunk(
   }
 );
 
+// interviewWebSocketStore state 에 currentRoom 방을 전달
 export const joinInterviewRoom = createAsyncThunk(
   "joinInterviewRoom",
-  async (roomId, { rejectWithValue }) => {
+  async (roomId, thunkAPI) => {
     try {
       const res = await axios.post(`/api/interviews/join/${roomId}`, {
         withCredentials: true,
       });
-      console.log(res.data);
+      thunkAPI.dispatch(setCurrentRoomWebSocket(res.data));
       return res.data;
     } catch (error) {
       console.error(error);
-      return rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
@@ -102,9 +106,9 @@ const interviewSlice = createSlice({
     setCurrentRoom: (state, action) => {
       state.currentRoom = action.payload;
     },
-      exitCurrentRoom:(state, action)=>{
-          state.currentRoom = {members :[]};
-      }
+    exitCurrentRoom: (state, action) => {
+      state.currentRoom = { members: [] };
+    },
   },
   extraReducers: {
     [getInterviewRoom.fulfilled]: (state, { payload }) => {
@@ -120,7 +124,7 @@ const interviewSlice = createSlice({
   },
 });
 
-export const {setCurrentRoom,exitCurrentRoom} = interviewSlice.actions;
+export const { setCurrentRoom, exitCurrentRoom } = interviewSlice.actions;
 
 export const interviewActions = interviewSlice.actions;
 

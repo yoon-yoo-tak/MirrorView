@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { getClient } from "store/WebSocketStore";
 import { initializeWebSocket, closeWebSocket } from "store/WebSocketStore";
 import { useDispatch } from "react-redux";
-import { interviewThunk } from "store/InterviewWebSocketStore";
+import { interviewThunk, userJoinRoom } from "store/InterviewWebSocketStore";
 
 const StudyRoom = () => {
   const dispatch = useDispatch();
@@ -119,22 +119,22 @@ const StudyRoom = () => {
     joinSession();
   }, []);
 
-    useEffect(()=>{
-      window.addEventListener('beforeunload', leaveSession);
-      return () => {
-        leaveSession();
-        window.removeEventListener('beforeunload', leaveSession);
-      };
-    },[session])
+  useEffect(() => {
+    window.addEventListener("beforeunload", leaveSession);
+    return () => {
+      leaveSession();
+      window.removeEventListener("beforeunload", leaveSession);
+    };
+  }, [session]);
 
-    const deleteIsSperker = (connectionId) => {
-        let prevIsSpeakList = isSpeakList;
-        let index = prevIsSpeakList.indexOf(connectionId, 0);
-        if (index > -1) {
-          prevIsSpeakList.splice(index, 1);
-          setIsSpeakList([...prevIsSpeakList]);
-        }
-      };
+  const deleteIsSperker = (connectionId) => {
+    let prevIsSpeakList = isSpeakList;
+    let index = prevIsSpeakList.indexOf(connectionId, 0);
+    if (index > -1) {
+      prevIsSpeakList.splice(index, 1);
+      setIsSpeakList([...prevIsSpeakList]);
+    }
+  };
 
   const joinSession = () => {
     const newOpenVidu = new OpenVidu();
@@ -230,14 +230,14 @@ const StudyRoom = () => {
     connection();
   };
 
-    const leaveSession = () => {
-      if (!session) return;
-      session?.disconnect();
+  const leaveSession = () => {
+    if (!session) return;
+    session?.disconnect();
 
-      // Empty all properties...
-      setPublisher(null);
-      setSubscribers([]);
-    };
+    // Empty all properties...
+    setPublisher(null);
+    setSubscribers([]);
+  };
 
   useEffect(() => {
     localStorage.setItem("questionList", JSON.stringify(questionList));
@@ -287,10 +287,20 @@ const StudyRoom = () => {
         dispatch(interviewThunk({ client, interviewRoomId }));
       })
       .then(() => {
-        //dispatch(enterRoom());
+        const userJoinData = {
+          type: "JOIN",
+          data: {
+            nickname: user.nickname,
+            ready: false,
+            essays: {},
+            role: "interviewee",
+          },
+        };
+
+        dispatch(userJoinRoom({ interviewRoomId, userJoinData }));
       })
       .catch(() => {
-        console.log("웹소켓 연결 --> 구독 --> join 터뜨리기");
+        console.log("웹소켓 연결 --> 구독 --> user join 터뜨리기 가.. 실패!");
       });
 
     return () => {
