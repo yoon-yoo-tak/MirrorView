@@ -1,19 +1,23 @@
 import * as S from "../../StudyRoomStyledComponents";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addQuestion } from "store/InterviewWebSocketStore";
 const StudyQustionList = ({ questionList, setQuestionList }) => {
     // const [newQuestionList, setNewQuestionList] = useState([]);
+    const {questions} = useSelector((state)=>state.interviewWebSocket);
+    const dispatch = useDispatch();
     const [newQuestion, setNewQuestion] = useState("");
-
+    
     const handleQuestion = (e) => {
         setNewQuestion(e.target.value);
     };
     const submitQuestion = () => {
         if (newQuestion.trim() !== "") {
-            setQuestionList((prevList) => [...prevList, newQuestion]);
+            dispatch(addQuestion(newQuestion));
             setNewQuestion("");
         }
     };
+
 
     return (
         <div>
@@ -31,8 +35,8 @@ const StudyQustionList = ({ questionList, setQuestionList }) => {
                     </S.questionButton>
                 </S.questionSubmitWrap>
                 <S.questionListWrap>
-                    {questionList.map((items, index) => (
-                        <S.questionEach>
+                    {questions.map((items, index) => (
+                        <S.questionEach key={index}>
                             {index + 1}. {items}
                         </S.questionEach>
                     ))}

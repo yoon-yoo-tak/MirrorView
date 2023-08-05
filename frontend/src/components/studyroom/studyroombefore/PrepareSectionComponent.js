@@ -6,11 +6,14 @@ import StudyChatting from "./preparesection/StudyChattingComponent";
 import StudyMyEssay from "./preparesection/StudyMyEssayCheckComponent";
 import StudyProfileAndEssay from "./preparesection/StudyProfileAndEssayComponent";
 import StudyQustionList from "./preparesection/StudyQuestionListComponent";
-
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { exitCurrentRoom } from "store/InterviewStore";
 const PrepareSection = (props) => {
     const [section, setSection] = useState("info");
-    const { peopleList, questionList, setQuestionList } = props;
-
+    const { peopleList, questionList, setQuestionList,leaveSession } = props;
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const handleInfo = () => {
         setSection("info");
     };
@@ -27,7 +30,11 @@ const PrepareSection = (props) => {
         setSection("chat");
     };
 
-    const handleExit = () => {};
+    const handleExit = () => {
+        dispatch(exitCurrentRoom());
+        leaveSession();
+        navigate("/");
+    };
 
     return (
         <S.sectionPage>

@@ -4,14 +4,11 @@ import * as S from "../../StudyRoomStyledComponents";
 import StudyProfileDetail from "./studypreparedetail/StudyProfileDetailComponent";
 import StudyEssayDetail from "./studypreparedetail/StudyEssayDetailComponent";
 
+
 const StudyProfileAndEssay = ({ peopleList }) => {
-    const [tap, setTap] = useState("profile");
-    const [checkProfile, setCheckProfile] = useState({
-        name: "",
-        rate: "",
-        email: "",
-    });
-    const [checkEssay, setCheckEssay] = useState([]);
+    const [tap, setTap] = useState(null);
+    const [checkProfile, setCheckProfile] = useState(null);
+    const [checkEssay, setCheckEssay] = useState(null);
 
     const handleProfileTap = () => {
         setTap("profile");
@@ -21,14 +18,12 @@ const StudyProfileAndEssay = ({ peopleList }) => {
         setTap("essay");
     };
 
-    const handleCheckWho = (name) => {
-        const target = peopleList.find((person) => person.name === name);
-        setCheckProfile({
-            name: target.name,
-            rate: target.rate,
-            email: target.email,
-        });
-        setCheckEssay(target.essay);
+    const handleCheckWho = (index) => {
+        const target = peopleList[index];
+        console.log(target);
+        setCheckProfile(target);
+        setCheckEssay(target.essays[0]); // 임시로 0번 넣기 나중엔 대표 값으로 변경
+        setTap("profile");
     };
 
     return (
@@ -41,9 +36,9 @@ const StudyProfileAndEssay = ({ peopleList }) => {
                         <div>
                             {peopleList.map((people, index) => (
                                 <S.peopleName
-                                    onClick={() => handleCheckWho(people.name)}
+                                    onClick={() => handleCheckWho(index)}
                                 >
-                                    {people.name}
+                                    {people.nickname}
                                 </S.peopleName>
                             ))}
                         </div>
@@ -59,7 +54,7 @@ const StudyProfileAndEssay = ({ peopleList }) => {
                         </S.contentTap>
                     </S.contentTapList>
                     <S.contentDetail>
-                        {checkEssay.length === 0 ? (
+                        {!checkProfile ? (
                             <S.profileContent>
                                 참여자를 클릭해 정보를 확인하세요!
                             </S.profileContent>

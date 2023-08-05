@@ -119,14 +119,22 @@ const StudyRoom = () => {
     joinSession();
   }, []);
 
-  const deleteIsSperker = (connectionId) => {
-    let prevIsSpeakList = isSpeakList;
-    let index = prevIsSpeakList.indexOf(connectionId, 0);
-    if (index > -1) {
-      prevIsSpeakList.splice(index, 1);
-      setIsSpeakList([...prevIsSpeakList]);
-    }
-  };
+    useEffect(()=>{
+      window.addEventListener('beforeunload', leaveSession);
+      return () => {
+        leaveSession();
+        window.removeEventListener('beforeunload', leaveSession);
+      };
+    },[session])
+
+    const deleteIsSperker = (connectionId) => {
+        let prevIsSpeakList = isSpeakList;
+        let index = prevIsSpeakList.indexOf(connectionId, 0);
+        if (index > -1) {
+          prevIsSpeakList.splice(index, 1);
+          setIsSpeakList([...prevIsSpeakList]);
+        }
+      };
 
   const joinSession = () => {
     const newOpenVidu = new OpenVidu();
@@ -222,6 +230,15 @@ const StudyRoom = () => {
     connection();
   };
 
+    const leaveSession = () => {
+      if (!session) return;
+      session?.disconnect();
+
+      // Empty all properties...
+      setPublisher(null);
+      setSubscribers([]);
+    };
+
   useEffect(() => {
     localStorage.setItem("questionList", JSON.stringify(questionList));
   }, [questionList]);
@@ -288,6 +305,7 @@ const StudyRoom = () => {
         questionList={questionList}
         setQuestionList={setQuestionList}
         peopleList={peopleList}
+        leaveSession={leaveSession}
       />
       {/* <StudyRoomInterviewer
                 questionList={questionList}

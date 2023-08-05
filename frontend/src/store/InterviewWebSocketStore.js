@@ -46,6 +46,8 @@ const initialState = {
       },
     ],
   },
+  questions:[],
+
 };
 
 export const interviewThunk = createAsyncThunk(
@@ -127,6 +129,14 @@ export const interviewSlice = createSlice({
       );
       if (member) member.role = role;
     },
+    addQuestion : (state, action) =>{
+      state.questions = [...state.questions, action.payload];
+    }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(interviewThunk.fulfilled, (state, action) => {
+      //state.client = action.payload;
+    });
   },
 });
 
@@ -137,6 +147,7 @@ export const {
   exitRoom,
   readyStatus,
   roleChange,
+  addQuestion,
 } = interviewSlice.actions;
 export const selectMessages = (state) => state.chat.currentRoom.messages;
 export default interviewSlice.reducer;

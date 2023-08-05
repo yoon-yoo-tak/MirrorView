@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 public class RoomMemberInfo {
 
     private String nickname;
+    private String email;
+    private float rating;
     private boolean ready;
     private List<EssayListDto> essays = new ArrayList<>();
     private String role;

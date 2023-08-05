@@ -41,10 +41,9 @@ public class InterviewController {
     @PostMapping("/create")
     public ResponseEntity<?> createRoom(@RequestBody RoomRequestDto requestDto,
                                         @AuthenticationPrincipal CustomMemberDetails member) {
-        Member user = member.getUser();
-        String nickname = user.getNickname();
-        System.out.println("nickname = " + nickname);
-        InterviewRoom interviewRoom = interviewService.create(member.getUsername(), nickname, requestDto);
+
+
+        InterviewRoom interviewRoom = interviewService.create(member.getUser(), requestDto);
         return BaseResponse.okWithData(HttpStatus.OK, "테스트", interviewRoom);
     }
 
@@ -64,10 +63,9 @@ public class InterviewController {
     public ResponseEntity<?> joinRoom(@AuthenticationPrincipal CustomMemberDetails member,
                                       @PathVariable String roomId) {
         log.info("db 가져오기");
-        String nickname = member.getNickname();
         InterviewRoom interview;
         try {
-            interview = interviewService.joinRoom(member.getUsername(), nickname, roomId);
+            interview = interviewService.joinRoom(member.getUser(), roomId);
         } catch (Exception e) {
             return BaseResponse.fail(e.getMessage(), 400);
         }

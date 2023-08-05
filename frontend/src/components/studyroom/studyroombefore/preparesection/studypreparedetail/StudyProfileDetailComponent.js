@@ -16,9 +16,9 @@ const StudyProfileDetail = ({ profile }) => {
                         </S.profileKey>
                         <S.vLine />
                         <S.profileDetail>
-                            <S.profileContent>{profile.name}</S.profileContent>
+                            <S.profileContent>{profile.nickname}</S.profileContent>
                             <S.profileContent>{profile.email}</S.profileContent>
-                            <S.profileContent>{profile.rate}</S.profileContent>
+                            <S.profileContent>{profile.rating}</S.profileContent>
                         </S.profileDetail>
                     </S.profileInfo>
                 </div>
