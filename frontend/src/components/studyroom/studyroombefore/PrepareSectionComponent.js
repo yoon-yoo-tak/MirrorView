@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { exitCurrentRoom } from "store/InterviewStore";
 const PrepareSection = (props) => {
     const [section, setSection] = useState("info");
-    const { peopleList, questionList, setQuestionList } = props;
+    const { peopleList, questionList, setQuestionList,leaveSession } = props;
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleInfo = () => {
@@ -32,6 +32,7 @@ const PrepareSection = (props) => {
 
     const handleExit = () => {
         dispatch(exitCurrentRoom());
+        leaveSession();
         navigate("/");
     };
 

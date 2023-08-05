@@ -305,6 +305,7 @@ const StudyRoom = () => {
                 questionList={questionList}
                 setQuestionList={setQuestionList}
                 peopleList={peopleList}
+                leaveSession={leaveSession}
             />
             {/* <StudyRoomInterviewer
                 questionList={questionList}

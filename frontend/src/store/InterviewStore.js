@@ -6,7 +6,47 @@ axios.defaults.withCredentials = true;
 
 const initialState = {
     room :[],
-    currentRoom:null,
+    currentRoom: {
+        id: "",
+        title: "",
+        host: "",
+        members: [
+          {
+            nickname: "",
+            ready: false,
+            essays: [],
+            role: "", //interviewer : 면접관 interviewee : 면접자
+          },
+        ],
+        password: "",
+        maxMemberCount: 0,
+        category: "",
+        isStarted: false,
+        timestamp: null,
+        messages: [
+          {
+            type: "CHAT",
+            data: {
+              memberId: "testuser1",
+              message: "하이하이하이하이1111111하이",
+            },
+          },
+          {
+            type: "SYSTEM",
+            data: {
+              memberId: "testuser1",
+              message: "하이하이하이하이하이",
+            },
+          },
+          {
+            type: "CHAT",
+            data: {
+              memberId: "testuser1",
+              message: "하이하12312123123이하이하이하이",
+            },
+          },
+        ],
+      },
 };
 
 export const getInterviewRoom = createAsyncThunk(
@@ -64,7 +104,7 @@ const interviewSlice = createSlice({
             state.currentRoom = action.payload;
         },
         exitCurrentRoom:(state, action)=>{
-            state.currentRoom = null;
+            state.currentRoom = {members :[]};
         }
     },
     extraReducers:{

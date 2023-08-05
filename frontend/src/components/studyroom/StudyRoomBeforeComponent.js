@@ -6,18 +6,18 @@ import { useSelector } from "react-redux";
 
 const StudyRoomBefore = (props) => {
     // 스터디룸 페이지에서 가져온 peopleList
-    const { questionList, setQuestionList, peopleList, streamManager } = props;
+    const { questionList, setQuestionList, peopleList, streamManager,leaveSession } = props;
     const [ready, setReady] = useState(false);
-    const {members} = useSelector((state)=>state.interview.currentRoom);
+    const {currentRoom} = useSelector((state)=>state.interview);
     const nickname = useSelector((state)=>state.auth.user.nickname);
     useEffect(()=>{
-        members.forEach(member => {
+        currentRoom.members.forEach(member => {
             if (member.nickname==nickname) {
                 setReady(member.ready);
                 return;
             }
         });
-    },[members])
+    },[currentRoom.members])
     const handleReady = () => {
         setReady(!ready);
         // 준비상태 반영 api 호출
@@ -81,9 +81,10 @@ const StudyRoomBefore = (props) => {
                 <S.prepareSectionSecond>
                     <PrepareSection
                         username={nickname}
-                        peopleList={members}
+                        peopleList={currentRoom.members}
                         questionList={questionList}
                         setQuestionList={setQuestionList}
+                        leaveSession = {leaveSession}
                     />
                 </S.prepareSectionSecond>
             </S.prepareWrap>
