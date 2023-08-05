@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -56,8 +57,10 @@ public class SecurityConfig {
 			.authorizeRequests()
 			.antMatchers("/").permitAll() //테스트 페이지
 			.antMatchers("/api/users/login").permitAll() //로그인
-			.antMatchers("/kauth.kakao.com/oauth/authorize/**").permitAll() //로그인
 			.antMatchers("/api/users/**").permitAll() //회원 가입
+			.antMatchers("/api/interviews/rooms/**").permitAll() // 면접방 조회
+			.antMatchers("/api/category/**").permitAll() // 카테고리 조회
+			.antMatchers(HttpMethod.GET, "/api/board/**").permitAll() //공지사항 조회
 			.antMatchers("/api/ws/**").permitAll()
 			.anyRequest().authenticated();
 
