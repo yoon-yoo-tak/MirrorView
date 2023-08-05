@@ -25,6 +25,31 @@ export const createChatRoomAsync = createAsyncThunk(
   }
 );
 
+export const subscribeRoomCountAsync = createAsyncThunk(
+  "chatRooms/subscribeRoomCountAsync",
+  async (_, { dispatch, getState }) => {
+    const client = getClient();
+    if (!client) {
+      throw new Error("WebSocket is not connected");
+    }
+    await client.subscribe("/sub/chatrooms.count", function (message) {
+      const payload = JSON.parse(message.body);
+      console.log(payload);
+      const count = payload.count;
+      const roomId = payload.roomId; // 서버에서 보낸 roomId를 읽습니다.
+
+      console.log("count sub에 대한 message 도착");
+
+      dispatch(
+        updateRoomCount({
+          roomId: roomId,
+          count: count,
+        })
+      );
+    });
+  }
+);
+
 export const loadChatRooms = createAsyncThunk(
   "chatRooms/loadChatRooms",
   async (_, { dispatch, getState }) => {
@@ -50,6 +75,18 @@ const chatRoomSlice = createSlice({
     addChatRoom: (state, action) => {
       state.chatRooms.push(action.payload);
     },
+    updateRoomCount: (state, action) => {
+      console.log("update 터짐");
+      const index = state.chatRooms.findIndex(
+        (room) => room.id === action.payload.roomId
+      );
+
+      if (index !== -1) {
+        const room = state.chatRooms[index];
+        const updatedRoom = { ...room, count: action.payload.count }; // 방의 새로운 사본을 만들고 count 속성을 업데이트
+        state.chatRooms[index] = updatedRoom; // chatRooms 배열의 해당 방을 새로운 사본으로 대체
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase("/user/sub/chatrooms", (state, action) => {
@@ -59,7 +96,11 @@ const chatRoomSlice = createSlice({
   },
 });
 
-export const { updateChatRooms, updateSelectedRoom, addChatRoom } =
-  chatRoomSlice.actions;
+export const {
+  updateChatRooms,
+  updateSelectedRoom,
+  addChatRoom,
+  updateRoomCount,
+} = chatRoomSlice.actions;
 
 export default chatRoomSlice.reducer;

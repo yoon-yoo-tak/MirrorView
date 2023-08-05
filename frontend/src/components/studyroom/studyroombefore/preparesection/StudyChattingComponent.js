@@ -14,7 +14,9 @@ const StudyChatting = () => {
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
   const { user } = useSelector((state) => state.auth);
-  const interviewRoomId = useSelector((state) => state.interview.currentRoom.id);
+  const interviewRoomId = useSelector(
+    (state) => state.interview.currentRoom.id
+  );
   const messages = useSelector(
     (state) => state.interviewWebSocket.currentRoom.messages
   );
@@ -24,7 +26,7 @@ const StudyChatting = () => {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSendClick(); // 엔터 키를 누르면 handleSendClick 함수 호출
     }
   };
@@ -34,14 +36,13 @@ const StudyChatting = () => {
 
     const messageToSend = {
       type: "CHAT",
-      roomId: interviewRoomId,
       data: {
         memberId: user.nickname,
         message: message.trim(),
       },
     };
 
-    dispatch(sendMessage(messageToSend)); // 액션 디스패치
+    dispatch(sendMessage({ roomId: interviewRoomId, data: messageToSend }));
     setMessage("");
   };
 
@@ -52,18 +53,22 @@ const StudyChatting = () => {
 
   return (
     <ChatContainer>
-      <ChatWindow ref={chatWindowRef}> {/* 참조 추가 */}
+      <ChatWindow ref={chatWindowRef}>
+        {" "}
+        {/* 참조 추가 */}
         {messages &&
           messages.map((msg, index) => (
             <div key={index}>
               {msg.type === "SYSTEM" ? (
-                <span style={{ color: "#6A9CFD" }}>
-                  [SYSTEM] {msg.data.message} {/* SYSTEM 메시지 수정 */}
+                <span style={{ color: "#e63c71" }}>
+                  {" "}
+                  {/* SYSTEM 메시지 */}
+                  [SYSTEM] {msg.data.message}
                 </span>
               ) : (
                 <>
                   <span style={{ color: "#6A9CFD" }}>
-                    {msg.data.memberId}:  {/* SYSTEM 메시지 수정 */}
+                    {msg.data.memberId}: {/* USER 메시지 */}
                     {msg.data.message}
                   </span>
                 </>

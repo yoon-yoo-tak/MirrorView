@@ -47,6 +47,7 @@ export const initializeWebSocket = createAsyncThunk(
 export const closeWebSocket = createAsyncThunk(
   "webSocket/close",
   (_, { getState }) => {
+    console.log("연결 종료 함수 호출");
     if (client !== null) {
       client.disconnect(
         () => {

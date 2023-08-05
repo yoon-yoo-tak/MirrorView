@@ -13,7 +13,7 @@ const initialState = {
       {
         nickname: "",
         ready: false,
-        essays: [],
+        essays: {},
         role: "",
       },
     ],
@@ -50,19 +50,25 @@ const initialState = {
 
 export const interviewThunk = createAsyncThunk(
   "chat/initialize",
-  async ({ client, interviewRoomId }, { dispatch }) => {
+  async ({ client, interviewRoomId }, { dispatch, getState }) => {
     client.subscribe("/sub/interviewrooms/" + interviewRoomId, (message) => {
       const parsedMessage = JSON.parse(message.body);
       switch (parsedMessage.type) {
-        case "CHAT": 
-          console.log("메시지 수신")
+        case "SYSTEM":
+        case "CHAT":
           dispatch(receiveMessage(parsedMessage));
           break;
         case "JOIN":
-          dispatch(enterRoom(parsedMessage));
+          dispatch(joinRoom(parsedMessage.data));
           break;
-        case "READY_STATUS":
-          dispatch(readyStatus(parsedMessage));
+        case "EXIT":
+          dispatch(exitRoom(parsedMessage.data));
+          break;
+        case "READY_CHANGE":
+          dispatch(readyStatus(parsedMessage.data));
+          break;
+        case "ROLE_CHANGE":
+          dispatch(roleChange(parsedMessage.data));
           break;
         default:
           break;
@@ -71,42 +77,66 @@ export const interviewThunk = createAsyncThunk(
   }
 );
 
-export const chatSlice = createSlice({
+export const interviewSlice = createSlice({
   name: "interviewWebSocket",
   initialState,
   reducers: {
+    // front button after
     sendMessage: (state, action) => {
       const client = getClient();
-      const { roomId: currentRoomId, ...newMessage } = action.payload; 
-      client.send(`/app/interviewrooms/${currentRoomId}`, {},
-        JSON.stringify(newMessage),
-      );
-      //state.currentRoom.messages.push(action.payload);
+      const { roomId, data } = action.payload;
+      client.send(`/app/interviewrooms/${roomId}`, {}, JSON.stringify(data));
     },
+
+    // call back
     receiveMessage: (state, action) => {
-      console.log(action.payload)
-      state.currentRoom.messages.push(action.payload);
+      const message = action.payload;
+      if (state.currentRoom) {
+        state.currentRoom.messages = [...state.currentRoom.messages, message];
+      }
     },
-    enterRoom: (state, action) => {
-      state.currentRoom.members.push(action.payload);
+
+    // call back
+    joinRoom: (state, action) => {
+      const member = action.payload;
+      state.currentRoom.members.push(member);
     },
-    exitRoom:(state, action) => {
-      const userId = action.payload.userId;
-      state.currentRoom.members.filter(member => member.id !== userId);
+
+    // call back
+    exitRoom: (state, action) => {
+      const nickname = action.payload.nickname;
+      state.currentRoom.members = state.currentRoom.members.filter(
+        (member) => member.nickname !== nickname
+      );
     },
+
+    // call back
     readyStatus: (state, action) => {
-      state.readyStatus = action.payload;
+      const { nickname, ready } = action.payload;
+      const member = state.currentRoom.members.find(
+        (member) => member.nickname === nickname
+      );
+      if (member) member.ready = ready;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(interviewThunk.fulfilled, (state, action) => {
-      //state.client = action.payload;
-    });
+
+    // call back
+    roleChange: (state, action) => {
+      const { nickname, role } = action.payload;
+      const member = state.currentRoom.members.find(
+        (member) => member.nickname === nickname
+      );
+      if (member) member.role = role;
+    },
   },
 });
 
-export const { sendMessage, receiveMessage, enterRoom, readyStatus } =
-  chatSlice.actions;
+export const {
+  sendMessage,
+  receiveMessage,
+  joinRoom,
+  exitRoom,
+  readyStatus,
+  roleChange,
+} = interviewSlice.actions;
 export const selectMessages = (state) => state.chat.currentRoom.messages;
-
-export default chatSlice.reducer;
+export default interviewSlice.reducer;

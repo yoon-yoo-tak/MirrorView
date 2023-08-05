@@ -9,7 +9,7 @@ import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { getClient } from "store/WebSocketStore";
-import { initializeWebSocket } from "store/WebSocketStore";
+import { initializeWebSocket, closeWebSocket } from "store/WebSocketStore";
 import { useDispatch } from "react-redux";
 import { interviewThunk } from "store/InterviewWebSocketStore";
 
@@ -65,237 +65,237 @@ const StudyRoom = () => {
     },
   ];
 
-    const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8000/';
-    const {user} = useSelector((state)=>state.auth);
-    const [questionList, setQuestionList] = useState([]);
-    const [OV, setOV] = useState(null);
+  const APPLICATION_SERVER_URL =
+    process.env.NODE_ENV === "production" ? "" : "http://localhost:8000/";
+  const { user } = useSelector((state) => state.auth);
+  const [questionList, setQuestionList] = useState([]);
+  const [OV, setOV] = useState(null);
 
-    const [OVForScreenSharing, setOVForScreenSharing] = useState();
-    const [sessionForScreenSharing, setSessionForScreenSharing] = useState();
+  const [OVForScreenSharing, setOVForScreenSharing] = useState();
+  const [sessionForScreenSharing, setSessionForScreenSharing] = useState();
 
-    const [session, setSession] = useState(null);
+  const [session, setSession] = useState(null);
 
-    const [mySession, setMySession] = useState("");
-    const [currentVideoDevice,setCurrentVideoDevice] = useState(null);
-    const [mainStreamManager, setMainStreamManager] = useState(null);
+  const [mySession, setMySession] = useState("");
+  const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
+  const [mainStreamManager, setMainStreamManager] = useState(null);
 
   const [initScreenData, setInitScreenData] = useState({
-    mySessionId: mySession+ '_screen',
-    myScreenName: user.nickname + '님의 화면',
+    mySessionId: mySession + "_screen",
+    myScreenName: user.nickname + "님의 화면",
   });
-
 
   const [publisher, setPublisher] = useState(null);
   const [subscribers, setSubscribers] = useState([]);
   const [isSpeakList, setIsSpeakList] = useState([]);
-  const [publisherForScreenSharing, setPublisherForScreenSharing] = useState(null);
+  const [publisherForScreenSharing, setPublisherForScreenSharing] =
+    useState(null);
 
   const [isAudioOn, setIsAudioOn] = useState(true);
   const [isVideoOn, setIsVideoOn] = useState(true);
 
   const [doScreenSharing, setDoScreenSharing] = useState(false);
-  const [doStartScreenSharing, setDoStartScreenSharing] =
-    useState(false);
-  const [doStopScreenSharing, setDoStopScreenSharing] =
-    useState(false);
+  const [doStartScreenSharing, setDoStartScreenSharing] = useState(false);
+  const [doStopScreenSharing, setDoStopScreenSharing] = useState(false);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
-  const [doPauseScreenSharing, setDoPauseScreenSharing] =
-    useState(false);
+  const [doPauseScreenSharing, setDoPauseScreenSharing] = useState(false);
   const [checkMyScreen, setCheckMyScreen] = useState(false);
-  const [destroyedStream, setDestroyedStream] = useState(
-    null
-  );
+  const [destroyedStream, setDestroyedStream] = useState(null);
 
-  const [choiceScreen, setChoiceScreen] = useState('');
+  const [choiceScreen, setChoiceScreen] = useState("");
   const [openScreenModal, setOpenScreenModal] = useState(false);
   const [isHideCam, setIsHideCam] = useState(false);
 
-
-
-    useEffect(() => {
-        const storedList = localStorage.getItem("questionList");
-        if (storedList) {
-            setQuestionList(JSON.parse(storedList));
-        }
-    }, []);
-    const {pathname} = useLocation();
-
-    useEffect(() =>{
-        setMySession(pathname.substring(11));
-        joinSession();
-    },[])
-
-    const deleteIsSperker = (connectionId) => {
-        let prevIsSpeakList = isSpeakList;
-        let index = prevIsSpeakList.indexOf(connectionId, 0);
-        if (index > -1) {
-          prevIsSpeakList.splice(index, 1);
-          setIsSpeakList([...prevIsSpeakList]);
-        }
-      };
-
-
-    const joinSession = () =>{
-        const newOpenVidu = new OpenVidu();
-        newOpenVidu.enableProdMode();
-        const newSession = newOpenVidu.initSession();
-
-        setOV(newOpenVidu);
-        setSession(newSession);
-
-        const connection = () =>{
-
-            newSession.on('streamCreated', (event) => {
-                const newSubscriber = newSession.subscribe(
-                  event.stream,
-                  JSON.parse(event.stream.connection.data).clientData
-                );
-                if (newSubscriber.stream.typeOfVideo === 'CUSTOM') {
-                  const newSubscribers = subscribers;
-                  newSubscribers.push(newSubscriber);
-
-                  setSubscribers([...newSubscribers]);
-                } else {
-                  // 비디오인 경우 화면 공유 스트림
-                  setMainStreamManager(newSubscriber);
-                  setIsScreenSharing(true);
-                  setDoPauseScreenSharing(true);
-                }
-              });
-
-              newSession.on('streamDestroyed', (event) => {
-                if (event.stream.typeOfVideo === 'CUSTOM') {
-                  deleteSubscriber(event.stream.streamManager);
-                } else {
-                  setDestroyedStream(event.stream.streamManager);
-                  setCheckMyScreen(true);
-                }
-              });
-
-              newSession.on('publisherStartSpeaking', (event) => {
-                const newIsSpeakList = isSpeakList;
-                newIsSpeakList.push(event.connection.connectionId);
-                setIsSpeakList([...newIsSpeakList]);
-              });
-
-              newSession.on('publisherStopSpeaking', (event) => {
-                deleteIsSperker(event.connection.connectionId);
-              });
-
-
-
-              // newSession.on('sessionDisconnected', (event) => {
-              //   console.log(event);
-              // });
-
-              newSession.on('exception', (exception) => {
-                console.warn(exception);
-              });
-
-            getToken().then((token)=>{
-                newSession.connect(token, {clientData:user.nickname})
-                .then(async () =>{
-                    await newOpenVidu.getUserMedia({
-                        audioSource: false,
-                        videoSource: undefined,
-                        resolution: '330x180',
-                        frameRate: 10,
-                    })
-                    .then((mediaStream)=>{
-                        var videoTrack = mediaStream.getVideoTracks()[0];
-
-                        var newPublisher = newOpenVidu.initPublisher(
-                            user.nickname,
-                            {
-                                audioSource: undefined,
-                                videoSource: videoTrack,
-                                publishAudio: isAudioOn,
-                                publishVideo: isVideoOn,
-                                // resolution: '1280x720',
-                                // frameRate: 10,
-                                insertMode: 'APPEND',
-                                mirror: true,
-                            }
-                        );
-
-                        newPublisher.once('accessAllowed',()=>{
-                            newSession.publish(newPublisher);
-                            setPublisher(newPublisher);
-                            console.log(newPublisher);
-                        });
-                    }).catch((error)=>{
-                        console.log(error);
-                    });
-                });
-            });
-
-
-        };
-        connection();
-
+  useEffect(() => {
+    const storedList = localStorage.getItem("questionList");
+    if (storedList) {
+      setQuestionList(JSON.parse(storedList));
     }
+  }, []);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    setMySession(pathname.substring(11));
+    joinSession();
+  }, []);
+
+  const deleteIsSperker = (connectionId) => {
+    let prevIsSpeakList = isSpeakList;
+    let index = prevIsSpeakList.indexOf(connectionId, 0);
+    if (index > -1) {
+      prevIsSpeakList.splice(index, 1);
+      setIsSpeakList([...prevIsSpeakList]);
+    }
+  };
+
+  const joinSession = () => {
+    const newOpenVidu = new OpenVidu();
+    newOpenVidu.enableProdMode();
+    const newSession = newOpenVidu.initSession();
+
+    setOV(newOpenVidu);
+    setSession(newSession);
+
+    const connection = () => {
+      newSession.on("streamCreated", (event) => {
+        const newSubscriber = newSession.subscribe(
+          event.stream,
+          JSON.parse(event.stream.connection.data).clientData
+        );
+        if (newSubscriber.stream.typeOfVideo === "CUSTOM") {
+          const newSubscribers = subscribers;
+          newSubscribers.push(newSubscriber);
+
+          setSubscribers([...newSubscribers]);
+        } else {
+          // 비디오인 경우 화면 공유 스트림
+          setMainStreamManager(newSubscriber);
+          setIsScreenSharing(true);
+          setDoPauseScreenSharing(true);
+        }
+      });
+
+      newSession.on("streamDestroyed", (event) => {
+        if (event.stream.typeOfVideo === "CUSTOM") {
+          deleteSubscriber(event.stream.streamManager);
+        } else {
+          setDestroyedStream(event.stream.streamManager);
+          setCheckMyScreen(true);
+        }
+      });
+
+      newSession.on("publisherStartSpeaking", (event) => {
+        const newIsSpeakList = isSpeakList;
+        newIsSpeakList.push(event.connection.connectionId);
+        setIsSpeakList([...newIsSpeakList]);
+      });
+
+      newSession.on("publisherStopSpeaking", (event) => {
+        deleteIsSperker(event.connection.connectionId);
+      });
+
+      // newSession.on('sessionDisconnected', (event) => {
+      //   console.log(event);
+      // });
+
+      newSession.on("exception", (exception) => {
+        console.warn(exception);
+      });
+
+      getToken().then((token) => {
+        newSession
+          .connect(token, { clientData: user.nickname })
+          .then(async () => {
+            await newOpenVidu
+              .getUserMedia({
+                audioSource: false,
+                videoSource: undefined,
+                resolution: "330x180",
+                frameRate: 10,
+              })
+              .then((mediaStream) => {
+                var videoTrack = mediaStream.getVideoTracks()[0];
+
+                var newPublisher = newOpenVidu.initPublisher(user.nickname, {
+                  audioSource: undefined,
+                  videoSource: videoTrack,
+                  publishAudio: isAudioOn,
+                  publishVideo: isVideoOn,
+                  // resolution: '1280x720',
+                  // frameRate: 10,
+                  insertMode: "APPEND",
+                  mirror: true,
+                });
+
+                newPublisher.once("accessAllowed", () => {
+                  newSession.publish(newPublisher);
+                  setPublisher(newPublisher);
+                  console.log(newPublisher);
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          });
+      });
+    };
+    connection();
+  };
 
   useEffect(() => {
     localStorage.setItem("questionList", JSON.stringify(questionList));
   }, [questionList]);
 
-    const deleteSubscriber = (streamManger) =>{
-        let subs = subscribers;
-        let index = subs.indexOf(streamManger,0);
-        if( index > -1){
-            subs.splice(index, 1);
-            setSubscribers(subs);
-        }
+  const deleteSubscriber = (streamManger) => {
+    let subs = subscribers;
+    let index = subs.indexOf(streamManger, 0);
+    if (index > -1) {
+      subs.splice(index, 1);
+      setSubscribers(subs);
     }
+  };
 
-    const getToken = async() => {
-        return createSession(mySession).then((sId)=>
-        createToken(sId)
-        );
+  const getToken = async () => {
+    return createSession(mySession).then((sId) => createToken(sId));
+  };
+
+  const createSession = async (sessionId) => {
+    const response = await axios.post(
+      `${APPLICATION_SERVER_URL}api/sessions`,
+      { customSessionId: sessionId },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data;
+  };
+
+  const createToken = async (sessionId) => {
+    const response = await axios.post(
+      `${APPLICATION_SERVER_URL}api/sessions/${sessionId}/connections`,
+      {},
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data;
+  };
+
+  // 면접방 웹 소켓 연결
+  useEffect(() => {
+    const interviewRoomId = location.pathname.replace("/studyroom/", "");
+    dispatch(initializeWebSocket(accessToken))
+      .then(() => {
+        const client = getClient();
+        dispatch(interviewThunk({ client, interviewRoomId }));
+      })
+      .then(() => {
+        //dispatch(enterRoom());
+      })
+      .catch(() => {
+        console.log("웹소켓 연결 --> 구독 --> join 터뜨리기");
+      });
+
+    return () => {
+      dispatch(closeWebSocket());
     };
+  }, []);
 
-    const createSession = async(sessionId) => {
-        const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions`,{customSessionId : sessionId},{
-            headers : {'Content-Type':'application/json',},
-        });
-        return response.data;
-    };
-
-    const createToken = async(sessionId) => {
-        const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions/${sessionId}/connections`,{},{
-            headers: {'Content-Type':'application/json',},
-        });
-        return response.data;
-    }
-
-    // 면접방 웹 소켓 연결
-    useEffect(() => {
-        const interviewRoomId = location.pathname.replace("/studyroom/", "");
-        dispatch(initializeWebSocket(accessToken))
-            .then(() => {
-                const client = getClient();
-                dispatch(interviewThunk({ client, interviewRoomId })); // ws, roomId -> subscribe
-            })
-            .catch(() => {
-                console.log("면접방 웹 소켓 연결 실패");
-            });
-    }, []);
-
-    return (
-        <div>
-            <StudyRoomBefore
-                streamManager ={publisher}
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-                peopleList={peopleList}
-            />
-            {/* <StudyRoomInterviewer
+  return (
+    <div>
+      <StudyRoomBefore
+        streamManager={publisher}
+        questionList={questionList}
+        setQuestionList={setQuestionList}
+        peopleList={peopleList}
+      />
+      {/* <StudyRoomInterviewer
                 questionList={questionList}
                 setQuestionList={setQuestionList}
                 peopleList={peopleList}
             /> */}
-        </div>
-    );
+    </div>
+  );
 };
 
 export default StudyRoom;

@@ -37,6 +37,7 @@ public class InterviewRoom {
                 .nickname(nickname)
                 .ready(false)
                 .essays(essayList)
+                .role("interviewee")
                 .build());
     }
 

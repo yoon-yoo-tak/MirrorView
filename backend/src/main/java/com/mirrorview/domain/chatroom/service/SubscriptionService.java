@@ -1,6 +1,7 @@
 package com.mirrorview.domain.chatroom.service;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
@@ -14,72 +15,130 @@ import org.springframework.stereotype.Service;
 
 import com.mirrorview.domain.chatroom.domain.ChatRoom;
 import com.mirrorview.domain.chatroom.repository.ChatRepository;
+import com.mirrorview.domain.interview.dto.MessageDto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 // 채널별 유저 수 관리 서비스
-// 전체 유저는 실시간
-// 각 방은 redis 에 저장해서 불러와서, 실시간 아님
+// 전체 유저 count 실시간, 각 방 유저 count 실시간
+/**
+SubscriptionService
+	│	채팅 구독
+	├── handleChatRoomSubscribe(userId, subscriptionId, roomId)
+	│   ├── addSubscription(userId, subscriptionId, roomId)
+	│   └── incrementRoomCount(roomId)
+	│       ├── (optional) chatRoom.setCount(...)
+	│       └── sendRoomUserCount(roomId, count)
+	│
+    │	면접방 구독
+	├── handleInterviewRoomSubscribe(userId, subscriptionId, roomId)
+	│   ├── addSubscription(userId, subscriptionId, roomId)
+	│   └── interviewRoomSystemMessage(userId, roomId, message)
+	│
+    │   채팅 구독 취소
+	├── handleUnsubscribe(userId, subscriptionId)
+	│   └── removeSubscription(userId, subscriptionId)
+	│       ├── (optional) decrementRoomCount(roomId)
+	│       │   ├── (optional) chatRoom.setCount(...)
+	│       │   └── sendRoomUserCount(roomId, count)
+	│
+    │   면접방 구독 취소
+	├── handleInterviewRoomUnsubscribe(userId)
+	│   └── (loop) handleUnsubscribe(userId, subscriptionId)
+	│       └── interviewRoomSystemMessage(userId, roomId, message)
+	│	
+ 	│   전체 채팅 인원
+	├── incrementTotalUserCount(userId)
+	├── decrementTotalUserCount(userId)
+    │
+	│   강제 종료시 구독 취소
+	└── handleForceUnsubscribe(userId)
+ */
+
+
 @Service
 @Getter
 @RequiredArgsConstructor
 public class SubscriptionService {
-	// 유저, sub-id, roomId
-	private final ConcurrentMap<String, ConcurrentMap<String, String>> userIdToSubscriptionMap = new ConcurrentHashMap<>();
-	private final ChatRepository chatRepository;
+
 	private final SimpMessagingTemplate simpMessagingTemplate;
-
-	// 접속한 전체 유저들
+	private final ConcurrentMap<String, ConcurrentMap<String, String>> userIdToSubscriptionMap = new ConcurrentHashMap<>();
 	private final Set<String> subscribedUsers = Collections.synchronizedSet(new HashSet<>());
-	
-	// 채널 구독
-	public void handleSubscribe(String userId, String subscriptionId, String roomId) {
-		userIdToSubscriptionMap
-			.computeIfAbsent(userId, k -> new ConcurrentHashMap<>())
-			.put(subscriptionId, roomId);
+	private final ChatRepository chatRepository;
 
-		// 면접방
-		if(roomId.length() > 25)
-			return;
-
-		// 채팅
-		incrementRoomCount(userId, roomId);
+	public void handleChatRoomSubscribe(String userId, String subscriptionId, String roomId) {
+		addSubscription(userId, subscriptionId, roomId);
+		incrementRoomCount(roomId);
 	}
-	
-	// 채널 구독 취소
+
+	public void handleInterviewRoomSubscribe(String userId, String subscriptionId, String roomId) {
+		addSubscription(userId, subscriptionId, roomId);
+		interviewRoomSystemMessage(userId, roomId, "님이 입장하셨습니다");
+	}
+
 	public void handleUnsubscribe(String userId, String subscriptionId) {
+		removeSubscription(userId, subscriptionId);
+	}
+
+	public void handleInterviewRoomUnsubscribe(String userId) {
 		ConcurrentMap<String, String> userSubscriptions = userIdToSubscriptionMap.get(userId);
 		if (userSubscriptions != null) {
-			String roomId = userSubscriptions.remove(subscriptionId);
-			if (roomId != null) {
-				decrementRoomCount(userId, roomId);
+			for (String subscriptionId : userSubscriptions.keySet()) {
+				String roomId = userSubscriptions.get(subscriptionId);
+				if (roomId != null && roomId.startsWith("interviewRoom")) {
+					handleUnsubscribe(userId, subscriptionId);
+					interviewRoomSystemMessage(userId, roomId, "님이 퇴장하셨습니다.");
+				}
 			}
 		}
 	}
 
-	public void incrementRoomCount(String userId, String roomId) {
-		System.out.println("구독하려는 방 " + roomId);
-		Optional<ChatRoom> chatRoomOptional = chatRepository.findById(roomId);
-		if(chatRoomOptional.isPresent()){
-			ChatRoom chatRoom = chatRoomOptional.get();
-			chatRoom.setCount(chatRoom.getCount() + 1);
-			chatRepository.save(chatRoom);
-		} else {
-			throw new RuntimeException("방이 존재하지 않습니다.");
+	private void addSubscription(String userId, String subscriptionId, String roomId) {
+		userIdToSubscriptionMap.computeIfAbsent(userId, k -> new ConcurrentHashMap<>()).put(subscriptionId, roomId);
+	}
+
+	private void removeSubscription(String userId, String subscriptionId) {
+		ConcurrentMap<String, String> userSubscriptions = userIdToSubscriptionMap.get(userId);
+		if (userSubscriptions != null) {
+			String roomId = userSubscriptions.remove(subscriptionId);
+			if (roomId != null && !roomId.startsWith("interviewRoom")) {
+				decrementRoomCount(roomId);
+			}
 		}
 	}
 
-	public void decrementRoomCount(String userId, String roomId) {
+	private void incrementRoomCount(String roomId) {
+		System.out.println("구독하려는 방 " + roomId);
+		Optional<ChatRoom> chatRoomOptional = chatRepository.findById(roomId);
+		chatRoomOptional.ifPresentOrElse(chatRoom -> {
+			chatRoom.setCount(chatRoom.getCount() + 1);
+			chatRepository.save(chatRoom);
+			sendRoomUserCount(roomId, chatRoom.getCount());
+		}, () -> {
+			throw new RuntimeException("방이 존재하지 않습니다.");
+		});
+	}
+
+	private void decrementRoomCount(String roomId) {
 		System.out.println("구독 취소하려는 방 " + roomId);
 		Optional<ChatRoom> chatRoomOptional = chatRepository.findById(roomId);
-		if(chatRoomOptional.isPresent()){
-			ChatRoom chatRoom = chatRoomOptional.get();
+		chatRoomOptional.ifPresentOrElse(chatRoom -> {
 			chatRoom.setCount(chatRoom.getCount() - 1);
 			chatRepository.save(chatRoom);
-		} else {
+			sendRoomUserCount(roomId, chatRoom.getCount());
+		}, () -> {
 			throw new RuntimeException("방이 존재하지 않습니다.");
-		}
+		});
+	}
+
+	private void sendRoomUserCount(String roomId, int count) {
+		System.out.println("chatroom user count 동작");
+		Map<String, Object> payload = new HashMap<>();
+		payload.put("roomId", roomId); // 방 ID도 함께 보냅니다.
+		payload.put("count", count);
+		System.out.println(payload);
+		simpMessagingTemplate.convertAndSend("/sub/chatrooms.count", payload);
 	}
 
 	public void incrementTotalUserCount(String userId) {
@@ -106,5 +165,19 @@ public class SubscriptionService {
 				simpMessagingTemplate.convertAndSend("/sub/count", subscribedUsers.size());
 			}
 		}
+	}
+
+	public void interviewRoomSystemMessage(String userId, String roomId, String suffix){
+		if (!roomId.startsWith("interviewRoom")) {
+			// roomId가 "interviewRoom"으로 시작하지 않으면 메서드를 종료
+			return;
+		}
+
+		MessageDto systemMessage = MessageDto.builder()
+			.type("SYSTEM")
+			.data(Map.of("memberId", "system", "message", userId + suffix))
+			.build();
+
+		simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, systemMessage);
 	}
 }
