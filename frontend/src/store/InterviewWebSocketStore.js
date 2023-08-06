@@ -85,6 +85,10 @@ export const interviewSlice = createSlice({
       state.currentRoom = { ...action.payload, messages: [] };
     },
 
+    clearCurrentRoom: (state, action) => {
+      state.currentRoom = {};
+    },
+
     // 유저가 들어 왔을 때 다른 유저들에게 해당 유저 send
     userJoinRoomPub: (state, action) => {
       const client = getClient();
@@ -155,6 +159,8 @@ export const interviewSlice = createSlice({
 });
 
 export const {
+  joinedInterviewRoomCurrentRoomUpdate,
+  clearCurrentRoom,
   setCurrentRoom,
   userJoinRoomPub,
   sendMessage,
@@ -164,7 +170,6 @@ export const {
   readyStatus,
   roleChange,
   addQuestion,
-  joinedInterviewRoomCurrentRoomUpdate,
 } = interviewSlice.actions;
 export const selectMessages = (state) => state.chat.currentRoom.messages;
 export default interviewSlice.reducer;

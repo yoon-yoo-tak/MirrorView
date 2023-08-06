@@ -12,6 +12,7 @@ import { getClient } from "store/WebSocketStore";
 import { initializeWebSocket, closeWebSocket } from "store/WebSocketStore";
 import { useDispatch } from "react-redux";
 import {
+  clearCurrentRoom,
   hostJoinInterviewRoom,
   interviewSubscribe,
   joinInterviewRoom,
@@ -365,6 +366,7 @@ const StudyRoom = () => {
     initialize();
     return () => {
       dispatch(closeWebSocket());
+      dispatch(clearCurrentRoom());
     };
   }, []);
 
