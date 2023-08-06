@@ -12,8 +12,10 @@ const SelectInterviewee = (props) => {
   const members = useSelector(
     (state) => state.interviewWebSocket.currentRoom.members
   );
-  const currentRoom = useSelector((state)=> state.interviewWebSocket.currentRoom);
-  const {user} = useSelector((state)=>state.auth);
+  const currentRoom = useSelector(
+    (state) => state.interviewWebSocket.currentRoom
+  );
+  const { user } = useSelector((state) => state.auth);
   const nickname = useSelector((state) => state.auth.nickname);
   useEffect(() => {
     if (members == null) return;
@@ -53,23 +55,28 @@ const SelectInterviewee = (props) => {
 
   const changeToInterviewee = () => {
     const client = getClient();
-    const member = members.filter((member) => member.nickname === user.nickname)[0];
+    const member = members.filter(
+      (member) => member.nickname === user.nickname
+    )[0];
     console.log(member);
     if (!interviewee) {
       // console.log("나는 면접자야");
       setMyRole("interviewee");
       setInterviewee(true);
       const sendData = {
-        type:"ROLE_CHANGE",
-        data:{
-          nickname:member.nickname,
-          role:"interivewee",
+        type: "ROLE_CHANGE",
+        data: {
+          nickname: member.nickname,
+          role: "interivewee",
           rating: 0.3,
-          ready:member.ready,
-        }
+          ready: member.ready,
+        },
       };
-      client.send(`/app/interviewrooms/${currentRoom.id}`,{},JSON.stringify(sendData));
-      
+      client.send(
+        `/app/interviewrooms/${currentRoom.id}`,
+        {},
+        JSON.stringify(sendData)
+      );
     } else return;
   };
 
