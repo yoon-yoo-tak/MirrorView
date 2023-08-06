@@ -200,12 +200,6 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
           return response;
         })
         .then((response) => {
-          console.log(response.data.data.id);
-          dispatch(hostJoinInterviewRoom(response.data.data.id));
-          console.log("방장 입장 - DB 데이터 가져오기");
-          return response;
-        })
-        .then((response) => {
           console.log("이동 ");
           navigate(`/studyroom/${response.data.data.id}`, {
             state: { isHost: true },

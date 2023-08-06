@@ -13,10 +13,24 @@ import interviewReducer from "./InterviewStore";
 import interviewWebSocketStore from "store/InterviewWebSocketStore";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+//import sessionStorage from "redux-persist/lib/storage/session";
+
+const sessionStorage = window.sessionStorage;
 
 const persistConfig = {
   key: "root",
-  storage,
+  //storage,
+  storage: {
+    getItem: (key) => {
+      return Promise.resolve(sessionStorage.getItem(key));
+    },
+    setItem: (key, item) => {
+      return Promise.resolve(sessionStorage.setItem(key, item));
+    },
+    removeItem: (key) => {
+      return Promise.resolve(sessionStorage.removeItem(key));
+    },
+  },
 };
 
 const rootReducer = combineReducers({
