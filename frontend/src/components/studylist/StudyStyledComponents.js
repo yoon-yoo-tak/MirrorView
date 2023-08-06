@@ -49,30 +49,33 @@ export const studylistMain = styled.div`
 // StudyRoomCategory
 
 export const categoryPage = styled.div`
-    width: 30rem;
+    width: 35rem;
     height: 3rem;
     background-color: white;
     box-shadow: 0px 0px 10px #bdbdbd;
     border-radius: 10px;
-    margin-right: 100px;
+    margin-right: 70px;
     padding: 5px 10px;
 `;
 
 export const categoryWrap = styled.div`
     display: flex;
     align-items: center;
+    justify-content: space-between;
 `;
 
 export const categoryList = styled.div`
     display: flex;
     align-items: center;
     flex: 3;
+    position: relative;
     justify-content: space-evenly;
 `;
 export const categoryDiv = styled.div`
     display: flex;
     align-items: center;
-    display: grid;
+    // display: grid;
+    margin: 0 30px 0 10px;
 `;
 export const categorySelect = styled.select`
     margin: 5px 0 5px 0;
@@ -264,6 +267,7 @@ export const modalInputText = styled.input`
     border: 0;
     border-radius: 10px;
     padding: 0;
+    font-family: "HakgyoansimWoojuR";
 `;
 
 export const modalInputDropDown = styled.div``;
@@ -277,8 +281,9 @@ export const modalOpenRadio = styled.input`
 `;
 
 export const modalCategory = styled.select`
+    font-family: "HakgyoansimWoojuR";
     margin: 5px 0 5px 0;
-    width: 18rem;
+    width: 12rem;
     height: 40px;
     background: #e6e6e6;
     border: 0;
