@@ -30,6 +30,7 @@ const StudyRoom = () => {
   const accessToken = useSelector((state) => state.auth.accessToken);
   const { user } = useSelector((state) => state.auth);
   const role = useSelector((state) => state.interview.myRole);
+  const currentRoom = useSelector((state) => state.currentRoom);
 
   const isHost = location.state?.isHost;
 
@@ -474,7 +475,12 @@ const StudyRoom = () => {
           // 방장은 방 만들때 이미 넣었으므로 그 작업이 불필요, 그냥 방 가져오면 됨
           if (isHost === false) {
             dispatch(joinInterviewRoom(interviewRoomId));
-            console.log("일반 유저 입장 - DB 데이터 가져오기");
+            console.log(
+              "일반 유저 입장 (조인작업까지 진행) - DB 데이터 가져오기"
+            );
+          } else {
+            dispatch(hostJoinInterviewRoom(interviewRoomId));
+            console.log("방장 입장 - 단순 DB 데이터 가져오기");
           }
         })
 
@@ -484,6 +490,7 @@ const StudyRoom = () => {
         })
         .catch(() => {
           console.log("웹소켓 연결 --> 구독이.. 실패!");
+          dispatch(clearCurrentRoom());
         });
     }
     initialize();
@@ -491,7 +498,8 @@ const StudyRoom = () => {
       dispatch(closeWebSocket());
       dispatch(clearCurrentRoom());
     };
-  }, []);
+    // currentRoom의 상태를 감지함
+  }, [currentRoom]);
 
   return (
     <div>

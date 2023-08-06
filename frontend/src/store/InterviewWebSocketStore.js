@@ -123,7 +123,8 @@ export const interviewSlice = createSlice({
     // 메시지 call back
     receiveMessage: (state, action) => {
       const message = action.payload;
-      if (state.currentRoom) {
+      // 방이 생성이 아직 안됐는데 SYSTEM MESSAGE가 동작해서 오류가 나서 추가
+      if (state.currentRoom && state.currentRoom.messages) {
         state.currentRoom.messages = [...state.currentRoom.messages, message];
       }
     },
