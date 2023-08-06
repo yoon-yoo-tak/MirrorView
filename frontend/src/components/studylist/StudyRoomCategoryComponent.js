@@ -8,6 +8,7 @@ import { getInterviewRoomByCategory } from "../../store/InterviewStore";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { TextField } from "@material-ui/core";
 
 const StudyRoomCategory = () => {
     const [firstCategory, setFirstCategory] = useState([
@@ -46,35 +47,55 @@ const StudyRoomCategory = () => {
             } else {
                 axios.get(`/api/category/${firstValue}`).then(({ data }) => {
                     setSecondCategory([...defaultValue, ...data.data]);
+                }).catch((error)=>{
+                    console.log(error);
                 });
             }
         }
+        setSecondValue("선택하세요");
+        setThirdValue("선택하세요");
     }, [firstValue]);
     useUpdateEffect(() => {
         if (secondCategory.length != 1) {
             if (secondValue === "선택하세요") {
                 setThirdCategory(defaultValue);
+                setThirdValue("선택하세요")
             } else {
                 axios.get(`/api/category/${secondValue}`).then(({ data }) => {
                     setThirdCategory([...defaultValue, ...data.data]);
+                }).catch((error)=>{
+                    console.log(error);
                 });
             }
         }
+        setThirdValue("선택하세요");
     }, [secondValue]);
 
     // const secondCategories = ["선택하세요", "first", "second", "third"];
 
-    // const handleFirstCategory = (e) => {
-    //     console.log(e.target.value);
-    //     setFirstValue(e.target.value);
-    //     // + 자식 카테고리 api 호출해서 지금 state에 자식 카테고리를 저장?
-    // };
-    // const handleSecondCategory = (e) => {
-    //     setSecondValue(e.target.value);
-    // };
+    const handleFirstCategory = (e) => {
+        setFirstValue(e.target.value);
+        // + 자식 카테고리 api 호출해서 지금 state에 자식 카테고리를 저장?
+    };
+    const handleSecondCategory = (e) => {
+        setSecondValue(e.target.value);
+    };
+
+    const handleThirdCategory = (e) => {
+        setThirdValue(e.target.value);
+    };
 
     const handleSubmit = () => {
+        console.log(firstValue);
+        if(thirdValue!="선택하세요"){
         dispatch(getInterviewRoomByCategory(thirdValue));
+        } else if(secondValue!="선택하세요"){
+            dispatch(getInterviewRoomByCategory(secondValue));
+        } else if(firstValue=="선택하세요"){
+            alert("카테고리를 선택하세요");
+        } else {
+            dispatch(getInterviewRoomByCategory(firstValue));
+        }
     };
 
     const style = {
@@ -101,11 +122,15 @@ const StudyRoomCategory = () => {
                         TITLE
                     </InputLabel> */}
                         <S.categoryDiv>
-                            <Select
+                            <TextField
+                                select
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-simple-select-standard"
                                 value={firstValue}
-                                style={style}
+                                InputProps={{
+                                    style:style,
+                                }}
+                                onChange={handleFirstCategory}
                                 // label="TITLE"
                             >
                                 {firstCategory.map((category) => (
@@ -117,14 +142,18 @@ const StudyRoomCategory = () => {
                                         {category.name}
                                     </MenuItem>
                                 ))}
-                            </Select>
+                            </TextField>
                         </S.categoryDiv>
                         <S.categoryDiv>
-                            <Select
+                            <TextField
+                                select
                                 labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={firstValue}
-                                style={style}
+                                id="demo-simple-select-standard1"
+                                value={secondValue}
+                                InputProps={{
+                                    style:style,
+                                }}
+                                onChange={handleSecondCategory}
                                 // label="TITLE"
                             >
                                 {secondCategory.map((category) => (
@@ -136,14 +165,18 @@ const StudyRoomCategory = () => {
                                         {category.name}
                                     </MenuItem>
                                 ))}
-                            </Select>
+                            </TextField>
                         </S.categoryDiv>
                         <S.categoryDiv>
-                            <Select
+                            <TextField
+                                select
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-simple-select-standard"
-                                value={firstValue}
-                                style={style}
+                                value={thirdValue}
+                                InputProps={{
+                                    style:style,
+                                }}
+                                onChange={handleThirdCategory}
                                 // label="TITLE"
                             >
                                 {thirdCategory.map((category) => (
@@ -155,7 +188,7 @@ const StudyRoomCategory = () => {
                                         {category.name}
                                     </MenuItem>
                                 ))}
-                            </Select>
+                            </TextField>
                         </S.categoryDiv>
                     </S.categoryList>
                 </FormControl>

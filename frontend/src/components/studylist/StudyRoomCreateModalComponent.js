@@ -55,9 +55,13 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
       } else {
         axios.get(`/api/category/${firstValue}`).then(({ data }) => {
           setSecondCategory([...defaultValue, ...data.data]);
-        });
+        }).catch((error)=>{
+          console.log(error);
+      });
       }
     }
+    setSecondValue("선택하세요")
+    setThirdValue("선택하세요")
   }, [firstValue]);
   useUpdateEffect(() => {
     if (secondCategory.length != 1) {
@@ -66,9 +70,12 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
       } else {
         axios.get(`/api/category/${secondValue}`).then(({ data }) => {
           setThirdCategory([...defaultValue, ...data.data]);
+        }).catch((error)=>{
+          console.log(error);
         });
       }
     }
+    setThirdValue("선택하세요");
   }, [secondValue]);
 
   const handleFirstCategory = (e) => {
@@ -79,6 +86,10 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
   const handleSecondCategory = (e) => {
     setSecondValue(e.target.value);
   };
+
+  const handleThirdCategory = (e) => {
+    setThirdValue(e.target.value);
+};
 
   // 모달창 관련
 
@@ -161,7 +172,6 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
         title === "" ||
         max === 0 ||
         firstValue === "선택하세요" ||
-        secondValue === "선택하세요" ||
         password === ""
       ) {
         // 하나라도 값이 없다면
@@ -173,8 +183,7 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
       if (
         title === "" ||
         max === 0 ||
-        firstValue === "선택하세요" ||
-        secondValue === "선택하세요"
+        firstValue === "선택하세요"
       ) {
         // 하나라도 값이 없다면
         alert("입력 항목을 확인해주세요");
@@ -186,12 +195,21 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
 
   // 방만 만들고 이동함. 다른 작업 안한다.
   const handleSubmit = async (e) => {
+    let selectCategory = null;
+    if(thirdValue!="선택하세요"){
+        selectCategory=thirdValue;
+      } else if(secondValue!="선택하세요"){
+        selectCategory = secondValue;
+      } else if(firstValue!="선택하세요"){
+          selectCategory = firstValue;
+      } 
+
     if (window.confirm("면접방을 생성하시겠습니까?")) {
       await axios
         .post("/api/interviews/create", {
           title: title,
           password: password,
-          category: secondValue,
+          category: selectCategory,
           maxMemberCount: max,
         })
         .then((response) => {
@@ -275,7 +293,7 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
                   <div style={style}>카테고리 선택</div>
                   <S.modalCategory
                     value={thirdValue}
-                    onChange={handleFirstCategory}>
+                    onChange={handleThirdCategory}>
                     {thirdCategory.map((category) => (
                       <option key={category.id} value={category.name}>
                         {category.name}
