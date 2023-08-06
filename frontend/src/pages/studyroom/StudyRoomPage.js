@@ -34,12 +34,10 @@ const StudyRoom = () => {
 
   const isHost = location.state?.isHost;
 
-
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(interviewActions.updateStarted(false));
-    return (()=>{
-    })
-  },[])
+    return () => {};
+  }, []);
   // 참가자 더미데이터 (자신 제외)
   const peopleList = [
     {
@@ -93,7 +91,7 @@ const StudyRoom = () => {
 
   const APPLICATION_SERVER_URL =
     process.env.NODE_ENV === "production" ? "" : "http://localhost:8000/";
-    const [questionList, setQuestionList] = useState(qlist);
+  const [questionList, setQuestionList] = useState(qlist);
   const [OV, setOV] = useState(null);
   const [OVForScreenSharing, setOVForScreenSharing] = useState();
   const [sessionForScreenSharing, setSessionForScreenSharing] = useState();
@@ -131,12 +129,10 @@ const StudyRoom = () => {
   }, []);
   const { pathname } = useLocation();
 
-
   useEffect(() => {
     setMySession(pathname.substring(11));
     joinSession();
   }, []);
-
 
   useEffect(() => {
     window.addEventListener("beforeunload", leaveSession);
@@ -147,10 +143,10 @@ const StudyRoom = () => {
   }, [session]);
 
   useEffect(() => {
-    window.addEventListener('beforeunload', leaveSessionForScreenSharing);
+    window.addEventListener("beforeunload", leaveSessionForScreenSharing);
     return () => {
       leaveSessionForScreenSharing();
-      window.removeEventListener('beforeunload', leaveSessionForScreenSharing);
+      window.removeEventListener("beforeunload", leaveSessionForScreenSharing);
     };
   }, [sessionForScreenSharing]);
 
@@ -172,7 +168,6 @@ const StudyRoom = () => {
     ];
     dispatch(interviewActions.updateFeedbacks(updatedFeedbackList));
   }, [dispatch]);
-
 
   const joinSession = () => {
     const newOpenVidu = new OpenVidu();
@@ -232,7 +227,7 @@ const StudyRoom = () => {
         newSession
           .connect(token, { clientData: user.nickname })
           .then(async () => {
-              newOpenVidu
+            newOpenVidu
               .getUserMedia({
                 audioSource: false,
                 videoSource: undefined,
@@ -269,7 +264,7 @@ const StudyRoom = () => {
 
   useEffect(() => {
     if (doStartScreenSharing) {
-        startScreenShare();
+      startScreenShare();
     }
   }, [doStartScreenSharing]);
 
@@ -332,8 +327,6 @@ const StudyRoom = () => {
     }
   };
 
-
-
   const leaveSession = () => {
     if (!session) return;
     session?.disconnect();
@@ -376,10 +369,10 @@ const StudyRoom = () => {
             .initPublisherAsync(initScreenData.myScreenName, {
               audioSource: false, // The source of audio. If undefined default microphone
               // videoSource: videoDevices[0].deviceId, // The source of video. If undefined default webcam
-              videoSource: 'screen', // The source of video. If undefined default webcam
+              videoSource: "screen", // The source of video. If undefined default webcam
               publishAudio: false,
               publishVideo: true,
-              resolution: '1280x720', // The resolution of your video
+              resolution: "1280x720", // The resolution of your video
               frameRate: 10, // The frame rate of your video
               // insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
             })
@@ -398,7 +391,7 @@ const StudyRoom = () => {
         })
         .catch((error) => {
           console.warn(
-            'There was an error connecting to the session:',
+            "There was an error connecting to the session:",
             error.code,
             error.message
           );
@@ -406,15 +399,14 @@ const StudyRoom = () => {
     });
   };
 
-
   useEffect(() => {
     localStorage.setItem("questionList", JSON.stringify(questionList));
   }, [questionList]);
 
-
-
   const getToken = async () => {
-    return createSession(pathname.substring(11)).then((sId) => createToken(sId));
+    return createSession(pathname.substring(11)).then((sId) =>
+      createToken(sId)
+    );
   };
 
   const createSession = async (sessionId) => {
@@ -523,40 +515,40 @@ const StudyRoom = () => {
                 />
             )} */}
       {initialized ? (
-          !isStarted ? (
-              <StudyRoomBefore
-                  streamManager={publisher}
-                  questionList={questionList}
-                  setQuestionList={setQuestionList}
-                  peopleList={peopleList}
-                  leaveSession={leaveSession}
-              />
-          ) : role === "interviewer" ? (
-              <StudyRoomInterviewer
-                  questionList={questionList}
-                  setQuestionList={setQuestionList}
-                  // feedbackList={feedbackList}
-                  // setFeedbackList={setFeedbackList}
-                  streamManager={publisher}
-                  subscribers={subscribers}
-                  isScreenSharing={isScreenSharing}
-                  isSpeakList={isSpeakList}
-                  isHideCam={isHideCam}
-                  peopleList={peopleList}
-              />
-          ) : (
-              <StudyRoomInterviewee
-                  questionList={questionList}
-                  setQuestionList={setQuestionList}
-                  peopleList={peopleList}
-                  subscribers={subscribers}
-                  streamManager={publisher}
-              />
-              )
+        !isStarted ? (
+          <StudyRoomBefore
+            streamManager={publisher}
+            questionList={questionList}
+            setQuestionList={setQuestionList}
+            peopleList={peopleList}
+            leaveSession={leaveSession}
+          />
+        ) : role === "interviewer" ? (
+          <StudyRoomInterviewer
+            questionList={questionList}
+            setQuestionList={setQuestionList}
+            // feedbackList={feedbackList}
+            // setFeedbackList={setFeedbackList}
+            streamManager={publisher}
+            subscribers={subscribers}
+            isScreenSharing={isScreenSharing}
+            isSpeakList={isSpeakList}
+            isHideCam={isHideCam}
+            peopleList={peopleList}
+          />
         ) : (
+          <StudyRoomInterviewee
+            questionList={questionList}
+            setQuestionList={setQuestionList}
+            peopleList={peopleList}
+            subscribers={subscribers}
+            streamManager={publisher}
+          />
+        )
+      ) : (
         <p>Loading...</p> // 이 부분은 로딩 표시로 대체할 수 있습니다.
-        )}
-        </div>
+      )}
+    </div>
   );
 };
 

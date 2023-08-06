@@ -1,16 +1,8 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import * as S from "./StudyStyledComponents";
-import {
-  joinInterviewRoom,
-  userJoinRoomPub,
-} from "../../store/InterviewWebSocketStore";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { initializeWebSocket } from "store/WebSocketStore";
 
 const StudyRoomThumbnail = (info) => {
-  const accessToken = useSelector((state) => state.auth.accessToken);
-  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleEnter = () => {

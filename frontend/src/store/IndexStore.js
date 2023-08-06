@@ -14,12 +14,16 @@ import interviewWebSocketStore from "store/InterviewWebSocketStore";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 //import sessionStorage from "redux-persist/lib/storage/session";
+//import { composeWithDevTools } from "redux-devtools-extension";
 
 const sessionStorage = window.sessionStorage;
 
 const persistConfig = {
   key: "root",
+  // 로컬 스토리지용
   //storage,
+
+  // 세션 스토리지용
   storage: {
     getItem: (key) => {
       return Promise.resolve(sessionStorage.getItem(key));
@@ -46,6 +50,17 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persistedReducer,
+  // 세션 스토리지용 - 각 탭마다 devtools 따로 동작
+  devTools: {
+    name:
+      window.location.pathname +
+      "?" +
+      window.location.search +
+      "_" +
+      Date.now(),
+    trace: true,
+    traceLimit: 25,
+  },
 });
 
 export const persistor = persistStore(store);
