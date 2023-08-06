@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import * as S from "../StudyRoomStyledComponents";
 // import PrepareTap from "./PrepareTapComponent";
@@ -21,6 +21,7 @@ const PrepareSection = (props) => {
     const handleInfo = () => {
         setSection("info");
     };
+
 
     // const handleQuest = () => {
     //     setSection("quest");

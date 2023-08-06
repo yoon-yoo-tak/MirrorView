@@ -716,7 +716,7 @@ export const lastVideoEach = styled.div`
     padding: 15px;
     // margin: 0 15px;
     width: 280px;
-    height: 120px;
+    height: 140px;
 
     flex-shrink: 0;
 `;

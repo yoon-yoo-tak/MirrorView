@@ -21,7 +21,6 @@ const StudyRoomBefore = (props) => {
   const [start, setStart] = useState(false);
   const role = useSelector((state) => state.interview.myRole);
 
-  const { currentRoom } = useSelector((state) => state.interview);
   const nickname = useSelector((state) => state.auth.user.nickname);
   useEffect(() => {
     currentRoom.members.forEach((member) => {
@@ -38,6 +37,7 @@ const StudyRoomBefore = (props) => {
   const videoRef = React.createRef();
 
   useEffect(() => {
+   
     componentDidUpdate();
     componentDidMount();
   }, [streamManager]);
