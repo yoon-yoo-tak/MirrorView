@@ -92,8 +92,10 @@ public class InterviewWebSocketController {
 				messageDto.setData(readyData);
 				System.out.println(readyData);
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
-
-				interviewService.systemMessage(principal.getName(), roomId, "님이 준비 상태를 변경했습니다.");
+				if(readyMember.isReady())
+					interviewService.systemMessage(principal.getName(), roomId, "님이 준비 완료했습니다.");
+				if(!readyMember.isReady())
+					interviewService.systemMessage(principal.getName(), roomId, "님이 준비 상태를 해제했습니다.");
 				break;
 
 			case "ROLE_CHANGE":
@@ -111,8 +113,10 @@ public class InterviewWebSocketController {
 				System.out.println(data);
 				messageDto.setData(data);
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
-
-				interviewService.systemMessage(principal.getName(), roomId, "님이 역할을 변경했습니다.");
+				if(roleMember.getRole().equals("interviewer"))
+					interviewService.systemMessage(principal.getName(), roomId, "님이 면접관으로 역할을 변경했습니다.");
+				if(roleMember.getRole().equals("interviewee"))
+					interviewService.systemMessage(principal.getName(), roomId, "님이 면접자로 역할을 변경했습니다.");
 				break;
 		}
 	}
