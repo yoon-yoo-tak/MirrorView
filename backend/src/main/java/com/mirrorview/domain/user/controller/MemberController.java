@@ -131,7 +131,7 @@ public class MemberController {
 		try {
 			String userId = member.getUsername();
 			if (userId.equals(ratingDto.getUserId())) {
-				return BaseResponse.fail("나는 나를 평가 할 수 없다.", 500);
+				return BaseResponse.fail("평가 대상이 아닙니다.", 500);
 			}
 			currentScore = memberService.saveScore(userId, ratingDto);
 		} catch (Exception e) {

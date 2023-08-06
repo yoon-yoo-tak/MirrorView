@@ -91,10 +91,18 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public InterviewRoom joinRoom(Member member, String roomId) {
+    public InterviewRoom joinRoom(Member member, String roomId, String password) {
         Optional<InterviewRoom> findRoom = findRoomById(roomId);
         if (findRoom.isPresent()) {
             InterviewRoom interviewRoom = findRoom.get();
+            String roomPassword = interviewRoom.getPassword();
+            if (!roomPassword.isEmpty()) {
+                log.info("room pass = {}", roomPassword);
+                log.info("pass = {}", password);
+                if (!roomPassword.equals(password)) {
+                    throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+                }
+            }
             List<EssayListDto> essayList = new ArrayList<>();
             // getEssayListDtos(member.getUserId());
             interviewRoom.join(member, essayList);

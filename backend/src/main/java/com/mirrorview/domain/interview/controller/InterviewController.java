@@ -20,6 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -61,11 +62,12 @@ public class InterviewController {
 
     @PostMapping("join/{roomId}")
     public ResponseEntity<?> joinRoom(@AuthenticationPrincipal CustomMemberDetails member,
-                                      @PathVariable String roomId) {
+        @PathVariable String roomId, @RequestBody Map<String, String> passwordMap) {
         log.info("db 가져오기");
         InterviewRoom interview;
+        String password = passwordMap.get("password");
         try {
-            interview = interviewService.joinRoom(member.getUser(), roomId);
+            interview = interviewService.joinRoom(member.getUser(), roomId, password);
         } catch (Exception e) {
             return BaseResponse.fail(e.getMessage(), 400);
         }

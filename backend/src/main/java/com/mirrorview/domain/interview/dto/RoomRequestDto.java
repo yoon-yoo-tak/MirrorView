@@ -21,6 +21,10 @@ public class RoomRequestDto {
     private Integer maxMemberCount;
 
     public InterviewRoom toEntity(String nickname) {
+        if (password == null) {
+            password = "";
+        }
+
         return InterviewRoom.builder()
                 .id("interviewRoom" + UUID.randomUUID())
                 .title(title)
