@@ -12,12 +12,15 @@ import { getClient } from "store/WebSocketStore";
 import { initializeWebSocket, closeWebSocket } from "store/WebSocketStore";
 import { useDispatch } from "react-redux";
 import { interviewThunk, userJoinRoom } from "store/InterviewWebSocketStore";
+import StudyRoomInterviewee from "components/studyroom/StudyRoomIntervieweeComponent";
+import { interviewActions } from "../../store/InterviewStore";
 
 const StudyRoom = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const isStarted = useSelector((state) => state.interview.isStarted);
   const accessToken = useSelector((state) => state.auth.accessToken);
-
+  const role = useSelector((state) => state.interview.myRole);
   // 참가자 더미데이터 (자신 제외)
   const peopleList = [
     {
@@ -64,11 +67,15 @@ const StudyRoom = () => {
       ],
     },
   ];
+    const qlist = peopleList.map((person) => ({
+        name: person.name,
+        questions: [],
+    }));
 
   const APPLICATION_SERVER_URL =
     process.env.NODE_ENV === "production" ? "" : "http://localhost:8000/";
   const { user } = useSelector((state) => state.auth);
-  const [questionList, setQuestionList] = useState([]);
+    const [questionList, setQuestionList] = useState(qlist);
   const [OV, setOV] = useState(null);
 
   const [OVForScreenSharing, setOVForScreenSharing] = useState();
@@ -126,6 +133,25 @@ const StudyRoom = () => {
       window.removeEventListener("beforeunload", leaveSession);
     };
   }, [session]);
+
+    useEffect(() => {
+        // 더미데이터대로 일단 추가
+        const updatedFeedbackList = [
+            {
+                name: "최고심",
+                feedbacks: [{ question: [], feedback: [] }],
+            },
+            {
+                name: "춘식이",
+                feedbacks: [{ question: [], feedback: [] }],
+            },
+            {
+                name: "빤쮸토끼",
+                feedbacks: [{ question: [], feedback: [] }],
+            },
+        ];
+        dispatch(interviewActions.updateFeedbacks(updatedFeedbackList));
+    }, [dispatch]);
 
   const deleteIsSperker = (connectionId) => {
     let prevIsSpeakList = isSpeakList;
@@ -308,20 +334,50 @@ const StudyRoom = () => {
   }, []);
 
   return (
-    <div>
-      <StudyRoomBefore
-        streamManager={publisher}
-        questionList={questionList}
-        setQuestionList={setQuestionList}
-        peopleList={peopleList}
-        leaveSession={leaveSession}
-      />
-      {/* <StudyRoomInterviewer
-                questionList={questionList}
-                setQuestionList={setQuestionList}
-                peopleList={peopleList}
-            /> */}
-    </div>
+      <div>
+          {/* {isStarted && role === "interviewer" && (
+                <StudyRoomInterviewer
+                    questionList={questionList}
+                    setQuestionList={setQuestionList}
+                    // feedbackList={feedbackList}
+                    // setFeedbackList={setFeedbackList}
+                    peopleList={peopleList}
+                />
+            )}
+            {isStarted && role === "interviewee" && (
+                <StudyRoomInterviewee peopleList={peopleList} />
+            )}
+            {!isStarted && (
+                <StudyRoomBefore
+                    questionList={questionList}
+                    setQuestionList={setQuestionList}
+                    peopleList={peopleList}
+                />
+            )} */}
+          {!isStarted ? (
+              <StudyRoomBefore
+                  streamManager={publisher}
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                  peopleList={peopleList}
+                  leaveSession={leaveSession}
+              />
+          ) : role === "interviewer" ? (
+              <StudyRoomInterviewer
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                  // feedbackList={feedbackList}
+                  // setFeedbackList={setFeedbackList}
+                  peopleList={peopleList}
+              />
+          ) : (
+              <StudyRoomInterviewee
+                  questionList={questionList}
+                  setQuestionList={setQuestionList}
+                  peopleList={peopleList}
+              />
+          )}
+      </div>
   );
 };
 

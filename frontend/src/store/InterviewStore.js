@@ -6,7 +6,17 @@ import { useDispatch } from "react-redux";
 axios.defaults.withCredentials = true;
 
 const initialState = {
-  room: [],
+    room: [],
+    // ------------------------------
+    feedbackList: [
+        {
+            name: "",
+            feedbacks: { question: [], feedback: [] },
+        },
+    ],
+    myRole: "interviewee",
+    isStarted: false,
+    //-------------------------------
 };
 
 export const getInterviewRoom = createAsyncThunk(
@@ -23,6 +33,19 @@ export const getInterviewRoom = createAsyncThunk(
       return rejectWithValue(error.response.data);
     }
   }
+);
+    "getInterViewRoom",
+    async (_, { rejectWithValue }) => {
+        try {
+            const res = await axios.get("/api/interviews/rooms", _, {
+                withCredentials: true,
+            });
+            return res.data;
+        } catch (error) {
+            console.error(error);
+            return rejectWithValue(error.response.data);
+        }
+    }
 );
 
 export const getInterviewRoomByCategory = createAsyncThunk(
@@ -42,14 +65,52 @@ export const getInterviewRoomByCategory = createAsyncThunk(
 );
 
 // interviewWebSocketStore state 에 currentRoom 방을 전달
+    "getInterviewRoomByCategory",
+    async (category, { rejectWithValue }) => {
+        try {
+            const res = await axios.get(`/api/interviews/rooms/${category}`, {
+                withCredentials: true,
+            });
+            console.log(res);
+            return res.data;
+        } catch (error) {
+            console.error(error);
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const joinInterviewRoom = createAsyncThunk(
+    "joinInterviewRoom",
+    async (roomId, { rejectWithValue }) => {
+        try {
+            const res = await axios.post(`/api/interviews/join/${roomId}`, {
+                withCredentials: true,
+            });
+            return res.data;
+        } catch (error) {
+            console.error(error);
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
 
 const interviewSlice = createSlice({
   name: "interview",
   initialState,
   reducers: {
-    exitCurrentRoom: (state, action) => {
+      exitCurrentRoom: (state, action) => {
       state.currentRoom = { members: [] };
-    },
+      },
+      updateFeedbacks: (state, action) => {
+          state.feedbackList = action.payload;
+      },
+      setMyRoll: (state, action) => {
+          state.myRole = action.payload;
+      },
+      updateStarted: (state, action) => {
+          state.isStarted = action.payload;
+      },
   },
   extraReducers: {
     [getInterviewRoom.fulfilled]: (state, { payload }) => {

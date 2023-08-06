@@ -9,6 +9,7 @@ import StudyQustionList from "./preparesection/StudyQuestionListComponent";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { exitCurrentRoom } from "store/InterviewStore";
+import StudyRating from "../starrating/StudyRatingComponent";
 const PrepareSection = (props) => {
     const [section, setSection] = useState("info");
     const { peopleList, questionList, setQuestionList,leaveSession } = props;
@@ -18,9 +19,9 @@ const PrepareSection = (props) => {
         setSection("info");
     };
 
-    const handleQuest = () => {
-        setSection("quest");
-    };
+    // const handleQuest = () => {
+    //     setSection("quest");
+    // };
 
     const handleMyInfo = () => {
         setSection("myInfo");
@@ -30,7 +31,10 @@ const PrepareSection = (props) => {
         setSection("chat");
     };
 
+    const [modalStates, setModalStates] = useState(false);
+
     const handleExit = () => {
+        setModalStates(true);
         dispatch(exitCurrentRoom());
         leaveSession();
         navigate("/");
@@ -40,14 +44,18 @@ const PrepareSection = (props) => {
         <S.sectionPage>
             <S.sectionWrap>
                 {section === "info" && (
-                    <StudyProfileAndEssay peopleList={peopleList} />
+                    <StudyProfileAndEssay
+                        questionList={questionList}
+                        setQuestionList={setQuestionList}
+                        peopleList={peopleList}
+                    />
                 )}
-                {section === "quest" && (
+                {/* {section === "quest" && (
                     <StudyQustionList
                         questionList={questionList}
                         setQuestionList={setQuestionList}
                     />
-                )}
+                )} */}
                 {section === "myInfo" && <StudyMyEssay />}
                 {section === "chat" && <StudyChatting />}
             </S.sectionWrap>
@@ -56,9 +64,9 @@ const PrepareSection = (props) => {
                     <S.sectionSelectTap onClick={handleInfo} menu="info">
                         INFO
                     </S.sectionSelectTap>
-                    <S.sectionSelectTap onClick={handleQuest} menu="quest">
+                    {/* <S.sectionSelectTap onClick={handleQuest} menu="quest">
                         Q.
-                    </S.sectionSelectTap>
+                    </S.sectionSelectTap> */}
                     <S.sectionSelectTap onClick={handleMyInfo} menu="myInfo">
                         MY
                     </S.sectionSelectTap>
@@ -67,6 +75,7 @@ const PrepareSection = (props) => {
                     </S.sectionSelectTap>
                 </div>
                 <S.exitRoom onClick={handleExit}>나가기</S.exitRoom>
+                {modalStates && <StudyRating peopleList={peopleList} />}
             </S.sectionSelectTaps>
         </S.sectionPage>
     );

@@ -17,8 +17,10 @@ const gradientAnimation = keyframes`
 
 export const page = styled.div`
     font-family: "HakgyoansimWoojuR";
-    min-height: 100vh;
-    min-width: 1200px;
+    // min-height: 100vh;
+    min-width: 1280px;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
     // background: rgb(29, 22, 60);
@@ -30,7 +32,7 @@ export const page = styled.div`
     //     rgba(27, 42, 66, 1) 100%
     // );
     background: linear-gradient(-45deg, #30577b, #304a7b, #464b72, #474375);
-    animation: ${gradientAnimation} 15s ease infinite;
+    animation: ${gradientAnimation} 10s ease infinite;
     background-size: 400% 400%;
     // padding: 5vh 0;
 `;
@@ -39,9 +41,10 @@ export const prepareWrap = styled.div`
     display: flex;
     // height: 20rem;
     // height: 80vh;
-    width: 80vw;
+    // width: 80vw;
     justify-content: center;
     align-items: center;
+    position: relative;
 `;
 
 // 스터디방 좌측 섹션
@@ -79,6 +82,29 @@ export const readyButton = styled.div`
     height: 30px;
 
     background: ${(props) => (props.status === "true" ? "#FF6980" : "#D4D4D4")};
+    // box-shadow: 0px 0px 10px #bdbdbd;
+    border-radius: 19px;
+    cursor: pointer;
+    color: white;
+    &:hover {
+        background-color: ${(props) =>
+            props.status === "true" ? "#FFD0D7" : "#D4D4D4"};
+    }
+`;
+
+export const startButton = styled.div`
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    position: relative;
+    width: 70px;
+    height: 30px;
+
+    background: ${(props) => (props.status === "true" ? "#61E7EF" : "#D4D4D4")};
     // box-shadow: 0px 0px 10px #bdbdbd;
     border-radius: 19px;
     cursor: pointer;
@@ -207,7 +233,8 @@ export const personList = styled.div`
 
 // 스터디 방 우측 섹션
 export const prepareSectionSecond = styled.div`
-    width: 835px;
+    width: 700px;
+    // overflow-x: auto;
 `;
 export const sectionPage = styled.div`
     min-width: 700px;
@@ -220,7 +247,7 @@ export const sectionWrap = styled.div`
     box-shadow: 0px 0px 10px #4e4e4e;
     margin: 18px;
     padding: 10px;
-    min-width: ${(props) => (props.menu === "viewer" ? "200px" : "500px")};
+    min-width: ${(props) => (props.menu === "viewer" ? "400px" : "500px")};
     height: 550px;
     flex: 8;
 `;
@@ -270,7 +297,12 @@ export const exitRoom = styled.div`
     border-radius: 100px;
     background-color: #fe6666;
 
-    margin: ${(props) => (props.menu === "viewer" ? "0 10px" : "")};
+    margin: ${(props) =>
+        props.menu === "viewer"
+            ? "0 10px"
+            : props.menu === "viewee"
+            ? "10px 20px"
+            : ""};
     box-shadow: 0px 0px 10px #4e4e4e;
 
     font-weight: bold;
@@ -346,9 +378,27 @@ export const contentDetail = styled.div`
     padding: 10px;
 
     background-color: #e9f2ff;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #a6b6ce;
+    }
+    &::-webkit-scrollbar-track {
+        background: #ededed;
+        border-radius: 3px;
+    }
 `;
 
 export const enterList = styled.div``;
+export const profileWrap = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 450px;
+`;
 
 export const profileInfo = styled.div`
     display: flex;
@@ -361,6 +411,10 @@ export const profileInfo = styled.div`
 export const profileKey = styled.div`
     margin: 10px;
     flex: 1;
+`;
+
+export const questInputText = styled.div`
+    margin: 0 16px;
 `;
 
 export const profileDetail = styled.div`
@@ -377,6 +431,7 @@ export const vLine = styled.div`
     border-left: 0.15rem solid white;
     height: 110px;
 `;
+
 export const essayDetailWrap = styled.div`
     // margin: 10px;
     height: 450px;
@@ -416,11 +471,27 @@ export const essayDetailContent = styled.div`
     padding: 5px;
 `;
 
+export const essayAI = styled.div`
+    text-align: end;
+    margin: 0 10px;
+    cursor: pointer;
+`;
+
 // 스터디 방 우측 섹션 - 사전 질문지 작성
 export const questionWrap = styled.div`
     justify-content: center;
-    padding: 20px;
-    height: auto;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #a6b6ce;
+    }
+    &::-webkit-scrollbar-track {
+        background: #ededed;
+        border-radius: 3px;
+    }
 `;
 
 export const questionIntro = styled.div`
@@ -446,19 +517,23 @@ export const questionListWrap = styled.div`
 `;
 
 export const questionEach = styled.div`
-    margin: 15px 10px;
+    margin: 15px 10px 5px 10px;
     font-size: 18px;
 `;
 
 export const questionSubmitWrap = styled.div`
     display: flex;
 `;
+export const questSubmit = styled.div`
+    display: flex;
+    justify-content: center;
+`;
 
 export const questionInput = styled.input`
     margin: 10px;
-    width: 100%;
-    height: 40px;
-    background: #e6e6e6;
+    width: 72%;
+    height: 35px;
+    background: #white;
     border: 0;
     // box-shadow: 0px 0px 5px #c7c7c7;
     border-radius: 10px;
@@ -471,17 +546,19 @@ export const questionButton = styled.button`
     justify-content: center;
     align-items: center;
     border: 0;
+    font-family: "HakgyoansimWoojuR";
 
     position: relative;
-    width: 70px;
-    height: 40px;
+    width: 55px;
+    height: 35px;
+    color: white;
 
-    background: #a1b6ff;
+    background: #5878eb;
     box-shadow: 0px 0px 5px #c7c7c7;
     border-radius: 10px;
     cursor: pointer;
     &:hover {
-        background-color: #e9e4ff;
+        background-color: #aabbfa;
     }
 `;
 
@@ -498,9 +575,20 @@ export const myEssayIntro = styled.div`
     font-weight: bold;
 `;
 
+export const myEssaySide = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+export const myEssayMain = styled.div`
+    margin: 5px 10px;
+    display: flex;
+    align-items: end;
+`;
+
 export const myEssayContentWrap = styled.div`
     overflow-y: auto;
-    max-height: 90%;
+    max-height: 78%;
     &::-webkit-scrollbar {
         width: 7px;
     }
@@ -531,6 +619,33 @@ export const myAnswer = styled.div`
     line-height: 1.5;
     padding: 5px;
 `;
+export const questListWrap = styled.div`
+    padding: 20px;
+`;
+export const questListTitle = styled.div`
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 15px;
+`;
+
+export const questList = styled.div`
+    overflow-y: auto;
+`;
+
+export const questEach = styled.div`
+    display: flex;
+    margin: 10px 0;
+    font-size: 17px;
+`;
+export const deleteQuest = styled.div`
+    padding: 6px;
+`;
+
+export const questText = styled.div`
+    background-color: white;
+    border-radius: 8px;
+    padding: 6px;
+`;
 
 // 면접 시작 ~
 
@@ -538,35 +653,60 @@ export const myAnswer = styled.div`
 
 export const interviewerWrap = styled.div`
     display: flex;
-    width: 80vw;
+    // width: 80vw;
     justify-content: center;
+    flex-direction: row;
     align-items: center;
+    // margin: 0 100px;
+    // padding: 0 200px;
+    position: relative;
 `;
 
 export const videoSection = styled.div`
-    flex: 3;
-    min-width: 600px;
+    // flex: 1;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+`;
+
+export const videoWrap = styled.div`
+    max-width: 800px;
+    flex: 1;
     height: 628px;
-    margin: 5px;
+    // margin: 5px;
 `;
 export const mainContainer = styled.div`
     width: 100%;
     height: 400px;
+    flex: 1;
 `;
 
 export const mainVideo = styled.div`
     background-color: white;
     border-radius: 13px;
-    width: 100%;
+    // width: 80%;
     height: 400px;
     // margin: 10px;
 `;
 
 export const lastVideos = styled.div`
     display: flex;
+    flex-wrap: nowrap;
     overflow-x: auto;
-    width: 100%;
-    margin: 15px 0;
+    // width: 80%;
+    margin-top: 15px;
+    // justify-content: space-between;
+    &::-webkit-scrollbar {
+        height: 7px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #a6b6ce;
+    }
+    &::-webkit-scrollbar-track {
+        background: #ededed;
+        border-radius: 3px;
+    }
 `;
 
 export const lastVideoEach = styled.div`
@@ -574,19 +714,21 @@ export const lastVideoEach = styled.div`
     border-radius: 13px;
 
     padding: 15px;
-    margin-right: 15px;
+    // margin: 0 15px;
     width: 280px;
     height: 120px;
 
     flex-shrink: 0;
 `;
 
-export const secondSection = styled.div``;
+export const secondSection = styled.div`
+    flex: 1;
+`;
 
 export const selectTapsWrap = styled.div`
     display: flex;
     justify-content: space-between;
-    margin: 15px;
+    // margin: 15px;
 `;
 
 export const selectTapsHorizon = styled.div`
@@ -627,6 +769,220 @@ export const tapsInterviewer = styled.div`
 `;
 
 export const interviewerSectionWrap = styled.div`
-    width: 30vw;
+    width: 80%;
     min-width: 400px;
+    display: flex;
+`;
+
+// 스터디 종료 후 평점 부여 페이지? 컴포넌트? 모달?
+
+export const ratingPage = styled.div`
+    width: 300px;
+    height: 500px;
+    z-index: 999;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background: #ffffff;
+    box-shadow: 0px 0px 15px #000000;
+    border-radius: 37px;
+
+    font-family: "HakgyoansimWoojuR";
+`;
+
+export const ratingWrap = styled.div`
+    padding: 15px;
+    text-align: center;
+    height: 100%;
+`;
+
+export const ratingTitle = styled.div`
+    font-weight: bold;
+    font-size: large;
+    margin: 15px 0 30px 0;
+    text-align: center;
+`;
+
+export const ratingSection = styled.div`
+    margin: 30px 0;
+    height: 68%;
+`;
+
+export const ratingContent = styled.div`
+    margin: 20px 20px;
+    text-align: center;
+`;
+
+export const ratingButton = styled.button`
+    width: 70px;
+    height: 30px;
+    border: 0;
+    border-radius: 100px;
+    box-shadow: 0px 0px 11px #afafaf;
+
+    font-weight: bold;
+
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    margin: 0 0 15px 0;
+    background-color: #a1e5fa;
+
+    font-family: "HakgyoansimWoojuR";
+
+    &:hover {
+        background-color: #58c8eb;
+    }
+`;
+
+export const ratingText = styled.div``;
+
+export const ratingBackDrop = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+`;
+
+// 면접 시작
+
+// 면접자의 화면
+
+export const mainWrap = styled.div`
+    position: relative;
+    width: 100%;
+    // height: 350px;
+    // max-height: 80vh;
+    overflow: auto;
+    &::-webkit-scrollbar {
+        width: 9px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #a6b6ce;
+    }
+    &::-webkit-scrollbar-track {
+        // background: #ededed;
+        border-radius: 3px;
+    }
+`;
+
+export const roomTitle = styled.div`
+    font-size: 22px;
+    margin: 20px;
+    color: white;
+`;
+
+export const vieweeWrap = styled.div`
+    display: flex;
+    // height: 20rem;
+    justify-content: center;
+    // align-items: center;
+
+    margin: 50px 100px;
+    position: relative;
+    align-content: center;
+
+    height: 100vh;
+    max-height: 80%;
+    position: relative;
+`;
+
+export const boxes = styled.div`
+    margin: 20px;
+    width: 250px;
+    height: 150px;
+    background-color: white;
+    box-shadow: 0px 0px 10px #4e4e4e;
+    border-radius: 13px;
+
+    padding: 15px;
+`;
+
+export const mainBox = styled.div`
+    margin: 20px;
+    width: 600px;
+    height: 380px;
+    background-color: white;
+    box-shadow: 0px 0px 10px #4e4e4e;
+    border-radius: 13px;
+
+    padding: 15px;
+`;
+
+export const leftBox = styled.div`
+    flex-shrink: 0;
+    max-height: 100%;
+
+    flex-direction: column;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 9px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 3px;
+        background: #a6b6ce;
+    }
+    &::-webkit-scrollbar-track {
+        // background: #ededed;
+        border-radius: 3px;
+    }
+`;
+
+// 피드백 작성하기
+
+export const feedbackEach = styled.div``;
+
+export const feedbackInput = styled.input`
+    margin: 10px;
+    width: 88%;
+    height: 30px;
+    background: white;
+    border: 0;
+    // box-shadow: 0px 0px 5px #c7c7c7;
+    border-radius: 10px;
+`;
+
+export const buttonWrap = styled.div`
+    display: flex;
+    justify-content: end;
+    margin-right: 13px;
+`;
+
+export const feedbackButton = styled.button`
+    font-family: "HakgyoansimWoojuR";
+    font-weight: bold;
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    position: relative;
+    width: 50px;
+    height: 30px;
+
+    color: white;
+
+    background: #5878eb;
+    box-shadow: 0px 0px 5px #c7c7c7;
+    border-radius: 13px;
+    cursor: pointer;
+    &:hover {
+        background-color: #aac0fa;
+    }
+`;
+
+export const feedbackInputWrap = styled.div`
+    display: flex;
+    justify-content: center;
 `;
