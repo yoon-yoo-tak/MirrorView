@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as S from "./StudyStyledComponents";
 import {
   joinInterviewRoom,
-  userJoinRoom,
+  userJoinRoomPub,
 } from "../../store/InterviewWebSocketStore";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -19,18 +19,9 @@ const StudyRoomThumbnail = (info) => {
         `${info.host}님이 생성한 ${info.title}에 입장하시겠습니까?`
       )
     ) {
-      dispatch(initializeWebSocket(accessToken))
-        .then(() => {
-          dispatch(
-            userJoinRoom({ interviewRoomId: info.roomId, userJoinData: user }) // 다른 유저들에게 pub
-          );
-        })
-        .then(() => {
-          dispatch(joinInterviewRoom(info.roomId)); // db
-        })
-        .then(() => {
-          navigate(`/studyroom/${info.roomId}`); // 이동
-        });
+      navigate(`/studyroom/${info.roomId}`, {
+        state: { isHost: false },
+      }); // 이동
     }
   };
   return (

@@ -9,6 +9,12 @@ const initialState = {
   questions: [],
 };
 
+// db 에 들어온 멤버를 넣고, 방을 가져오니까 이미 멤버가 들어온 상태임
+// 근데 다른 유저들은 이 멤버를 모르는 상태
+// 이 멤버가 들어왔음을, 기존 다른 user들에게 알려야함
+// 다른 유저들에게 해당유저 pub(방금 들어온 유저는 제외한 상태로) -> 입장유저가 방 subscribe -> 입장 유저는 디비에서 방 데이터를 가져옴(자신 포함)
+
+// 일반 유저용 currentRoomUpdate
 export const joinInterviewRoom = createAsyncThunk(
   "joinInterviewRoom",
   async (roomId, thunkAPI) => {
@@ -16,6 +22,7 @@ export const joinInterviewRoom = createAsyncThunk(
       const res = await axios.post(`/api/interviews/join/${roomId}`, {
         withCredentials: true,
       });
+      thunkAPI.dispatch(joinedInterviewRoomCurrentRoomUpdate(res.data.data));
       return res.data;
     } catch (error) {
       console.error(error);
@@ -24,7 +31,23 @@ export const joinInterviewRoom = createAsyncThunk(
   }
 );
 
-export const interviewThunk = createAsyncThunk(
+// 방장용 currentRoomUpdate
+export const hostJoinInterviewRoom = createAsyncThunk(
+  "rooms/fetch",
+  async (roomId, thunkAPI) => {
+    try {
+      const res = await axios.get(`/api/interviews/find/${roomId}`);
+      thunkAPI.dispatch(joinedInterviewRoomCurrentRoomUpdate(res.data.data));
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// 하나의 채널 구독하고 case 로 처리
+export const interviewSubscribe = createAsyncThunk(
   "chat/initialize",
   async ({ client, interviewRoomId }, { dispatch, getState }) => {
     client.subscribe("/sub/interviewrooms/" + interviewRoomId, (message) => {
@@ -57,14 +80,32 @@ export const interviewSlice = createSlice({
   name: "interviewWebSocket",
   initialState,
   reducers: {
-    // 유저가 조인시 방 가져오기
-    setCurrentRoomWebSocket: (state, action) => {
-      state.currentRoom = { ...action.payload.data, messages: [] };
+    // currentRoom update
+    joinedInterviewRoomCurrentRoomUpdate: (state, action) => {
+      state.currentRoom = { ...action.payload, messages: [] };
     },
 
-    // 방장이 방 만들 시 방 가져오기
-    setCurrentRoom: (state, action) => {
-      state.currentRoom = { ...action.payload, messages: [] };
+    // 유저가 들어 왔을 때 다른 유저들에게 해당 유저 send
+    userJoinRoomPub: (state, action) => {
+      const client = getClient();
+      const { interviewRoomId, userJoinData } = action.payload;
+      const sendUserData = {
+        type: "JOIN",
+        data: userJoinData,
+      };
+      client.send(
+        `/app/interviewrooms/${interviewRoomId}`,
+        {},
+        JSON.stringify(sendUserData)
+      );
+    },
+
+    // 유저들에게 내정보 pub, call back
+    joinRoom: (state, action) => {
+      state.currentRoom.members = [
+        ...state.currentRoom.members,
+        action.payload,
+      ];
     },
 
     // 메시지 보내기
@@ -77,45 +118,14 @@ export const interviewSlice = createSlice({
     // 메시지 call back
     receiveMessage: (state, action) => {
       const message = action.payload;
-      console.log("메시지 도착");
-      console.log(state);
       if (state.currentRoom) {
         state.currentRoom.messages = [...state.currentRoom.messages, message];
       }
     },
 
-    // 유저가 들어 왔을 때 동작
-    userJoinRoom: (state, action) => {
-      const client = getClient();
-      const { interviewRoomId, userJoinData } = action.payload;
-
-      const sendUserData = {
-        type: "JOIN",
-        data: userJoinData,
-      };
-
-      client.send(
-        `/app/interviewrooms/${interviewRoomId}`,
-        {},
-        JSON.stringify(sendUserData)
-      );
-    },
-
-    // 유저들에게 pub, call back
-    joinRoom: (state, action) => {
-      console.log("callback ", action.payload);
-
-      state.currentRoom.members = [
-        ...state.currentRoom.members,
-        action.payload,
-      ];
-    },
-
     // call back
     exitRoom: (state, action) => {
-      console.log(action.payload, " exit call back 확인");
       const nickname = action.payload.nickname;
-      console.log(nickname);
       state.currentRoom.members = state.currentRoom.members.filter(
         (member) => member.nickname !== nickname
       );
@@ -142,20 +152,11 @@ export const interviewSlice = createSlice({
       state.questions = [...state.questions, action.payload];
     },
   },
-  extraReducers: {
-    // db 에 들어온 멤버를 넣고, 방을 가져오니까 이미 멤버가 들어온 상태임
-    // 근데 다른 유저들은 이 멤버를 모르는 상태
-    // 이 멤버가 들어왔음을 기존, 다른 user들에게 알려야함
-    [joinInterviewRoom.fulfilled]: (state, { payload }) => {
-      state.currentRoom = { ...payload.data, messages: [] };
-    },
-  },
 });
 
 export const {
   setCurrentRoom,
-  setCurrentRoomWebSocket,
-  userJoinRoom,
+  userJoinRoomPub,
   sendMessage,
   receiveMessage,
   joinRoom,
@@ -163,6 +164,7 @@ export const {
   readyStatus,
   roleChange,
   addQuestion,
+  joinedInterviewRoomCurrentRoomUpdate,
 } = interviewSlice.actions;
 export const selectMessages = (state) => state.chat.currentRoom.messages;
 export default interviewSlice.reducer;

@@ -11,16 +11,27 @@ import { useSelector } from "react-redux";
 import { getClient } from "store/WebSocketStore";
 import { initializeWebSocket, closeWebSocket } from "store/WebSocketStore";
 import { useDispatch } from "react-redux";
-import { interviewThunk, userJoinRoom } from "store/InterviewWebSocketStore";
+import {
+  hostJoinInterviewRoom,
+  interviewSubscribe,
+  joinInterviewRoom,
+  userJoinRoom,
+  userJoinRoomPub,
+} from "store/InterviewWebSocketStore";
 import StudyRoomInterviewee from "components/studyroom/StudyRoomIntervieweeComponent";
 import { interviewActions } from "../../store/InterviewStore";
 
 const StudyRoom = () => {
+  const [initialized, setInitialized] = useState(false);
   const dispatch = useDispatch();
   const location = useLocation();
   const isStarted = useSelector((state) => state.interview.isStarted);
   const accessToken = useSelector((state) => state.auth.accessToken);
+  const { user } = useSelector((state) => state.auth);
   const role = useSelector((state) => state.interview.myRole);
+
+  const isHost = location.state?.isHost;
+
   // 참가자 더미데이터 (자신 제외)
   const peopleList = [
     {
@@ -67,15 +78,14 @@ const StudyRoom = () => {
       ],
     },
   ];
-    const qlist = peopleList.map((person) => ({
-        name: person.name,
-        questions: [],
-    }));
+  const qlist = peopleList.map((person) => ({
+    name: person.name,
+    questions: [],
+  }));
 
   const APPLICATION_SERVER_URL =
     process.env.NODE_ENV === "production" ? "" : "http://localhost:8000/";
-  const { user } = useSelector((state) => state.auth);
-    const [questionList, setQuestionList] = useState(qlist);
+  const [questionList, setQuestionList] = useState(qlist);
   const [OV, setOV] = useState(null);
 
   const [OVForScreenSharing, setOVForScreenSharing] = useState();
@@ -134,24 +144,24 @@ const StudyRoom = () => {
     };
   }, [session]);
 
-    useEffect(() => {
-        // 더미데이터대로 일단 추가
-        const updatedFeedbackList = [
-            {
-                name: "최고심",
-                feedbacks: [{ question: [], feedback: [] }],
-            },
-            {
-                name: "춘식이",
-                feedbacks: [{ question: [], feedback: [] }],
-            },
-            {
-                name: "빤쮸토끼",
-                feedbacks: [{ question: [], feedback: [] }],
-            },
-        ];
-        dispatch(interviewActions.updateFeedbacks(updatedFeedbackList));
-    }, [dispatch]);
+  useEffect(() => {
+    // 더미데이터대로 일단 추가
+    const updatedFeedbackList = [
+      {
+        name: "최고심",
+        feedbacks: [{ question: [], feedback: [] }],
+      },
+      {
+        name: "춘식이",
+        feedbacks: [{ question: [], feedback: [] }],
+      },
+      {
+        name: "빤쮸토끼",
+        feedbacks: [{ question: [], feedback: [] }],
+      },
+    ];
+    dispatch(interviewActions.updateFeedbacks(updatedFeedbackList));
+  }, [dispatch]);
 
   const deleteIsSperker = (connectionId) => {
     let prevIsSpeakList = isSpeakList;
@@ -306,36 +316,61 @@ const StudyRoom = () => {
 
   // 면접방 웹 소켓 연결
   useEffect(() => {
-    const interviewRoomId = location.pathname.replace("/studyroom/", "");
-    dispatch(initializeWebSocket(accessToken))
-      .then(() => {
-        const client = getClient();
-        dispatch(interviewThunk({ client, interviewRoomId }));
-      })
-      .then(() => {
-        // const userJoinData = {
-        //   type: "JOIN",
-        //   data: {
-        //     nickname: user.nickname,
-        //     ready: false,
-        //     essays: {},
-        //     role: "interviewee",
-        //   },
-        // };
-        //dispatch(userJoinRoom({ interviewRoomId })); //userJoinData
-      })
-      .catch(() => {
-        console.log("웹소켓 연결 --> 구독이.. 실패!");
-      });
+    async function initialize() {
+      // 내부 컴포넌트가 먼저 동작하지 않도록 설정
+      // 여기서 여러 가지 초기화 작업 수행
+      // 예: 웹소켓 연결, 데이터 가져오기 등
+      const interviewRoomId = location.pathname.replace("/studyroom/", "");
 
+      // 웹소켓 연결
+      dispatch(initializeWebSocket(accessToken))
+        // 일반 유저일 때만 pub함, 방장은 pub 불필요
+        .then(() => {
+          if (isHost === false) {
+            dispatch(
+              userJoinRoomPub({
+                interviewRoomId,
+                userJoinData: user,
+              })
+            );
+            console.log("일반 유저가 pub ", interviewRoomId, user);
+          }
+        })
+
+        // 구독
+        .then(() => {
+          const client = getClient();
+          dispatch(interviewSubscribe({ client, interviewRoomId }));
+          console.log("구독 성공");
+        })
+
+        // 조인 이후, DB 에서 방 데이터 가져와서 curretRoom 에 넣기.
+        .then(() => {
+          // 일반 유저는 조인하면서 방에 자신을 넣는데,
+          // 방장은 방 만들때 이미 넣었으므로 그 작업이 불필요, 그냥 방 가져오면 됨
+          if (isHost === false) {
+            dispatch(joinInterviewRoom(interviewRoomId));
+            console.log("일반 유저 입장 - DB 데이터 가져오기");
+          }
+        })
+
+        // 내부 컴포넌트 동작되게 설정
+        .then(() => {
+          setInitialized(true);
+        })
+        .catch(() => {
+          console.log("웹소켓 연결 --> 구독이.. 실패!");
+        });
+    }
+    initialize();
     return () => {
       dispatch(closeWebSocket());
     };
   }, []);
 
   return (
-      <div>
-          {/* {isStarted && role === "interviewer" && (
+    <div>
+      {/* {isStarted && role === "interviewer" && (
                 <StudyRoomInterviewer
                     questionList={questionList}
                     setQuestionList={setQuestionList}
@@ -354,30 +389,34 @@ const StudyRoom = () => {
                     peopleList={peopleList}
                 />
             )} */}
-          {!isStarted ? (
-              <StudyRoomBefore
-                  streamManager={publisher}
-                  questionList={questionList}
-                  setQuestionList={setQuestionList}
-                  peopleList={peopleList}
-                  leaveSession={leaveSession}
-              />
-          ) : role === "interviewer" ? (
-              <StudyRoomInterviewer
-                  questionList={questionList}
-                  setQuestionList={setQuestionList}
-                  // feedbackList={feedbackList}
-                  // setFeedbackList={setFeedbackList}
-                  peopleList={peopleList}
-              />
-          ) : (
-              <StudyRoomInterviewee
-                  questionList={questionList}
-                  setQuestionList={setQuestionList}
-                  peopleList={peopleList}
-              />
-          )}
-      </div>
+      {initialized ? (
+        !isStarted ? (
+          <StudyRoomBefore
+            streamManager={publisher}
+            questionList={questionList}
+            setQuestionList={setQuestionList}
+            peopleList={peopleList}
+            leaveSession={leaveSession}
+          />
+        ) : role === "interviewer" ? (
+          <StudyRoomInterviewer
+            questionList={questionList}
+            setQuestionList={setQuestionList}
+            // feedbackList={feedbackList}
+            // setFeedbackList={setFeedbackList}
+            peopleList={peopleList}
+          />
+        ) : (
+          <StudyRoomInterviewee
+            questionList={questionList}
+            setQuestionList={setQuestionList}
+            peopleList={peopleList}
+          />
+        )
+      ) : (
+        <p>Loading...</p> // 이 부분은 로딩 표시로 대체할 수 있습니다.
+      )}
+    </div>
   );
 };
 

@@ -71,6 +71,7 @@ public class InterviewWebSocketController {
 					data.put("role", "interviewee");
 
 					messageDto.setData(data);
+					System.out.println(messageDto);
 					simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 				}
 				break;
