@@ -105,11 +105,10 @@ export const interviewSlice = createSlice({
     joinRoom: (state, action) => {
       console.log("callback ", action.payload);
 
-      // const member = {
-      //   ...action.payload, // 기존의 데이터
-      // };
-
-      state.currentRoom.members = [...state.currentRoom.members, member];
+      state.currentRoom.members = [
+        ...state.currentRoom.members,
+        action.payload,
+      ];
     },
 
     // call back
