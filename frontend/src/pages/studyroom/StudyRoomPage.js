@@ -446,7 +446,7 @@ const StudyRoom = () => {
         await dispatch(interviewSubscribe({ client, interviewRoomId }));
         console.log("구독 성공");
 
-        await new Promise((resolve) => setTimeout(resolve, 150)); // 대기
+        //await new Promise((resolve) => setTimeout(resolve, 150)); // 대기
 
         // 일반 유저일 때만 pub함, 방장은 pub 불필요
         if (isHost === false) {

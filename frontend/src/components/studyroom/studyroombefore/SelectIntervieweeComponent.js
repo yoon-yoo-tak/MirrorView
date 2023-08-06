@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { interviewActions } from "store/InterviewStore";
 import * as S from "../StudyRoomStyledComponents";
 import { getClient } from "store/WebSocketStore";
+import { roleChange } from "store/InterviewWebSocketStore";
 
 const SelectInterviewee = (props) => {
   const [interviewee, setInterviewee] = useState(true);
@@ -17,6 +18,7 @@ const SelectInterviewee = (props) => {
   );
   const { user } = useSelector((state) => state.auth);
   const nickname = useSelector((state) => state.auth.nickname);
+
   useEffect(() => {
     if (members == null) return;
 
@@ -39,6 +41,7 @@ const SelectInterviewee = (props) => {
     setIntervieweeList(interviewee);
     setInterviewerList(interviewer);
   }, [members]);
+
   // 더미데이터
   const [intervieweeList, setIntervieweeList] = useState([
     // 입장 시 유저의 기본값은 면접자로 설정
@@ -53,43 +56,64 @@ const SelectInterviewee = (props) => {
     { name: "빅또리" },
   ]);
 
-  const changeToInterviewee = () => {
-    const client = getClient();
-    const member = members.filter(
-      (member) => member.nickname === user.nickname
-    )[0];
-    console.log(member);
-    if (!interviewee) {
-      // console.log("나는 면접자야");
-      setMyRole("interviewee");
-      setInterviewee(true);
-      const sendData = {
-        type: "ROLE_CHANGE",
-        data: {
-          nickname: member.nickname,
-          role: "interivewee",
-          rating: 0.3,
-          ready: member.ready,
-        },
-      };
-      client.send(
-        `/app/interviewrooms/${currentRoom.id}`,
-        {},
-        JSON.stringify(sendData)
-      );
-    } else return;
-  };
+  // const changeToInterviewee = () => {
+  //   const client = getClient();
+  //   const member = members.filter(
+  //     (member) => member.nickname === user.nickname
+  //   )[0];
+  //   console.log(member);
+  //   if (!interviewee) {
+  //     // console.log("나는 면접자야");
+  //     setMyRole("interviewee");
+  //     setInterviewee(true);
+  //     const sendData = {
+  //       type: "ROLE_CHANGE",
+  //       data: {
+  //         nickname: member.nickname,
+  //         role: "interivewee",
+  //         rating: 0.3,
+  //         ready: member.ready,
+  //       },
+  //     };
+  //     client.send(
+  //       `/app/interviewrooms/${currentRoom.id}`,
+  //       {},
+  //       JSON.stringify(sendData)
+  //     );
+  //   } else return;
+  // };
 
-  const changeToInterviewer = () => {
-    if (interviewee) {
-      // console.log("나는 면접관이야");
-      setMyRole("interviewer");
-      setInterviewee(false);
-      setIntervieweeList((prevList) =>
-        prevList.filter((item) => item.name !== props.username)
-      );
-      setInterviewerList((prevList) => [{ name: props.username }, ...prevList]);
-    } else return;
+  // const changeToInterviewer = () => {
+  //   if (interviewee) {
+  //     // console.log("나는 면접관이야");
+  //     setMyRole("interviewer");
+  //     setInterviewee(false);
+  //     setIntervieweeList((prevList) =>
+  //       prevList.filter((item) => item.name !== props.username)
+  //     );
+  //     setInterviewerList((prevList) => [{ name: props.username }, ...prevList]);
+  //   } else return;
+  // };
+
+  const changeRole = () => {
+    const client = getClient();
+    const newRole = interviewee ? "interviewer" : "interviewee"; // 현재 상태를 기반으로 새 역할 결정
+
+    setMyRole(newRole);
+    setInterviewee(!interviewee); // 상태 토글
+
+    const sendData = {
+      type: "ROLE_CHANGE",
+      data: { nickname: user.nickname },
+    };
+
+    client.send(
+      `/app/interviewrooms/${currentRoom.id}`,
+      {},
+      JSON.stringify(sendData)
+    );
+
+    dispatch(roleChange({ nickname: user.nickname, role: newRole })); // 리듀서 액션 디스패치
   };
 
   useEffect(() => {
@@ -103,12 +127,12 @@ const SelectInterviewee = (props) => {
           <S.nowText now="interviewee">면접자</S.nowText>
           <label htmlFor="interviewee">
             {!interviewee && (
-              <S.changeButtonActive onClick={changeToInterviewee}>
+              <S.changeButtonActive onClick={changeRole}>
                 전환하기
               </S.changeButtonActive>
             )}
             {interviewee && (
-              <S.changeButtonGray onClick={changeToInterviewee}>
+              <S.changeButtonGray onClick={changeRole}>
                 전환하기
               </S.changeButtonGray>
             )}
@@ -137,12 +161,12 @@ const SelectInterviewee = (props) => {
           <S.nowText now="interviewer">면접관</S.nowText>
           <label htmlFor="interviewer">
             {interviewee && (
-              <S.changeButtonActive onClick={changeToInterviewer}>
+              <S.changeButtonActive onClick={changeRole}>
                 전환하기
               </S.changeButtonActive>
             )}
             {!interviewee && (
-              <S.changeButtonGray onClick={changeToInterviewer}>
+              <S.changeButtonGray onClick={changeRole}>
                 전환하기
               </S.changeButtonGray>
             )}
