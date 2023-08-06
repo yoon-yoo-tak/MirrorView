@@ -41,6 +41,7 @@ const StudyRoomBefore = (props) => {
   const videoRef = React.createRef();
 
   useEffect(() => {
+
     componentDidUpdate();
     componentDidMount();
   }, [streamManager]);

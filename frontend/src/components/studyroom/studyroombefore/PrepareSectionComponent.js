@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import * as S from "../StudyRoomStyledComponents";
 // import PrepareTap from "./PrepareTapComponent";
@@ -6,18 +6,22 @@ import StudyChatting from "./preparesection/StudyChattingComponent";
 import StudyMyEssay from "./preparesection/StudyMyEssayCheckComponent";
 import StudyProfileAndEssay from "./preparesection/StudyProfileAndEssayComponent";
 import StudyQustionList from "./preparesection/StudyQuestionListComponent";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { exitCurrentRoom } from "store/InterviewStore";
+import { exitRoom } from "store/InterviewWebSocketStore";
+import { getClient } from "store/WebSocketStore";
 import StudyRating from "../starrating/StudyRatingComponent";
 const PrepareSection = (props) => {
     const [section, setSection] = useState("info");
     const { peopleList, questionList, setQuestionList,leaveSession } = props;
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const {user} = useSelector((state)=>state.auth)
+    const {currentRoom} = useSelector((state)=>state.interviewWebSocket);
     const handleInfo = () => {
         setSection("info");
     };
+
 
     // const handleQuest = () => {
     //     setSection("quest");
@@ -34,8 +38,15 @@ const PrepareSection = (props) => {
     const [modalStates, setModalStates] = useState(false);
 
     const handleExit = () => {
-        setModalStates(true);
-        dispatch(exitCurrentRoom());
+        const client = getClient();
+        const sendUserData = {
+            type: "EXIT",
+            data: {
+            nickname: user.nickname,
+            }
+          };
+          console.log(currentRoom);
+        client.send(`/app/interviewrooms/${currentRoom.id}`,{},JSON.stringify(sendUserData));
         leaveSession();
         navigate("/");
     };

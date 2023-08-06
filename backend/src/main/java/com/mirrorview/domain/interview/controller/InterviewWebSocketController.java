@@ -91,7 +91,14 @@ public class InterviewWebSocketController {
 				break;
 
 			case "ROLE_CHANGE":
-				MemberDto roleMemberDto = (MemberDto)messageDto.getData();
+				log.info("{}",messageDto.getData());
+				Map<String, Object> data = messageDto.getData();
+				MemberDto roleMemberDto = MemberDto.builder()
+					.role((String)data.get("role"))
+					.rating(3.5f)
+					.ready((boolean)data.get("ready"))
+					.nickname((String)data.get("nickname"))
+					.build();
 
 				// 멤버의 역할 상태 토글하고 DB에 반영
 				RoomMemberInfo roleMember = interviewService.toggleRoleStatus(roomId, roleMemberDto.getNickname());
