@@ -7,6 +7,16 @@ axios.defaults.withCredentials = true;
 
 const initialState = {
   room: [],
+  // ------------------------------
+  feedbackList: [
+    {
+      name: "",
+      feedbacks: { question: [], feedback: [] },
+    },
+  ],
+  myRole: "interviewee",
+  isStarted: false,
+  //-------------------------------
 };
 
 export const getInterviewRoom = createAsyncThunk(
@@ -41,14 +51,21 @@ export const getInterviewRoomByCategory = createAsyncThunk(
   }
 );
 
-// interviewWebSocketStore state 에 currentRoom 방을 전달
-
 const interviewSlice = createSlice({
   name: "interview",
   initialState,
   reducers: {
     exitCurrentRoom: (state, action) => {
       state.currentRoom = { members: [] };
+    },
+    updateFeedbacks: (state, action) => {
+      state.feedbackList = action.payload;
+    },
+    setMyRoll: (state, action) => {
+      state.myRole = action.payload;
+    },
+    updateStarted: (state, action) => {
+      state.isStarted = action.payload;
     },
   },
   extraReducers: {

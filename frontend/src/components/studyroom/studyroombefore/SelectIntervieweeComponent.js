@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 // import { useSelector } from "react-redux";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { interviewActions } from "store/InterviewStore";
 import * as S from "../StudyRoomStyledComponents";
 import { getClient } from "store/WebSocketStore";
 
 const SelectInterviewee = (props) => {
-  const [interviewee, setInterviewee] = useState(true);
-  const members = useSelector(
+    const [interviewee, setInterviewee] = useState(true);
+    const [myRole, setMyRole] = useState("interviewee");
+    const dispatch = useDispatch();
+    const members = useSelector(
     (state) => state.interviewWebSocket.currentRoom.members
   );
   const currentRoom = useSelector((state)=> state.interviewWebSocket.currentRoom);
@@ -54,6 +57,7 @@ const SelectInterviewee = (props) => {
     console.log(member);
     if (!interviewee) {
       // console.log("나는 면접자야");
+        setMyRole("interviewee");
       setInterviewee(true);
       const sendData = {
         type:"ROLE_CHANGE",
@@ -72,6 +76,7 @@ const SelectInterviewee = (props) => {
   const changeToInterviewer = () => {
     if (interviewee) {
       // console.log("나는 면접관이야");
+        setMyRole("interviewer");
       setInterviewee(false);
       setIntervieweeList((prevList) =>
         prevList.filter((item) => item.name !== props.username)
@@ -79,6 +84,10 @@ const SelectInterviewee = (props) => {
       setInterviewerList((prevList) => [{ name: props.username }, ...prevList]);
     } else return;
   };
+
+    useEffect(() => {
+        dispatch(interviewActions.setMyRoll(myRole));
+    }, myRole);
 
   return (
     <S.selectPage>
