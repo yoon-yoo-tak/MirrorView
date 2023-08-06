@@ -5,7 +5,7 @@ import axios from "axios";
 // 구독과, 콜백만 처리
 
 const initialState = {
-  currentRoom: {members:[],},
+  currentRoom: { members: [] },
   questions: [],
 };
 
@@ -107,6 +107,8 @@ export const interviewSlice = createSlice({
 
     // 유저들에게 내정보 pub, call back
     joinRoom: (state, action) => {
+      if (!state.currentRoom.members) return; // 방 생성 이전에 오는 내 정보 pub는 무시
+
       state.currentRoom.members = [
         ...state.currentRoom.members,
         action.payload,
@@ -135,7 +137,7 @@ export const interviewSlice = createSlice({
       state.currentRoom.members = state.currentRoom.members.filter(
         (member) => member.nickname !== nickname
       );
-      state.questions=[];
+      state.questions = [];
     },
 
     // call back

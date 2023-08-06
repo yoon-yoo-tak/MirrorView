@@ -434,58 +434,54 @@ const StudyRoom = () => {
   // 면접방 웹 소켓 연결
   useEffect(() => {
     async function initialize() {
-      // 내부 컴포넌트가 먼저 동작하지 않도록 설정
-      // 여기서 여러 가지 초기화 작업 수행
-      // 예: 웹소켓 연결, 데이터 가져오기 등
-      const interviewRoomId = location.pathname.replace("/studyroom/", "");
+      try {
+        // 내부 컴포넌트가 먼저 동작하지 않도록 설정
+        const interviewRoomId = location.pathname.replace("/studyroom/", "");
 
-      // 웹소켓 연결
-      dispatch(initializeWebSocket(accessToken))
-        // 일반 유저일 때만 pub함, 방장은 pub 불필요
-        .then(() => {
-          if (isHost === false) {
-            dispatch(
-              userJoinRoomPub({
-                interviewRoomId,
-                userJoinData: user,
-              })
-            );
-            console.log("일반 유저가 pub ", interviewRoomId, user);
-          }
-        })
+        // 웹소켓 연결
+        await dispatch(initializeWebSocket(accessToken));
 
         // 구독
-        .then(() => {
-          const client = getClient();
-          dispatch(interviewSubscribe({ client, interviewRoomId }));
-          console.log("구독 성공");
-        })
+        const client = getClient();
+        await dispatch(interviewSubscribe({ client, interviewRoomId }));
+        console.log("구독 성공");
 
-        // 조인 이후, DB 에서 방 데이터 가져와서 curretRoom 에 넣기.
-        .then(() => {
-          // 일반 유저는 조인하면서 방에 자신을 넣는데,
-          // 방장은 방 만들때 이미 넣었으므로 그 작업이 불필요, 그냥 방 가져오면 됨
-          if (isHost === false) {
-            dispatch(joinInterviewRoom(interviewRoomId));
-            console.log(
-              "일반 유저 입장 (조인작업까지 진행) - DB 데이터 가져오기"
-            );
-          } else {
-            dispatch(hostJoinInterviewRoom(interviewRoomId));
-            console.log("방장 입장 - 단순 DB 데이터 가져오기");
-          }
-        })
+        await new Promise((resolve) => setTimeout(resolve, 150)); // 대기
+
+        // 일반 유저일 때만 pub함, 방장은 pub 불필요
+        if (isHost === false) {
+          await dispatch(
+            userJoinRoomPub({
+              interviewRoomId,
+              userJoinData: user,
+            })
+          );
+          console.log("일반 유저가 pub ", interviewRoomId, user);
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, 150)); // 대기
+
+        // 조인 이후, DB에서 방 데이터 가져와서 curretRoom에 넣기.
+        if (isHost === false) {
+          await dispatch(joinInterviewRoom(interviewRoomId));
+          console.log(
+            "일반 유저 입장 (조인작업까지 진행) - DB 데이터 가져오기"
+          );
+        } else {
+          await dispatch(hostJoinInterviewRoom(interviewRoomId));
+          console.log("방장 입장 - 단순 DB 데이터 가져오기");
+        }
 
         // 내부 컴포넌트 동작되게 설정
-        .then(() => {
-          setInitialized(true);
-        })
-        .catch(() => {
-          console.log("웹소켓 연결 --> 구독이.. 실패!");
-          dispatch(clearCurrentRoom());
-        });
+        setInitialized(true);
+      } catch (error) {
+        console.log("웹소켓 연결 --> 구독이.. 실패!", error);
+        dispatch(clearCurrentRoom());
+      }
     }
+
     initialize();
+
     return () => {
       dispatch(closeWebSocket());
       dispatch(clearCurrentRoom());
