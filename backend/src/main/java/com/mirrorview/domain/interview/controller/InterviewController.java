@@ -8,6 +8,7 @@ import com.mirrorview.domain.interview.service.InterviewService;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.global.auth.security.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
+
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,35 +31,34 @@ import java.util.Optional;
 @RequestMapping("/api/interviews")
 public class InterviewController {
 
-    private final InterviewService interviewService;
+	private final InterviewService interviewService;
 
-    @GetMapping("/rooms")
-    public ResponseEntity<?> getRooms(
-            @RequestParam(required = false) String jobType,
-            @RequestParam(required = false) String interviewType) {
-        return BaseResponse.okWithData(HttpStatus.OK, "방 정보 조회 완료", interviewService.findRoom());
-    }
+	@GetMapping("/rooms")
+	public ResponseEntity<?> getRooms(
+		@RequestParam(required = false) String jobType,
+		@RequestParam(required = false) String interviewType) {
+		return BaseResponse.okWithData(HttpStatus.OK, "방 정보 조회 완료", interviewService.findRoom());
+	}
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createRoom(@RequestBody RoomRequestDto requestDto,
-                                        @AuthenticationPrincipal CustomMemberDetails member) {
+	@PostMapping("/create")
+	public ResponseEntity<?> createRoom(@RequestBody RoomRequestDto requestDto,
+		@AuthenticationPrincipal CustomMemberDetails member) {
 
+		InterviewRoom interviewRoom = interviewService.create(member.getUser(), requestDto);
+		return BaseResponse.okWithData(HttpStatus.OK, "테스트", interviewRoom);
+	}
 
-        InterviewRoom interviewRoom = interviewService.create(member.getUser(), requestDto);
-        return BaseResponse.okWithData(HttpStatus.OK, "테스트", interviewRoom);
-    }
-
-    @PostMapping("/exit/{roomId}")
-    public ResponseEntity<?> exitRoom(@AuthenticationPrincipal CustomMemberDetails member,
-                                      @PathVariable String roomId) {
-        String nickname = member.getNickname();
-        try {
-            interviewService.exitRoom(nickname, roomId);
-        } catch (Exception e) {
-            return BaseResponse.fail(e.getMessage(), 400);
-        }
-        return BaseResponse.ok(HttpStatus.OK, "나가기 완료");
-    }
+	@PostMapping("/exit/{roomId}")
+	public ResponseEntity<?> exitRoom(@AuthenticationPrincipal CustomMemberDetails member,
+		@PathVariable String roomId) {
+		String nickname = member.getNickname();
+		try {
+			interviewService.exitRoom(nickname, roomId);
+		} catch (Exception e) {
+			return BaseResponse.fail(e.getMessage(), 400);
+		}
+		return BaseResponse.ok(HttpStatus.OK, "나가기 완료");
+	}
 
     @PostMapping("join/{roomId}")
     public ResponseEntity<?> joinRoom(@AuthenticationPrincipal CustomMemberDetails member,
@@ -74,9 +74,18 @@ public class InterviewController {
         return BaseResponse.okWithData(HttpStatus.OK, "조인 완료", interview);
     }
 
-    @GetMapping("/rooms/{category}")
-    public ResponseEntity<?> searchRooms(@PathVariable("category") String category) {
-        List<RoomResponseDto> list = interviewService.findRoomByCategory(category);
-        return BaseResponse.okWithData(HttpStatus.OK, "카테고리로 조회 성공", list);
-    }
+	@GetMapping("/rooms/{category}")
+	public ResponseEntity<?> searchRooms(@PathVariable("category") String category) {
+		List<RoomResponseDto> list = interviewService.findRoomByCategory(category);
+		return BaseResponse.okWithData(HttpStatus.OK, "카테고리로 조회 성공", list);
+	}
+
+	@GetMapping("/find/{roomId}")
+	public ResponseEntity<?> findRoom(@PathVariable String roomId) {
+		Optional<InterviewRoom> roomById = interviewService.findRoomById(roomId);
+		if (roomById.isPresent()){
+			return BaseResponse.okWithData(HttpStatus.OK, "방 가져오기", roomById.get());
+		}
+		return BaseResponse.fail("방이 존재하지 않습니다.", 404);
+	}
 }
