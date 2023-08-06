@@ -59,6 +59,13 @@ export const interviewSubscribe = createAsyncThunk(
           dispatch(receiveMessage(parsedMessage));
           break;
         case "JOIN":
+          // 내정보는 무시, 상대 정보만 나에게 pub
+          const myNickname = getState().auth.user.nickname;
+          const authNickname = parsedMessage.data.nickname;
+          if (myNickname === authNickname) {
+            return;
+          }
+
           dispatch(joinRoom(parsedMessage.data));
           break;
         case "EXIT":
@@ -107,7 +114,7 @@ export const interviewSlice = createSlice({
 
     // 유저들에게 내정보 pub, call back
     joinRoom: (state, action) => {
-      if (!state.currentRoom.members) return; // 방 생성 이전에 오는 내 정보 pub는 무시
+      if (!state.currentRoom.members) return; // 방 생성 이전에 오는 내 정보 무시
 
       state.currentRoom.members = [
         ...state.currentRoom.members,

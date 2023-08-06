@@ -9,11 +9,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
+@ToString
 public class RoomMemberInfo {
 
     private String nickname;
@@ -32,10 +34,10 @@ public class RoomMemberInfo {
     }
 
     public void changeRole(){
-        if (role.equals("INTERVIEWEE")) {
-            role = "INTERVIEWER";
-        } else if (role.equals("INTERVIEWER")) {
-            role = "INTERVIEWEE";
+        if (role.equals("interviewee")) {
+            role = "interviewer";
+        } else if (role.equals("interviewer")) {
+            role = "interviewee";
         }
     }
 }

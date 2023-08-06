@@ -2,7 +2,6 @@ package com.mirrorview.domain.interview.service;
 
 import com.mirrorview.domain.interview.domain.InterviewRoom;
 import com.mirrorview.domain.interview.domain.RoomMemberInfo;
-import com.mirrorview.domain.interview.dto.MemberDto;
 import com.mirrorview.domain.interview.dto.RoomRequestDto;
 import com.mirrorview.domain.interview.dto.RoomResponseDto;
 import com.mirrorview.domain.user.domain.Member;

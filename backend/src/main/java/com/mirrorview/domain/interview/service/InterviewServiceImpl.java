@@ -7,7 +7,6 @@ import com.mirrorview.domain.essay.repository.EssayDetailRepository;
 import com.mirrorview.domain.essay.repository.EssayRepository;
 import com.mirrorview.domain.interview.domain.InterviewRoom;
 import com.mirrorview.domain.interview.domain.RoomMemberInfo;
-import com.mirrorview.domain.interview.dto.MemberDto;
 import com.mirrorview.domain.interview.dto.MessageDto;
 import com.mirrorview.domain.interview.dto.RoomRequestDto;
 import com.mirrorview.domain.interview.dto.RoomResponseDto;
@@ -160,6 +159,8 @@ public class InterviewServiceImpl implements InterviewService {
         // 레디 상태 토글
         member.changeReady();
 
+        System.out.println(member);
+
         interviewRepository.save(room);
         return member;
     }
@@ -182,6 +183,7 @@ public class InterviewServiceImpl implements InterviewService {
 
         // 역할 상태 토글
         member.changeRole();
+        System.out.println(member);
         interviewRepository.save(room);
         return member;
     }

@@ -13,18 +13,15 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mirrorview.domain.interview.domain.InterviewRoom;
 import com.mirrorview.domain.interview.domain.RoomMemberInfo;
-import com.mirrorview.domain.interview.dto.MemberDto;
 import com.mirrorview.domain.interview.dto.MessageDto;
 import com.mirrorview.domain.interview.service.InterviewService;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.service.MemberService;
-import com.mirrorview.domain.user.service.MemberServiceImpl;
 import com.mirrorview.global.auth.security.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 
@@ -44,7 +41,7 @@ public class InterviewWebSocketController {
 	// 채널 하나만 구독해서 전부 처리할거임
 	@MessageMapping("/interviewrooms/{roomId}")
 	public void sendToAll(@DestinationVariable String roomId, @Payload MessageDto messageDto, Principal principal) {
-		log.info("interview - {} 동작, {}", messageDto.getType(), messageDto);
+		log.info("interview - {} 동작, {}", messageDto.getType(), messageDto.getData());
 
 		Authentication authentication = (Authentication) principal;
 		CustomMemberDetails user = (CustomMemberDetails) authentication.getPrincipal();
@@ -79,30 +76,40 @@ public class InterviewWebSocketController {
 				interviewService.exitRoom(user.getNickname(), roomId);
 				// 나간 멤버를 pub
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
-			case "READY_CHANGE":
-				MemberDto readyMember = (MemberDto)messageDto.getData();
 
-				// (redis) 레디한 멤버의 상태를 토글
-				RoomMemberInfo roomMemberInfo = interviewService.toggleReadyStatus(roomId, readyMember.getNickname());
-				messageDto.setData((Map<String, Object>)roomMemberInfo);
+			case "READY_CHANGE":
+				Map<String, Object> readyData = messageDto.getData();
+				String userNicknameReady = (String)readyData.get("nickname");
+
+				RoomMemberInfo readyMember = interviewService.toggleReadyStatus(roomId, userNicknameReady);
+				readyData.put("nickname", readyMember.getNickname());
+				readyData.put("email", readyMember.getEmail());
+				readyData.put("rating", readyMember.getRating());
+				readyData.put("ready", readyMember.isReady());
+				readyData.put("essays", readyMember.getEssays());
+				readyData.put("role", readyMember.getRole());
+
+				messageDto.setData(readyData);
+				System.out.println(readyData);
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 
 				interviewService.systemMessage(principal.getName(), roomId, "님이 준비 상태를 변경했습니다.");
 				break;
 
 			case "ROLE_CHANGE":
-				log.info("{}",messageDto.getData());
 				Map<String, Object> data = messageDto.getData();
-				MemberDto roleMemberDto = MemberDto.builder()
-					.role((String)data.get("role"))
-					.rating(3.5f)
-					.ready((boolean)data.get("ready"))
-					.nickname((String)data.get("nickname"))
-					.build();
+				String userNickname = (String)data.get("nickname");
 
 				// 멤버의 역할 상태 토글하고 DB에 반영
-				RoomMemberInfo roleMember = interviewService.toggleRoleStatus(roomId, roleMemberDto.getNickname());
-				messageDto.setData((Map<String, Object>)roleMember);
+				RoomMemberInfo roleMember = interviewService.toggleRoleStatus(roomId, userNickname);
+				data.put("nickname", roleMember.getNickname());
+				data.put("email", roleMember.getEmail());
+				data.put("rating", roleMember.getRating());
+				data.put("ready", roleMember.isReady());
+				data.put("essays", roleMember.getEssays());
+				data.put("role", roleMember.getRole());
+				System.out.println(data);
+				messageDto.setData(data);
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 
 				interviewService.systemMessage(principal.getName(), roomId, "님이 역할을 변경했습니다.");
