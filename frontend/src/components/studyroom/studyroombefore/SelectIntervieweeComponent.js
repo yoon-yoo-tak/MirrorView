@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 // import { useSelector } from "react-redux";
 import { useSelector } from "react-redux";
 import * as S from "../StudyRoomStyledComponents";
+import { getClient } from "store/WebSocketStore";
 
 const SelectInterviewee = (props) => {
   const [interviewee, setInterviewee] = useState(true);
   const members = useSelector(
     (state) => state.interviewWebSocket.currentRoom.members
   );
+  const currentRoom = useSelector((state)=> state.interviewWebSocket.currentRoom);
+  const {user} = useSelector((state)=>state.auth);
   const nickname = useSelector((state) => state.auth.nickname);
   useEffect(() => {
     if (members == null) return;
@@ -46,13 +49,23 @@ const SelectInterviewee = (props) => {
   ]);
 
   const changeToInterviewee = () => {
+    const client = getClient();
+    const member = members.filter((member) => member.nickname === user.nickname)[0];
+    console.log(member);
     if (!interviewee) {
       // console.log("나는 면접자야");
       setInterviewee(true);
-      setInterviewerList((prevList) =>
-        prevList.filter((item) => item.name !== props.username)
-      );
-      setIntervieweeList((prevList) => [{ name: props.username }, ...prevList]);
+      const sendData = {
+        type:"ROLE_CHANGE",
+        data:{
+          nickname:member.nickname,
+          role:"interivewee",
+          rating: 0.3,
+          ready:member.ready,
+        }
+      };
+      client.send(`/app/interviewrooms/${currentRoom.id}`,{},JSON.stringify(sendData));
+      
     } else return;
   };
 

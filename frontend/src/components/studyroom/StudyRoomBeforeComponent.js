@@ -14,7 +14,7 @@ const StudyRoomBefore = (props) => {
     leaveSession,
   } = props;
   const [ready, setReady] = useState(false);
-  const { currentRoom } = useSelector((state) => state.interview);
+  const { currentRoom } = useSelector((state) => state.interviewWebSocket);
   const nickname = useSelector((state) => state.auth.user.nickname);
   useEffect(() => {
     currentRoom.members.forEach((member) => {

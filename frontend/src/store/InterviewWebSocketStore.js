@@ -5,7 +5,7 @@ import axios from "axios";
 // 구독과, 콜백만 처리
 
 const initialState = {
-  currentRoom: {},
+  currentRoom: {members:[],},
   questions: [],
 };
 
@@ -29,6 +29,7 @@ export const interviewThunk = createAsyncThunk(
   async ({ client, interviewRoomId }, { dispatch, getState }) => {
     client.subscribe("/sub/interviewrooms/" + interviewRoomId, (message) => {
       const parsedMessage = JSON.parse(message.body);
+      console.log(parsedMessage);
       switch (parsedMessage.type) {
         case "SYSTEM":
         case "CHAT":
@@ -104,12 +105,11 @@ export const interviewSlice = createSlice({
     // 유저들에게 pub, call back
     joinRoom: (state, action) => {
       console.log("callback ", action.payload);
-
       // const member = {
       //   ...action.payload, // 기존의 데이터
       // };
 
-      state.currentRoom.members = [...state.currentRoom.members, member];
+      state.currentRoom.members = [...state.currentRoom.members, action.payload];
     },
 
     // call back
@@ -120,6 +120,7 @@ export const interviewSlice = createSlice({
       state.currentRoom.members = state.currentRoom.members.filter(
         (member) => member.nickname !== nickname
       );
+      state.questions=[];
     },
 
     // call back
@@ -133,11 +134,11 @@ export const interviewSlice = createSlice({
 
     // call back
     roleChange: (state, action) => {
-      const { nickname, roles } = action.payload;
+      const { nickname, role } = action.payload;
       const member = state.currentRoom.members.find(
         (member) => member.nickname === nickname
       );
-      if (member) member.roles = roles;
+      if (member) member.role = role;
     },
     addQuestion: (state, action) => {
       state.questions = [...state.questions, action.payload];
