@@ -25,17 +25,19 @@ const SelectInterviewee = (props) => {
     const interviewee = [];
     const interviewer = [];
 
+    // 준비 상태 바꾸기 필요. 임시로 넣어뒀음. 155, 190 라인
+
     members.forEach((member) => {
       if (member.role === "interviewee") {
         if (member.nickname == nickname) {
           setInterviewee(true);
         }
-        interviewee.push({ name: member.nickname });
+        interviewee.push({ name: member.nickname, ready: member.ready });
       } else {
         if (member.nickname == nickname) {
           setInterviewee(false);
         }
-        interviewer.push({ name: member.nickname });
+        interviewer.push({ name: member.nickname, ready: member.ready });
       }
     });
     setIntervieweeList(interviewee);
@@ -150,7 +152,7 @@ const SelectInterviewee = (props) => {
             <S.personList
               checkname={items.name === props.username ? "true" : ""}
               key={index}>
-              {items.name}
+              {items.name} {items.ready && "(준비)"}
             </S.personList>
           ))}
         </S.selectSectionList>
@@ -185,6 +187,7 @@ const SelectInterviewee = (props) => {
               checkname={items.name === props.username ? "true" : ""}
               key={index}>
               {items.name}
+              {items.ready && "(준비)"}
             </S.personList>
           ))}
         </S.selectSectionList>

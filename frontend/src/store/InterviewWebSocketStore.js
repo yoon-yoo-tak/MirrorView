@@ -72,7 +72,7 @@ export const interviewSubscribe = createAsyncThunk(
           dispatch(exitRoom(parsedMessage.data));
           break;
         case "READY_CHANGE":
-          dispatch(readyStatus(parsedMessage.data));
+          dispatch(readyChange(parsedMessage.data));
           break;
         case "ROLE_CHANGE":
           dispatch(roleChange(parsedMessage.data));
@@ -148,7 +148,7 @@ export const interviewSlice = createSlice({
     },
 
     // call back
-    readyStatus: (state, action) => {
+    readyChange: (state, action) => {
       const { nickname, ready } = action.payload;
       const member = state.currentRoom.members.find(
         (member) => member.nickname === nickname
@@ -179,7 +179,7 @@ export const {
   receiveMessage,
   joinRoom,
   exitRoom,
-  readyStatus,
+  readyChange,
   roleChange,
   addQuestion,
 } = interviewSlice.actions;
