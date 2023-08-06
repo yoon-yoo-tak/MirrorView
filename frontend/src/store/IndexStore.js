@@ -52,12 +52,9 @@ const store = configureStore({
   reducer: persistedReducer,
   // 세션 스토리지용 - 각 탭마다 devtools 따로 동작
   devTools: {
-    name:
-      window.location.pathname +
-      "?" +
-      window.location.search +
-      "_" +
-      Date.now(),
+    name: `${
+      window.location.pathname + "?" + window.location.search
+    }-${new Date().getTime()}`,
     trace: true,
     traceLimit: 25,
   },
