@@ -92,7 +92,6 @@ const StudyRoom = () => {
 
   const APPLICATION_SERVER_URL =
     process.env.NODE_ENV === "production" ? "" : "http://localhost:8000/";
-  const { user } = useSelector((state) => state.auth);
     const [questionList, setQuestionList] = useState(qlist);
   const [OV, setOV] = useState(null);
   const [OVForScreenSharing, setOVForScreenSharing] = useState();
@@ -516,7 +515,7 @@ const StudyRoom = () => {
                 />
             )} */}
       {initialized ? (
-          {!isStarted ? (
+          !isStarted ? (
               <StudyRoomBefore
                   streamManager={publisher}
                   questionList={questionList}
