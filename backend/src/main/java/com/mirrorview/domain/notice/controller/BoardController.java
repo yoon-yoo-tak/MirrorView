@@ -7,6 +7,8 @@ import com.mirrorview.domain.notice.service.BoardService;
 import com.mirrorview.global.auth.security.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/board")
+@Slf4j
 public class BoardController {
     private final BoardService boardService;
 
@@ -31,6 +34,7 @@ public class BoardController {
     @PostMapping
     @Secured("ROLE_ADMIN")
     public ResponseEntity<?> writeNotice(@RequestBody BoardWriteDto dto, @AuthenticationPrincipal CustomMemberDetails member) {
+        log.info("user role = {}", member.getAuthorities());
         try {
             boardService.writeNotice(dto, member.getUsername());
             return BaseResponse.ok(HttpStatus.OK, "공지사항 작성 성공");

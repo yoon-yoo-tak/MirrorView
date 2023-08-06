@@ -17,7 +17,7 @@ public interface InterviewService {
 
     void exitRoom(String nickname, String roomId);
 
-    InterviewRoom joinRoom(Member member, String roomId);
+    InterviewRoom joinRoom(Member member, String roomId, String password);
 
     void changeReady(RoomMemberInfo memberInfo, InterviewRoom room);
 
