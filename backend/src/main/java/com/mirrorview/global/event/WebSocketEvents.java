@@ -1,9 +1,11 @@
 package com.mirrorview.global.event;
 
+import java.security.Principal;
 import java.util.concurrent.ConcurrentMap;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;

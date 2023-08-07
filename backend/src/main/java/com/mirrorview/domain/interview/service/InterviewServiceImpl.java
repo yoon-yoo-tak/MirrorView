@@ -53,7 +53,7 @@ public class InterviewServiceImpl implements InterviewService {
     public InterviewRoom create(Member member, RoomRequestDto requestDto) {
         InterviewRoom createRoom = requestDto.toEntity(member.getNickname());
         List<EssayListDto> essayList = new ArrayList<>();
-        //getEssayListDtos(member.getUserId());
+        //List<EssayListDto> essayListDtos = getEssayListDtos(member.getUserId());
         createRoom.join(member, essayList);
         interviewRepository.save(createRoom);
         System.out.println(interviewRepository.count());
@@ -128,16 +128,20 @@ public class InterviewServiceImpl implements InterviewService {
                 }
             }
             List<EssayListDto> essayList = new ArrayList<>();
-            // getEssayListDtos(member.getUserId());
+            //List<EssayListDto> essayListDtos = getEssayListDtos(member.getUserId());
             interviewRoom.join(member, essayList);
+
+            System.out.println(member);
+
             interviewRepository.save(interviewRoom);
             return interviewRoom;
         }
         throw new IllegalArgumentException("방 정보가 존재하지 않습니다.");
     }
 
-    private List<EssayListDto> getEssayListDtos(String userId) {
+    public List<EssayListDto> getEssayListDtos(String userId) {
         List<EssayDto> essays = essayRepository.findEssayByUserId(userId);
+        log.info("에쎄이 가져오기 {}", essays);
         List<EssayListDto> essayList = new ArrayList<>();
         for (EssayDto essay : essays) {
             List<EssayDetailDto> essayDetail = essayDetailRepository.findEssayByEssayId(essay.getId());

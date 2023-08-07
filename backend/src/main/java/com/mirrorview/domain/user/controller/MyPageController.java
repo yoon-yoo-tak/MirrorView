@@ -134,6 +134,7 @@ public class MyPageController {
 	public ResponseEntity<?> showEssays(@AuthenticationPrincipal
 		CustomMemberDetails member) {
 		List<EssayDto> list = essayService.findEssayByUserId(member.getUsername());
+		System.out.println(list);
 		return BaseResponse.okWithData(HttpStatus.OK, "에세이 목록 불러오기 성공", list);
 	}
 
