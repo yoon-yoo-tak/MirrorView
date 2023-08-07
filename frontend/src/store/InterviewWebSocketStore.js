@@ -23,6 +23,7 @@ export const joinInterviewRoom = createAsyncThunk(
         withCredentials: true,
       });
       thunkAPI.dispatch(joinedInterviewRoomCurrentRoomUpdate(res.data.data));
+      console.log(res.data.data)
       return res.data;
     } catch (error) {
       console.error(error);
@@ -59,13 +60,20 @@ export const interviewSubscribe = createAsyncThunk(
           dispatch(receiveMessage(parsedMessage));
           break;
         case "JOIN":
+          // 내정보는 무시, 상대 정보만 나에게 pub
+          const myNickname = getState().auth.user.nickname;
+          const authNickname = parsedMessage.data.nickname;
+          if (myNickname === authNickname) {
+            return;
+          }
+
           dispatch(joinRoom(parsedMessage.data));
           break;
         case "EXIT":
           dispatch(exitRoom(parsedMessage.data));
           break;
         case "READY_CHANGE":
-          dispatch(readyStatus(parsedMessage.data));
+          dispatch(readyChange(parsedMessage.data));
           break;
         case "ROLE_CHANGE":
           dispatch(roleChange(parsedMessage.data));
@@ -74,6 +82,20 @@ export const interviewSubscribe = createAsyncThunk(
           break;
       }
     });
+  }
+);
+
+// 내 자소서 불러오기
+export const fetchEssays = createAsyncThunk(
+  'essays/fetchAll',
+  async (nickname, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await axios.get('/api/essays');
+      dispatch(addEssays({ data: response.data.data, nickname }));
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -107,7 +129,7 @@ export const interviewSlice = createSlice({
 
     // 유저들에게 내정보 pub, call back
     joinRoom: (state, action) => {
-      if (!state.currentRoom.members) return; // 방 생성 이전에 오는 내 정보 pub는 무시
+      if (!state.currentRoom.members) return; // 방 생성 이전에 오는 내 정보 무시
 
       state.currentRoom.members = [
         ...state.currentRoom.members,
@@ -141,7 +163,7 @@ export const interviewSlice = createSlice({
     },
 
     // call back
-    readyStatus: (state, action) => {
+    readyChange: (state, action) => {
       const { nickname, ready } = action.payload;
       const member = state.currentRoom.members.find(
         (member) => member.nickname === nickname
@@ -160,6 +182,12 @@ export const interviewSlice = createSlice({
     addQuestion: (state, action) => {
       state.questions = [...state.questions, action.payload];
     },
+    addEssays: (state, action) => {
+      const member = state.currentRoom.members.find(
+        (member) => member.nickname === action.payload.nickname
+      );
+      member.essays = action.payload.data;
+    }
   },
 });
 
@@ -172,9 +200,10 @@ export const {
   receiveMessage,
   joinRoom,
   exitRoom,
-  readyStatus,
+  readyChange,
   roleChange,
   addQuestion,
+  addEssays,
 } = interviewSlice.actions;
 export const selectMessages = (state) => state.chat.currentRoom.messages;
 export default interviewSlice.reducer;

@@ -1,16 +1,14 @@
 package com.mirrorview.domain.category.controller;
 
 import com.mirrorview.domain.category.dto.CategoryDto;
+import com.mirrorview.domain.category.entity.Category;
 import com.mirrorview.domain.category.service.CategoryService;
 import com.mirrorview.global.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,4 +37,14 @@ public class CategoryController {
         return BaseResponse.okWithData(HttpStatus.OK, "자식 카테고리 조회 성공", categoryDtos);
     }
 
+//    @GetMapping("/detail")
+//    public ResponseEntity<?> getChildHierarchy(@RequestParam Integer depth, @RequestParam String name) {
+//        List<CategoryDto> result = null;
+//        try {
+//            result = categoryService.getHierarchiesCategory(depth, name);
+//        } catch (Exception e) {
+//            return BaseResponse.fail(e.getMessage(), 400);
+//        }
+//        return BaseResponse.okWithData(HttpStatus.OK, "조회 성공", result);
+//    }
 }

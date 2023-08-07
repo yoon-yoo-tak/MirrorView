@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 import pfImage from "../../assets/sidebar/🦆 icon _person outline_.png";
 import pcImage from "../../assets/sidebar/🦆 icon _people outline_.png";
@@ -546,4 +546,401 @@ export const comment = styled.div`
     height: 2.5rem;
     border-radius: 10px;
     margin-left: 19.0625rem;
+`;
+
+// CreateEssay
+export const essayCreateBox = styled.div`
+    position: relative;
+    top: 5px;
+    left: 0px;
+    margin: 0px;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: #e3f1f8;
+    width: 1100px;
+    height: 600px;
+`;
+
+export const esaayCategory = styled.div`
+    max-height: 200px;
+    font-size: 16px;
+    color: #333;
+    padding: 10px;
+`;
+
+export const esaayQuestion = styled.div`
+    max-height: 200px;
+    padding: 10px;
+`;
+
+export const essayAnswer = styled.div`
+    max-height: 800px;
+    color: #333;
+    padding: 10px;
+    overflow-y: auto;
+`;
+
+export const RoundedTextareaQues = styled.textarea`
+    font-size: 14px;
+    padding: 15px;
+    border-radius: 8px; // 모서리 둥글게
+    border: 1px solid #ccc; // 테두리 추가
+    width: 1040px; // 가로 크기 지정
+    height: 15px;
+    resize: none; // 사용자가 크기를 조절하지 못하도록 함
+    font-family: HakgyoansimWoojuR;
+`;
+
+export const RoundedTextareaAns = styled.textarea`
+    font-size: 16px;
+    padding: 15px;
+    border-radius: 8px; // 모서리 둥글게
+    border: 1px solid #ccc; // 테두리 추가
+    width: 1040px; // 가로 크기 지정
+    height: 350px;
+    resize: none; // 사용자가 크기를 조절하지 못하도록 함
+    font-family: HakgyoansimWoojuR;
+`;
+
+//
+export const EssayCreatePageContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+export const EssayFormContainer = styled.div`
+    position: relative;
+`;
+
+export const PaginationContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    position: relative;
+    bottom: 65px; /* 하늘색 박스 위로 위치 조정 */
+    right: 405px;
+`;
+
+export const PaginationButton = styled.button`
+    background-color: transparent;
+    border: none;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 16px;
+`;
+
+export const ActivePaginationButton = styled(PaginationButton)`
+    color: #a1b6ff;
+`;
+
+export const CircleNumber = styled.div`
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #a1b6ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+`;
+
+export const SaveButton = styled.button`
+    padding: 10px 20px;
+    font-size: 15px;
+    background-color: #ffb8d0;
+    color: black;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: wooju;
+
+    &:hover {
+        background-color: #40a9ff;
+    }
+`;
+
+//EsaayList
+export const essayListBox = styled.div`
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: rgba(161, 182, 255, 0.15);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+    border-radius: 15px;
+    padding: 35px 30px;
+    width: 400px;
+    height: 80px;
+    max-width: 2000px;
+    top: -50px;
+    left: 80px;
+
+    .title {
+        /* TITLE 스타일 조정 (좌측 상단) */
+        position: absolute;
+        top: 20px;
+        left: 30px;
+        font-family: HakgyoansimWoojuR;
+        font-size: 32px;
+    }
+
+    .time {
+        /* TIME 스타일 조정 (우측 하단) */
+        position: absolute;
+        bottom: 10px;
+        right: 15px;
+        font-family: HakgyoansimWoojuR;
+        font-size: 20px;
+    }
+`;
+
+export const essayListContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap; /* 옆으로 나란하게 정렬하고 줄 바꿈 */
+    gap: 60px; /* 박스 사이의 간격 조정 */
+`;
+
+export const EssayPaginationContainer = styled.div`
+    position: relative;
+    top: auto;
+    bottom: 20px;
+    left: 48.5%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    z-index: 2;
+
+    ul.pagination {
+        display: flex;
+        list-style-type: none;
+
+        li {
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        li.active {
+            font-size: 16px;
+            font-family: "DAE";
+            color: black;
+        }
+    }
+`;
+
+//Feedaback list page
+
+export const feedbackContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap; /* 옆으로 나란하게 정렬하고 줄 바꿈 */
+    gap: 50px; /* 박스 사이의 간격 조정 */
+
+    //
+    /* position: relative;
+    width: 100%;
+    height: 100%;
+    border: none; */
+`;
+
+export const feebacklistbox = styled.div`
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    border: 0.5px solid gray;
+    border-radius: 15px;
+    padding: 35px 30px;
+    width: 100px;
+    height: 180px;
+    max-width: 2000px;
+    top: -30px;
+    left: 55px;
+
+    .roomname {
+        /* TITLE 스타일 조정 (좌측 상단) */
+        position: absolute;
+        font-family: HakgyoansimWoojuR;
+        font-size: 20px;
+        justify-content: center;
+        top: 15%;
+        transform: translate(-10%, -50%);
+        white-space: nowrap;
+        text-overflow: ellipsis; /* 10글자 이상이면 ...으로 표시 */
+        overflow: hidden;
+        max-width: 7em; /* 최대 10글자까지 표시 */
+    }
+
+    .time {
+        /* TIME 스타일 조정 (우측 하단) */
+        position: absolute;
+        bottom: 10px;
+        right: 15px;
+        font-family: HakgyoansimWoojuR;
+        font-size: 20px;
+    }
+    .people {
+        /* TIME 스타일 조정 (우측 하단) */
+        position: absolute;
+        bottom: 30px;
+        right: 15px;
+        font-family: HakgyoansimWoojuR;
+        font-size: 20px;
+    }
+`;
+
+export const FeedbackPaginationContainer = styled.div`
+    position: relative;
+    top: 100%;
+    left: 47%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    z-index: 2;
+
+    ul.pagination {
+        display: flex;
+        list-style-type: none;
+
+        li {
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        li.active {
+            font-size: 16px;
+            font-family: "DAE";
+            color: black;
+        }
+    }
+`;
+
+export const ModalWrapper = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명한 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+`;
+
+export const ModalContent = styled.div`
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    height: 500px;
+    width: 800px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+`;
+
+export const Modal = ({ children, onClose }) => {
+    const handleWrapperClick = (e) => {
+        // 모달 내용 클릭 시 모달이 닫히지 않도록 확인
+        if (e.target === e.currentTarget) {
+            onClose();
+        }
+    };
+
+    return (
+        <ModalWrapper onClick={handleWrapperClick}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+                {children}
+            </ModalContent>
+        </ModalWrapper>
+    );
+};
+
+//Sign up
+export const SignupCreateBox = styled.div`
+    position: relative;
+    top: 0px;
+    left: 0px;
+    margin: 10px;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: rgb(242, 247, 255, 1);
+    width: 1470px;
+    height: 700px;
+
+    .input {
+        width: 25%; /* 혹은 다른 원하는 크기로 조정 */
+        /* ... (나머지 스타일 속성들) */
+    }
+`;
+
+export const InputField = styled.div`
+    border-radius: 10px;
+    padding: 10px;
+    margin-left: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* 입력란 간격을 조정합니다. */
+    font-family: HakgyoansimWoojuR;
+    font-weight: bold;
+
+    .inputTitle {
+        margin-left: 5px;
+    }
+
+    .inputWrap {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .input {
+        width: 50%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .errorMessageWrap {
+        color: red;
+        margin-top: 1px;
+        margin-left: 5px;
+    }
+`;
+
+export const VerificationField = styled.div`
+    display: flex;
+    align-items: center;
+
+    .verificationLabel {
+        width: 0%;
+        padding: 5px;
+        /* font-weight: bold; */
+    }
+
+    .verificationInputWrap {
+        width: 65%;
+        padding: 5px;
+    }
+
+    .verificationInput {
+        width: 15%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+`;
+
+export const CheckBtn = styled.button`
+    font-family: HakgyoansimWoojuR;
+    font-size: 16px;
+    margin: 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0px;
+    border-radius: 15px;
+    width: 80px;
+    height: 35px;
 `;

@@ -45,6 +45,7 @@ axios.defaults.withCredentials = true;
 const initialState = {
     id: "",
     password: "",
+    name: "",
     loginLoading: false,
     loginDone: false,
     loginError: null,
@@ -122,6 +123,7 @@ export const kakaoLogin = createAsyncThunk(
             console.error(error);
             return rejectWithValue(error.response.data);
         }
+
     }
 );
 
@@ -129,6 +131,9 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
+        setFullName: (state, action) => {
+            state.fullName = action.payload;
+        },
         setId: (state, action) => {
             state.id = action.payload;
         },
@@ -248,6 +253,7 @@ export const {
     setNickname,
     setPhoto,
     logout,
+    setFullName,
 } = authSlice.actions;
 
 export const authActions = authSlice.actions;

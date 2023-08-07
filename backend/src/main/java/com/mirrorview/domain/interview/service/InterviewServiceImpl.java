@@ -1,5 +1,7 @@
 package com.mirrorview.domain.interview.service;
 
+import com.mirrorview.domain.category.entity.Category;
+import com.mirrorview.domain.category.repository.CategoryRepository;
 import com.mirrorview.domain.essay.dto.EssayDetailDto;
 import com.mirrorview.domain.essay.dto.EssayDto;
 import com.mirrorview.domain.essay.dto.EssayListDto;
@@ -7,13 +9,11 @@ import com.mirrorview.domain.essay.repository.EssayDetailRepository;
 import com.mirrorview.domain.essay.repository.EssayRepository;
 import com.mirrorview.domain.interview.domain.InterviewRoom;
 import com.mirrorview.domain.interview.domain.RoomMemberInfo;
-import com.mirrorview.domain.interview.dto.MemberDto;
 import com.mirrorview.domain.interview.dto.MessageDto;
 import com.mirrorview.domain.interview.dto.RoomRequestDto;
 import com.mirrorview.domain.interview.dto.RoomResponseDto;
 import com.mirrorview.domain.interview.repository.InterviewRepository;
 import com.mirrorview.domain.user.domain.Member;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -32,12 +32,16 @@ import java.util.stream.Collectors;
 @Transactional
 @Slf4j
 public class InterviewServiceImpl implements InterviewService {
+    private static final Integer LARGE_CATEGORY = 1;
+    private static final Integer MIDDLE_CATEGORY = 2;
+    private static final Integer SMALL_CATEGORY = 3;
 
     private final RedisTemplate<String, InterviewRoom> template;
     private final InterviewRepository interviewRepository;
     private final EssayRepository essayRepository;
     private final EssayDetailRepository essayDetailRepository;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public List<RoomResponseDto> findRoom() {
@@ -49,7 +53,7 @@ public class InterviewServiceImpl implements InterviewService {
     public InterviewRoom create(Member member, RoomRequestDto requestDto) {
         InterviewRoom createRoom = requestDto.toEntity(member.getNickname());
         List<EssayListDto> essayList = new ArrayList<>();
-        //getEssayListDtos(member.getUserId());
+        //List<EssayListDto> essayListDtos = getEssayListDtos(member.getUserId());
         createRoom.join(member, essayList);
         interviewRepository.save(createRoom);
         System.out.println(interviewRepository.count());
@@ -82,11 +86,31 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     @Override
-    public List<RoomResponseDto> findRoomByCategory(String category) {
-        return interviewRepository.findByCategory(category)
-                .stream()
-                .map(RoomResponseDto::build)
+    public List<RoomResponseDto> findRoomByCategory(Integer depth, String categoryName) {
+        List<RoomResponseDto> result = new ArrayList<>();
+        List<Category> tmp = new ArrayList<>();
+        Category category = categoryRepository.findFirstByName(categoryName)
+                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다."));
+
+        if (depth == SMALL_CATEGORY) {
+            tmp.add(category);
+        }
+        if (depth == MIDDLE_CATEGORY) {
+            tmp = categoryRepository.findHierarchiesByMiddleCategory(category.getId());
+        }
+        if (depth == LARGE_CATEGORY) {
+            tmp = categoryRepository.findHierarchiesByLargeCategory(category.getId());
+        }
+
+        List<String> collect = tmp.stream()
+                .map(Category::getName)
                 .collect(Collectors.toList());
+
+        collect.forEach(c -> {
+            List<RoomResponseDto> roomResponseDtos = toRoomResponseDtos(interviewRepository.findByCategory(c));
+            result.addAll(roomResponseDtos);
+        });
+        return result;
     }
 
     @Override
@@ -104,16 +128,20 @@ public class InterviewServiceImpl implements InterviewService {
                 }
             }
             List<EssayListDto> essayList = new ArrayList<>();
-            // getEssayListDtos(member.getUserId());
+            //List<EssayListDto> essayListDtos = getEssayListDtos(member.getUserId());
             interviewRoom.join(member, essayList);
+
+            System.out.println(member);
+
             interviewRepository.save(interviewRoom);
             return interviewRoom;
         }
         throw new IllegalArgumentException("방 정보가 존재하지 않습니다.");
     }
 
-    private List<EssayListDto> getEssayListDtos(String userId) {
+    public List<EssayListDto> getEssayListDtos(String userId) {
         List<EssayDto> essays = essayRepository.findEssayByUserId(userId);
+        log.info("에쎄이 가져오기 {}", essays);
         List<EssayListDto> essayList = new ArrayList<>();
         for (EssayDto essay : essays) {
             List<EssayDetailDto> essayDetail = essayDetailRepository.findEssayByEssayId(essay.getId());
@@ -132,6 +160,7 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     private List<RoomResponseDto> toRoomResponseDtos(Iterable<InterviewRoom> rooms) {
+        log.info("rooms in method = {}", rooms);
         List<RoomResponseDto> result = new ArrayList<>();
         rooms.forEach(room -> {
             if (room != null) {
@@ -139,6 +168,7 @@ public class InterviewServiceImpl implements InterviewService {
                 result.add(roomResponseDto);
             }
         });
+        log.info("this is toDtos = {}", result);
         return result;
     }
 
@@ -150,8 +180,8 @@ public class InterviewServiceImpl implements InterviewService {
         InterviewRoom room = roomOptional.get();
 
         Optional<RoomMemberInfo> memberOptional = room.getMembers().stream()
-            .filter(member -> member.getNickname().equals(userNickname))
-            .findFirst();
+                .filter(member -> member.getNickname().equals(userNickname))
+                .findFirst();
         if (!memberOptional.isPresent()) {
             throw new RuntimeException("Member not found");
         }
@@ -172,8 +202,8 @@ public class InterviewServiceImpl implements InterviewService {
         InterviewRoom room = roomOptional.get();
 
         Optional<RoomMemberInfo> memberOptional = room.getMembers().stream()
-            .filter(member -> member.getNickname().equals(username))
-            .findFirst();
+                .filter(member -> member.getNickname().equals(username))
+                .findFirst();
 
         if (!memberOptional.isPresent()) {
             throw new RuntimeException("Member not found");
@@ -187,16 +217,16 @@ public class InterviewServiceImpl implements InterviewService {
     }
 
     // ex) suffix: userid + suffix 내용
-    public void systemMessage(String userId, String roomId, String suffix){
+    public void systemMessage(String userId, String roomId, String suffix) {
         if (!roomId.startsWith("interviewRoom")) {
             // roomId가 "interviewRoom"으로 시작하지 않으면 메서드를 종료
             return;
         }
 
         MessageDto systemMessage = MessageDto.builder()
-            .type("SYSTEM")
-            .data(Map.of("memberId", "system", "message", userId + suffix))
-            .build();
+                .type("SYSTEM")
+                .data(Map.of("memberId", "system", "message", userId + suffix))
+                .build();
 
         simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, systemMessage);
     }
