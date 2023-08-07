@@ -1,5 +1,6 @@
 package com.mirrorview.domain.interview.service;
 
+import com.mirrorview.domain.essay.dto.EssayListDto;
 import com.mirrorview.domain.interview.domain.InterviewRoom;
 import com.mirrorview.domain.interview.domain.RoomMemberInfo;
 import com.mirrorview.domain.interview.dto.RoomRequestDto;
@@ -20,9 +21,13 @@ public interface InterviewService {
 
     void changeReady(RoomMemberInfo memberInfo, InterviewRoom room);
 
+    //List<EssayListDto> getEssayListDtos(String userId);
+
     Optional<InterviewRoom> findRoomById(String roomId);
 
     List<RoomResponseDto> findRoomByCategory(Integer depth, String category);
+
+    List<EssayListDto> getEssayListDtos(String userId);
 
     RoomMemberInfo toggleReadyStatus(String roomId, String userNickname);
 

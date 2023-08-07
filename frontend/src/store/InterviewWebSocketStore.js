@@ -23,6 +23,7 @@ export const joinInterviewRoom = createAsyncThunk(
         withCredentials: true,
       });
       thunkAPI.dispatch(joinedInterviewRoomCurrentRoomUpdate(res.data.data));
+      console.log(res.data.data)
       return res.data;
     } catch (error) {
       console.error(error);
@@ -81,6 +82,20 @@ export const interviewSubscribe = createAsyncThunk(
           break;
       }
     });
+  }
+);
+
+// 내 자소서 불러오기
+export const fetchEssays = createAsyncThunk(
+  'essays/fetchAll',
+  async (nickname, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await axios.get('/api/essays');
+      dispatch(addEssays({ data: response.data.data, nickname }));
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -167,6 +182,12 @@ export const interviewSlice = createSlice({
     addQuestion: (state, action) => {
       state.questions = [...state.questions, action.payload];
     },
+    addEssays: (state, action) => {
+      const member = state.currentRoom.members.find(
+        (member) => member.nickname === action.payload.nickname
+      );
+      member.essays = action.payload.data;
+    }
   },
 });
 
@@ -182,6 +203,7 @@ export const {
   readyChange,
   roleChange,
   addQuestion,
+  addEssays,
 } = interviewSlice.actions;
 export const selectMessages = (state) => state.chat.currentRoom.messages;
 export default interviewSlice.reducer;

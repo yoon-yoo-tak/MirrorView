@@ -459,8 +459,6 @@ const StudyRoom = () => {
           console.log("일반 유저가 pub ", interviewRoomId, user);
         }
 
-        await new Promise((resolve) => setTimeout(resolve, 150)); // 대기
-
         // 조인 이후, DB에서 방 데이터 가져와서 curretRoom에 넣기.
         if (isHost === false) {
           await dispatch(joinInterviewRoom(interviewRoomId));
@@ -468,9 +466,11 @@ const StudyRoom = () => {
             "일반 유저 입장 (조인작업까지 진행) - DB 데이터 가져오기"
           );
         } else {
-          await dispatch(hostJoinInterviewRoom(interviewRoomId));
+          await dispatch(hostJoinInterviewRoom(interviewRoomId)); 
           console.log("방장 입장 - 단순 DB 데이터 가져오기");
         }
+
+        await new Promise((resolve) => setTimeout(resolve, 500)); // 대기
 
         // 내부 컴포넌트 동작되게 설정
         setInitialized(true);
