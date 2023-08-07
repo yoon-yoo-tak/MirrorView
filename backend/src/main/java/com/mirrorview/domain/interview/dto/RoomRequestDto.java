@@ -24,6 +24,9 @@ public class RoomRequestDto {
         if (password == null) {
             password = "";
         }
+        if (maxMemberCount == null) {
+            maxMemberCount = 6;
+        }
 
         return InterviewRoom.builder()
                 .id("interviewRoom" + UUID.randomUUID())
