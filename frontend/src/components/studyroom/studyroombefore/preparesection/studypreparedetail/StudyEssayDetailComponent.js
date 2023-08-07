@@ -2,9 +2,16 @@ import * as S from "../../../StudyRoomStyledComponents";
 import { useSelector, useDispatch } from "react-redux";
 import { interviewActions } from "store/InterviewStore";
 
-const StudyEssayDetail = ({ essay, profile, onAir }) => {
+const StudyEssayDetail = ({ nickname, onAir }) => {
   const feedbackList = useSelector((state) => state.interview.feedbackList);
+  const members = useSelector(
+    (state) => state.interviewWebSocket.currentRoom.members
+  );
   const dispatch = useDispatch();
+
+  // nickname을 사용하여 해당 멤버를 찾습니다.
+  const member = members.find((m) => m.nickname === nickname);
+  const essay = member ? member.mainEssay : null;
 
   const createAI = (index) => {
     // 자소서 기반 질문 자동 생성 api 호출
@@ -39,12 +46,28 @@ const StudyEssayDetail = ({ essay, profile, onAir }) => {
   if (!essay) {
     return (
       <div>
-        <S.essayDetailWrap>에세이가 없습니다.</S.essayDetailWrap>
+        {nickname}
+        {member && member.mainEssay ? (
+          <S.essayDetailWrap>
+            {member.mainEssay.title}
+            {member.mainEssay.essayDetails.map((item, index) => (
+              <S.essayDetailEach key={index}>
+                <S.essayDetailQuest>
+                  {index + 1}. {item.question}
+                </S.essayDetailQuest>
+                <S.essayDetailContent>{item.answer}</S.essayDetailContent>
+              </S.essayDetailEach>
+            ))}
+          </S.essayDetailWrap>
+        ) : (
+          <S.essayDetailWrap>에세이가 없습니다.</S.essayDetailWrap>
+        )}
       </div>
     );
   }
   return (
     <div>
+      {nickname}
       <S.essayDetailWrap>
         {essay.title}
         {essay.essayDetails.map((item, index) => (

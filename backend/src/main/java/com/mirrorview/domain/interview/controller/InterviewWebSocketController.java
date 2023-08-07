@@ -16,6 +16,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mirrorview.domain.essay.service.EssayService;
 import com.mirrorview.domain.interview.domain.InterviewRoom;
 import com.mirrorview.domain.interview.domain.RoomMemberInfo;
 import com.mirrorview.domain.interview.dto.MessageDto;
@@ -35,6 +36,7 @@ public class InterviewWebSocketController {
 
 	private final InterviewService interviewService;
 	private final MemberService memberService;
+	//private final EssayService essayService;
 	private final SimpMessagingTemplate simpMessagingTemplate;
 
 
@@ -118,6 +120,13 @@ public class InterviewWebSocketController {
 				if(roleMember.getRole().equals("interviewee"))
 					interviewService.systemMessage(principal.getName(), roomId, "님이 면접자로 역할을 변경했습니다.");
 				break;
+
+			case "MAIN_ESSAY":
+				System.out.println(messageDto);
+				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
+				break;
+
+
 		}
 	}
 

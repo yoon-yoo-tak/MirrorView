@@ -25,6 +25,7 @@ export const joinInterviewRoom = createAsyncThunk(
         withCredentials: true,
       });
       thunkAPI.dispatch(joinedInterviewRoomCurrentRoomUpdate(res.data.data));
+      console.log(res.data.data);
       return res.data;
     } catch (error) {
       console.error(error);
@@ -79,10 +80,27 @@ export const interviewSubscribe = createAsyncThunk(
         case "ROLE_CHANGE":
           dispatch(roleChange(parsedMessage.data));
           break;
+        case "MAIN_ESSAY":
+          dispatch(selectedEssay(parsedMessage.data));
+          break;
         default:
           break;
       }
     });
+  }
+);
+
+// 내 자소서 불러오기
+export const fetchEssays = createAsyncThunk(
+  "essays/fetchAll",
+  async (nickname, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await axios.get("/api/essays");
+      dispatch(addEssays({ data: response.data.data, nickname }));
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
@@ -140,6 +158,34 @@ export const interviewSlice = createSlice({
       }
     },
 
+    publishSelectedEssay: (state, action) => {
+      const client = getClient();
+      const { roomId, nickname, mainEssay } = action.payload;
+      const sendData = {
+        type: "MAIN_ESSAY",
+        data: {
+          nickname: nickname,
+          mainEssay: mainEssay,
+        },
+      };
+      client.send(
+        `/app/interviewrooms/${roomId}`,
+        {},
+        JSON.stringify(sendData)
+      );
+    },
+
+    // 대표 자소서 call back
+    selectedEssay: (state, action) => {
+      const { nickname, mainEssay } = action.payload;
+      console.log(mainEssay);
+      const member = state.currentRoom.members.find(
+        (member) => member.nickname === nickname
+      );
+
+      if (member) member.mainEssay = mainEssay;
+    },
+
     // call back
     exitRoom: (state, action) => {
       const nickname = action.payload.nickname;
@@ -192,7 +238,13 @@ export const interviewSlice = createSlice({
     },
     setNicknames:(state,action)=>{
       state.nicknames = action.payload;
-    }
+    },
+    addEssays: (state, action) => {
+      const member = state.currentRoom.members.find(
+        (member) => member.nickname === action.payload.nickname
+      );
+      member.essays = action.payload.data;
+    },
   },
 });
 
@@ -211,6 +263,9 @@ export const {
   deleteQuestion,
   addFeedback,
   setNicknames,
+  addEssays,
+  publishSelectedEssay,
+  selectedEssay,
 } = interviewSlice.actions;
 export const selectMessages = (state) => state.chat.currentRoom.messages;
 export default interviewSlice.reducer;

@@ -40,6 +40,9 @@ public class InterviewRoom {
     private LocalDateTime timestamp;
 
     public void join(Member member, List<EssayListDto> essayList) {
+        if (members.size() == maxMemberCount) {
+            throw new IllegalStateException("최대 인원수를 초과했습니다.");
+        }
         members.add(RoomMemberInfo.builder()
                 .nickname(member.getNickname())
                 .email(member.getEmail())

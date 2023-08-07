@@ -5,6 +5,7 @@ import pcImage from "../../assets/sidebar/🦆 icon _people outline_.png";
 import fbImage from "../../assets/sidebar/🦆 icon _book open outline_.png";
 import essayImage from "../../assets/sidebar/🦆 icon _file text outline_.png";
 import defaultImage from "../../assets/defaultimage.png";
+import updateIcon from "../../assets/pencil.png";
 
 // 사이드바
 
@@ -116,11 +117,7 @@ export const profileWrap = styled.div`
 `;
 
 export const profileImage = styled.div`
-    width: 160px;
-    height: 160px;
-    background-size: cover;
-    background-image: url(${defaultImage});
-    filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.4));
+    position: relative;
 `;
 
 export const profileInfo = styled.div`
@@ -193,6 +190,67 @@ export const confirmBtn = styled.button`
     cursor: pointer;
     &:hover {
         background-color: #e9e4ff;
+    }
+`;
+
+export const cropModal = styled.div`
+    width: 600px;
+    height: 400px;
+    z-index: 999;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background: #ffffff;
+    box-shadow: 0px 0px 15px #000000;
+    border-radius: 37px;
+
+    font-family: "HakgyoansimWoojuR";
+
+    padding: 20px 20px;
+`;
+
+export const cropContainer = styled.div`
+    width: 600px;
+    height: 350px;
+    // z-index: 999;
+
+    // top: 10%;
+    // left: 50%;
+
+    position: relative;
+    background: white;
+`;
+
+export const buttonWrap = styled.div`
+    justify-content: center;
+    display: flex;
+    padding: 18px;
+`;
+
+export const updateImageButton = styled.button`
+    // margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    font-family: "HakgyoansimWoojuR";
+    font-weight: bold;
+
+    position: relative;
+    width: 80px;
+    height: 32px;
+
+    background: white;
+    box-shadow: 0px 0px 10px #bdbdbd;
+    border-radius: 13px;
+    cursor: pointer;
+    &:hover {
+        background-color: #dce6ff;
     }
 `;
 
@@ -400,19 +458,18 @@ export const hidden = styled.div`
 `;
 
 // 버튼
-export const Button = styled.button`
-    padding: 10px 20px;
-    font-size: 15px;
-    background-color: #ffb8d0;
-    color: black;
-    border: none;
-    border-radius: 7px;
+export const Button = styled.div`
     cursor: pointer;
-    font-family: wooju;
 
-    &:hover {
-        background-color: #40a9ff;
-    }
+    width: ${(props) => (props.value === "image" ? "40px" : "30px")};
+    height: ${(props) => (props.value === "image" ? "40px" : "30px")};
+    position: ${(props) => (props.value === "image" ? "absolute" : "")};
+    right: ${(props) => (props.value === "image" ? "0" : "")};
+    bottom: ${(props) => (props.value === "image" ? "0" : "")};
+    margin: 0 10px 0 10px;
+    background-image: url(${updateIcon});
+    background-size: cover;
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
 `;
 
 // NickName change
@@ -798,3 +855,92 @@ export const Modal = ({ children, onClose }) => {
         </ModalWrapper>
     );
 };
+
+//Sign up
+export const SignupCreateBox = styled.div`
+    position: relative;
+    top: 0px;
+    left: 0px;
+    margin: 10px;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: rgb(242, 247, 255, 1);
+    width: 1470px;
+    height: 700px;
+
+    .input {
+        width: 25%; /* 혹은 다른 원하는 크기로 조정 */
+        /* ... (나머지 스타일 속성들) */
+    }
+`;
+
+export const InputField = styled.div`
+    border-radius: 10px;
+    padding: 10px;
+    margin-left: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* 입력란 간격을 조정합니다. */
+    font-family: HakgyoansimWoojuR;
+    font-weight: bold;
+
+    .inputTitle {
+        margin-left: 5px;
+    }
+
+    .inputWrap {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .input {
+        width: 50%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .errorMessageWrap {
+        color: red;
+        margin-top: 1px;
+        margin-left: 5px;
+    }
+`;
+
+export const VerificationField = styled.div`
+    display: flex;
+    align-items: center;
+
+    .verificationLabel {
+        width: 0%;
+        padding: 5px;
+        /* font-weight: bold; */
+    }
+
+    .verificationInputWrap {
+        width: 65%;
+        padding: 5px;
+    }
+
+    .verificationInput {
+        width: 15%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+`;
+
+export const CheckBtn = styled.button`
+    font-family: HakgyoansimWoojuR;
+    font-size: 16px;
+    margin: 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0px;
+    border-radius: 15px;
+    width: 80px;
+    height: 35px;
+`;
