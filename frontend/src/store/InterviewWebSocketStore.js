@@ -8,7 +8,7 @@ const initialState = {
   currentRoom: { members: [] },
   questions: [],
   feedbackList: [],
-
+  nicknames:null,
 };
 
 // db 에 들어온 멤버를 넣고, 방을 가져오니까 이미 멤버가 들어온 상태임
@@ -190,6 +190,9 @@ export const interviewSlice = createSlice({
       const {index, targetUserIdx,value} = action.payload;
       state.feedbackList[targetUserIdx].feedbacks[index].feedback = value;
     },
+    setNicknames:(state,action)=>{
+      state.nicknames = action.payload;
+    }
   },
 });
 
@@ -207,6 +210,7 @@ export const {
   addQuestion,
   deleteQuestion,
   addFeedback,
+  setNicknames,
 } = interviewSlice.actions;
 export const selectMessages = (state) => state.chat.currentRoom.messages;
 export default interviewSlice.reducer;

@@ -1,3 +1,4 @@
+import useUpdateEffect from "lib/UseUpdateEffect";
 import PrepareSection from "./studyroombefore/PrepareSectionComponent";
 import SelectInterviewee from "./studyroombefore/SelectIntervieweeComponent";
 import * as S from "./StudyRoomStyledComponents";
@@ -43,7 +44,6 @@ const StudyRoomBefore = (props) => {
       console.log(members);
     }
   }, [currentRoom.members]);
-
   const handleReady = () => {
     const client = getClient();
     setReady(!ready);

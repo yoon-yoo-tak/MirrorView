@@ -12,84 +12,99 @@ import { exitRoom } from "store/InterviewWebSocketStore";
 import { getClient } from "store/WebSocketStore";
 import StudyRating from "../starrating/StudyRatingComponent";
 const PrepareSection = (props) => {
-    const [section, setSection] = useState("info");
-    const { peopleList, questionList, setQuestionList,leaveSession } = props;
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const {user} = useSelector((state)=>state.auth)
-    const {currentRoom} = useSelector((state)=>state.interviewWebSocket);
-    const handleInfo = () => {
-        setSection("info");
-    };
+  const [section, setSection] = useState("info");
+  const { peopleList, questionList, setQuestionList, leaveSession } = props;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+  const { currentRoom, nicknames } = useSelector(
+    (state) => state.interviewWebSocket
+  );
+  const handleInfo = () => {
+    setSection("info");
+  };
 
+  // const handleQuest = () => {
+  //     setSection("quest");
+  // };
 
-    // const handleQuest = () => {
-    //     setSection("quest");
-    // };
+  const handleMyInfo = () => {
+    setSection("myInfo");
+  };
 
-    const handleMyInfo = () => {
-        setSection("myInfo");
-    };
+  const handleChat = () => {
+    setSection("chat");
+  };
 
-    const handleChat = () => {
-        setSection("chat");
-    };
+  const [modalStates, setModalStates] = useState(false);
 
-    const [modalStates, setModalStates] = useState(false);
+  const handleExit = () => {
+    console.log(nicknames);
+    if (!nicknames) {
+      const client = getClient();
+      const sendUserData = {
+        type: "EXIT",
+        data: {
+          nickname: user.nickname,
+        },
+      };
+      client.send(
+        `/app/interviewrooms/${currentRoom.id}`,
+        {},
+        JSON.stringify(sendUserData)
+      );
+      leaveSession();
+      navigate("/");
+    } else {
+      setModalStates(true);
+    }
+  };
 
-    const handleExit = () => {
-        const client = getClient();
-        const sendUserData = {
-            type: "EXIT",
-            data: {
-            nickname: user.nickname,
-            }
-          };
-          console.log(currentRoom);
-        client.send(`/app/interviewrooms/${currentRoom.id}`,{},JSON.stringify(sendUserData));
-        leaveSession();
-        navigate("/");
-    };
-
-    return (
-        <S.sectionPage>
-            <S.sectionWrap>
-                {section === "info" && (
-                    <StudyProfileAndEssay
-                        questionList={questionList}
-                        setQuestionList={setQuestionList}
-                        peopleList={peopleList}
-                    />
-                )}
-                {/* {section === "quest" && (
+  return (
+    <S.sectionPage>
+      <S.sectionWrap>
+        {section === "info" && (
+          <StudyProfileAndEssay
+            questionList={questionList}
+            setQuestionList={setQuestionList}
+            peopleList={peopleList}
+          />
+        )}
+        {/* {section === "quest" && (
                     <StudyQustionList
                         questionList={questionList}
                         setQuestionList={setQuestionList}
                     />
                 )} */}
-                {section === "myInfo" && <StudyMyEssay />}
-                {section === "chat" && <StudyChatting />}
-            </S.sectionWrap>
-            <S.sectionSelectTaps>
-                <div>
-                    <S.sectionSelectTap onClick={handleInfo} menu="info">
-                        INFO
-                    </S.sectionSelectTap>
-                    {/* <S.sectionSelectTap onClick={handleQuest} menu="quest">
+        {section === "myInfo" && <StudyMyEssay />}
+        {section === "chat" && <StudyChatting />}
+      </S.sectionWrap>
+      <S.sectionSelectTaps>
+        <div>
+          <S.sectionSelectTap onClick={handleInfo} menu="info">
+            INFO
+          </S.sectionSelectTap>
+          {/* <S.sectionSelectTap onClick={handleQuest} menu="quest">
                         Q.
                     </S.sectionSelectTap> */}
-                    <S.sectionSelectTap onClick={handleMyInfo} menu="myInfo">
-                        MY
-                    </S.sectionSelectTap>
-                    <S.sectionSelectTap onClick={handleChat} menu="chat">
-                        CHAT
-                    </S.sectionSelectTap>
-                </div>
-                <S.exitRoom onClick={handleExit}>나가기</S.exitRoom>
-                {modalStates && <StudyRating peopleList={peopleList} />}
-            </S.sectionSelectTaps>
-        </S.sectionPage>
-    );
+          <S.sectionSelectTap onClick={handleMyInfo} menu="myInfo">
+            MY
+          </S.sectionSelectTap>
+          <S.sectionSelectTap onClick={handleChat} menu="chat">
+            CHAT
+          </S.sectionSelectTap>
+        </div>
+        <S.exitRoom onClick={handleExit}>나가기</S.exitRoom>
+        {modalStates && (
+          <StudyRating
+            peopleList={peopleList}
+            leaveSession={leaveSession}
+            setModalStates={setModalStates}
+          />
+        )}
+      </S.sectionSelectTaps>
+    </S.sectionPage>
+  );
 };
 
 export default PrepareSection;

@@ -5,22 +5,17 @@ import Rating from "@mui/material/Rating";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { updateStarted } from "store/InterviewStore";
-const StudyRating = ({ peopleList, setModalStates }) => {
-const dispatch = useDispatch();
+import { useNavigate } from "react-router-dom";
+import { getClient } from "store/WebSocketStore";
+const StudyRating = ({ peopleList, setModalStates, leaveSession }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [ratingData, setRatingdata] = useState([]);
-  const members = useSelector(
-    (state) => state.interviewWebSocket.currentRoom.members
+  const { currentRoom, nicknames } = useSelector(
+    (state) => state.interviewWebSocket
   );
-  const [nicknames, setNicknames] = useState([]);
   const { user } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    setNicknames(
-      members
-        .filter((member) => member.nickname !== user.nickname)
-        .map((member) => member.nickname)
-    );
-  }, []);
   const handleRatingChange = (name) => (newValue) => {
     console.log(name, newValue);
     const target = ratingData.find((person) => person.nickname === name);
@@ -37,6 +32,9 @@ const dispatch = useDispatch();
       ]);
     }
   };
+  useEffect(()=>{
+    console.log(nicknames);
+  },[])
 
   const handleSubmit = () => {
     console.log(ratingData);
@@ -50,17 +48,35 @@ const dispatch = useDispatch();
     console.log(checkNull);
     if (ratingData.length === nicknames.length && checkNull) {
       ratingData.forEach((item) => {
-        axios.post("api/users/rating/save",{
-            nickname:item.nickname,
-            score:item.rate,
-        }).then((response)=>{
+        axios
+          .post("api/users/rating/save", {
+            nickname: item.nickname,
+            score: item.rate,
+          })
+          .then((response) => {
             console.log(response);
-        }).catch((error)=>{
+          })
+          .catch((error) => {
             console.log(error);
-        })
-        setModalStates(false);
-        dispatch(updateStarted(false));
+          });
       });
+      setModalStates(false);
+      const client = getClient();
+      const sendUserData = {
+        type: "EXIT",
+        data: {
+          nickname: user.nickname,
+        },
+      };
+      console.log(currentRoom);
+      client.send(
+        `/app/interviewrooms/${currentRoom.id}`,
+        {},
+        JSON.stringify(sendUserData)
+      );
+      leaveSession();
+      updateStarted(null);
+      navigate("/");
     } else {
       alert("모든 참여자에 대해 별점을 눌러주세요!");
     }
