@@ -16,7 +16,7 @@ import com.mirrorview.domain.feedback.domain.Feedback;
 @NoArgsConstructor
 public class FeedbackDto {
     private Long id;
-    private Long roomId;
+    private String roomId;
     private String roomTitle;
     private String content;
     private String senderId;

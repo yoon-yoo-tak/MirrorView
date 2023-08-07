@@ -22,7 +22,7 @@ public class Feedback {
     private String content;
 
     @Column(name = "room_id")
-    private Long roomId;
+    private String roomId;
 
     @Column(name = "room_title")
     private String roomTitle;

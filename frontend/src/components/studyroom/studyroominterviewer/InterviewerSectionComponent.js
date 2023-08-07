@@ -83,7 +83,7 @@ const InterviewerSection = (props) => {
                         </S.sectionSelectTap>
                     </div>
                     <S.exitRoom onClick={handleExit}>나가기</S.exitRoom>
-                    {modalStates && <StudyRating peopleList={peopleList} />}
+                    {modalStates && <StudyRating peopleList={peopleList} setModalStates={setModalStates} />}
                 </S.sectionSelectTaps>
             </S.interviewerSectionWrap>
         </div>

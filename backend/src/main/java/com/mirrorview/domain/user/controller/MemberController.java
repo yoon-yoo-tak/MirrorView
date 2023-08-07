@@ -129,11 +129,11 @@ public class MemberController {
 		@RequestBody RatingDto ratingDto) {
 		float currentScore;
 		try {
-			String userId = member.getUsername();
-			if (userId.equals(ratingDto.getUserId())) {
+			String nickname = member.getNickname();
+			if (nickname.equals(ratingDto.getNickname())) {
 				return BaseResponse.fail("평가 대상이 아닙니다.", 500);
 			}
-			currentScore = memberService.saveScore(userId, ratingDto);
+			currentScore = memberService.saveScore(member.getUsername(), ratingDto);
 		} catch (Exception e) {
 			return BaseResponse.fail(e.getMessage(), 400);
 		}

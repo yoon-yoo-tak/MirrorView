@@ -37,7 +37,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 	@Override
 	public void saveFeedback(FeedbackSaveDto dto, String senderId) {
-		Optional<Member> member = memberRepository.findByUserId(dto.getReceiver());
+		Optional<Member> member = memberRepository.findByNickname(dto.getReceiver());
 		Optional<Member> sender = memberRepository.findByUserId(senderId);
 		if (member.isPresent() && sender.isPresent()) {
 			feedbackRepository.save(Feedback.builder()
