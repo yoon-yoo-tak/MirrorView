@@ -32,10 +32,12 @@ import com.mirrorview.global.auth.security.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/mypage")
 @RequiredArgsConstructor
+@Slf4j
 public class MyPageController {
 
 	private final MemberProfileService memberProfileService;
@@ -114,7 +116,11 @@ public class MyPageController {
 	@PutMapping("/essays") // 자소서안의 문항들 수정/삭제와 같은 자소서 문항에 대한 변경
 	public ResponseEntity<?> updateEssays(@RequestBody EssayUpdateDto essays, @AuthenticationPrincipal
 		CustomMemberDetails member) {
-		essayDetailService.updateEssayDetails(essays, member.getUsername());
+		try {
+			essayDetailService.updateEssayDetails(essays, member.getUsername());
+		} catch (Exception e) {
+			return BaseResponse.fail(e.getMessage(), 400);
+		}
 		return BaseResponse.ok(HttpStatus.OK, "수정 완료");
 	}
 
@@ -125,8 +131,10 @@ public class MyPageController {
 			essayService.insertEssayAndEssayDetails(essays, member.getUsername());
 			return BaseResponse.ok(HttpStatus.OK, "자소서 저장 성공!");
 		} catch (Exception e) {
-			e.printStackTrace();
-			return BaseResponse.fail("자소서 저장 실패!", 400);
+			if (e instanceof NullPointerException) {
+				return BaseResponse.fail("형식에 맞는 json이 아닙니다", 400);
+			}
+			return BaseResponse.fail(e.getMessage(), 400);
 		}
 	}
 
@@ -150,7 +158,7 @@ public class MyPageController {
 			essayService.deleteByEssayId(essayId);
 			return BaseResponse.ok(HttpStatus.OK, "삭제 성공");
 		} catch (Exception e) {
-			return BaseResponse.fail("삭제 실패", 400);
+			return BaseResponse.fail(e.getMessage(), 400);
 		}
 	}
 
