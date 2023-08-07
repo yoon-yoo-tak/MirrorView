@@ -5,6 +5,7 @@ import pcImage from "../../assets/sidebar/🦆 icon _people outline_.png";
 import fbImage from "../../assets/sidebar/🦆 icon _book open outline_.png";
 import essayImage from "../../assets/sidebar/🦆 icon _file text outline_.png";
 import defaultImage from "../../assets/defaultimage.png";
+import updateIcon from "../../assets/pencil.png";
 
 // 사이드바
 
@@ -116,11 +117,7 @@ export const profileWrap = styled.div`
 `;
 
 export const profileImage = styled.div`
-    width: 160px;
-    height: 160px;
-    background-size: cover;
-    background-image: url(${defaultImage});
-    filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.4));
+    position: relative;
 `;
 
 export const profileInfo = styled.div`
@@ -193,6 +190,67 @@ export const confirmBtn = styled.button`
     cursor: pointer;
     &:hover {
         background-color: #e9e4ff;
+    }
+`;
+
+export const cropModal = styled.div`
+    width: 600px;
+    height: 400px;
+    z-index: 999;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background: #ffffff;
+    box-shadow: 0px 0px 15px #000000;
+    border-radius: 37px;
+
+    font-family: "HakgyoansimWoojuR";
+
+    padding: 20px 20px;
+`;
+
+export const cropContainer = styled.div`
+    width: 600px;
+    height: 350px;
+    // z-index: 999;
+
+    // top: 10%;
+    // left: 50%;
+
+    position: relative;
+    background: white;
+`;
+
+export const buttonWrap = styled.div`
+    justify-content: center;
+    display: flex;
+    padding: 18px;
+`;
+
+export const updateImageButton = styled.button`
+    // margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    font-family: "HakgyoansimWoojuR";
+    font-weight: bold;
+
+    position: relative;
+    width: 80px;
+    height: 32px;
+
+    background: white;
+    box-shadow: 0px 0px 10px #bdbdbd;
+    border-radius: 13px;
+    cursor: pointer;
+    &:hover {
+        background-color: #dce6ff;
     }
 `;
 
@@ -400,22 +458,21 @@ export const hidden = styled.div`
 `;
 
 // 버튼
-export const Button = styled.button`
-  padding: 10px 20px;
-  font-size: 15px;
-  background-color: #FFB8D0;
-  color: black;
-  border: none;
-  border-radius: 7px;
-  cursor: pointer;
-  font-family: wooju;
+export const Button = styled.div`
+    cursor: pointer;
 
-  &:hover {
-    background-color: #40a9ff;
-  }
+    width: ${(props) => (props.value === "image" ? "40px" : "30px")};
+    height: ${(props) => (props.value === "image" ? "40px" : "30px")};
+    position: ${(props) => (props.value === "image" ? "absolute" : "")};
+    right: ${(props) => (props.value === "image" ? "0" : "")};
+    bottom: ${(props) => (props.value === "image" ? "0" : "")};
+    margin: 0 10px 0 10px;
+    background-image: url(${updateIcon});
+    background-size: cover;
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
 `;
 
-// NickName change 
+// NickName change
 export const btn2 = styled.button`
     margin: -45px;
     margin-left: 730px;
@@ -447,30 +504,29 @@ export const btn2 = styled.button`
 `;
 
 export const btn3 = styled.button`
-  margin: 150px;
-  margin-left: 30.625rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border: 0;
+    margin: 150px;
+    margin-left: 30.625rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
 
-  width: 60px;
-  height: 35px;
+    width: 60px;
+    height: 35px;
 
-  background: #a1b6ff; 
+    background: #a1b6ff;
 
-  box-shadow: 0px 0px 5px #bdbdbd;
-  border-radius: 5px;
-  cursor: pointer;
-  &:hover {
-    background-color: #e9e4ff;
-  }
+    box-shadow: 0px 0px 5px #bdbdbd;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+        background-color: #e9e4ff;
+    }
 `;
 
-
 export const changeInput2 = styled.input`
-    margin: 60px 0 5px ;
+    margin: 60px 0 5px;
     width: 25rem;
     height: 2.5rem;
     background: #e6e6e6;
@@ -479,8 +535,8 @@ export const changeInput2 = styled.input`
     margin-left: 18.75rem;
 
     ::placeholder {
-        color: black; 
-        font-size: 1.875rem; 
+        color: black;
+        font-size: 1.875rem;
     }
 `;
 
@@ -490,4 +546,4 @@ export const comment = styled.div`
     height: 2.5rem;
     border-radius: 10px;
     margin-left: 19.0625rem;
-`
+`;
