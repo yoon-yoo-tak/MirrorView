@@ -78,7 +78,7 @@ const interviewSlice = createSlice({
   },
 });
 
-export const { setCurrentRoom, exitCurrentRoom } = interviewSlice.actions;
+export const { setCurrentRoom, exitCurrentRoom,updateStarted } = interviewSlice.actions;
 
 export const interviewActions = interviewSlice.actions;
 

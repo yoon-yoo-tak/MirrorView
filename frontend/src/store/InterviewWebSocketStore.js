@@ -7,6 +7,8 @@ import axios from "axios";
 const initialState = {
   currentRoom: { members: [] },
   questions: [],
+  feedbackList: [],
+  nicknames:null,
 };
 
 // db 에 들어온 멤버를 넣고, 방을 가져오니까 이미 멤버가 들어온 상태임
@@ -190,7 +192,7 @@ export const interviewSlice = createSlice({
       state.currentRoom.members = state.currentRoom.members.filter(
         (member) => member.nickname !== nickname
       );
-      state.questions = [];
+      state.feedbackList = [];
     },
 
     // call back
@@ -211,7 +213,31 @@ export const interviewSlice = createSlice({
       if (member) member.role = role;
     },
     addQuestion: (state, action) => {
-      state.questions = [...state.questions, action.payload];
+        let bool = false;
+        console.log(state.feedbackList);
+        state.feedbackList.forEach((feedback)=>{
+          if (feedback.nickname===action.payload.nickname) {
+            bool = true;
+            feedback.feedbacks.push({question:action.payload.question,feedback:"",});
+            
+          }
+        });
+        if(!bool) {
+          state.feedbackList=[...state.feedbackList,{nickname:action.payload.nickname,feedbacks:[{question:action.payload.question,feedback:""}]}];
+        }
+    },
+    deleteQuestion:(state,action)=>{
+      const {index, targetUserIdx} = action.payload;
+      const deleteFeedback = state.feedbackList[targetUserIdx].feedbacks;
+      state.feedbackList[targetUserIdx].feedbacks.splice(index,1);
+      console.log(state.feedbackList);
+    },
+    addFeedback:(state,action) =>{
+      const {index, targetUserIdx,value} = action.payload;
+      state.feedbackList[targetUserIdx].feedbacks[index].feedback = value;
+    },
+    setNicknames:(state,action)=>{
+      state.nicknames = action.payload;
     },
     addEssays: (state, action) => {
       const member = state.currentRoom.members.find(
@@ -234,6 +260,9 @@ export const {
   readyChange,
   roleChange,
   addQuestion,
+  deleteQuestion,
+  addFeedback,
+  setNicknames,
   addEssays,
   publishSelectedEssay,
   selectedEssay,

@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FeedbackSaveDto {
 	private String content;
-	private Long roomId;
+	private String roomId;
 	private String roomTitle;
 	private String receiver;
 }

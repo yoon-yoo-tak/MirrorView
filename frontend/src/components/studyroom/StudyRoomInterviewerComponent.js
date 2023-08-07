@@ -1,10 +1,11 @@
 import * as S from "./StudyRoomStyledComponents";
 import InterviewerSection from "./studyroominterviewer/InterviewerSectionComponent";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { interviewActions } from "store/InterviewStore";
 import SubscriberVideo from "./studyroominterviewer/SubscriberVideo";
 import { useEffect, useState } from "react";
+import { setNicknames } from "store/InterviewWebSocketStore";
 const StudyRoomInterviewer = (props) => {
   const {
     peopleList,
@@ -17,11 +18,20 @@ const StudyRoomInterviewer = (props) => {
   } = props;
 
   const gosim = useSelector((state) => state.interview.feedbackList[0]);
+  const {currentRoom} = useSelector((state)=>state.interviewWebSocket);
+  const {user} = useSelector((state)=>state.auth);
   const [selectSubscriber,setSelectSubscriber] = useState(null);
-
+  const dispatch = useDispatch();
   const test = (e) => {
         setSelectSubscriber(e);
     };
+  useEffect(()=>{
+    dispatch(setNicknames(
+      currentRoom.members
+        .filter((member) => member.nickname !== user.nickname)
+        .map((member) => member.nickname)
+    ));
+  },[])
 
   return (
     <S.page>

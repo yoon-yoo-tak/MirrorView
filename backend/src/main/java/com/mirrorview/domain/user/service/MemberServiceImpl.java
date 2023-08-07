@@ -78,7 +78,7 @@ public class MemberServiceImpl implements MemberService {
     public float saveScore(String userId, RatingDto ratingDto) {
 
         Optional<Member> member = memberRepository.findByUserId(userId);
-        Optional<Member> otherMember = memberRepository.findByUserId(ratingDto.getUserId());
+        Optional<Member> otherMember = memberRepository.findByNickname(ratingDto.getNickname());
         if (member.isEmpty() || otherMember.isEmpty()) {
             throw new IllegalArgumentException("존재하지 않는 유저입니다.");
         }
