@@ -22,7 +22,7 @@ public interface InterviewService {
 
     Optional<InterviewRoom> findRoomById(String roomId);
 
-    List<RoomResponseDto> findRoomByCategory(String category);
+    List<RoomResponseDto> findRoomByCategory(Integer depth, String category);
 
     RoomMemberInfo toggleReadyStatus(String roomId, String userNickname);
 
