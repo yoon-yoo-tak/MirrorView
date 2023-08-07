@@ -11,6 +11,8 @@ import com.mirrorview.domain.feedback.repository.FeedbackRepository;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,6 +21,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EssayDetailServiceImpl implements EssayDetailService {
 
     private final EssayDetailRepository essayDetailRepository;
@@ -34,18 +37,20 @@ public class EssayDetailServiceImpl implements EssayDetailService {
     @Override
     @Transactional
     public void updateEssayDetails(EssayUpdateDto essayUpdateDto, String userId) {
+        log.info("updatedto = {}", essayUpdateDto);
         Long id = essayUpdateDto.getId();
         Optional<Essay> essay = essayRepository.findById(id); // 영속성 부여
         List<EssayDetailUpdateDto> list = essayUpdateDto.getEssayDetails();
         if (essay.isPresent()) {
             for (EssayDetailUpdateDto dto : list) {
+                log.info("update Dto = {}", dto);
                 Long essay_detail_id = dto.getId();
                 if (dto.getId() == 0) { // id 가 0이다 == 새로 추가된 항목
                     EssayDetail essayDetail = EssayDetail.builder()
-                            .question(dto.getQuestion())
-                            .answer(dto.getAnswer())
-                            .essay(essay.get())
-                            .build();
+                        .question(dto.getQuestion())
+                        .answer(dto.getAnswer())
+                        .essay(essay.get())
+                        .build();
                     essayDetailRepository.save(essayDetail);
                 }
                 Optional<EssayDetail> essayDetail = essayDetailRepository.findById(essay_detail_id);
@@ -57,6 +62,8 @@ public class EssayDetailServiceImpl implements EssayDetailService {
                     essayDetail.ifPresent(detail -> detail.updateQnA(dto.getQuestion(), dto.getAnswer()));
                 }
             }
+        } else {
+            throw new IllegalArgumentException("ID에 해당하는 자소서가 없습니다.");
         }
     }
 }

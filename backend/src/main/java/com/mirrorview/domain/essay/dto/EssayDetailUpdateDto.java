@@ -1,5 +1,6 @@
 package com.mirrorview.domain.essay.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mirrorview.domain.essay.domain.EssayDetail;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
