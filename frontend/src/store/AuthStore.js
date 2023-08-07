@@ -35,6 +35,9 @@
 // slice, 기존 reducer를 따로 만들지 않고 이렇게 생성
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+// -----------------------------------------------------------
+import defaultImage from "../assets/defaultimage.png";
+// -----------------------------------------------------------
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
@@ -58,6 +61,9 @@ const initialState = {
     notAllow: true,
     user: null,
     provider: "",
+    // ---------------
+    photo: `${defaultImage}`,
+    // ---------------
 };
 // initialState를 통해 state의 처음 상태를 정의한다.
 
@@ -117,6 +123,7 @@ export const kakaoLogin = createAsyncThunk(
             console.error(error);
             return rejectWithValue(error.response.data);
         }
+
     }
 );
 
@@ -167,6 +174,11 @@ const authSlice = createSlice({
         setNickname: (state, action) => {
             state.user.nickname = action.payload;
         },
+        // --------------------------------------------
+        setPhoto: (state, action) => {
+            state.user.photo = action.payload;
+        },
+        // --------------------------------------------
         setNotAllow: (state, action) => {
             state.notAllow = action.payload;
         },
@@ -239,6 +251,7 @@ export const {
     loginSuccess,
     loginFailure,
     setNickname,
+    setPhoto,
     logout,
     setFullName,
 } = authSlice.actions;
