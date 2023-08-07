@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as S from "../../../StudyRoomStyledComponents";
 import { interviewActions } from "store/InterviewStore";
+import { addQuestion } from 'store/InterviewWebSocketStore';
 
 const StudyProfileDetail = (props) => {
   const {
@@ -15,7 +16,7 @@ const StudyProfileDetail = (props) => {
   const [newQuestion, setNewQuestion] = useState("");
   const dispatch = useDispatch();
 
-  const feedbackList = useSelector((state) => state.interview.feedbackList);
+  const feedbackList = useSelector((state) => state.interviewWebSocket.feedbackList);
   // questionList : 사람과 질문 모두가 들어있는 객체 배열
   // 그러니 지금 프로필에 접속한 사람과 일치하는 객체만 뽑아와보자.
 
@@ -26,6 +27,7 @@ const StudyProfileDetail = (props) => {
   // 새로운 질문 입력시 input
   const handleQuestion = (e) => {
     setNewQuestion(e.target.value);
+    console.log(profile);
   };
 
   // 입력된 질문을 질문 리스트에 업데이트!
@@ -47,20 +49,20 @@ const StudyProfileDetail = (props) => {
   //         );
   //     }
   // };
-  const updateMatchingObject = (value) => {
-    const targetUserIdx = feedbackList.findIndex(
-      (obj) => obj.name === profile.name
-    );
-    const updatedMatchingObject = {
-      ...feedbackList[targetUserIdx],
-      feedbacks: [
-        ...feedbackList[targetUserIdx].feedbacks,
-        { question: value, feedback: [] },
-      ],
-    };
+  // const updateMatchingObject = (value) => {
+  //   const targetUserIdx = feedbackList.findIndex(
+  //     (obj) => obj.nickname === profile.nickname
+  //   );
+  //   const updatedMatchingObject = {
+  //     nickname:profile.nickname,
+  //     feedbacks: [
+  //       ...feedbackList[targetUserIdx].feedbacks,
+  //       { question: value, feedback: [] },
+  //     ],
+  //   };
 
-    return updatedMatchingObject;
-  };
+  //   return updatedMatchingObject;
+  // };
 
   const handleOnKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -78,13 +80,10 @@ const StudyProfileDetail = (props) => {
     // }
 
     // const handleUpdateArray = (newQuestion) => {
-    const updatedMatchingObject = updateMatchingObject(newQuestion);
-    const updatedArray = feedbackList.map((obj) =>
-      obj.name === profile.name ? updatedMatchingObject : obj
-    );
+    // const updatedMatchingObject = updateMatchingObject(newQuestion);
+    dispatch(addQuestion({nickname:profile.nickname,question:newQuestion}));
     setNewQuestion("");
-
-    dispatch(interviewActions.updateFeedbacks(updatedArray));
+    console.log(feedbackList);
   };
 
   return (
@@ -107,7 +106,7 @@ const StudyProfileDetail = (props) => {
           </S.profileInfo>
           <S.questionWrap>
             <S.questInputText>
-              {profile.name}님에게 사전 질문 등록하기
+              {profile.nickname}님에게 사전 질문 등록하기
             </S.questInputText>
             <S.questSubmit>
               <S.questionInput

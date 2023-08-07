@@ -33,7 +33,7 @@ const StudyProfileAndEssay = (props) => {
     console.log(target);
     setCheckProfile(target);
     setCheckEssay(target.essay);
-    setCheckWho(target.name);
+    setCheckWho(target.nickname);
     setCheckQuestions(
       questionList.find((person) => person.name === target.name)
     );

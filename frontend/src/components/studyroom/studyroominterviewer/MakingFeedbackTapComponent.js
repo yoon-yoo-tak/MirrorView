@@ -13,13 +13,13 @@ const MakingFeedbackTap = ({
   const [targetQuestion, setTargetQuestion] = useState([]);
   const [checkWho, setCheckWho] = useState("");
 
-  const feedbackList = useSelector((state) => state.interview.feedbackList);
-
-  const handleCheckWho = (name) => {
+  
+  const members = useSelector((state)=>state.interviewWebSocket.currentRoom.members);
+  const handleCheckWho = (nickname) => {
     // const target = questionList.find((list) => list.name === name);
 
     // setTargetQuestion(target.questions);
-    setCheckWho(name);
+    setCheckWho(nickname);
   };
 
   return (
@@ -27,9 +27,9 @@ const MakingFeedbackTap = ({
       <S.profileAndEssayWrap>
         <S.contentTapWrap>
           <S.contentTapList>
-            {peopleList.map((people, index) => (
-              <S.contentTap onClick={() => handleCheckWho(people.name)}>
-                {people.name}
+            {members.map((member, index) => (
+              <S.contentTap key = {index} onClick={() => handleCheckWho(member.nickname)}>
+                {member.nickname}
               </S.contentTap>
             ))}
           </S.contentTapList>

@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as S from "../StudyRoomStyledComponents";
 import { interviewActions } from "store/InterviewStore";
+import { addFeedback } from "store/InterviewWebSocketStore";
+import  axios  from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const MakingFeedback = ({
     // targetQuestion,
@@ -124,15 +128,16 @@ const MakingFeedback = ({
     //     }
     // }, [feedbackList, targetUserIdx]);
     // ----------------------------------------------------------------------
-    const feedbackList = useSelector((state) => state.interview.feedbackList);
+    const feedbackList = useSelector((state) => state.interviewWebSocket.feedbackList);
     const [targetUserIdx, setTargetUserIdx] = useState(null);
     const [qlength, setQLength] = useState(0);
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
+    const {currentRoom} = useSelector((state)=>state.interviewWebSocket);
     useEffect(() => {
-        const idx = feedbackList.findIndex((obj) => obj.name === checkWho);
+        const idx = feedbackList.findIndex((obj) => obj.nickname === checkWho);
         setTargetUserIdx(idx);
-
+        console.log(idx);
         if (idx !== null) {
             setQLength(
                 feedbackList[idx]?.feedbacks?.map((item) => item.question)
@@ -151,15 +156,12 @@ const MakingFeedback = ({
     const [newfeedbacks, setNewFeedbacks] = useState(initialFeedbacks);
 
     const handleFeedback = (e, index) => {
-        setInputValues((prevInputValues) => {
-            const newInputValues = [...prevInputValues];
-            newInputValues[index] = e.target.value;
-            return newInputValues;
-        });
+        dispatch(addFeedback({value:e.target.value,index,targetUserIdx}))
+
         // console.log(qlength);
     };
 
-    const submitFeedback = () => {
+    const submitFeedback = async () => {
         // const updatedMatchingObject = updateMatchingObject();
         // const combinedFeedbacks = feedbackList[targetUserIdx]?.feedbacks.map(
         //     (item, index) => ({
@@ -168,20 +170,36 @@ const MakingFeedback = ({
         //     })
         // );
         if (window.confirm(`${checkWho}님에게 피드백을 등록할까요?`)) {
-            const combinedFeedbacks = feedbackList[
-                targetUserIdx
-            ]?.feedbacks.map((item, index) => ({
-                question: item.question,
-                feedback: inputValues[index], // prevInputValues를 사용
-            }));
-            console.log(combinedFeedbacks);
-            setNewFeedbacks(combinedFeedbacks);
+            console.log(feedbackList[targetUserIdx]);
+            let content = "";
+            feedbackList[targetUserIdx].feedbacks.forEach((element,index) => {
+                content+=`${index+1}. ${element.question}\n ${element.feedback}\n\n`
+            });
+            axios.post("api/mypage/feedbacks/save",{
+                content:content,
+                roomId:currentRoom.id,
+                roomTitle:currentRoom.title,
+                receiver:feedbackList[targetUserIdx].nickname
+            }).then((response)=>{
+                console.log(response);
+                alert("피드백 저장 완료");
+            }).catch((error)=>{
+                console.log(error);
+            })
+            // const combinedFeedbacks = feedbackList[
+            //     targetUserIdx
+            // ]?.feedbacks.map((item, index) => ({
+            //     question: item.question,
+            //     feedback: inputValues[index], // prevInputValues를 사용
+            // }));
+            // console.log(combinedFeedbacks);
+            // setNewFeedbacks(combinedFeedbacks);
 
-            const newfeedbackList = feedbackList.map((object) =>
-                object.name === checkWho ? combinedFeedbacks : object
-            );
+            // const newfeedbackList = feedbackList.map((object) =>
+            //     object.name === checkWho ? combinedFeedbacks : object
+            // );
 
-            dispatch(interviewActions.updateFeedbacks(newfeedbackList));
+            // dispatch(interviewActions.updateFeedbacks(newfeedbackList));
         }
     };
 
@@ -199,20 +217,20 @@ const MakingFeedback = ({
                 </S.questionIntro>
                 {/* <S.questionSubmitWrap> */}
                 {feedbackList[targetUserIdx]?.feedbacks
-                    ?.map((items) => items.question)
-                    .map((item, index) => (
+                    ?.map((item,index) => (
                         <S.feedbackEach>
                             <S.questionEach>
-                                {index + 1}. {item}
+                                {index + 1}. {item.question}
                             </S.questionEach>
                             <S.feedbackInputWrap>
                                 <S.feedbackInput
-                                    value={inputValues[index]}
+                                    value={item.feedback}
                                     onChange={(e) => handleFeedback(e, index)}
                                 />
                             </S.feedbackInputWrap>
                         </S.feedbackEach>
-                    ))}
+                    ))
+                    }
                 <S.buttonWrap>
                     <S.feedbackButton onClick={submitFeedback}>
                         저장

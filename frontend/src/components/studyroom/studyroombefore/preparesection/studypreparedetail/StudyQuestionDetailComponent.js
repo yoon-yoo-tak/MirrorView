@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import * as S from "../../../StudyRoomStyledComponents";
 import { useSelector, useDispatch } from "react-redux";
-import { interviewActions } from "store/InterviewStore";
+import { deleteQuestion } from "store/InterviewWebSocketStore";
 
 const StudyQuestionDetail = ({
   checkWho,
@@ -19,14 +19,14 @@ const StudyQuestionDetail = ({
   //         questions: updatedQuestions,
   //     }));
   // };
-  const feedbackList = useSelector((state) => state.interview.feedbackList);
+  const feedbackList = useSelector((state) => state.interviewWebSocket.feedbackList);
   // const targetUserIdx = feedbackList.findIndex(
   //     (obj) => obj.name === checkWho
   // );
   const [targetUserIdx, setTargetUserIdx] = useState(null);
 
   useEffect(() => {
-    const idx = feedbackList.findIndex((obj) => obj.name === checkWho);
+    const idx = feedbackList.findIndex((obj) => obj.nickname === checkWho);
     setTargetUserIdx(idx);
   }, [feedbackList, checkWho]);
   const dispatch = useDispatch();
@@ -49,12 +49,13 @@ const StudyQuestionDetail = ({
     // const targetUserIdx = feedbackList.findIndex(
     //     (obj) => obj.name === checkWho
     // );
-    const updatedMatchingObject = updateMatchingObject(index);
-    const updatedArray = feedbackList.map((obj, index) =>
-      index === targetUserIdx ? updatedMatchingObject : obj
-    );
-
-    dispatch(interviewActions.updateFeedbacks(updatedArray));
+    // const updatedMatchingObject = updateMatchingObject(index);
+    // const updatedArray = feedbackList.map((obj, index) =>
+    //   index === targetUserIdx ? updatedMatchingObject : obj
+    // );
+// console.log(index);
+//   console.log(feedbackList[targetUserIdx].feedbacks[index]);
+    dispatch(deleteQuestion({index,targetUserIdx}));
   };
 
   return (

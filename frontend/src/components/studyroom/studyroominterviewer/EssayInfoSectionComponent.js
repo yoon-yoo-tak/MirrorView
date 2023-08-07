@@ -2,13 +2,21 @@ import { useState } from "react";
 
 import * as S from "../StudyRoomStyledComponents";
 import StudyEssayDetail from "../studyroombefore/preparesection/studypreparedetail/StudyEssayDetailComponent";
+import { useSelector } from 'react-redux';
 
 const EssayInfoSection = ({ peopleList, questionList }) => {
     const [checkEssay, setCheckEssay] = useState([]);
+    const members = useSelector((state)=>state.interviewWebSocket.currentRoom.members);
 
-    const handleCheckWho = (name) => {
-        const target = peopleList.find((person) => person.name === name);
-        setCheckEssay(target.essay);
+    const handleCheckWho = (index) => {
+        const target =members[index];
+        console.log(target.essays);
+        if (target.essays.length!=0) {
+            setCheckEssay(target.essays[0]);    
+        }else{
+            setCheckEssay([]);
+        }
+        
     };
 
     return (
@@ -16,11 +24,12 @@ const EssayInfoSection = ({ peopleList, questionList }) => {
             <S.profileAndEssayWrap>
                 <S.contentTapWrap>
                     <S.contentTapList>
-                        {peopleList.map((people, index) => (
+                        {members.map((member, index) => (
                             <S.contentTap
-                                onClick={() => handleCheckWho(people.name)}
+                                key = {index}
+                                onClick={() => handleCheckWho(index)}
                             >
-                                {people.name}
+                                {member.nickname}
                             </S.contentTap>
                         ))}
                     </S.contentTapList>
