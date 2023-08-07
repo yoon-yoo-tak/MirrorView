@@ -120,7 +120,10 @@ public class InterviewWebSocketController {
 				if(roleMember.getRole().equals("interviewee"))
 					interviewService.systemMessage(principal.getName(), roomId, "님이 면접자로 역할을 변경했습니다.");
 				break;
-			case "ESSAY_CHANGE":
+
+			case "MAIN_ESSAY":
+				System.out.println(messageDto);
+				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 				break;
 
 

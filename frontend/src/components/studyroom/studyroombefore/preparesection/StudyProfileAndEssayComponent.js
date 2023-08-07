@@ -12,6 +12,8 @@ const StudyProfileAndEssay = (props) => {
   const [checkEssay, setCheckEssay] = useState(null);
   const [checkWho, setCheckWho] = useState("");
   const [checkQuestions, setCheckQuestions] = useState([]);
+  const [selectedNickname, setSelectedNickname] = useState(null);
+
   const [targetObject, setTargetObject] = useState({
     name: "",
     questions: [],
@@ -29,6 +31,9 @@ const StudyProfileAndEssay = (props) => {
   };
 
   const handleCheckWho = (index) => {
+    const selectedPerson = peopleList[index];
+    setSelectedNickname(selectedPerson.nickname);
+
     const target = peopleList[index];
     console.log(target);
     setCheckProfile(target);
@@ -100,7 +105,11 @@ const StudyProfileAndEssay = (props) => {
                 // addQuestionToProfile={addQuestionToProfile}
               />
             ) : tap === "essay" ? (
-              <StudyEssayDetail essay={checkEssay} onAir={false} />
+              <StudyEssayDetail
+                nickname={selectedNickname}
+                essay={checkEssay}
+                onAir={false}
+              />
             ) : (
               tap === "question" && (
                 <StudyQuestionDetail
