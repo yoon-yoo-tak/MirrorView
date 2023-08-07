@@ -9,7 +9,6 @@ import com.mirrorview.domain.essay.repository.EssayDetailRepository;
 import com.mirrorview.domain.essay.repository.EssayRepository;
 import com.mirrorview.domain.interview.domain.InterviewRoom;
 import com.mirrorview.domain.interview.domain.RoomMemberInfo;
-import com.mirrorview.domain.interview.dto.MemberDto;
 import com.mirrorview.domain.interview.dto.MessageDto;
 import com.mirrorview.domain.interview.dto.RoomRequestDto;
 import com.mirrorview.domain.interview.dto.RoomResponseDto;

@@ -5,7 +5,7 @@ import axios from "axios";
 // 구독과, 콜백만 처리
 
 const initialState = {
-  currentRoom: {members:[],},
+  currentRoom: { members: [] },
   questions: [],
 };
 
@@ -59,13 +59,20 @@ export const interviewSubscribe = createAsyncThunk(
           dispatch(receiveMessage(parsedMessage));
           break;
         case "JOIN":
+          // 내정보는 무시, 상대 정보만 나에게 pub
+          const myNickname = getState().auth.user.nickname;
+          const authNickname = parsedMessage.data.nickname;
+          if (myNickname === authNickname) {
+            return;
+          }
+
           dispatch(joinRoom(parsedMessage.data));
           break;
         case "EXIT":
           dispatch(exitRoom(parsedMessage.data));
           break;
         case "READY_CHANGE":
-          dispatch(readyStatus(parsedMessage.data));
+          dispatch(readyChange(parsedMessage.data));
           break;
         case "ROLE_CHANGE":
           dispatch(roleChange(parsedMessage.data));
@@ -107,6 +114,8 @@ export const interviewSlice = createSlice({
 
     // 유저들에게 내정보 pub, call back
     joinRoom: (state, action) => {
+      if (!state.currentRoom.members) return; // 방 생성 이전에 오는 내 정보 무시
+
       state.currentRoom.members = [
         ...state.currentRoom.members,
         action.payload,
@@ -123,7 +132,8 @@ export const interviewSlice = createSlice({
     // 메시지 call back
     receiveMessage: (state, action) => {
       const message = action.payload;
-      if (state.currentRoom) {
+      // 방이 생성이 아직 안됐는데 SYSTEM MESSAGE가 동작해서 오류가 나서 추가
+      if (state.currentRoom && state.currentRoom.messages) {
         state.currentRoom.messages = [...state.currentRoom.messages, message];
       }
     },
@@ -134,11 +144,11 @@ export const interviewSlice = createSlice({
       state.currentRoom.members = state.currentRoom.members.filter(
         (member) => member.nickname !== nickname
       );
-      state.questions=[];
+      state.questions = [];
     },
 
     // call back
-    readyStatus: (state, action) => {
+    readyChange: (state, action) => {
       const { nickname, ready } = action.payload;
       const member = state.currentRoom.members.find(
         (member) => member.nickname === nickname
@@ -169,7 +179,7 @@ export const {
   receiveMessage,
   joinRoom,
   exitRoom,
-  readyStatus,
+  readyChange,
   roleChange,
   addQuestion,
 } = interviewSlice.actions;

@@ -9,6 +9,33 @@ import {
   SendButton,
 } from "cha/StudyRoomChatStyleComponent";
 
+const USER_COLORS = [
+  "#0F4C81", // Classic Blue
+  "#FF6B6B", // Coral
+  "#6B5B95", // Ultra Violet
+  "#67D5B5", // Mint Green
+  "#FF8080", // Living Coral
+  "#FF9F89", // Rose Gold
+  "#FFD1DC", // Millennial Pink
+  "#A0E7E5", // Neo Mint
+  "#FF4500", // Lush Lava Red
+  "#FFD700", // Golden Yellow
+  "#40E0D0", // Turquoise
+  "#50C878", // Emerald Green
+  "#E6E6FA", // Lavender
+  "#B2BEB5", // Ash Gray
+  "#228B22", // Forest Green
+];
+
+const getUserColor = (userId) => {
+  let hash = 0;
+  for (let i = 0; i < userId.length; i++) {
+    hash = userId.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % USER_COLORS.length;
+  return USER_COLORS[index];
+};
+
 const StudyChatting = () => {
   const chatWindowRef = useRef(null);
   const dispatch = useDispatch();
@@ -67,7 +94,7 @@ const StudyChatting = () => {
                 </span>
               ) : (
                 <>
-                  <span style={{ color: "#6A9CFD" }}>
+                  <span style={{ color: getUserColor(msg.data.memberId) }}>
                     {msg.data.memberId}: {/* USER 메시지 */}
                     {msg.data.message}
                   </span>

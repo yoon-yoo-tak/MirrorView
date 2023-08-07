@@ -4,6 +4,9 @@ import * as S from "./StudyRoomStyledComponents";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { interviewActions } from "store/InterviewStore";
+import { readyChange } from "store/InterviewWebSocketStore";
+import { getClient } from "store/WebSocketStore";
+
 const StudyRoomBefore = (props) => {
   // 스터디룸 페이지에서 가져온 peopleList
   const {
@@ -20,7 +23,13 @@ const StudyRoomBefore = (props) => {
   const [start, setStart] = useState(false);
   const role = useSelector((state) => state.interview.myRole);
 
-  const { currentRoom } = useSelector((state) => state.interviewWebSocket);
+  const members = useSelector(
+    (state) => state.interviewWebSocket.currentRoom.members
+  );
+  const currentRoom = useSelector(
+    (state) => state.interviewWebSocket.currentRoom
+  );
+  const { user } = useSelector((state) => state.auth);
   const nickname = useSelector((state) => state.auth.user.nickname);
 
   useEffect(() => {
@@ -31,17 +40,31 @@ const StudyRoomBefore = (props) => {
           return;
         }
       });
+      console.log(members);
     }
   }, [currentRoom.members]);
 
   const handleReady = () => {
+    const client = getClient();
     setReady(!ready);
-    // 준비상태 반영 api 호출
+    const sendData = {
+      type: "READY_CHANGE",
+      data: { nickname: user.nickname, ready: !ready }, // 현재 준비 상태를 반대로 전송
+    };
+
+    client.send(
+      `/app/interviewrooms/${currentRoom.id}`,
+      {},
+      JSON.stringify(sendData)
+    );
+
+    // 이 부분은 리덕스 스토어에 준비 상태를 업데이트하는 액션을 디스패치하는 것을 가정합니다.
+    // 해당 액션과 액션 생성자를 정의해야 합니다.
+    dispatch(readyChange({ nickname: user.nickname, ready: !ready }));
   };
   const videoRef = React.createRef();
 
   useEffect(() => {
-
     componentDidUpdate();
     componentDidMount();
   }, [streamManager]);

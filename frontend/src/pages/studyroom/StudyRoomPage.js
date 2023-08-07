@@ -30,15 +30,14 @@ const StudyRoom = () => {
   const accessToken = useSelector((state) => state.auth.accessToken);
   const { user } = useSelector((state) => state.auth);
   const role = useSelector((state) => state.interview.myRole);
+  const currentRoom = useSelector((state) => state.currentRoom);
 
   const isHost = location.state?.isHost;
 
-
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(interviewActions.updateStarted(false));
-    return (()=>{
-    })
-  },[])
+    return () => {};
+  }, []);
   // 참가자 더미데이터 (자신 제외)
   const peopleList = [
     {
@@ -92,7 +91,7 @@ const StudyRoom = () => {
 
   const APPLICATION_SERVER_URL =
     process.env.NODE_ENV === "production" ? "" : "http://localhost:8000/";
-    const [questionList, setQuestionList] = useState(qlist);
+  const [questionList, setQuestionList] = useState(qlist);
   const [OV, setOV] = useState(null);
   const [OVForScreenSharing, setOVForScreenSharing] = useState();
   const [sessionForScreenSharing, setSessionForScreenSharing] = useState();
@@ -130,12 +129,10 @@ const StudyRoom = () => {
   }, []);
   const { pathname } = useLocation();
 
-
   useEffect(() => {
     setMySession(pathname.substring(11));
     joinSession();
   }, []);
-
 
   useEffect(() => {
     window.addEventListener("beforeunload", leaveSession);
@@ -146,10 +143,10 @@ const StudyRoom = () => {
   }, [session]);
 
   useEffect(() => {
-    window.addEventListener('beforeunload', leaveSessionForScreenSharing);
+    window.addEventListener("beforeunload", leaveSessionForScreenSharing);
     return () => {
       leaveSessionForScreenSharing();
-      window.removeEventListener('beforeunload', leaveSessionForScreenSharing);
+      window.removeEventListener("beforeunload", leaveSessionForScreenSharing);
     };
   }, [sessionForScreenSharing]);
 
@@ -171,7 +168,6 @@ const StudyRoom = () => {
     ];
     dispatch(interviewActions.updateFeedbacks(updatedFeedbackList));
   }, [dispatch]);
-
 
   const joinSession = () => {
     const newOpenVidu = new OpenVidu();
@@ -231,7 +227,7 @@ const StudyRoom = () => {
         newSession
           .connect(token, { clientData: user.nickname })
           .then(async () => {
-              newOpenVidu
+            newOpenVidu
               .getUserMedia({
                 audioSource: false,
                 videoSource: undefined,
@@ -268,7 +264,7 @@ const StudyRoom = () => {
 
   useEffect(() => {
     if (doStartScreenSharing) {
-        startScreenShare();
+      startScreenShare();
     }
   }, [doStartScreenSharing]);
 
@@ -331,8 +327,6 @@ const StudyRoom = () => {
     }
   };
 
-
-
   const leaveSession = () => {
     if (!session) return;
     session?.disconnect();
@@ -375,10 +369,10 @@ const StudyRoom = () => {
             .initPublisherAsync(initScreenData.myScreenName, {
               audioSource: false, // The source of audio. If undefined default microphone
               // videoSource: videoDevices[0].deviceId, // The source of video. If undefined default webcam
-              videoSource: 'screen', // The source of video. If undefined default webcam
+              videoSource: "screen", // The source of video. If undefined default webcam
               publishAudio: false,
               publishVideo: true,
-              resolution: '1280x720', // The resolution of your video
+              resolution: "1280x720", // The resolution of your video
               frameRate: 10, // The frame rate of your video
               // insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
             })
@@ -397,7 +391,7 @@ const StudyRoom = () => {
         })
         .catch((error) => {
           console.warn(
-            'There was an error connecting to the session:',
+            "There was an error connecting to the session:",
             error.code,
             error.message
           );
@@ -405,15 +399,14 @@ const StudyRoom = () => {
     });
   };
 
-
   useEffect(() => {
     localStorage.setItem("questionList", JSON.stringify(questionList));
   }, [questionList]);
 
-
-
   const getToken = async () => {
-    return createSession(pathname.substring(11)).then((sId) => createToken(sId));
+    return createSession(pathname.substring(11)).then((sId) =>
+      createToken(sId)
+    );
   };
 
   const createSession = async (sessionId) => {
@@ -441,57 +434,60 @@ const StudyRoom = () => {
   // 면접방 웹 소켓 연결
   useEffect(() => {
     async function initialize() {
-      // 내부 컴포넌트가 먼저 동작하지 않도록 설정
-      // 여기서 여러 가지 초기화 작업 수행
-      // 예: 웹소켓 연결, 데이터 가져오기 등
-      const interviewRoomId = location.pathname.replace("/studyroom/", "");
+      try {
+        // 내부 컴포넌트가 먼저 동작하지 않도록 설정
+        const interviewRoomId = location.pathname.replace("/studyroom/", "");
 
-      // 웹소켓 연결
-      dispatch(initializeWebSocket(accessToken))
-        // 일반 유저일 때만 pub함, 방장은 pub 불필요
-        .then(() => {
-          if (isHost === false) {
-            dispatch(
-              userJoinRoomPub({
-                interviewRoomId,
-                userJoinData: user,
-              })
-            );
-            console.log("일반 유저가 pub ", interviewRoomId, user);
-          }
-        })
+        // 웹소켓 연결
+        await dispatch(initializeWebSocket(accessToken));
 
         // 구독
-        .then(() => {
-          const client = getClient();
-          dispatch(interviewSubscribe({ client, interviewRoomId }));
-          console.log("구독 성공");
-        })
+        const client = getClient();
+        await dispatch(interviewSubscribe({ client, interviewRoomId }));
+        console.log("구독 성공");
 
-        // 조인 이후, DB 에서 방 데이터 가져와서 curretRoom 에 넣기.
-        .then(() => {
-          // 일반 유저는 조인하면서 방에 자신을 넣는데,
-          // 방장은 방 만들때 이미 넣었으므로 그 작업이 불필요, 그냥 방 가져오면 됨
-          if (isHost === false) {
-            dispatch(joinInterviewRoom(interviewRoomId));
-            console.log("일반 유저 입장 - DB 데이터 가져오기");
-          }
-        })
+        //await new Promise((resolve) => setTimeout(resolve, 150)); // 대기
+
+        // 일반 유저일 때만 pub함, 방장은 pub 불필요
+        if (isHost === false) {
+          await dispatch(
+            userJoinRoomPub({
+              interviewRoomId,
+              userJoinData: user,
+            })
+          );
+          console.log("일반 유저가 pub ", interviewRoomId, user);
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, 150)); // 대기
+
+        // 조인 이후, DB에서 방 데이터 가져와서 curretRoom에 넣기.
+        if (isHost === false) {
+          await dispatch(joinInterviewRoom(interviewRoomId));
+          console.log(
+            "일반 유저 입장 (조인작업까지 진행) - DB 데이터 가져오기"
+          );
+        } else {
+          await dispatch(hostJoinInterviewRoom(interviewRoomId));
+          console.log("방장 입장 - 단순 DB 데이터 가져오기");
+        }
 
         // 내부 컴포넌트 동작되게 설정
-        .then(() => {
-          setInitialized(true);
-        })
-        .catch(() => {
-          console.log("웹소켓 연결 --> 구독이.. 실패!");
-        });
+        setInitialized(true);
+      } catch (error) {
+        console.log("웹소켓 연결 --> 구독이.. 실패!", error);
+        dispatch(clearCurrentRoom());
+      }
     }
+
     initialize();
+
     return () => {
       dispatch(closeWebSocket());
       dispatch(clearCurrentRoom());
     };
-  }, []);
+    // currentRoom의 상태를 감지함
+  }, [currentRoom]);
 
   return (
     <div>
@@ -515,40 +511,40 @@ const StudyRoom = () => {
                 />
             )} */}
       {initialized ? (
-          !isStarted ? (
-              <StudyRoomBefore
-                  streamManager={publisher}
-                  questionList={questionList}
-                  setQuestionList={setQuestionList}
-                  peopleList={peopleList}
-                  leaveSession={leaveSession}
-              />
-          ) : role === "interviewer" ? (
-              <StudyRoomInterviewer
-                  questionList={questionList}
-                  setQuestionList={setQuestionList}
-                  // feedbackList={feedbackList}
-                  // setFeedbackList={setFeedbackList}
-                  streamManager={publisher}
-                  subscribers={subscribers}
-                  isScreenSharing={isScreenSharing}
-                  isSpeakList={isSpeakList}
-                  isHideCam={isHideCam}
-                  peopleList={peopleList}
-              />
-          ) : (
-              <StudyRoomInterviewee
-                  questionList={questionList}
-                  setQuestionList={setQuestionList}
-                  peopleList={peopleList}
-                  subscribers={subscribers}
-                  streamManager={publisher}
-              />
-              )
+        !isStarted ? (
+          <StudyRoomBefore
+            streamManager={publisher}
+            questionList={questionList}
+            setQuestionList={setQuestionList}
+            peopleList={peopleList}
+            leaveSession={leaveSession}
+          />
+        ) : role === "interviewer" ? (
+          <StudyRoomInterviewer
+            questionList={questionList}
+            setQuestionList={setQuestionList}
+            // feedbackList={feedbackList}
+            // setFeedbackList={setFeedbackList}
+            streamManager={publisher}
+            subscribers={subscribers}
+            isScreenSharing={isScreenSharing}
+            isSpeakList={isSpeakList}
+            isHideCam={isHideCam}
+            peopleList={peopleList}
+          />
         ) : (
+          <StudyRoomInterviewee
+            questionList={questionList}
+            setQuestionList={setQuestionList}
+            peopleList={peopleList}
+            subscribers={subscribers}
+            streamManager={publisher}
+          />
+        )
+      ) : (
         <p>Loading...</p> // 이 부분은 로딩 표시로 대체할 수 있습니다.
-        )}
-        </div>
+      )}
+    </div>
   );
 };
 
