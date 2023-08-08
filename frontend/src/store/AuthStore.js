@@ -36,7 +36,7 @@
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // -----------------------------------------------------------
-import defaultImage from "../assets/defaultimage.png";
+// import defaultImage from "../assets/defaultimage.png";
 // -----------------------------------------------------------
 import axios from "axios";
 
@@ -62,7 +62,7 @@ const initialState = {
     user: null,
     provider: "",
     // ---------------
-    photo: `${defaultImage}`,
+    photo: "",
     // ---------------
 };
 // initialState를 통해 state의 처음 상태를 정의한다.
