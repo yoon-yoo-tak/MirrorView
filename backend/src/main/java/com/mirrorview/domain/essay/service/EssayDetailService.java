@@ -1,5 +1,7 @@
 package com.mirrorview.domain.essay.service;
 
+import com.mirrorview.domain.essay.domain.Essay;
+import com.mirrorview.domain.essay.domain.EssayDetail;
 import com.mirrorview.domain.essay.dto.EssayDetailDto;
 import com.mirrorview.domain.essay.dto.EssayUpdateDto;
 

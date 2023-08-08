@@ -144,9 +144,8 @@ public class MyPageController {
 
 	@GetMapping("/essays") // 전체 자소서 목록 불러오기
 	public ResponseEntity<?> showEssays(@AuthenticationPrincipal
-		CustomMemberDetails member) {
-		List<EssayDto> list = essayService.findEssayByUserId(member.getUsername());
-		System.out.println(list);
+		CustomMemberDetails member, Pageable pageable) {
+		Page<EssayDto> list = essayService.findEssayByUserId(member.getUsername(), pageable);
 		return BaseResponse.okWithData(HttpStatus.OK, "에세이 목록 불러오기 성공", list);
 	}
 

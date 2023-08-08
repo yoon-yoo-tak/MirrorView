@@ -15,5 +15,5 @@ import java.util.List;
 public class EssayUpdateDto {
     private Long id;
     private String title;
-    private List<EssayDetailUpdateDto> essayDetails = new ArrayList<>();
+    private List<EssayDetailCreateDto> essayDetails = new ArrayList<>();
 }

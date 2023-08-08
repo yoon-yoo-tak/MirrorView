@@ -10,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@ToString
 public class EssayDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
