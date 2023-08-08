@@ -86,4 +86,8 @@ public class InterviewRoom {
             }
         });
     }
+
+    public void startedState(){
+        isStarted = true;
+    }
 }

@@ -6,12 +6,14 @@ import ChattingSection from "./ChattingSectionComponent";
 import MakingFeedbackTap from "./MakingFeedbackTapComponent";
 // 일단 임시로 불러오겠음
 import StudyRating from "../starrating/StudyRatingComponent";
-
 import * as S from "../StudyRoomStyledComponents";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateStarted } from "store/InterviewStore";
+import { getClient } from "store/WebSocketStore";
 
 const InterviewerSection = (props) => {
+    const currentRoom = useSelector((state)=>(state.interviewWebSocket.currentRoom))
+    const started = useSelector((state)=>(state.interviewWebSocket.currentRoom.started))
     const [section, setSection] = useState("info");
     const { peopleList, questionList, feedbackList, setFeedbackList } = props;
 
@@ -32,8 +34,13 @@ const InterviewerSection = (props) => {
     const [modalStates, setModalStates] = useState(false);
     
     const handleExit = () => {
-        dispatch(updateStarted(false));
-        // setModalStates(true);
+        const client = getClient();
+        const exitData = {
+            type: "ROOM_START_CANCEL",
+        }
+            
+        client.send(`/app/interviewrooms/${currentRoom.id}`, {}, JSON.stringify(exitData));
+        console.log("나가기 동작");
     };
     return (
         <div>

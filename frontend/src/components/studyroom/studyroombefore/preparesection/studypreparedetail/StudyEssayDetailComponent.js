@@ -46,10 +46,9 @@ const StudyEssayDetail = ({ nickname, onAir }) => {
   if (!essay) {
     return (
       <div>
-        {nickname}
         {member && member.mainEssay ? (
           <S.essayDetailWrap>
-            {member.mainEssay.title}
+            에쎄이 제목: {member.mainEssay.title}
             {member.mainEssay.essayDetails.map((item, index) => (
               <S.essayDetailEach key={index}>
                 <S.essayDetailQuest>
@@ -60,7 +59,7 @@ const StudyEssayDetail = ({ nickname, onAir }) => {
             ))}
           </S.essayDetailWrap>
         ) : (
-          <S.essayDetailWrap>에세이가 없습니다.</S.essayDetailWrap>
+          <S.essayDetailWrap>대표 에세이가 없습니다.</S.essayDetailWrap>
         )}
       </div>
     );

@@ -26,7 +26,7 @@ const StudyRoom = () => {
   const [initialized, setInitialized] = useState(false);
   const dispatch = useDispatch();
   const location = useLocation();
-  const isStarted = useSelector((state) => state.interview.isStarted);
+  const isStarted = useSelector((state) => state.interviewWebSocket.currentRoom.started);
   const accessToken = useSelector((state) => state.auth.accessToken);
   const { user } = useSelector((state) => state.auth);
   const role = useSelector((state) => state.interview.myRole);
@@ -35,9 +35,10 @@ const StudyRoom = () => {
   const isHost = location.state?.isHost;
 
   useEffect(() => {
-    dispatch(interviewActions.updateStarted(false));
+    // dispatch(interviewActions.updateStarted(false));s
+    console.log(isStarted);
     return () => {};
-  }, []);
+  }, [isStarted]);
   // 참가자 더미데이터 (자신 제외)
   const peopleList = [
     {
