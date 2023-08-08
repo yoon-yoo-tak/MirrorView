@@ -67,6 +67,7 @@ public class InterviewServiceImpl implements InterviewService {
         if (findRoom.isPresent()) {
             InterviewRoom interviewRoom = findRoom.get();
             if (interviewRoom.getCurrentCount() == 1) {
+                System.out.println("왜터짐?" + nickname);
                 interviewRepository.delete(interviewRoom);
                 return;
             }

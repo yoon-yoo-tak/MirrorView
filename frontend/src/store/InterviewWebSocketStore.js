@@ -137,8 +137,11 @@ export const interviewSlice = createSlice({
       state.currentRoom = { ...action.payload, messages: [] };
     },
 
+    // 내가 나갈 경우 (소켓이 끊어져야함)
     clearCurrentRoom: (state, action) => {
       state.currentRoom = {};
+      state.feedbackList = [];
+      state.nicknames = null;
     },
 
     // 유저가 들어 왔을 때 다른 유저들에게 해당 유저 send
@@ -210,13 +213,12 @@ export const interviewSlice = createSlice({
       if (member) member.mainEssay = mainEssay;
     },
 
-    // call back
+    // "상대"가 나갈 경우 상대 currentRoom 방에서 제거, call back
     exitRoom: (state, action) => {
       const nickname = action.payload.nickname;
       state.currentRoom.members = state.currentRoom.members.filter(
         (member) => member.nickname !== nickname
       );
-      state.feedbackList = [];
     },
 
     // call back

@@ -27,6 +27,8 @@ public class AmazonS3Controller {
 	public ResponseEntity<?> uploadImage(@RequestPart MultipartFile multipartFile, @AuthenticationPrincipal
 		CustomMemberDetails member) {
 		try {
+			System.out.println("이미지지지");
+			
 			String fileName = awsS3Service.uploadProfileImage(multipartFile, member.getUsername());
 			return BaseResponse.okWithData(HttpStatus.OK, "파일 업로드 성공", fileName);
 		} catch (Exception e) {
