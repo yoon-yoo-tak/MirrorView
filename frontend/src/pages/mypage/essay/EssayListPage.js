@@ -41,7 +41,8 @@ const MyEssay = () => {
 
     // 페이지를 변경하는 함수를 정의합니다.
     const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+        // console.log(pageNumber);
+        setCurrentPage(pageNumber+1);
     };
 
     // 이전 페이지로 이동하는 함수를 정의합니다.
