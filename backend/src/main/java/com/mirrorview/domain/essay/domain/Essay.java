@@ -26,7 +26,7 @@ public class Essay {
 
     private String title;
 
-    @OneToMany(mappedBy = "essay")
+    @OneToMany(mappedBy = "essay", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<EssayDetail> essayDetails = new ArrayList<>();
 
     @CreationTimestamp
@@ -35,5 +35,8 @@ public class Essay {
 
     public void updateEssayDetail(List<EssayDetail> essayDetails) {
         this.essayDetails = List.copyOf(essayDetails);
+    }
+    public void updateTitle(String title){
+        this.title = title;
     }
 }

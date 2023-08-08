@@ -1,10 +1,14 @@
 package com.mirrorview.domain.essay.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.mirrorview.domain.essay.domain.Essay;
@@ -30,8 +34,15 @@ public class EssayServiceImpl implements EssayService {
     private final FeedbackRepository feedbackRepository;
 
     @Override
-    public List<EssayDto> findEssayByUserId(String userId) {
-        return essayRepository.findEssayByUserId(userId);
+    public Page<EssayDto> findEssayByUserId(String userId, Pageable pageable) {
+        Member member = memberRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저"));
+        Page<Essay> pageEssay = essayRepository.findByMember(member, pageable);
+        List<EssayDto> list = new ArrayList<>();
+        for(Essay e: pageEssay){
+            EssayDto dto = EssayDto.toDto(e);
+            list.add(dto);
+        }
+        return new PageImpl<>(list, pageable, pageEssay.getTotalElements());
     }
 
     @Override

@@ -25,6 +25,7 @@ public class JoinDto {
 			.nickname(nickname)
 			.password(password)
 			.email(email)
+			.photo("https://mirror-view.s3.ap-northeast-2.amazonaws.com/defaultimage.png")
 			.roles("ROLE_USER")
 			.delete(false)
 			.build();
