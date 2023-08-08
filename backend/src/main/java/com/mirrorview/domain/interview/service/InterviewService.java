@@ -34,5 +34,7 @@ public interface InterviewService {
     RoomMemberInfo toggleRoleStatus(String roomId, String username);
 
     void systemMessage(String userId, String roomId, String suffix);
+
+    boolean startedState(String roomId);
 }
 

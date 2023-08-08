@@ -230,5 +230,15 @@ public class InterviewServiceImpl implements InterviewService {
 
         simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, systemMessage);
     }
+
+    public boolean startedState(String roomId){
+        Optional<InterviewRoom> roomById = interviewRepository.findById(roomId);
+        if(roomById.isPresent()){
+            roomById.get().startedState();
+            System.out.println("11111111111111111111111111111111111111");
+            return true;
+        }
+        return false;
+    }
 }
 

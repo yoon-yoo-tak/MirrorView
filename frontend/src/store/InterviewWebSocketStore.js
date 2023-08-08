@@ -8,7 +8,7 @@ const initialState = {
   currentRoom: { members: [] },
   questions: [],
   feedbackList: [],
-  nicknames:null,
+  nicknames: null,
 };
 
 // db 에 들어온 멤버를 넣고, 방을 가져오니까 이미 멤버가 들어온 상태임
@@ -49,6 +49,34 @@ export const hostJoinInterviewRoom = createAsyncThunk(
   }
 );
 
+// 내 자소서 불러오기
+export const fetchEssays = createAsyncThunk(
+  "essays/fetchAll",
+  async (nickname, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await axios.get("/api/essays");
+      dispatch(addEssays({ data: response.data.data, nickname }));
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const setStartedState = createAsyncThunk(
+  "room/setStartedState",
+  async (roomId, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await axios.post(`/api/interviews/started/${roomId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
+
 // 하나의 채널 구독하고 case 로 처리
 export const interviewSubscribe = createAsyncThunk(
   "chat/initialize",
@@ -83,6 +111,12 @@ export const interviewSubscribe = createAsyncThunk(
         case "MAIN_ESSAY":
           dispatch(selectedEssay(parsedMessage.data));
           break;
+        case "ROOM_START":
+          dispatch(roomStartState(parsedMessage.data));
+          break;
+        case "ROOM_START_CANCEL":
+          dispatch(roomStartCancelState(parsedMessage.data));
+          break;
         default:
           break;
       }
@@ -90,19 +124,7 @@ export const interviewSubscribe = createAsyncThunk(
   }
 );
 
-// 내 자소서 불러오기
-export const fetchEssays = createAsyncThunk(
-  "essays/fetchAll",
-  async (nickname, { rejectWithValue, dispatch }) => {
-    try {
-      const response = await axios.get("/api/essays");
-      dispatch(addEssays({ data: response.data.data, nickname }));
-      return response.data.data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+
 
 export const interviewSlice = createSlice({
   name: "interviewWebSocket",
@@ -110,6 +132,8 @@ export const interviewSlice = createSlice({
   reducers: {
     // currentRoom update
     joinedInterviewRoomCurrentRoomUpdate: (state, action) => {
+      console.log(action.payload)
+
       state.currentRoom = { ...action.payload, messages: [] };
     },
 
@@ -213,30 +237,30 @@ export const interviewSlice = createSlice({
       if (member) member.role = role;
     },
     addQuestion: (state, action) => {
-        let bool = false;
-        console.log(state.feedbackList);
-        state.feedbackList.forEach((feedback)=>{
-          if (feedback.nickname===action.payload.nickname) {
-            bool = true;
-            feedback.feedbacks.push({question:action.payload.question,feedback:"",});
-            
-          }
-        });
-        if(!bool) {
-          state.feedbackList=[...state.feedbackList,{nickname:action.payload.nickname,feedbacks:[{question:action.payload.question,feedback:""}]}];
+      let bool = false;
+      console.log(state.feedbackList);
+      state.feedbackList.forEach((feedback) => {
+        if (feedback.nickname === action.payload.nickname) {
+          bool = true;
+          feedback.feedbacks.push({ question: action.payload.question, feedback: "", });
+
         }
+      });
+      if (!bool) {
+        state.feedbackList = [...state.feedbackList, { nickname: action.payload.nickname, feedbacks: [{ question: action.payload.question, feedback: "" }] }];
+      }
     },
-    deleteQuestion:(state,action)=>{
-      const {index, targetUserIdx} = action.payload;
+    deleteQuestion: (state, action) => {
+      const { index, targetUserIdx } = action.payload;
       const deleteFeedback = state.feedbackList[targetUserIdx].feedbacks;
-      state.feedbackList[targetUserIdx].feedbacks.splice(index,1);
+      state.feedbackList[targetUserIdx].feedbacks.splice(index, 1);
       console.log(state.feedbackList);
     },
-    addFeedback:(state,action) =>{
-      const {index, targetUserIdx,value} = action.payload;
+    addFeedback: (state, action) => {
+      const { index, targetUserIdx, value } = action.payload;
       state.feedbackList[targetUserIdx].feedbacks[index].feedback = value;
     },
-    setNicknames:(state,action)=>{
+    setNicknames: (state, action) => {
       state.nicknames = action.payload;
     },
     addEssays: (state, action) => {
@@ -245,6 +269,13 @@ export const interviewSlice = createSlice({
       );
       member.essays = action.payload.data;
     },
+    roomStartState: (state, action) => {
+      state.currentRoom.started = true;
+    },
+    roomStartCancelState: (state, action) => {
+      state.currentRoom.started = false;
+    },
+
   },
 });
 
@@ -266,6 +297,9 @@ export const {
   addEssays,
   publishSelectedEssay,
   selectedEssay,
+  roomStartState,
+  roomStartCancelState,
+
 } = interviewSlice.actions;
 export const selectMessages = (state) => state.chat.currentRoom.messages;
 export default interviewSlice.reducer;
