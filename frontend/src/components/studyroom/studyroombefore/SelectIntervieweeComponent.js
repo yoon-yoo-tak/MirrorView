@@ -58,45 +58,6 @@ const SelectInterviewee = (props) => {
     { name: "빅또리" },
   ]);
 
-  // const changeToInterviewee = () => {
-  //   const client = getClient();
-  //   const member = members.filter(
-  //     (member) => member.nickname === user.nickname
-  //   )[0];
-  //   console.log(member);
-  //   if (!interviewee) {
-  //     // console.log("나는 면접자야");
-  //     setMyRole("interviewee");
-  //     setInterviewee(true);
-  //     const sendData = {
-  //       type: "ROLE_CHANGE",
-  //       data: {
-  //         nickname: member.nickname,
-  //         role: "interivewee",
-  //         rating: 0.3,
-  //         ready: member.ready,
-  //       },
-  //     };
-  //     client.send(
-  //       `/app/interviewrooms/${currentRoom.id}`,
-  //       {},
-  //       JSON.stringify(sendData)
-  //     );
-  //   } else return;
-  // };
-
-  // const changeToInterviewer = () => {
-  //   if (interviewee) {
-  //     // console.log("나는 면접관이야");
-  //     setMyRole("interviewer");
-  //     setInterviewee(false);
-  //     setIntervieweeList((prevList) =>
-  //       prevList.filter((item) => item.name !== props.username)
-  //     );
-  //     setInterviewerList((prevList) => [{ name: props.username }, ...prevList]);
-  //   } else return;
-  // };
-
   const changeRole = () => {
     const client = getClient();
     const newRole = interviewee ? "interviewer" : "interviewee"; // 현재 상태를 기반으로 새 역할 결정

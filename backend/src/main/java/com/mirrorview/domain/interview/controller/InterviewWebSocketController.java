@@ -75,10 +75,11 @@ public class InterviewWebSocketController {
 				}
 				break;
 			case "EXIT": // unsub, unconnected
-				interviewService.exitRoom(user.getNickname(), roomId);
+				System.out.println(33333333);
+				//interviewService.exitRoom(user.getNickname(), roomId);
 				// 나간 멤버를 pub
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
-
+				break;
 			case "READY_CHANGE":
 				Map<String, Object> readyData = messageDto.getData();
 				String userNicknameReady = (String)readyData.get("nickname");

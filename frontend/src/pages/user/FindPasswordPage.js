@@ -31,7 +31,7 @@ const FindPassword = () => {
     };
 
     return (
-        <S.loginForm>
+        <S.form>
             <form onSubmit={handleSubmit}>
                 <S.page>
                     <S.wrap>
@@ -40,7 +40,7 @@ const FindPassword = () => {
                         <S.contentWrap>
                             <S.inputTitle>ID</S.inputTitle>
                             <S.inputWrap>
-                                <S.inputEmailContent
+                                <S.inputContent
                                     type="text"
                                     className="input"
                                     placeholder="ID를 입력해주세요"
@@ -52,7 +52,7 @@ const FindPassword = () => {
                             </S.inputWrap>
                             <S.inputTitle>E-MAIL</S.inputTitle>
                             <S.inputWrap>
-                                <S.inputEmailContent
+                                <S.inputContent
                                     type="email"
                                     className="input"
                                     placeholder="E-MAIL을 입력해주세요"
@@ -76,7 +76,7 @@ const FindPassword = () => {
             </form>
             {message && <p>Status : {message}</p>}
             {error && <p>{error}</p>}
-        </S.loginForm>
+        </S.form>
     );
 };
 

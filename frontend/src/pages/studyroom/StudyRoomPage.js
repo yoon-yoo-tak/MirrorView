@@ -33,6 +33,7 @@ const StudyRoom = () => {
   const currentRoom = useSelector((state) => state.currentRoom);
 
   const isHost = location.state?.isHost;
+  // 방장을 다시 찾아줘야함
 
   useEffect(() => {
     // dispatch(interviewActions.updateStarted(false));s

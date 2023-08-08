@@ -176,7 +176,7 @@ public class SubscriptionService {
 			// roomId가 "interviewRoom"으로 시작하지 않으면 메서드를 종료
 			return;
 		}
-
+		System.out.println(11111111);
 		interviewService.exitRoom(userId, roomId);
 
 		Map<String, Object> data = new HashMap<>();

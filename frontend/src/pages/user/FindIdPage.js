@@ -30,7 +30,7 @@ const FindId = () => {
     };
 
     return (
-        <S.loginForm>
+        <S.form>
             <form onSubmit={handleSubmit}>
                 <S.page>
                     <S.wrap>
@@ -39,7 +39,7 @@ const FindId = () => {
                         <S.contentWrap>
                             <S.inputTitle>E-MAIL</S.inputTitle>
                             <S.inputWrap>
-                                <S.inputEmailContent
+                                <S.inputContent
                                     type="email"
                                     className="input"
                                     placeholder="E-MAIL을 입력해주세요"
@@ -63,7 +63,7 @@ const FindId = () => {
             </form>
             {foundId && <p>찾은 아이디 : {foundId}</p>}
             {error && <p>{error}</p>}
-        </S.loginForm>
+        </S.form>
     );
 };
 
