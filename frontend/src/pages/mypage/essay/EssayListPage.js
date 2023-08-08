@@ -18,7 +18,7 @@ const MyEssay = () => {
     };
 
     const handleEssayDetail = (id) => {
-        navigate(`/essaydetail/${id}`);
+        navigate(`/mypage/essaydetail/${id}`);
     };
 
     const nickname = useSelector((state) => state.auth.nickname);
