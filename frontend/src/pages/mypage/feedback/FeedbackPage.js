@@ -18,10 +18,10 @@ const Feedback = () => {
     const [showModal, setShowModal] = useState(false); // 모달을 열고 닫을 상태(state) 변수
 
     useEffect(()=>{
-        axios.get(`api/mpyage/feedback?size=${perPage}&page${currentPage}`)
+        axios.get(`/api/mypage/feedbacks?size=${perPage}&page=${currentPage-1}`)
         .then(({data})=>{
-            console.log(data.data);
-            // setFeedbackList(data.data.feedbackList);
+            console.log(data.data.content);
+            setFeedbackList(data.data.content);
             setTotalPages(data.data.totalPages);
         }).catch((error)=>{
             console.log(error);
@@ -83,10 +83,10 @@ const Feedback = () => {
                     <hr />
                     <div>
                         <div>{user.nickname}님에게 전달된 피드백들이에요!</div>
-                        <FeedbackComponent />
+                        <FeedbackComponent feedbackList={feedbackList}/>
 
                         {/* 공간 */}
-                        <S.feedbackContainer>
+                        {/* <S.feedbackContainer>
                             {feedbackList.map((feedback,index) => (
                                 // 피드백 리스트를 클릭하면 모달을 열도록 설정
                                 <S.feebacklistbox
@@ -105,7 +105,7 @@ const Feedback = () => {
                                     </tr>
                                     <tr>
                                         <td className="people">
-                                            {/* {feedback.} */}상대이름
+                                            {feedback.}
                                         </td>
                                     </tr>
                                     {modalStates[index] && (
@@ -116,7 +116,8 @@ const Feedback = () => {
                         )}
                                 </S.feebacklistbox>
                             ))}
-                        </S.feedbackContainer>
+                        </S.feedbackContainer> */}
+                        
                         <S.FeedbackPaginationContainer>
                             <ul className="pagination">
                                 <li

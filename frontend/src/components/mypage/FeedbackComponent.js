@@ -5,26 +5,26 @@ import * as S from "./MypageStyledComponents";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const FeedbackComponent = () => {
+const FeedbackComponent = ({feedbackList}) => {
     // 더미데이터
     const [feedbacks,setFeedbacks] = useState([]);
     const {user,accessToken} = useSelector((state)=>state.auth);
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
-    useEffect(()=>{
-        axios.get(`/api/mypage/feedbacks?userId=${user.userId}`)
-        .then(({data})=>{
-            setFeedbacks(data.data);
+    // useEffect(()=>{
+    //     axios.get(`/api/mypage/feedbacks?userId=${user.userId}`)
+    //     .then(({data})=>{
+    //         setFeedbacks(data.data);
 
-        })
-        .catch((error)=>{
-            console.log(error);
-        })
-    },[])
+    //     })
+    //     .catch((error)=>{
+    //         console.log(error);
+    //     })
+    // },[])
 
     useEffect(()=>{
-        setModalStates(feedbacks.map(()=>false));
-    },[feedbacks])
+        setModalStates(feedbackList.map(()=>false));
+    },[feedbackList])
     
     // const archive = [
     //     { id: 1, nickname: "히히", time: 10 },
@@ -38,7 +38,7 @@ const FeedbackComponent = () => {
     //     { id: 9, nickname: "악악", time: 90 },
     // ];
 
-    const [modalStates, setModalStates] = useState(feedbacks.map(() => false));
+    const [modalStates, setModalStates] = useState(feedbackList.map(() => false));
 
     const handleModal = (index) => {
         const newModalStates = modalStates.map((state, idx) =>{
@@ -59,13 +59,13 @@ const FeedbackComponent = () => {
     return (
         <div>
             <S.fbComponent>
-                {feedbacks.map((item, index) => (
+                {feedbackList.map((item, index) => (
                     <S.fbThumbnail
                         // className="archive"
                         key={item.id}
                         onClick={() => handleModal(index)}
                     >
-                        <div>작성자 : {item.nickname}</div>
+                        <div>작성자 : {item.senderNickname}</div>
                         <div>도착한 날짜 : {item.createdTime.substring(0,10)}</div>
                         {modalStates[index] && (
                             <FeedbackModal

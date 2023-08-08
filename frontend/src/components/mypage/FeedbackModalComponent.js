@@ -8,9 +8,13 @@ const FeedbackModal = ({ item, setModalStates }) => {
     const closeModal = () => {
         setModalStates(false);
     };
-
+    const [content,setContent] = useState("");
     const modalRef = useRef(null);
 
+    useEffect(()=>{
+        document.getElementById("content").innerHTML=item.content.replaceAll('\n','<br/>');
+        
+    },[]);
     useEffect(() => {
         const handler = (e) => {
             if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -52,14 +56,11 @@ const FeedbackModal = ({ item, setModalStates }) => {
             <S.modalBackDrop>
                 <S.modalContainer ref={modalRef} onClick={handleInsideClick}>
                     <S.modalButton onClick={closeModal}>닫기</S.modalButton>
-                    <S.modalContent>작성자 : {item.nickname}</S.modalContent>
-                    {/* tiem : {item.createdTime.substring(0,10)} */}
+                    <S.modalContent>작성자 : {item.senderNickname}</S.modalContent>
+                    날짜 : {item.createdTime.substring(0,10)}
                     <br/>
-                    answer : {item.answer}
                     <br/>
-                    question : {item.question}
-                    <br/>
-                    content : {item.content}
+                    <div id = "content"></div>
                 </S.modalContainer>
             </S.modalBackDrop>
         </div>
