@@ -15,6 +15,7 @@ const StudyRoomInterviewer = (props) => {
     setQuestionList,
     // feedbackList,
     setFeedbackList,
+    
   } = props;
 
   const gosim = useSelector((state) => state.interview.feedbackList[0]);
@@ -45,6 +46,11 @@ const StudyRoomInterviewer = (props) => {
                 </S.mainVideo>
             </S.mainContainer>
               <S.lastVideos>
+              <S.lastVideoEach onClick={()=>test(streamManager)}>
+                          {JSON.parse(streamManager.stream.connection.data).clientData}님의 화면입니다
+                          <SubscriberVideo subscriber={streamManager} key={streamManager.stream.connection.connectionId}>
+                          </SubscriberVideo>
+                      </S.lastVideoEach>
                   {subscribers.map((sub) => (
                       <S.lastVideoEach onClick={()=>test(sub)}>
                           {JSON.parse(sub.stream.connection.data).clientData}님의 화면입니다

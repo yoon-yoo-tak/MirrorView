@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getClient } from "store/WebSocketStore";
 import { setNicknames } from "store/InterviewWebSocketStore";
 
-const StudyRoomInterviewee = ({ peopleList, subscribers }) => {
+const StudyRoomInterviewee = ({ peopleList, subscribers,streamManager }) => {
   const [selectSubscriber, setSelectSubscriber] = useState(null);
   const selectPerson = (e) => {
     setSelectSubscriber(e);
@@ -49,6 +49,13 @@ const StudyRoomInterviewee = ({ peopleList, subscribers }) => {
         </S.mainWrap>
 
         <S.leftBox>
+        <S.boxes onClick={() => selectPerson(streamManager)}>
+              {JSON.parse(streamManager.stream.connection.data).clientData}
+              <SubscriberVideo
+                subscriber={streamManager}
+                key={streamManager.stream.connection.connectionId}
+              ></SubscriberVideo>
+            </S.boxes>
           {subscribers.map((sub) => (
             <S.boxes onClick={() => selectPerson(sub)}>
               {JSON.parse(sub.stream.connection.data).clientData}
