@@ -2,6 +2,9 @@ package com.mirrorview.domain.user.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -92,8 +95,9 @@ public class MyPageController {
 	}
 
 	@GetMapping("/feedbacks") // 전체 피드백 목록
-	public ResponseEntity<?> getFeedbackList(@AuthenticationPrincipal CustomMemberDetails member) {
-		List<FeedbackListDto> list = feedbackService.findFeedbackByUserId(member.getUsername());
+	public ResponseEntity<?> getFeedbackList(@AuthenticationPrincipal CustomMemberDetails member, @PageableDefault(size = 5)
+		Pageable pageable) {
+		Page<FeedbackDto> list = feedbackService.findFeedbackByUserId(member.getUsername(), pageable);
 		return BaseResponse.okWithData(HttpStatus.OK, "전체 피드백 목록 조회 성공", list);
 	}
 
