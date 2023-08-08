@@ -1,14 +1,22 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {logout} from "../../store/AuthStore";
+import { logout } from "../../store/AuthStore";
 const Header = () => {
-    const {user} = useSelector((state)=>state.auth);
+    const { user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-    const onClickLogout = (e) =>{
+    const onClickLogout = (e) => {
+        alert("로그아웃 되었습니다!");
         dispatch(logout());
-    }
+        navigate("");
+    };
+    const navigate = useNavigate();
+
+    const movePage = (props) => {
+        navigate(`/${props}`);
+    };
+
     return (
         <Nav>
             <Link to="/">
@@ -17,28 +25,22 @@ const Header = () => {
                 <Logo></Logo>
             </Link>
             <NavMenu>
-                <NavItem>
-                    <StyledLink to="/aboutus">About us</StyledLink>
+                {/* <StyledLink to="/aboutus">About us</StyledLink> */}
+                <NavItem onClick={() => movePage("aboutus")}>About us</NavItem>
+                <NavItem onClick={() => movePage("notice")}>Notice</NavItem>
+                <NavItem onClick={() => movePage("studylist")}>
+                    StudyList
                 </NavItem>
-                <NavItem>
-                    <StyledLink to="/notice">Notice</StyledLink>
-                </NavItem>
-                <NavItem>
-                    <StyledLink to="/studylist">StudyList</StyledLink>
-                </NavItem>
-                <NavItem>
-                    <StyledLink to="/mypage/profile">MyPage</StyledLink>
+                <NavItem onClick={() => movePage("mypage/profile")}>
+                    MyPage
                 </NavItem>
                 <LoginNavItem>
                     {!user ? (
-                        <>
-                            <NavItem>
-                                <StyledLink to="/login">로그인</StyledLink>
-                            </NavItem>
-                        </>):(
-                        <NavItem>
-                            <StyledLink to="/" onClick={onClickLogout}>로그아웃</StyledLink>
+                        <NavItem onClick={() => movePage("login")}>
+                            로그인
                         </NavItem>
+                    ) : (
+                        <NavItem onClick={onClickLogout}>로그아웃</NavItem>
                     )}
                 </LoginNavItem>
             </NavMenu>
@@ -47,48 +49,55 @@ const Header = () => {
 };
 
 const Logo = styled.div`
-  width: 18.75rem;
-  height: 6.25rem;
-  margin-top: 0.625rem;
-  margin-left: 3rem;
-  background-image: url(${process.env.PUBLIC_URL}/mirlogo.png);
-  background-size: contain;
-  background-repeat: no-repeat;
+    // width: 18.75rem;
+    // height: 6.25rem;
+    width: 200px;
+    height: 60px;
+    // object-fit: contain;
+    margin-left: 40px;
+    background-image: url(${process.env.PUBLIC_URL}/mirlogo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
 `;
 
-const Nav = styled.nav`
-  justify-content: flex-end;
-  display: flex;
-  align-items: center;
-  padding: 0.5rem;
-  background-color: white;
+const Nav = styled.div`
+    justify-content: flex-end;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    background-color: white;
+    height: 60px;
 `;
 
-const NavMenu = styled.ul`
-  display: flex;
-  list-style: none;
-  margin-left: auto;
-  font-family: Imcre;
+const NavMenu = styled.div`
+    display: flex;
+    list-style: none;
+    margin-left: auto;
 `;
 
-const NavItem = styled.li`
-  margin-right: auto;
-//   margin-right : 80px;
-  margin-left: 5rem;
-  cursor: pointer;
+const NavItem = styled.div`
+    margin-right: auto;
+    //   margin-right : 80px;
+    margin-left: 5rem;
+    cursor: pointer;
+    font-family: "NanumSquareNeo-Variable";
+    font-weight: bold;
+    &:hover {
+        color: gray;
+    }
 `;
 
 const LoginNavItem = styled(NavItem)`
-  margin-right: 5rem;
+    margin-right: 5rem;
 `;
 
-const StyledLink = styled(Link)`
-  color: #231656;
-  text-decoration: none; /* 밑줄 없애기 */
+// const StyledLink = styled(Link)`
+//     color: #231656;
+//     text-decoration: none; /* 밑줄 없애기 */
 
-  &:hover {
-    text-decoration: underline;
-  }
-`;
+//     &:hover {
+//         text-decoration: underline;
+//     }
+// `;
 
 export default Header;
