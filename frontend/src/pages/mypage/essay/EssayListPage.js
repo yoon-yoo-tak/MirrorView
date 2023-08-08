@@ -17,27 +17,27 @@ const MyEssay = () => {
         navigate("/mypage/essaycreate");
     };
 
-    const handleEssayDetail = (id) => {
-        navigate(`/mypage/essaydetail/${id}`);
+    const handleEssayDetail = (essay) => {
+        navigate(`/mypage/essaydetail/${essay.id}`,{state:essay.title});
     };
 
-    const nickname = useSelector((state) => state.auth.nickname);
+    
 
     const perPage = 6; // 페이지당 피드백 개수를 지정합니다.
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const {user} = useSelector((state)=>state.auth);
     const [essayList, setEssayList] = useState([]);
     const[totalPages,setTotalPages] = useState(1);
 
     useEffect(()=>{
-        axios.get(`/api/mypage/essays?userId=${user.userId}`)
+        axios.get(`/api/mypage/essays?size=${user.userId}&page=${currentPage-1}`)
         .then(({data})=>{
-            setEssayList(data.data);
-            console.log(data);
+            setEssayList(data.data.content);
+            setTotalPages(data.data.totalPages);
         }).catch((error)=>{
             console.error(error);
         });
-    },[])
+    },[currentPage])
 
     // 페이지를 변경하는 함수를 정의합니다.
     const handlePageChange = (pageNumber) => {
@@ -87,7 +87,7 @@ const MyEssay = () => {
                                         <S.essayListBox
                                             key={index}
                                             onClick={() =>
-                                                handleEssayDetail(essay.id)
+                                                handleEssayDetail(essay)
                                             }
                                         >
                                             <tr>
@@ -119,7 +119,7 @@ const MyEssay = () => {
                                             { length: totalPages },
                                             (_, index) => (
                                                 <li
-                                                    key={index + 1}
+                                                    key={index}
                                                     className={
                                                         index + 1 ===
                                                         currentPage
@@ -128,7 +128,7 @@ const MyEssay = () => {
                                                     }
                                                     onClick={() =>
                                                         handlePageChange(
-                                                            index + 1
+                                                            index
                                                         )
                                                     }
                                                 >

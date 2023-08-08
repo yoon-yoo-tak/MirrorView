@@ -10,22 +10,28 @@ import axios from "axios";
 import essayData from "./essayData";
 
 const EssayDetail = () => {
-    const { user, accessToken } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
     const navigate = useNavigate();
-    const { pathname, state } = useLocation();
-    const [essay, setEssay] = useState([]);
-    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    const {pathname,state} = useLocation();
+    const [essayList, setEssayList] = useState({title:"",essayDetails:[]});
+    const [currentPage, setCurrentPage] = useState(0);
     useEffect(() => {
-        console.log(pathname);
+        
         const id = pathname.substring(20);
         axios
             .get(`/api/mypage/essays/${id}`)
             .then(({ data }) => {
-                setEssay(data.data);
+                console.log(data);
+                setEssayList({
+                    id,
+                    title:state,
+                    essayDetails:data.data
+                });
             })
             .catch((error) => {
                 console.error(error);
             });
+            setCurrentPage(0);
     }, []);
 
     // const essayUpdate = (e) => {
@@ -33,40 +39,65 @@ const EssayDetail = () => {
     //     navigate("essaydetail/:id/update");
     // };
 
-    const itemsPerPage = 1; // 1개씩 보여주도록 변경
-    const [currentPage, setCurrentPage] = useState(1);
 
-    const totalPages = essayData.length;
 
     const goToPage = (page) => {
-        if (page >= 1 && page <= totalPages) {
+        if (page >= 0 && page <= essayList.essayDetails.length) {
             setCurrentPage(page);
         }
     };
 
-    const handleCompanyChange = (event) => {
-        const newCompanyValue = event.target.value;
-        setEssay((prevEssay) => ({
-            ...prevEssay,
-            company: newCompanyValue,
+    const handleTitle = (e) => {
+        setEssayList((prevData)=>({
+          ...prevData,
+          title:e.target.value
+    
         }));
-    };
+      };
 
-    const handleTitleChange = (event) => {
-        const newTitleValue = event.target.value;
-        setEssay((prevEssay) => ({
-            ...prevEssay,
-            title: newTitleValue,
+      const handleQuestion = (e) => {
+        setEssayList(prevState => ({
+          ...prevState,
+          essayDetails: prevState.essayDetails.map((detail, index) => 
+            index === currentPage 
+              ? {...detail, question: e.target.value}
+              : detail
+          )
         }));
-    };
+      };
+      const handleAnswer = (e) => {
+        setEssayList(prevState => ({
+          ...prevState,
+          essayDetails: prevState.essayDetails.map((detail, index) => 
+            index === currentPage 
+              ? {...detail, answer: e.target.value}
+              : detail
+          )
+        }));
+      };
 
-    const handleContentChange = (event) => {
-        const newContentValue = event.target.value;
-        setEssay((prevEssay) => ({
-            ...prevEssay,
-            content: newContentValue,
-        }));
-    };
+      const onclickSave =async()=>{
+       console.log(essayList); 
+        await axios.put(`/api/mypage/essays`,essayList)
+        .then((response)=>{
+          console.log(response);
+          alert("자기소개서 수정 완료");
+        //   navigate("/mypage/myessay");
+        }).catch((error)=>{
+          console.log(error);
+        })
+        // navigate("/mypage/myessay")
+    }
+
+    const addEssay = () => {
+        setEssayList((prevData)=>({
+          ...prevData,
+          essayDetails:[
+            ...prevData.essayDetails,
+            {question:"",answer:""},
+          ]
+          
+        }))};
 
     return (
         <div>
@@ -76,10 +107,10 @@ const EssayDetail = () => {
                     <h2>자기소개서 작성하기</h2>
                     <hr />
                     <div>
-                        {essayData
-                            .filter((essay) => essay.id === currentPage)
-                            .map((essay) => (
-                                <S.EssayFormContainer key={essay.id}>
+                        {essayList.essayDetails
+                            .filter((essay,index) => index === currentPage)
+                            .map((essay,index) => (
+                                <S.EssayFormContainer key={index}>
                                     <div className="essayCreateBox">
                                         <S.btn
                                             theme="save"
@@ -88,40 +119,26 @@ const EssayDetail = () => {
                                                 top: "5px",
                                                 left: "1040px",
                                             }}
+                                            onClick={onclickSave}
                                         >
                                             저장하기
                                         </S.btn>
                                         <S.essayCreateBox>
                                             <S.esaayCategory>
                                                 <S.RoundedTextareaQues
-                                                    defaultValue={essay.company}
-                                                    onChange={(event) =>
-                                                        handleCompanyChange(
-                                                            event
-                                                        )
-                                                    }
+                                                    value={essayList.title} onChange={handleTitle} placeholder="자기소개서 주제"
                                                 ></S.RoundedTextareaQues>
                                             </S.esaayCategory>
 
                                             <S.esaayQuestion>
                                                 <S.RoundedTextareaQues
-                                                    placeholder={essay.title}
-                                                    defaultValue={essay.title}
-                                                    onChange={(event) =>
-                                                        handleTitleChange(event)
-                                                    }
+                                                   value={essay.question} onChange={handleQuestion} placeholder="문항 질문을 입력하세요"
                                                 ></S.RoundedTextareaQues>
                                             </S.esaayQuestion>
 
                                             <S.essayAnswer>
                                                 <S.RoundedTextareaAns
-                                                    placeholder={essay.content}
-                                                    defaultValue={essay.content}
-                                                    onChange={(event) =>
-                                                        handleContentChange(
-                                                            event
-                                                        )
-                                                    }
+                                                   value={essay.answer} onChange={handleAnswer} placeholder="문항에 대한 자기소개서를 입력하세요"
                                                 ></S.RoundedTextareaAns>
                                             </S.essayAnswer>
 
@@ -132,18 +149,19 @@ const EssayDetail = () => {
                                                     top: "-5px",
                                                     left: "990px",
                                                 }}
+                                                onClick={addEssay}
                                             >
                                                 문항 추가
                                             </S.btn>
 
                                             <S.PaginationContainer>
                                                 {[
-                                                    ...Array(totalPages).keys(),
-                                                ].map((page) => (
+                                                    ...Array(essayList.essayDetails.length).keys(),
+                                                ].map((page,index) => (
                                                     <S.PaginationButton
-                                                        key={page + 1}
+                                                        key={index}
                                                         onClick={() =>
-                                                            goToPage(page + 1)
+                                                            goToPage(index)
                                                         }
                                                     >
                                                         <S.CircleNumber>
