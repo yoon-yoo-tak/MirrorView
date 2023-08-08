@@ -19,7 +19,7 @@ public class FeedbackDto {
     private String roomId;
     private String roomTitle;
     private String content;
-    private String senderId;
+    private String senderNickname;
     private LocalDateTime createdTime;
 
     public static FeedbackDto toDto(Feedback feedback){
@@ -28,7 +28,7 @@ public class FeedbackDto {
             .roomTitle(feedback.getRoomTitle())
             .roomId(feedback.getRoomId())
             .content(feedback.getContent())
-            .senderId(feedback.getSender().getUserId())
+            .senderNickname(feedback.getSender().getNickname())
             .createdTime(feedback.getCreatedTime())
             .build();
     }
