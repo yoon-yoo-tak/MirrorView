@@ -10,10 +10,10 @@ public interface FeedbackService {
 
 	List<FeedbackListDto> findFeedbackByUserId(String userId);
 	//
-	List<FeedbackDto> findFeedbackByRoomId(Long roomId);
+	List<FeedbackDto> findFeedbackByRoomId(String roomId);
 	//
 	// FeedbackDto findFeedbackByFeedbackId(Long feedbackId);
 	//
 	void saveFeedback(FeedbackSaveDto dto, String senderId);
-	void deleteByRoomId(Long roomId);
+	void deleteByRoomId(String roomId);
 }

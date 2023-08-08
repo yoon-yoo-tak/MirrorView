@@ -98,13 +98,13 @@ public class MyPageController {
 	}
 
 	@GetMapping("/feedbacks/{roomId}") // 피드백 방마다 피드백들
-	public ResponseEntity<?> getFeedback(@PathVariable("roomId") Long roomId) {
+	public ResponseEntity<?> getFeedback(@PathVariable("roomId") String roomId) {
 		List<FeedbackDto> list = feedbackService.findFeedbackByRoomId(roomId);
 		return BaseResponse.okWithData(HttpStatus.OK, "피드백 조회 성공", list);
 	}
 
 	@DeleteMapping("/feedbacks/{roomId}")
-	public ResponseEntity<?> deleteFeedback(@PathVariable("roomId") Long roomId) {
+	public ResponseEntity<?> deleteFeedback(@PathVariable("roomId") String roomId) {
 		try {
 			feedbackService.deleteByRoomId(roomId);
 			return BaseResponse.ok(HttpStatus.OK, "삭제 성공");

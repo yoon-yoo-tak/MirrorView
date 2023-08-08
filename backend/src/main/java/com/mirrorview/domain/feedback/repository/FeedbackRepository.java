@@ -7,8 +7,8 @@ import com.mirrorview.domain.user.domain.Member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FeedbackRepository extends JpaRepository<Feedback, Long>, FeedbackRepositoryCustom {
-	List<Feedback> findByRoomId(Long roomId);
+public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
+	List<Feedback> findByRoomId(String roomId);
 	List<Feedback> findByReceiver(Member member);
-	void deleteByRoomId(Long roomId);
+	void deleteByRoomId(String roomId);
 }

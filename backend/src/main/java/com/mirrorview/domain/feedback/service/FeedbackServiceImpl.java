@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.mirrorview.domain.feedback.domain.Feedback;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class FeedbackServiceImpl implements FeedbackService {
 
 	private final FeedbackRepository feedbackRepository;
@@ -37,6 +39,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
 	@Override
 	public void saveFeedback(FeedbackSaveDto dto, String senderId) {
+		log.info("dto = {}", dto);
 		Optional<Member> member = memberRepository.findByNickname(dto.getReceiver());
 		Optional<Member> sender = memberRepository.findByUserId(senderId);
 		if (member.isPresent() && sender.isPresent()) {
@@ -53,12 +56,12 @@ public class FeedbackServiceImpl implements FeedbackService {
 	}
 
 	@Override
-	public void deleteByRoomId(Long roomId) {
+	public void deleteByRoomId(String roomId) {
 		feedbackRepository.deleteByRoomId(roomId);
 	}
 
 	@Override
-	public List<FeedbackDto> findFeedbackByRoomId(Long roomId) {
+	public List<FeedbackDto> findFeedbackByRoomId(String roomId) {
 		return feedbackRepository.findByRoomId(roomId)
 			.stream()
 			.map(FeedbackDto::toDto)
