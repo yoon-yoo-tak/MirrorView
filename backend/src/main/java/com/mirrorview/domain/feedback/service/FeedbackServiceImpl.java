@@ -1,5 +1,6 @@
 package com.mirrorview.domain.feedback.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,6 +8,10 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.mirrorview.domain.feedback.domain.Feedback;
@@ -29,12 +34,20 @@ public class FeedbackServiceImpl implements FeedbackService {
 	private final MemberRepository memberRepository;
 
 	@Override
-	public List<FeedbackListDto> findFeedbackByUserId(String userId) {
+	public Page<FeedbackDto> findFeedbackByUserId(String userId, Pageable pageable) {
 		Optional<Member> member = memberRepository.findByUserId(userId);
-		return member.map(value -> feedbackRepository.findByReceiver(value)
-			.stream()
-			.map(FeedbackListDto::toDto)
-			.collect(Collectors.toList())).orElse(null);
+		// return member.map(value -> feedbackRepository.findByReceiver(value)
+		// 	.stream()
+		// 	.map(FeedbackDto::toDto)
+		// 	.collect(Collectors.toList())).orElse(null);
+		Page<Feedback> pageFeedback = feedbackRepository.findByReceiver(member.get(), pageable);
+		List<FeedbackDto> list = new ArrayList<>();
+		for (Feedback f: pageFeedback){
+			FeedbackDto dto = FeedbackDto.toDto(f);
+			list.add(dto);
+		}
+		return new PageImpl<>(list, pageable, pageFeedback.getTotalElements());
+
 	}
 
 	@Override
