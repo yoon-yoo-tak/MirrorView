@@ -14,13 +14,14 @@ export const page = styled.div`
     justify-content: center;
     display: flex;
     font-family: "HakgyoansimWoojuR";
+    padding-top: 60px;
 `;
 
 export const studylistContainer = styled.div`
     padding-top: 50px;
     width: 63rem;
     flex-direction: column;
-    position: relative;
+    // position: relative;
 `;
 
 export const studylistTop = styled.div`
@@ -68,7 +69,7 @@ export const categoryList = styled.div`
     display: flex;
     align-items: center;
     flex: 3;
-    position: relative;
+    // position: relative;
     justify-content: space-evenly;
 `;
 export const categoryDiv = styled.div`
@@ -96,7 +97,7 @@ export const categoryButton = styled.button`
     align-items: center;
     border: 0;
 
-    position: relative;
+    // position: relative;
     width: 50px;
     height: 30px;
 
