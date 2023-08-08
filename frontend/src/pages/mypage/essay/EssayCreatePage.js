@@ -6,7 +6,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const EssayCreatePage = () => {
-<<<<<<< frontend/src/pages/mypage/essay/EssayCreatePage.js
   const itemsPerPage = 1; // 1개씩 보여주도록 변경
   const [currentPage, setCurrentPage] = useState(0);
   const [essayList,setEssayList]=useState({title:"",essayDetails:[]});
@@ -80,50 +79,16 @@ const EssayCreatePage = () => {
       ]
       
     }))};
-=======
-    const itemsPerPage = 1; // 1개씩 보여주도록 변경
-    const [currentPage, setCurrentPage] = useState(1);
 
-    const totalPages = essayData.length;
+  return (
+    <div>
+      <S.page>
+        <Sidebar menu="essay" />
+        <S.wrap>
+          <h2>자기소개서 작성하기</h2>
+          <hr />
+          <div>
 
-    const goToPage = (page) => {
-        if (page >= 1 && page <= totalPages) {
-            setCurrentPage(page);
-        }
-    };
->>>>>>> frontend/src/pages/mypage/essay/EssayCreatePage.js
-
-    return (
-        <div>
-            <S.page>
-                <Sidebar menu="essay" />
-                <S.wrap>
-                    <h2>자기소개서 작성하기</h2>
-                    <hr />
-                    <div>
-                        {essayData
-                            .filter((essay) => essay.id === currentPage)
-                            .map((essay) => (
-                                <S.EssayFormContainer key={essay.id}>
-                                    <div className="essayCreateBox">
-                                        <S.btn
-                                            theme="save"
-                                            style={{
-                                                position: "relative",
-                                                top: "5px",
-                                                left: "1040px",
-                                            }}
-                                        >
-                                            저장하기
-                                        </S.btn>
-                                        <S.essayCreateBox>
-                                            <S.esaayCategory>
-                                                <S.RoundedTextareaQues
-                                                    value={essay.company}
-                                                ></S.RoundedTextareaQues>
-                                            </S.esaayCategory>
-
-<<<<<<< frontend/src/pages/mypage/essay/EssayCreatePage.js
             {essayList.essayDetails
               .filter((essay,index) => index === currentPage)
               .map((essay,index) => (
@@ -165,56 +130,6 @@ const EssayCreatePage = () => {
       </S.page>
     </div>
   );
-=======
-                                            <S.esaayQuestion>
-                                                <S.RoundedTextareaQues
-                                                    placeholder={essay.title}
-                                                ></S.RoundedTextareaQues>
-                                            </S.esaayQuestion>
-
-                                            <S.essayAnswer>
-                                                <S.RoundedTextareaAns
-                                                    placeholder={essay.content}
-                                                ></S.RoundedTextareaAns>
-                                            </S.essayAnswer>
-
-                                            <S.btn
-                                                theme="save"
-                                                style={{
-                                                    position: "relative",
-                                                    top: "-5px",
-                                                    left: "990px",
-                                                }}
-                                            >
-                                                문항 추가
-                                            </S.btn>
-
-                                            <S.PaginationContainer>
-                                                {[
-                                                    ...Array(totalPages).keys(),
-                                                ].map((page) => (
-                                                    <S.PaginationButton
-                                                        key={page + 1}
-                                                        onClick={() =>
-                                                            goToPage(page + 1)
-                                                        }
-                                                    >
-                                                        <S.CircleNumber>
-                                                            {page + 1}
-                                                        </S.CircleNumber>
-                                                    </S.PaginationButton>
-                                                ))}
-                                            </S.PaginationContainer>
-                                        </S.essayCreateBox>
-                                    </div>
-                                </S.EssayFormContainer>
-                            ))}
-                    </div>
-                </S.wrap>
-            </S.page>
-        </div>
-    );
->>>>>>> frontend/src/pages/mypage/essay/EssayCreatePage.js
 };
 
-export default EssayCreatePage;
+export default EssayCreatePage;
