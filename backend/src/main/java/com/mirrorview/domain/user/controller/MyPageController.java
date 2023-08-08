@@ -2,6 +2,9 @@ package com.mirrorview.domain.user.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -92,19 +95,20 @@ public class MyPageController {
 	}
 
 	@GetMapping("/feedbacks") // 전체 피드백 목록
-	public ResponseEntity<?> getFeedbackList(@AuthenticationPrincipal CustomMemberDetails member) {
-		List<FeedbackListDto> list = feedbackService.findFeedbackByUserId(member.getUsername());
+	public ResponseEntity<?> getFeedbackList(@AuthenticationPrincipal CustomMemberDetails member, @PageableDefault(size = 5)
+		Pageable pageable) {
+		Page<FeedbackDto> list = feedbackService.findFeedbackByUserId(member.getUsername(), pageable);
 		return BaseResponse.okWithData(HttpStatus.OK, "전체 피드백 목록 조회 성공", list);
 	}
 
 	@GetMapping("/feedbacks/{roomId}") // 피드백 방마다 피드백들
-	public ResponseEntity<?> getFeedback(@PathVariable("roomId") Long roomId) {
+	public ResponseEntity<?> getFeedback(@PathVariable("roomId") String roomId) {
 		List<FeedbackDto> list = feedbackService.findFeedbackByRoomId(roomId);
 		return BaseResponse.okWithData(HttpStatus.OK, "피드백 조회 성공", list);
 	}
 
 	@DeleteMapping("/feedbacks/{roomId}")
-	public ResponseEntity<?> deleteFeedback(@PathVariable("roomId") Long roomId) {
+	public ResponseEntity<?> deleteFeedback(@PathVariable("roomId") String roomId) {
 		try {
 			feedbackService.deleteByRoomId(roomId);
 			return BaseResponse.ok(HttpStatus.OK, "삭제 성공");
