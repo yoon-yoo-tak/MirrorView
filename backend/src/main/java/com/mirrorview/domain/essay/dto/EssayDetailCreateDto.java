@@ -12,6 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class EssayDetailCreateDto {
+    private String id;
     private String question;
     private String answer;
 }
