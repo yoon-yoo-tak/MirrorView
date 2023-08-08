@@ -20,6 +20,8 @@ import Sidebar from "pages/sidebar/SideBar";
 import ChatList from "pages/sidebar/ChatList";
 import PrivateChatRoom from "pages/sidebar/ChatRoom";
 import KakaoLoginRedirectPage from "pages/user/KakaoLoginRedirectPage";
+import FindId from "./pages/user/FindIdPage";
+import FindPassword from "./pages/user/FindPasswordPage";
 
 // axios 전역 설정
 import axios from "axios";
@@ -28,32 +30,37 @@ import { useSelector } from "react-redux";
 axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const App = () => {
-  const { accessToken } = useSelector((state) => state.auth);
-  axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-  return (
-    <div>
-      <Sidebar>
-        <ChatList />
-        <PrivateChatRoom />
-      </Sidebar>
+    const { accessToken } = useSelector((state) => state.auth);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    return (
+        <div>
+            <Sidebar>
+                <ChatList />
+                <PrivateChatRoom />
+            </Sidebar>
 
-      <Header></Header>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/mypage/*" element={<MyPage />} />
-        <Route path="/aboutus" element={<AboutusPage />} />
-        <Route path="/notice" element={<NoticePage />} />
-        <Route path="/noticedetail/:id" element={<NoticeDetail />} />
-        <Route path="/studylist" element={<StudyRoomList />} />
-        <Route path="/noticewritepage" element={<NoticeWritePage />} />
-        <Route path="/studyroom/:id" element={<StudyRoom />} />
-        <Route path="/login/kakao/code" element={<KakaoLoginRedirectPage />} />
-      </Routes>
-      <Footer></Footer>
-    </div>
-  );
+            <Header></Header>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/findid" element={<FindId />} />
+                <Route path="/findpassword" element={<FindPassword />} />
+                <Route path="/mypage/*" element={<MyPage />} />
+                <Route path="/aboutus" element={<AboutusPage />} />
+                <Route path="/notice" element={<NoticePage />} />
+                <Route path="/noticedetail/:id" element={<NoticeDetail />} />
+                <Route path="/studylist" element={<StudyRoomList />} />
+                <Route path="/noticewritepage" element={<NoticeWritePage />} />
+                <Route path="/studyroom/:id" element={<StudyRoom />} />
+                <Route
+                    path="/login/kakao/code"
+                    element={<KakaoLoginRedirectPage />}
+                />
+            </Routes>
+            <Footer></Footer>
+        </div>
+    );
 };
 
 export default App;

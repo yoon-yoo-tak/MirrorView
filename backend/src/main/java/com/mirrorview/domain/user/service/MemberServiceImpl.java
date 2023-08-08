@@ -133,7 +133,7 @@ public class MemberServiceImpl implements MemberService {
             return str;
         }
 
-        String mask = "*".repeat(str.length() - numCharsToMask); // 나머지 길이만큼 "*"로 채움
-        return str.substring(0, numCharsToMask) + mask;
+        String mask = "*".repeat(numCharsToMask); // 나머지 길이만큼 "*"로 채움
+        return str.substring(0, str.length() - numCharsToMask) + mask;
     }
 }
