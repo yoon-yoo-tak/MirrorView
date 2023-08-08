@@ -1,6 +1,7 @@
 package com.mirrorview.domain.interview.controller;
 
 import com.mirrorview.domain.interview.domain.InterviewRoom;
+import com.mirrorview.domain.interview.dto.MessageDto;
 import com.mirrorview.domain.interview.dto.RoomRequestDto;
 import com.mirrorview.domain.interview.dto.RoomResponseDto;
 import com.mirrorview.domain.interview.service.InterviewService;
@@ -11,11 +12,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -26,6 +30,7 @@ import java.util.Optional;
 public class InterviewController {
 
     private final InterviewService interviewService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @GetMapping("/rooms")
     public ResponseEntity<?> getRooms(
@@ -85,6 +90,22 @@ public class InterviewController {
         if (roomById.isPresent()) {
             return BaseResponse.okWithData(HttpStatus.OK, "방 가져오기", roomById.get());
         }
-        return BaseResponse.fail("방이 존재하지 않습니다.", 404);
+        return BaseResponse.fail("방이 존재하지 않습니다.", 400);
+    }
+
+    @PostMapping("/started/{roomId}")
+    public ResponseEntity<?> setStartedState(@PathVariable String roomId){
+        if(interviewService.startedState(roomId)){
+            // state 값 변경 pub
+            Map<String, Object> data = new HashMap<>();
+            data.put("isStarted", true);
+
+            MessageDto messageDto = MessageDto.builder()
+                .type("ROOM_START")
+                .data(data)
+                .build();
+            simpMessagingTemplate.convertAndSend("/sub/interviewrooms/"+roomId, messageDto);
+        }
+        return BaseResponse.ok(HttpStatus.OK, "방이 시작되었습니다.");
     }
 }

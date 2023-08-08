@@ -126,6 +126,10 @@ public class InterviewWebSocketController {
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 				break;
 
+			case "ROOM_START_CANCEL":
+				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
+				break;
+
 
 		}
 	}

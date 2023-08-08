@@ -4,8 +4,8 @@ import SelectInterviewee from "./studyroombefore/SelectIntervieweeComponent";
 import * as S from "./StudyRoomStyledComponents";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { interviewActions } from "store/InterviewStore";
-import { readyChange } from "store/InterviewWebSocketStore";
+//import { interviewActions, } from "store/InterviewStore";
+import { readyChange, setStartedState } from "store/InterviewWebSocketStore";
 import { getClient } from "store/WebSocketStore";
 
 const StudyRoomBefore = (props) => {
@@ -22,16 +22,32 @@ const StudyRoomBefore = (props) => {
 
   const [ready, setReady] = useState(false);
   const [start, setStart] = useState(false);
-  const role = useSelector((state) => state.interview.myRole);
-
-  const members = useSelector(
-    (state) => state.interviewWebSocket.currentRoom.members
-  );
   const currentRoom = useSelector(
     (state) => state.interviewWebSocket.currentRoom
   );
   const { user } = useSelector((state) => state.auth);
   const nickname = useSelector((state) => state.auth.user.nickname);
+  const host = currentRoom?.host;
+
+
+  // 누르면 start로, state 변경, db도 변경
+  const handleStart = () => {
+    const readyCount = currentRoom.members.filter(member => member.ready).length;
+    if (readyCount === currentRoom.members.length - 1) {
+      dispatch(setStartedState(currentRoom.id));
+    } else {
+      alert("모든 참가자가 준비되지 않았습니다.");
+    }
+  };
+
+  useEffect(()=>{
+    console.log(user)
+  },[])
+
+  const handleTest = () => {
+    setStart(true);
+    //dispatch(interviewActions.updateStarted(start));
+  };
 
   useEffect(() => {
     if (currentRoom && currentRoom.members) {
@@ -41,9 +57,8 @@ const StudyRoomBefore = (props) => {
           return;
         }
       });
-      console.log(members);
     }
-  }, [currentRoom.members]);
+  }, [currentRoom.members, host]);
   const handleReady = () => {
     const client = getClient();
     setReady(!ready);
@@ -81,59 +96,61 @@ const StudyRoomBefore = (props) => {
     }
   };
 
-  const handleTest = () => {
-    console.log(role);
-    setStart(true);
-    dispatch(interviewActions.updateStarted(start));
-  };
-
   return (
     <S.page>
       <S.prepareWrap>
         <S.prepareSectionFirst>
           <S.readySection>
             <S.readyText>
-              {/* {!ready && hostName === nickname && (
-                                <S.readyText>
-                                    잠시만 기다려주세요<br />
-                                    참가자들이 준비중입니다
-                                </S.readyText>
-                            )}
-                            {!ready && hostName === nickname && (
-                                <S.readyText>
-                                    모든 참가자의 준비가 완료되었습니다<br />
-                                    면접을 시작해주세요!
-                                </S.readyText>
-                            )} */}
-              {!ready && (
-                <S.readyText>
-                  지금은 준비시간 입니다. <br />
-                  준비가 완료되면 버튼을 눌러주세요
-                </S.readyText>
-              )}
-              {ready && (
-                <S.readyText>
-                  준비가 완료되었습니다. <br />곧 면접이 시작됩니다!
-                </S.readyText>
-              )}
+              {
+                // 면접관인 경우
+                user.nickname === host ? (
+                  !ready ? (
+                    <S.readyText>
+                      잠시만 기다려주세요<br />
+                      참가자들이 준비중입니다
+                    </S.readyText>
+                  ) : (
+                    <S.readyText>
+                      모든 참가자의 준비가 완료되었습니다<br />
+                      면접을 시작해주세요!
+                    </S.readyText>
+                  )
+                ) : (
+                  // 면접자인 경우
+                  !ready ? (
+                    <S.readyText>
+                      지금은 준비시간 입니다. <br />
+                      준비가 완료되면 버튼을 눌러주세요
+                    </S.readyText>
+                  ) : (
+                    <S.readyText>
+                      준비가 완료되었습니다. <br />
+                      곧 면접이 시작됩니다!
+                    </S.readyText>
+                  )
+                )
+              }
             </S.readyText>
             <S.readyButtonDiv>
-              {/* {hostName !== nickname &&  */}
-              <S.readyButton
-                onClick={handleReady}
-                status={!ready ? "true" : ""}
-                disabled={ready}>
-                준비완료
-              </S.readyButton>
-              {/* } */}
-              {/* {hostName === nickname &&
-                            <S.startButton
-                                onClick={handleReady}
-                                status={!ready ? "true" : ""}
-                                disabled={ready}
-                            >
-                                면접시작
-                            </S.startButton> } */}
+              {
+                user.nickname === host ? (
+                  <S.startButton
+                    onClick={handleStart}
+                    disabled={ready}
+                  >
+                    면접시작
+                  </S.startButton>
+                ) : (
+                  <S.readyButton
+                    onClick={handleReady}
+                    status={!ready ? "true" : ""}
+                    disabled={ready}
+                  >
+                    준비완료
+                  </S.readyButton>
+                )
+              }
             </S.readyButtonDiv>
           </S.readySection>
           <S.myVideo>
