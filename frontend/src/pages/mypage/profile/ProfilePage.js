@@ -107,56 +107,64 @@ const Profile = () => {
     };
 
     const handleSetImage = async (croppedImageUrl) => {
-        setImageUrl(croppedImageUrl); // 크롭된 이미지 URL을 프로필 이미지 URL로 설정
-        handleModalClose(); // 크롭 모달 닫기
+        setImageUrl(croppedImageUrl);
+        handleModalClose();
 
-        // ---------확인용------------
-        // setUser((prevData) => ({
-        //     ...prevData,
-        //     photo: croppedImageUrl,
-        // }));
-
-        // --------------------------
+        // 이미지 URL에서 Blob 데이터를 가져와서 FormData에 추가
+        const response = await fetch(croppedImageUrl);
+        const blob = await response.blob();
 
         const formData = new FormData();
-        formData.append("profilePicture", croppedImageUrl);
+        formData.append("multipartFile", blob, "profile.jpg"); // 파일 이름은 필요에 따라 변경할 수 있습니다.
 
         try {
-            const response = await axios.post("/api/s3/image", formData, {
+            const serverResponse = await axios.post("/api/s3/image", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             });
             dispatch(setPhoto(croppedImageUrl));
-            console.log("Server response:", response.data);
+
+            // 서버로부터 반환된 새로운 이미지 URL을 사용하여 상태를 업데이트
+            if (serverResponse.data && serverResponse.data.fileName) {
+                const newImageUrl = serverResponse.data.fileName; // 혹은 적절한 경로를 추가하여 완전한 URL을 만듭니다.
+                // dispatch(setPhoto(newImageUrl));
+                console.log("등록해ㅠ");
+            }
         } catch (error) {
-            console.error(error);
+            console.error("Error uploading the image:", error);
         }
     };
 
     // 기본 이미지로 돌려놓기
     const setDefaultImage = async () => {
         if (window.confirm("기본 이미지로 설정하시겠습니까?")) {
-            // ---------확인용------------
-            // setUser((prevData) => ({
-            //     ...prevData,
-            //     photo: defaultImage,
-            // }));
-            // --------------------------
+            const response = await fetch(defaultImage);
+            const blob = await response.blob();
 
             const formData = new FormData();
-            formData.append("profilePicture", defaultImage);
+            formData.append("multipartFile", blob, "profile.jpg"); // 파일 이름은 필요에 따라 변경할 수 있습니다.
 
             try {
-                const response = await axios.post("/api/s3/image", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
+                const serverResponse = await axios.post(
+                    "/api/s3/image",
+                    formData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    }
+                );
                 dispatch(setPhoto(defaultImage));
-                console.log("Server response:", response.data);
+
+                // 서버로부터 반환된 새로운 이미지 URL을 사용하여 상태를 업데이트
+                if (serverResponse.data && serverResponse.data.fileName) {
+                    const newImageUrl = serverResponse.data.fileName; // 혹은 적절한 경로를 추가하여 완전한 URL을 만듭니다.
+                    // dispatch(setPhoto(newImageUrl));
+                    console.log("등록해ㅠ");
+                }
             } catch (error) {
-                console.error(error);
+                console.error("Error uploading the image:", error);
             }
             handleClose();
         }
@@ -292,8 +300,6 @@ const Profile = () => {
                             </S.gradeStar>
                         </S.gradeGroup>
                     </S.profileBox>
-
-                    <div></div>
                 </S.profileWrap>
             </S.profilePage>
         </div>
