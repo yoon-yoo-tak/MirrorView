@@ -25,6 +25,7 @@ const Login = () => {
 
     const handleSubmit = useCallback(
         (e) => {
+            console.log("들어옴");
             e.preventDefault();
             dispatch(
                 login({
@@ -55,17 +56,17 @@ const Login = () => {
 
     const notAllow = !id || !password;
 
-    const onClickLogin = useCallback(
-        (e) => {
-            dispatch(
-                login({
-                    userId: inputId,
-                    password: inputPassword,
-                })
-            );
-        },
-        [inputId, inputPassword]
-    );
+    // const onClickLogin = useCallback(
+    //     (e) => {
+    //         dispatch(
+    //             login({
+    //                 userId: inputId,
+    //                 password: inputPassword,
+    //             })
+    //         );
+    //     },
+    //     [inputId, inputPassword]
+    // );
 
     const goSignUpPage = () => {
         navigate("/signup");
@@ -125,9 +126,9 @@ const Login = () => {
                             </S.textWrap>
                             <S.goLoginWrap>
                                 <S.submitButton
-                                // disabled={notAllow}
-                                // className="bottomButton"
-                                // onClick={onClickLogin}
+                                    // disabled={notAllow}
+                                    // className="bottomButton"
+                                    onClick={handleSubmit}
                                 >
                                     로그인
                                 </S.submitButton>

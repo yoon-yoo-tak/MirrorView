@@ -123,7 +123,6 @@ export const kakaoLogin = createAsyncThunk(
             console.error(error);
             return rejectWithValue(error.response.data);
         }
-
     }
 );
 
