@@ -668,7 +668,7 @@ export const essayListBox = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    background-color: rgba(161, 182, 255, 0.15);
+    // background-color: rgba(161, 182, 255, 0.15);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
     border-radius: 15px;
     padding: 35px 30px;
