@@ -53,7 +53,7 @@ const FeedbackModal = ({ item, setModalStates }) => {
                 <S.modalContainer ref={modalRef} onClick={handleInsideClick}>
                     <S.modalButton onClick={closeModal}>닫기</S.modalButton>
                     <S.modalContent>작성자 : {item.nickname}</S.modalContent>
-                    tiem : {item.createdTime.substring(0,10)}
+                    {/* tiem : {item.createdTime.substring(0,10)} */}
                     <br/>
                     answer : {item.answer}
                     <br/>
