@@ -14,16 +14,16 @@ import ChangeNickname from "./profile/ChangeNicknamePage";
 import { getUserInfo } from "../../store/AuthStore";
 
 const MyPage = () => {
-    // const {user} = useSelector((state) => state.auth);
+    const {user} = useSelector((state) => state.auth);
 
     // ---- 임의 사용자 생성 ----
-    const user = {
-        userId: "123",
-        nickname: "뀨",
-        email: "ssafy@ssafy",
-        averageRating: 3.4,
-        password: "123",
-    };
+    // const user = {
+    //     userId: "123",
+    //     nickname: "뀨",
+    //     email: "ssafy@ssafy",
+    //     averageRating: 3.4,
+    //     password: "123",
+    // };
     // ------------------------
 
     const navigate = useNavigate();

@@ -11,15 +11,15 @@ const EssayComponent = () => {
 
     axios.defaults.headers.common["Authorization"] =  `Bearer ${accessToken}`;
     
-    useEffect(()=>{
-        axios.get(`/api/mypage/essays?userId=${user.userId}`)
-        .then(({data})=>{
-            setEssyList(data.data);
-            console.log(data);
-        }).catch((error)=>{
-            console.error(error);
-        })
-    },[])
+    // useEffect(()=>{
+    //     axios.get(`/api/mypage/essays?userId=${user.userId}`)
+    //     .then(({data})=>{
+    //         setEssyList(data.data);
+    //         console.log(data);
+    //     }).catch((error)=>{
+    //         console.error(error);
+    //     })
+    // },[])
 
     const essay = [
         { id: 1, name: "히히", time: 10 },

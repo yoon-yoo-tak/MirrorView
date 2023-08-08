@@ -1,7 +1,7 @@
 // MyEssay.js
 import Sidebar from "../MypageSidebarPage";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EssayComponent from "../../../components/mypage/EssayComponent";
 import * as S from "../../../components/mypage/MypageStyledComponents";
@@ -23,17 +23,21 @@ const MyEssay = () => {
 
     const nickname = useSelector((state) => state.auth.nickname);
 
-    const itemsPerPage = 6; // 페이지당 피드백 개수를 지정합니다.
-    const [currentPage, setCurrentPage] = useState(1);
+    const perPage = 6; // 페이지당 피드백 개수를 지정합니다.
+    const [currentPage, setCurrentPage] = useState(0);
+    const {user} = useSelector((state)=>state.auth);
+    const [essayList, setEssayList] = useState([]);
+    const[totalPages,setTotalPages] = useState(1);
 
-    // 전체 페이지 수를 계산
-    const totalPages = Math.ceil(example.length / itemsPerPage);
-
-    // 현재 페이지에 해당하는 피드백 데이터를 가져옵니다.
-    const currentEssays = example.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
+    useEffect(()=>{
+        axios.get(`/api/mypage/essays?userId=${user.userId}`)
+        .then(({data})=>{
+            setEssayList(data.data);
+            console.log(data);
+        }).catch((error)=>{
+            console.error(error);
+        });
+    },[])
 
     // 페이지를 변경하는 함수를 정의합니다.
     const handlePageChange = (pageNumber) => {
@@ -79,21 +83,21 @@ const MyEssay = () => {
                         <div className="essayBox">
                             <div className="essayList">
                                 <S.essayListContainer>
-                                    {currentEssays.map((example) => (
+                                    {essayList.map((essay,index) => (
                                         <S.essayListBox
-                                            key={example.id}
+                                            key={index}
                                             onClick={() =>
-                                                handleEssayDetail(example.id)
+                                                handleEssayDetail(essay.id)
                                             }
                                         >
                                             <tr>
                                                 <td className="title">
-                                                    {example.title}
+                                                    {essay.title}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td className="time">
-                                                    작성일시 : {example.time}
+                                                    작성일시 : {essay.createdTime.substring(0,10)}
                                                 </td>
                                             </tr>
                                         </S.essayListBox>

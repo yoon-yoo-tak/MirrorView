@@ -2,37 +2,37 @@
 const essayData = [
     {
       id: 1,
-      company: "회사A",
-      title: "첫 번째 자기소개서",
-      content: "첫 번째 자기소개서 내용입니다.",
+      title: "제목",
+      question: "문항 질문을 작성하세요",
+      answer: "문항에 대한 자기소개서를 작성하세요",
     },
 
     {
       id: 2,
-      company: "회사B",
-      title: "두 번째 자기소개서",
-      content: "두 번째 자기소개서 내용입니다.",
+      title: "회사B",
+      question: "두 번째 자기소개서",
+      answer: "두 번째 자기소개서 내용입니다.",
     },
 
     {
         id: 3,
-        company: "회사C",
-        title: "세 번째 자기소개서",
-        content: "세 번째 자기소개서 내용입니다.",
+        title: "회사C",
+        question: "세 번째 자기소개서",
+        answer: "세 번째 자기소개서 내용입니다.",
       },
 
       {
         id: 4,
-        company: "회사D",
-        title: "네 번째 자기소개서",
-        content: "네 번째 자기소개서 내용입니다.",
+        title: "회사D",
+        question: "네 번째 자기소개서",
+        answer: "네 번째 자기소개서 내용입니다.",
       },
 
       {
         id: 5,
-        company: "회사E",
-        title: "5번째 자기소개서",
-        content: "5번째 자기소개서 내용입니다.",
+        title: "회사E",
+        question: "5번째 자기소개서",
+        answer: "5번째 자기소개서 내용입니다.",
       },
   ];
 
