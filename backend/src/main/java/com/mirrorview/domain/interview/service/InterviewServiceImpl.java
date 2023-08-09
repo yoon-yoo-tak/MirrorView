@@ -53,7 +53,6 @@ public class InterviewServiceImpl implements InterviewService {
     public InterviewRoom create(Member member, RoomRequestDto requestDto) {
         InterviewRoom createRoom = requestDto.toEntity(member.getNickname());
         List<EssayListDto> essayList = new ArrayList<>();
-        //List<EssayListDto> essayListDtos = getEssayListDtos(member.getUserId());
         createRoom.join(member, essayList);
         interviewRepository.save(createRoom);
         System.out.println(interviewRepository.count());
@@ -67,7 +66,6 @@ public class InterviewServiceImpl implements InterviewService {
         if (findRoom.isPresent()) {
             InterviewRoom interviewRoom = findRoom.get();
             if (interviewRoom.getCurrentCount() == 1) {
-                System.out.println("왜터짐?" + nickname);
                 interviewRepository.delete(interviewRoom);
                 return;
             }
@@ -236,7 +234,6 @@ public class InterviewServiceImpl implements InterviewService {
         Optional<InterviewRoom> roomById = interviewRepository.findById(roomId);
         if(roomById.isPresent()){
             roomById.get().startedState();
-            System.out.println("11111111111111111111111111111111111111");
             return true;
         }
         return false;

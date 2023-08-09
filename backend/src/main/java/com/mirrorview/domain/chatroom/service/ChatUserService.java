@@ -48,18 +48,32 @@ public class ChatUserService {
 		Optional<ChatUser> chatUser = chatUserRepository.findById(userId);
 		if(chatUser.isPresent()) {
 			ChatUser chatUser1 = chatUser.get();
-			chatUser1.getFavoriteChatRoomIds().add(roomId);
+			Set<String> favoriteChatRoomIds = chatUser1.getFavoriteChatRoomIds();
+
+			// roomId가 이미 favoriteChatRoomIds에 존재하는지 확인
+			if (favoriteChatRoomIds.contains(roomId)) {
+				throw new RuntimeException("이미 즐겨찾기에 등록된 채팅방입니다.");
+			}
+
+			favoriteChatRoomIds.add(roomId);
 			chatUserRepository.save(chatUser1);
 		}
 	}
 
 	public void removeChatRoomFromFavorites(String userId, String roomId) {
 		Optional<ChatUser> chatUser = chatUserRepository.findById(userId);
-			if(chatUser.isPresent()) {
-				ChatUser chatUser1 = chatUser.get();
-				chatUser1.getFavoriteChatRoomIds().remove(roomId);
-				chatUserRepository.save(chatUser1);
+		if(chatUser.isPresent()) {
+			ChatUser chatUser1 = chatUser.get();
+			Set<String> favoriteChatRoomIds = chatUser1.getFavoriteChatRoomIds();
+
+			// roomId가 이미 favoriteChatRoomIds에 존재하는지 확인
+			if (!favoriteChatRoomIds.contains(roomId)) {
+				throw new RuntimeException("이미 즐겨찾기에서 삭제된 채팅방입니다.");
 			}
+
+			favoriteChatRoomIds.remove(roomId);
+			chatUserRepository.save(chatUser1);
+		}
 	}
 
 	public ChatUser addUserToRedis(String userId, String userNickname){
