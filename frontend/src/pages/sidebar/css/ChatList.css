@@ -1,42 +1,86 @@
 .chat-room-list {
-  width: 100%;
+    width: 100%;
 }
 
 .chat-room-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 5px;
-  margin-bottom: 3px;
-  padding: 3px;
-  transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 5px 10px;
+    transition: background-color 0.3s ease;
+    background-color: #f3f8ff;
+    box-shadow: 0px 0px 5px #ebebeb;
+    font-family: "HakgyoansimWoojuR";
+    height: 50px;
+    border: solid 2px #c6ddff;
 }
 
 .chat-room-item:hover {
-  background-color: #9baff3;
+    background-color: #bad6ff;
+    color: white;
 }
 
-.chat-room-title {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+/* .chat-room-title {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+} */
 
 .chat-room-title .icon {
-  margin-right: 2px;
+    margin-right: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chatContent {
+    display: flex;
+    flex-direction: column;
+    /* white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; */
+    max-width: 160px;
+}
+
+.chatTitle {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chatCount {
+    font-size: 14px;
+    padding: 5px;
 }
 
 .join-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    padding: 5px 10px;
+
+    width: 30px;
+    height: 18px;
+    font-weight: bold;
+    color: white;
+
+    background: #9bc3ff;
+    box-shadow: 0px 0px 10px #bdbdbd;
+    border-radius: 13px;
+    cursor: pointer;
 }
 
 .join-button:hover {
-  background-color: #0056b3;
+    background-color: #f3f8ff;
+    color: gray;
 }

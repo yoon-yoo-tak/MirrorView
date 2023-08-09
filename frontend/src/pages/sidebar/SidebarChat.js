@@ -224,8 +224,8 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
                 {/* 채팅 섹션 */}
                 <div className="sidebar-section">
                     <div className="section-title">
-                        <h4>채팅</h4>
-                        접속 인원: {userCount}
+                        <h2>채팅</h2>
+                        <div className="count">접속 인원: {userCount}</div>
                         {/* <button onClick={toggleChatsContent}>
                             {isChatsContentVisible ? (
                                 <FaChevronUp />
@@ -268,12 +268,12 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
                             {view === "ChatRoom" && <ChatRoom />}
                         </div>
 
-                        <button
+                        <div
                             className="chatbtn"
                             onClick={handleOpenCreateChatModal}
                         >
-                            채팅 만들기 <FaPlus className="icon" />
-                        </button>
+                            채팅방 개설하기 <FaPlus className="icon" />
+                        </div>
                         {showCreateChatModal && ( // <-- 추가
                             <ChatModal
                                 isOpen={showCreateChatModal}
