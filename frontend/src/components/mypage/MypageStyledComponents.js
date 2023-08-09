@@ -14,6 +14,8 @@ export const sidebarWrap = styled.div`
     width: 280px;
     height: 855px;
     flex: 1;
+
+    // padding-top: 60px;
 `;
 
 export const sideMenuWrap = styled.div`
@@ -25,12 +27,12 @@ export const sideMenu = styled.div`
     display: flex;
     // align-items: left;
     justify-content: left;
-    font-size: 15px;
+    font-size: 18px;
     padding: 15px 5px;
     display: flex;
     align-items: center;
     border-radius: 30px 0 0 30px;
-    font-family: "Nanum Gothic";
+    font-family: "HakgyoansimWoojuR";
     cursor: pointer;
     &:hover {
         background-color: rgba(255, 255, 255, 0.3);
@@ -42,12 +44,13 @@ export const sideMenuNow = styled.div`
     display: flex;
     // align-items: left;
     justify-content: left;
-    font-size: 15px;
+    font-size: 18px;
+    font-weight: bold;
     padding: 15px 5px;
     align-items: center;
     background-color: white;
     border-radius: 30px 0 0 30px;
-    font-family: "Nanum Gothic";
+    font-family: "HakgyoansimWoojuR";
     cursor: pointer;
 `;
 
@@ -96,9 +99,11 @@ export const page = styled.div`
     justify-content: center;
     height: 855px;
     font-family: "HakgyoansimWoojuR";
+    padding-top: 60px;
 `;
 
 export const wrap = styled.div`
+    // padding-top: 60px;
     flex: 4;
     margin: 10px 50px;
 `;

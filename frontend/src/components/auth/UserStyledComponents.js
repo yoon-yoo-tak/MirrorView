@@ -20,6 +20,8 @@ export const form = styled.div`
     width: 100%;
     height: 855px;
     font-family: "HakgyoansimWoojuR";
+
+    padding-top: 60px;
 `;
 
 export const hidden = styled.div`
@@ -66,7 +68,7 @@ export const contentWrap = styled.div`
     // align-items: center;
     flex-direction: column;
     margin-top: 20px;
-    position: relative;
+    // position: relative;
 `;
 
 export const inputContent = styled.input`

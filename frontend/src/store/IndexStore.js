@@ -19,45 +19,45 @@ import storage from "redux-persist/lib/storage";
 const sessionStorage = window.sessionStorage;
 
 const persistConfig = {
-  key: "root",
-  // 로컬 스토리지용
-  //storage,
+    key: "root",
+    // 로컬 스토리지용
+    //storage,
 
-  // 세션 스토리지용
-  storage: {
-    getItem: (key) => {
-      return Promise.resolve(sessionStorage.getItem(key));
+    // 세션 스토리지용
+    storage: {
+        getItem: (key) => {
+            return Promise.resolve(sessionStorage.getItem(key));
+        },
+        setItem: (key, item) => {
+            return Promise.resolve(sessionStorage.setItem(key, item));
+        },
+        removeItem: (key) => {
+            return Promise.resolve(sessionStorage.removeItem(key));
+        },
     },
-    setItem: (key, item) => {
-      return Promise.resolve(sessionStorage.setItem(key, item));
-    },
-    removeItem: (key) => {
-      return Promise.resolve(sessionStorage.removeItem(key));
-    },
-  },
 };
 
 const rootReducer = combineReducers({
-  auth: authReducer,
-  webSocket: WebSocketStoreReducer,
-  chatRoom: chatRoomReducer,
-  chatView: chatViewReducer,
-  interview: interviewReducer,
-  interviewWebSocket: interviewWebSocketStore,
+    auth: authReducer,
+    webSocket: WebSocketStoreReducer,
+    chatRoom: chatRoomReducer,
+    chatView: chatViewReducer,
+    interview: interviewReducer,
+    interviewWebSocket: interviewWebSocketStore,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-  reducer: persistedReducer,
-  // 세션 스토리지용 - 각 탭마다 devtools 따로 동작
-  devTools: {
-    name: `${
-      window.location.pathname + "?" + window.location.search
-    }-${new Date().getTime()}`,
-    trace: true,
-    traceLimit: 25,
-  },
+    reducer: persistedReducer,
+    // 세션 스토리지용 - 각 탭마다 devtools 따로 동작
+    devTools: {
+        name: `${
+            window.location.pathname + "?" + window.location.search
+        }-${new Date().getTime()}`,
+        trace: true,
+        traceLimit: 25,
+    },
 });
 
 export const persistor = persistStore(store);

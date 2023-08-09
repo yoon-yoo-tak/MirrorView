@@ -16,9 +16,9 @@ import NoticeDetail from "./pages/notice/NoticeDetailPage";
 import StudyRoomList from "./pages/studylist/StudyRoomListPage";
 import NoticeWritePage from "./pages/notice/NoticeWritePage";
 import StudyRoom from "./pages/studyroom/StudyRoomPage";
-import Sidebar from "pages/sidebar/SideBar";
-import ChatList from "pages/sidebar/ChatList";
-import PrivateChatRoom from "pages/sidebar/ChatRoom";
+// import Sidebar from "pages/sidebar/SideBar";
+// import ChatList from "pages/sidebar/ChatList";
+// import PrivateChatRoom from "pages/sidebar/ChatRoom";
 import KakaoLoginRedirectPage from "pages/user/KakaoLoginRedirectPage";
 import FindId from "./pages/user/FindIdPage";
 import FindPassword from "./pages/user/FindPasswordPage";
@@ -34,10 +34,10 @@ const App = () => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     return (
         <div>
-            <Sidebar>
+            {/* <Sidebar>
                 <ChatList />
                 <PrivateChatRoom />
-            </Sidebar>
+            </Sidebar> */}
 
             <Header></Header>
             <Routes>
