@@ -1,109 +1,109 @@
 /* ChatRoom.css */
 .chat-room-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 70vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 70vh;
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 10px;
-    font-family: "HakgyoansimWoojuR";
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  font-family: "HakgyoansimWoojuR";
 }
 
 .chat-container {
-    display: flex;
-    flex-direction: column;
-    height: 80%;
-    /* border: 2px solid #ccc; */
-    background-color: #ecf5ff;
-    border-radius: 10px;
-    padding: 10px;
-    overflow-y: auto;
-    font-family: "HakgyoansimWoojuR";
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  /* border: 2px solid #ccc; */
+  background-color: #ecf5ff;
+  border-radius: 10px;
+  padding: 10px;
+  overflow-y: auto;
+  font-family: "HakgyoansimWoojuR";
 }
 
 .chat-container::-webkit-scrollbar {
-    width: 7px;
+  width: 7px;
 }
 
 .chat-container::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-    background: #a6b6ce;
+  border-radius: 3px;
+  background: #a6b6ce;
 }
 .chat-container::-webkit-scrollbar-track {
-    opacity: 0;
-    border-radius: 3px;
+  opacity: 0;
+  border-radius: 3px;
 }
 
 .chat-message-container {
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    border-radius: 10px;
-    margin: 5px 0;
-    padding: 0.6rem;
-    margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 10px;
+  margin: 5px 0;
+  padding: 0.6rem;
+  margin-bottom: 10px;
 }
 
 .chat-user-id {
-    margin-left: 10px;
-    font-size: 15px;
-    font-weight: bold;
-    color: #555;
+  margin-left: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #555;
 }
 
 .chat-message {
-    margin: 2px 0;
-    font-size: 17px;
+  margin: 2px 0;
+  font-size: 17px;
 }
 
 .chat-time {
-    align-self: flex-end;
-    font-size: 12px;
-    color: #aaa;
+  align-self: flex-end;
+  font-size: 12px;
+  color: #aaa;
 }
 
 .back-button-container {
-    display: flex;
-    width: 24px;
+  display: flex;
+  width: 24px;
 }
 
 .back-button {
-    background-color: transparent;
-    border: none;
-    z-index: 10;
+  background-color: transparent;
+  border: none;
+  z-index: 10;
 }
 
 .chat-title {
-    margin: 3px;
-    font-size: 20px;
+  margin: 3px;
+  font-size: 20px;
 }
 
 .input-button-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  align-items: center;
 }
 
 .chatInput {
-    flex-grow: 1;
-    width: calc(
-        100% - 50px
-    ); /* Here we ensure that the input field always takes up the remaining space after subtracting the width of the send button */
-    /* margin-right: 1rem; */
-    height: 30px;
-    background: #f4f4f4;
-    border: 0;
-    border-radius: 6px;
+  flex-grow: 1;
+  width: calc(
+    100% - 50px
+  ); /* Here we ensure that the input field always takes up the remaining space after subtracting the width of the send button */
+  /* margin-right: 1rem; */
+  height: 30px;
+  background: #f4f4f4;
+  border: 0;
+  border-radius: 6px;
 }
 
 .sendButton {
-    width: 20px;
-    margin: 0 10px;
-    cursor: pointer;
+  width: 20px;
+  margin: 0 10px;
+  cursor: pointer;
 }

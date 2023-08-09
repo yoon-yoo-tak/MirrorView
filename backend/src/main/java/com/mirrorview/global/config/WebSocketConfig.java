@@ -28,25 +28,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final JwtTokenUtil jwtTokenUtil;
     private final UserDetailsService userDetailsService;
 
-    // @Override
-    // public void registerStompEndpoints(StompEndpointRegistry registry) {
-    //     registry.addEndpoint("/api/ws").setAllowedOriginPatterns("*")
-    //             .setHandshakeHandler(new DefaultHandshakeHandler() {
-    //                 @Override
-    //                 protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler,
-    //                                                   Map<String, Object> attributes) {
-    //                     String token = request.getURI().getQuery().split("=")[1];
-    //                     if (JwtTokenUtil.validateToken(token)) {
-    //                         String username = JwtTokenUtil.getUsernameFromToken(token);
-    //                         return new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
-    //                     } else {
-    //                         return null;
-    //                     }
-    //                 }
-    //             })
-    //             .withSockJS();
-    // }
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/api/ws").setAllowedOriginPatterns("*")
@@ -64,7 +45,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                             new UsernamePasswordAuthenticationToken(customMemberDetails.getUser().getNickname(), null, customMemberDetails.getAuthorities());
                         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                        //attributes.put("nickname", customMemberDetails.getUser().getNickname());
                         return authentication;
                     } else {
                         return null;

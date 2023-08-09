@@ -69,7 +69,6 @@ public class ChatUserService {
 			.favoriteChatRoomIds(new HashSet<>())
 			.build();
 		chatUserRepository.save(chatUser);
-		System.out.println("유저 추가됨" + chatUser);
 		return chatUser ;
 	}
 }
