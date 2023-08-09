@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FaPlus, FaChevronUp, FaChevronDown } from "react-icons/fa";
 
-import FriendList from "pages/sidebar/FriendList";
-import FriendRecieve from "pages/sidebar/FriendRecieve";
-import FriendWait from "pages/sidebar/FriendWait";
 import ChatList from "pages/sidebar/ChatList";
 import ChatRoom from "pages/sidebar/ChatRoom";
+import ChatMyList from "pages/sidebar/ChatMyList";
+
+import axios from 'axios'; // <-- axios 불러오기
 
 import { useDispatch } from "react-redux"; // <-- useDispatch 불러오기
 import {
@@ -32,14 +32,9 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
     const userCount = useSelector((state) => state.webSocket.userCount);
     const [isOpen, setIsOpen] = useState(false);
 
-    // 토글 기능
-    const [isFriendsContentVisible, setFriendsContentVisible] = useState(true);
     const [isChatsContentVisible, setChatsContentVisible] = useState(true);
-    const [friendContent, setFriendContent] = useState("null");
     const [chatContent, setChatContent] = useState("myChat");
-    const friendsContentRef = useRef(null);
     const chatsContentRef = useRef(null);
-    const [friendsContentHeight, setFriendsContentHeight] = useState("auto");
     const [chatsContentHeight, setChatsContentHeight] = useState("auto");
 
     const [showCreateChatModal, setShowCreateChatModal] = useState(false);
@@ -52,132 +47,42 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
     const handleCloseCreateChatModal = () => {
         setShowCreateChatModal(false);
     };
-    // ---------------------------------------------------
-
-    // const handleFriendsSideBar = () => {
-    //     // toggleSidebar 함수 호출
-    //     toggleSidebar();
-    // };
 
     useEffect(() => {
         if (clickChat) {
-            if (user === null) {
-                // alert("로그인 필요");
-                // return;
-            }
+            setIsOpen(true);
+            dispatch(initializeWebSocket(accessToken))
+                .then(() => {
+                    const client = getClient();
+                    dispatch(subscribeUserCount(client));
+                    dispatch(subscribeUserChatRooms(client));
+                    dispatch(subscribeChatRoomCreate(client));
+                    dispatch(subscribeRoomCountAsync());
+                });
 
-            console.log(webSocketState);
-            const currentIsOpen = isOpen;
-            setIsOpen(!currentIsOpen);
-
-            if (currentIsOpen) {
-                dispatch(closeWebSocket());
-            } else {
-                dispatch(initializeWebSocket(accessToken))
-                    .then(() => {
-                        const client = getClient();
-                        dispatch(subscribeUserCount(client));
-                    })
-                    .then(() => {
-                        const client = getClient();
-                        dispatch(subscribeUserChatRooms(client));
-                    })
-                    .then(() => {
-                        const client = getClient();
-                        dispatch(subscribeChatRoomCreate(client));
-                    })
-                    .then(() => {
-                        const client = getClient();
-                        dispatch(subscribeRoomCountAsync());
+            // 유저를 redis에 등록함
+            const fetchUserData = async () => {
+                try {
+                    const response = await axios.get(`/api/chat/find`, {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
                     });
-                setFriendContent("friendList");
-            }
-            setClickChat(false);
-        }
-    }, [clickChat, setClickChat]);
-    // ---------------------------------------------------
+                    if (response.data.status === 'ok') {
+                        console.log('유저를 redis에 등록함');
+                    }
+                } catch (error) {
+                    console.error('유저 데이터 가져오기 실패:', error);
+                }
+            };
+            fetchUserData();
 
-    // 토글 기능, web socket 연결
-    // const toggleSidebar = () => {
-    //     if (user === null) {
-    //         // alert("로그인 필요");
-    //         // return;
-    //     }
-
-    //     console.log(webSocketState);
-    //     const currentIsOpen = isOpen;
-    //     setIsOpen(!currentIsOpen);
-
-    //     if (currentIsOpen) {
-    //         dispatch(closeWebSocket());
-    //     } else {
-    //         dispatch(initializeWebSocket(accessToken))
-    //             .then(() => {
-    //                 const client = getClient();
-    //                 dispatch(subscribeUserCount(client));
-    //             })
-    //             .then(() => {
-    //                 const client = getClient();
-    //                 dispatch(subscribeUserChatRooms(client));
-    //             })
-    //             .then(() => {
-    //                 const client = getClient();
-    //                 dispatch(subscribeChatRoomCreate(client));
-    //             })
-    //             .then(() => {
-    //                 const client = getClient();
-    //                 dispatch(subscribeRoomCountAsync());
-    //             });
-    //         setFriendContent("friendList");
-    //     }
-    // };
-
-    // const toggleFriendsContent = () => {
-    //     if (isFriendsContentVisible) {
-    //         setFriendsContentHeight(
-    //             `${friendsContentRef.current.scrollHeight}px`
-    //         );
-    //     }
-    //     setFriendsContentVisible(!isFriendsContentVisible);
-    // };
-
-    // const toggleChatsContent = () => {
-    //     if (isChatsContentVisible) {
-    //         setChatsContentHeight(`${chatsContentRef.current.scrollHeight}px`);
-    //     }
-    //     setChatsContentVisible(!isChatsContentVisible);
-    // };
-
-    useEffect(() => {
-        if (!isFriendsContentVisible) {
-            setFriendsContentHeight("0px");
         } else {
-            setFriendsContentHeight("auto");
+            setIsOpen(false); // 사이드바를 닫습니다.
+            dispatch(closeWebSocket()); // WebSocket 연결을 종료합니다.
         }
-        if (!isChatsContentVisible) {
-            setChatsContentHeight("0px");
-        } else {
-            setChatsContentHeight("auto");
-        }
-    }, [isFriendsContentVisible, isChatsContentVisible]);
+    }, [clickChat]);
 
-    // 친구 목록 기능
-    // function renderFriendContent() {
-    //     switch (friendContent) {
-    //         case "friendList":
-    //             return <FriendList />;
-    //         case "friendRecieve":
-    //             return <FriendRecieve />;
-    //         case "friendWait":
-    //             return <FriendWait />;
-    //         default:
-    //             return null;
-    //     }
-    // }
-
-    // const handleFriendContentChange = (content) => {
-    //     setFriendContent(content);
-    // };
 
     // 채팅 기능
     function renderChatContent() {
@@ -185,7 +90,7 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
             case "openChat":
                 return <ChatList />;
             case "myChat":
-                return <ChatList />;
+                return <ChatMyList />;
             default:
                 return null;
         }
@@ -212,33 +117,15 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
     return (
         <div>
             <div id="mySidebar" className={`sidebar ${isOpen ? "open" : ""}`}>
-                {/* <button
-                    className={`openbtn ${isOpen ? "open" : ""}`}
-                    onClick={toggleSidebar}
-                >
-                    ☰
-                </button> */}
-
-                {/* 친구 목록 섹션 */}
-
-                {/* 채팅 섹션 */}
                 <div className="sidebar-section">
                     <div className="section-title">
                         <h2>채팅</h2>
                         <div className="count">접속 인원: {userCount}</div>
-                        {/* <button onClick={toggleChatsContent}>
-                            {isChatsContentVisible ? (
-                                <FaChevronUp />
-                            ) : (
-                                <FaChevronDown />
-                            )}
-                        </button> */}
                     </div>
                     <div className="underline"></div>
                     <div
-                        className={`section-content ${
-                            isChatsContentVisible ? "" : "collapsed"
-                        }`}
+                        className={`section-content ${isChatsContentVisible ? "" : "collapsed"
+                            }`}
                         style={{
                             maxHeight: isChatsContentVisible
                                 ? "none"

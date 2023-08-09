@@ -162,7 +162,7 @@ export const interviewSlice = createSlice({
     // 유저들에게 내정보 pub, call back
     joinRoom: (state, action) => {
       if (!state.currentRoom.members) return; // 방 생성 이전에 오는 내 정보 무시
-
+      console.log(action.payload);
       state.currentRoom.members = [
         ...state.currentRoom.members,
         action.payload,

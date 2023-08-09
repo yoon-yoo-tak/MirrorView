@@ -57,7 +57,7 @@ public class InterviewWebSocketController {
 			/** 멤버에 대한 처리 (JOIN, EXIT, READY_CHANGE, ROLE_CHANGE) */
 
 			case "JOIN": // sub 하면서 터뜨리기
-				Optional<Member> byUser = memberService.findByUserId(name);
+				Optional<Member> byUser = memberService.findByNickname(name);
 				if(byUser.isPresent()){
 					Member member = byUser.get();
 
@@ -75,9 +75,6 @@ public class InterviewWebSocketController {
 				}
 				break;
 			case "EXIT": // unsub, unconnected
-				System.out.println(33333333);
-				//interviewService.exitRoom(user.getNickname(), roomId);
-				// 나간 멤버를 pub
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 				break;
 			case "READY_CHANGE":
@@ -125,6 +122,7 @@ public class InterviewWebSocketController {
 			case "MAIN_ESSAY":
 				System.out.println(messageDto);
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
+				interviewService.systemMessage(principal.getName(), roomId, "님이 대표 자소서를 변경했습니다.");
 				break;
 
 			case "ROOM_START_CANCEL":

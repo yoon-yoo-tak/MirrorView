@@ -9,5 +9,5 @@ import com.mirrorview.domain.chatroom.domain.ChatUser;
 
 @Repository
 public interface ChatUserRepository extends CrudRepository<ChatUser, String> {
-	Optional<ChatUser> findByUserId(String userId);
+	Optional<ChatUser> findById(String userId);
 }

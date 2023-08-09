@@ -51,7 +51,6 @@ public class InterviewController {
     public ResponseEntity<?> exitRoom(@AuthenticationPrincipal CustomMemberDetails member,
                                       @PathVariable String roomId) {
         String nickname = member.getNickname();
-        System.out.println(222222);
         try {
             interviewService.exitRoom(nickname, roomId);
         } catch (Exception e) {

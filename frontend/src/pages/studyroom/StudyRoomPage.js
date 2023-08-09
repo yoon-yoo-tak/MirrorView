@@ -472,7 +472,7 @@ const StudyRoom = () => {
           console.log("방장 입장 - 단순 DB 데이터 가져오기");
         }
 
-        await new Promise((resolve) => setTimeout(resolve, 500)); // 대기
+        await new Promise((resolve) => setTimeout(resolve, 330)); // 대기
 
         // 내부 컴포넌트 동작되게 설정
         setInitialized(true);
