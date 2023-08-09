@@ -76,6 +76,11 @@ public class InterviewController {
 
     @GetMapping("/rooms/category")
     public ResponseEntity<?> searchRooms(@RequestParam Integer depth, @RequestParam String category) {
+        log.info("depth = {}", depth);
+        log.info("category = {}", category);
+        if (category.equals("앱개발")) {
+            log.info("일치합니다");
+        }
         List<RoomResponseDto> list = null;
         try {
             list = interviewService.findRoomByCategory(depth, category);

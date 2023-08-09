@@ -45,11 +45,14 @@ const StudyRoomCategory = () => {
                 setSecondCategory(defaultValue);
                 setThirdCategory(defaultValue);
             } else {
-                axios.get(`/api/category/${firstValue}`).then(({ data }) => {
-                    setSecondCategory([...defaultValue, ...data.data]);
-                }).catch((error)=>{
-                    console.log(error);
-                });
+                axios
+                    .get(`/api/category/${firstValue}`)
+                    .then(({ data }) => {
+                        setSecondCategory([...defaultValue, ...data.data]);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
             }
         }
         setSecondValue("선택하세요");
@@ -59,13 +62,16 @@ const StudyRoomCategory = () => {
         if (secondCategory.length != 1) {
             if (secondValue === "선택하세요") {
                 setThirdCategory(defaultValue);
-                setThirdValue("선택하세요")
+                setThirdValue("선택하세요");
             } else {
-                axios.get(`/api/category/${secondValue}`).then(({ data }) => {
-                    setThirdCategory([...defaultValue, ...data.data]);
-                }).catch((error)=>{
-                    console.log(error);
-                });
+                axios
+                    .get(`/api/category/${secondValue}`)
+                    .then(({ data }) => {
+                        setThirdCategory([...defaultValue, ...data.data]);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
             }
         }
         setThirdValue("선택하세요");
@@ -87,14 +93,21 @@ const StudyRoomCategory = () => {
 
     const handleSubmit = () => {
         console.log(firstValue);
-        if(thirdValue!="선택하세요"){
-        dispatch(getInterviewRoomByCategory(thirdValue));
-        } else if(secondValue!="선택하세요"){
-            dispatch(getInterviewRoomByCategory(secondValue));
-        } else if(firstValue=="선택하세요"){
+        if (thirdValue != "선택하세요") {
+            dispatch(
+                getInterviewRoomByCategory({ depth: 3, category: thirdValue })
+            );
+        } else if (secondValue != "선택하세요") {
+            dispatch(
+                getInterviewRoomByCategory({ depth: 2, category: secondValue })
+            );
+        } else if (firstValue == "선택하세요") {
             alert("카테고리를 선택하세요");
         } else {
-            dispatch(getInterviewRoomByCategory(firstValue));
+            console.log("good start");
+            dispatch(
+                getInterviewRoomByCategory({ depth: 1, category: firstValue })
+            );
         }
     };
 
@@ -128,7 +141,7 @@ const StudyRoomCategory = () => {
                                 id="demo-simple-select-standard"
                                 value={firstValue}
                                 InputProps={{
-                                    style:style,
+                                    style: style,
                                 }}
                                 onChange={handleFirstCategory}
                                 // label="TITLE"
@@ -151,7 +164,7 @@ const StudyRoomCategory = () => {
                                 id="demo-simple-select-standard1"
                                 value={secondValue}
                                 InputProps={{
-                                    style:style,
+                                    style: style,
                                 }}
                                 onChange={handleSecondCategory}
                                 // label="TITLE"
@@ -174,7 +187,7 @@ const StudyRoomCategory = () => {
                                 id="demo-simple-select-standard"
                                 value={thirdValue}
                                 InputProps={{
-                                    style:style,
+                                    style: style,
                                 }}
                                 onChange={handleThirdCategory}
                                 // label="TITLE"

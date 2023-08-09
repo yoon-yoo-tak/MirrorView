@@ -36,15 +36,4 @@ public class CategoryController {
         }
         return BaseResponse.okWithData(HttpStatus.OK, "자식 카테고리 조회 성공", categoryDtos);
     }
-
-//    @GetMapping("/detail")
-//    public ResponseEntity<?> getChildHierarchy(@RequestParam Integer depth, @RequestParam String name) {
-//        List<CategoryDto> result = null;
-//        try {
-//            result = categoryService.getHierarchiesCategory(depth, name);
-//        } catch (Exception e) {
-//            return BaseResponse.fail(e.getMessage(), 400);
-//        }
-//        return BaseResponse.okWithData(HttpStatus.OK, "조회 성공", result);
-//    }
 }
