@@ -949,3 +949,8 @@ export const CheckBtn = styled.button`
     width: 80px;
     height: 35px;
 `;
+
+export const withdrawal = styled.div`
+    cursor: pointer;
+    margin-top: 300px;
+`;

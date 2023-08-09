@@ -13,6 +13,7 @@ import myInfo from "../../assets/person-image.png";
 import Sidebar from "pages/sidebar/SideBar";
 import SidebarChat from "pages/sidebar/SidebarChat";
 import SidebarFriends from "pages/sidebar/SideBarFriends";
+import SidebarSearch from "pages/sidebar/SIdeBarSearch";
 import ChatList from "pages/sidebar/ChatList";
 import PrivateChatRoom from "pages/sidebar/ChatRoom";
 import Search from "../../assets/searchicon.png";
@@ -42,12 +43,17 @@ const Header = () => {
 
     const [clickFriends, setClickFriends] = useState(false);
     const [clickChat, setClickChat] = useState(false);
+    const [clickSearch, setClickSearch] = useState(false);
     const handleFriendsSideBar = () => {
         setClickFriends(true);
     };
 
     const handleChatSidebar = () => {
         setClickChat(true);
+    };
+
+    const handleSearchSidebar = () => {
+        setClickSearch(true);
     };
 
     const openSearch = () => {
@@ -159,7 +165,7 @@ const Header = () => {
                                 </Menu>
                                 <FriendsIcon onClick={handleFriendsSideBar} />
                                 <ChatIcon onClick={handleChatSidebar} />
-                                <SearchIcon onClick={openSearch} />
+                                <SearchIcon onClick={handleSearchSidebar} />
                             </IconArea>
                         )}
                     </LoginNavItem>
@@ -173,6 +179,10 @@ const Header = () => {
                 <ChatList />
                 <PrivateChatRoom />
             </SidebarChat>
+            <SidebarSearch
+                clickSearch={clickSearch}
+                setClickSearch={setClickSearch}
+            />
         </div>
     );
 };
