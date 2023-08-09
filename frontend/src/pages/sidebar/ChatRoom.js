@@ -41,7 +41,6 @@ function ChatRoom() {
         const client = getClient();
         if (client == null) return;
 
-<<<<<<< frontend/src/pages/sidebar/ChatRoom.js
         client.send(`/app/chatrooms/${roomId}`);
     };
 
@@ -49,44 +48,6 @@ function ChatRoom() {
     const sendMessage = () => {
         const client = getClient();
         if (client == null) return;
-=======
-    client.send(
-      `/app/chatrooms.send/${roomId}`,
-      {},
-      JSON.stringify({ userNickname: user.nickname, message })
-    );
-    setMessage("");
-  };
-
-  useEffect(() => {
-    const client = getClient();
-    if (client == null) return;
-    console.log("선택방 ", roomId);
-    const historySubscription = client.subscribe(
-      `/user/sub/chatrooms/${roomId}`, // 이전 채팅 기록을 가져오는 엔드포인트
-      (message) => {
-        if (message.body) {
-          const newMessages = JSON.parse(message.body);
-          setChatMessages(newMessages);
-        }
-      }
-    );
-
-    // 다른 유저의 채팅
-    const subscription = client.subscribe(
-      `/sub/chatrooms/${roomId}`, // 신규 채팅 메시지를 가져오는 엔드포인트
-      (message) => {
-        if (message.body) {
-          console.log(message.body);
-          const newMessage = JSON.parse(message.body);
-          setChatMessages((prevMessages) => [...prevMessages, newMessage]);
-          console.log(chatMessages);
-        }
-      }
-    );
-    new Promise((resolve) => setTimeout(resolve, 500)); 
-    getPreviousChats();
->>>>>>> frontend/src/pages/sidebar/ChatRoom.js
 
         client.send(
             `/app/chatrooms.send/${roomId}`,
@@ -97,7 +58,6 @@ function ChatRoom() {
     };
 
     useEffect(() => {
-        getPreviousChats();
         const client = getClient();
         if (client == null) return;
         console.log("선택방 ", roomId);
@@ -126,6 +86,8 @@ function ChatRoom() {
                 }
             }
         );
+        new Promise((resolve) => setTimeout(resolve, 330));
+        getPreviousChats();
 
         return () => {
             subscription.unsubscribe();
