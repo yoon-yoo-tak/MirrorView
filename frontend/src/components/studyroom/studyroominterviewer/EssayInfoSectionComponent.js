@@ -5,17 +5,19 @@ import StudyEssayDetail from "../studyroombefore/preparesection/studypreparedeta
 import { useSelector } from 'react-redux';
 
 const EssayInfoSection = ({ peopleList, questionList }) => {
-    const [checkEssay, setCheckEssay] = useState([]);
+    // const [checkEssay, setCheckEssay] = useState([]);
     const members = useSelector((state)=>state.interviewWebSocket.currentRoom.members);
-
-    const handleCheckWho = (index) => {
-        const target =members[index];
-        console.log(target.essays);
-        if (target.essays.length!=0) {
-            setCheckEssay(target.essays[0]);    
-        }else{
-            setCheckEssay([]);
-        }
+    const [nickname,setNickname] = useState(null);
+    const handleCheckWho = (nickname) => {
+        console.log(nickname);
+        setNickname(nickname);
+        // console.log(target.nickname);
+        // console.log(target.essays);
+        // if (target.essays.length!=0) {
+        //     setCheckEssay(target.essays[0]);    
+        // }else{
+        //     setCheckEssay([]);
+        // }
         
     };
 
@@ -27,19 +29,19 @@ const EssayInfoSection = ({ peopleList, questionList }) => {
                         {members.map((member, index) => (
                             <S.contentTap
                                 key = {index}
-                                onClick={() => handleCheckWho(index)}
+                                onClick={() => handleCheckWho(member.nickname)}
                             >
                                 {member.nickname}
                             </S.contentTap>
                         ))}
                     </S.contentTapList>
                     <S.contentDetail>
-                        {checkEssay.length === 0 ? (
+                        {nickname === 0 ? (
                             <S.profileContent>
                                 참여자를 클릭해 정보를 확인하세요!
                             </S.profileContent>
                         ) : (
-                            <StudyEssayDetail essay={checkEssay} onAir={true} />
+                            <StudyEssayDetail nickname={nickname} onAir={true} />
                         )}
                     </S.contentDetail>
                 </S.contentTapWrap>
