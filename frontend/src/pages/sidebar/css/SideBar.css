@@ -1,6 +1,6 @@
 .sidebar {
     position: fixed;
-    height: 100%;
+    height: calc(100% - 60px);
     width: 0;
     z-index: 10;
     top: 60px;
@@ -8,9 +8,10 @@
     background-color: #fff;
     overflow-x: hidden;
     transition: 0.5s;
-    padding-top: 10px;
+    /* padding-top: 10px; */
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 h2 {
@@ -240,6 +241,27 @@ h2 {
 }
 
 .accept:hover {
+    color: white;
+}
+
+.cancel {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 7px;
+    width: 33px;
+    height: 18px;
+    background: #ffd5c8;
+    box-shadow: 0px 0px 15px #bdbdbd;
+    border-radius: 19px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cancel:hover {
     color: white;
 }
 

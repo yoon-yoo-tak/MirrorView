@@ -45,7 +45,7 @@ function FriendWait() {
     return (
         <div className="wrap">
             {friendRequests.length === 0 && (
-                <div className="nameText">친구 요청 대기중</div>
+                <div className="nameText">요청이 없습니다.</div>
             )}
             {friendRequests.map((friend, index) => (
                 <div>
@@ -53,7 +53,7 @@ function FriendWait() {
                         <div className="nameWrap" key={index}>
                             <div className="nameText">{friend.nickname}</div>
                             <div
-                                className="accept"
+                                className="cancel"
                                 onClick={() => handleAccept(friend.userId)}
                             >
                                 취소
