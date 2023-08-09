@@ -11,8 +11,6 @@
     padding-top: 10px;
     display: flex;
     flex-direction: column;
-
-    /* padding-top: 60px; */
 }
 
 .sidebar > * {
@@ -20,7 +18,8 @@
 }
 
 .sidebar.open {
-    width: 21.66%;
+    /* width: 21.66%; */
+    width: 300px;
 }
 
 .openbtn.open {
@@ -34,6 +33,7 @@
     color: #818181;
     display: block;
     transition: 0.3s;
+    font-family: HakgyoansimWoojuR;
 }
 
 .openbtn {
@@ -64,9 +64,23 @@
 .section-title {
     height: 1.5rem;
     padding: 1px 0px 5px 0px;
+    font-weight: bold;
+    color: #3d67ff;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: HakgyoansimWoojuR;
+}
+
+.section-title img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: transform 0.2s;
+    &:hover {
+        transform: scale(1.1);
+    }
 }
 
 .section-title button {
@@ -115,21 +129,31 @@
 }
 
 .nav-btn button {
+    padding: 0.2rem;
     border: none; /* 테두리를 없애기 위해 */
     background-color: white; /* 배경색을 하얀색으로 설정 */
     cursor: pointer; /* 마우스 포인터를 버튼 형태로 변경 */
     transition: all 0.3s ease; /* hover 효과를 부드럽게 전환 */
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     padding: 15px 10px 10px 10px;
+    font-family: HakgyoansimWoojuR;
+    border-bottom: 0.1rem solid white;
+    min-width: 6rem;
 }
 
 .nav-btn button:hover {
-    background-color: #bde0fe; /* 버튼에 마우스를 올렸을 때 배경색을 하늘색으로 변경 */
+    background-color: #f5f8ff; /* 버튼에 마우스를 올렸을 때 배경색을 하늘색으로 변경 */
     border-bottom: 0.1rem solid lightgray;
     font-size: 1.2rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+    font-weight: bold;
+    /* text-overflow: ellipsis; */
+    /* white-space: nowrap; */
+    /* overflow: hidden; */
+}
+
+.nav-btn button.selected {
+    border-bottom: 0.1rem solid lightgray;
+    font-weight: bold;
 }
 
 .item-enter {
@@ -141,4 +165,86 @@
     opacity: 1;
     transform: translateY(0);
     transition: opacity 1000ms, transform 1000ms;
+}
+
+.wrap {
+    padding: 10px;
+}
+
+.nameWrap {
+    display: flex;
+    justify-content: space-between;
+    font-family: HakgyoansimWoojuR;
+    font-size: 20px;
+    margin: 10px 0 7px 0;
+    align-items: center;
+}
+
+.delete {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 7px;
+    width: 33px;
+    height: 18px;
+    border-radius: 19px;
+    text-align: center;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+.delete:hover {
+    font-weight: bold;
+}
+
+.nameText {
+    font-weight: bold;
+}
+
+.buttonWrap {
+    display: flex;
+}
+
+.accept {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 7px;
+    width: 33px;
+    height: 18px;
+    background: #a1b6ff;
+    box-shadow: 0px 0px 15px #bdbdbd;
+    border-radius: 19px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.accept:hover {
+    color: white;
+}
+
+.reject {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 7px;
+    width: 33px;
+    height: 18px;
+    background: #ffa1a1;
+    box-shadow: 0px 0px 15px #bdbdbd;
+    border-radius: 19px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.reject:hover {
+    color: white;
 }

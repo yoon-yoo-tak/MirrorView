@@ -8,6 +8,8 @@ import FriendWait from "pages/sidebar/FriendWait";
 import ChatList from "pages/sidebar/ChatList";
 import ChatRoom from "pages/sidebar/ChatRoom";
 
+import searchIcon from "../../assets/searchicon.png";
+
 import { useDispatch } from "react-redux"; // <-- useDispatch 불러오기
 import {
     initializeWebSocket,
@@ -68,24 +70,25 @@ const SidebarFriends = ({ setClickFriends, clickFriends }) => {
             if (currentIsOpen) {
                 dispatch(closeWebSocket());
             } else {
-                dispatch(initializeWebSocket(accessToken))
-                    .then(() => {
-                        const client = getClient();
-                        dispatch(subscribeUserCount(client));
-                    })
-                    .then(() => {
-                        const client = getClient();
-                        dispatch(subscribeUserChatRooms(client));
-                    })
-                    .then(() => {
-                        const client = getClient();
-                        dispatch(subscribeChatRoomCreate(client));
-                    })
-                    .then(() => {
-                        const client = getClient();
-                        dispatch(subscribeRoomCountAsync());
-                    });
+                // dispatch(initializeWebSocket(accessToken))
+                //     .then(() => {
+                //         const client = getClient();
+                //         dispatch(subscribeUserCount(client));
+                //     })
+                //     .then(() => {
+                //         const client = getClient();
+                //         dispatch(subscribeUserChatRooms(client));
+                //     })
+                //     .then(() => {
+                //         const client = getClient();
+                //         dispatch(subscribeChatRoomCreate(client));
+                //     })
+                //     .then(() => {
+                //         const client = getClient();
+                //         dispatch(subscribeRoomCountAsync());
+                //     });
                 setFriendContent("friendList");
+                setSelectedButton("friendList");
             }
             setClickFriends(false);
         }
@@ -169,9 +172,11 @@ const SidebarFriends = ({ setClickFriends, clickFriends }) => {
                 return null;
         }
     }
+    const [selectedButton, setSelectedButton] = useState("friendList");
 
     const handleFriendContentChange = (content) => {
         setFriendContent(content);
+        setSelectedButton(content);
     };
 
     // 채팅 기능
@@ -217,17 +222,18 @@ const SidebarFriends = ({ setClickFriends, clickFriends }) => {
                 {/* 친구 목록 섹션 */}
                 <div className="sidebar-section">
                     <div className="section-title">
-                        <h4>친구 목록</h4>
-                        <button onClick={toggleFriendsContent}>
+                        <h2>친구</h2>
+
+                        {/* <button onClick={toggleFriendsContent}>
                             {isFriendsContentVisible ? (
                                 <FaChevronUp />
                             ) : (
                                 <FaChevronDown />
                             )}
-                        </button>
+                        </button> */}
                     </div>
                     <div className="underline"></div>
-                    <div
+                    {/* <div
                         className={`section-content ${
                             isFriendsContentVisible ? "" : "collapsed"
                         }`}
@@ -237,35 +243,47 @@ const SidebarFriends = ({ setClickFriends, clickFriends }) => {
                                 : friendsContentHeight,
                         }}
                         ref={friendsContentRef}
-                    >
-                        <div className="nav-btn">
-                            <button
-                                onClick={() =>
-                                    handleFriendContentChange("friendList")
-                                }
-                            >
-                                {" "}
-                                친구목록{" "}
-                            </button>
-                            <button
-                                onClick={() =>
-                                    handleFriendContentChange("friendRecieve")
-                                }
-                            >
-                                {" "}
-                                친구요청{" "}
-                            </button>
-                            <button
-                                onClick={() =>
-                                    handleFriendContentChange("friendWait")
-                                }
-                            >
-                                {" "}
-                                대기중{" "}
-                            </button>
-                        </div>
-                        {renderFriendContent()}
+                    > */}
+                    <div className="nav-btn">
+                        <button
+                            onClick={() =>
+                                handleFriendContentChange("friendList")
+                            }
+                            className={
+                                selectedButton === "friendList"
+                                    ? "selected"
+                                    : ""
+                            }
+                        >
+                            친구목록
+                        </button>
+                        <button
+                            onClick={() =>
+                                handleFriendContentChange("friendRecieve")
+                            }
+                            className={
+                                selectedButton === "friendRecieve"
+                                    ? "selected"
+                                    : ""
+                            }
+                        >
+                            친구요청
+                        </button>
+                        <button
+                            onClick={() =>
+                                handleFriendContentChange("friendWait")
+                            }
+                            className={
+                                selectedButton === "friendWait"
+                                    ? "selected"
+                                    : ""
+                            }
+                        >
+                            대기중
+                        </button>
                     </div>
+                    {renderFriendContent()}
+                    {/* </div> */}
                 </div>
             </div>
         </div>

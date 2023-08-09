@@ -180,9 +180,9 @@ const Profile = () => {
 
     return (
         <div>
-            <S.profilePage>
+            <S.page>
                 <Sidebar menu="profile" />
-                <S.profileWrap>
+                <S.wrap>
                     <S.profileBox>
                         <h2>{user.nickname}님 반갑습니다!</h2>
                         <hr />
@@ -300,8 +300,8 @@ const Profile = () => {
                             </S.gradeStar>
                         </S.gradeGroup>
                     </S.profileBox>
-                </S.profileWrap>
-            </S.profilePage>
+                </S.wrap>
+            </S.page>
         </div>
     );
 };

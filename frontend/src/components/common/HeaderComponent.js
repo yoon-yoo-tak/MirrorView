@@ -15,6 +15,7 @@ import SidebarChat from "pages/sidebar/SidebarChat";
 import SidebarFriends from "pages/sidebar/SideBarFriends";
 import ChatList from "pages/sidebar/ChatList";
 import PrivateChatRoom from "pages/sidebar/ChatRoom";
+import Search from "../../assets/searchicon.png";
 
 const Header = () => {
     const { user } = useSelector((state) => state.auth);
@@ -47,6 +48,10 @@ const Header = () => {
 
     const handleChatSidebar = () => {
         setClickChat(true);
+    };
+
+    const openSearch = () => {
+        // console.log("사람찾아요");
     };
 
     const font = {
@@ -131,7 +136,7 @@ const Header = () => {
                                     }}
                                 >
                                     <MenuItem style={font}>
-                                        사용자님
+                                        {user.nickname}님
                                         <br /> 반갑습니다!
                                     </MenuItem>
 
@@ -154,6 +159,7 @@ const Header = () => {
                                 </Menu>
                                 <FriendsIcon onClick={handleFriendsSideBar} />
                                 <ChatIcon onClick={handleChatSidebar} />
+                                <SearchIcon onClick={openSearch} />
                             </IconArea>
                         )}
                     </LoginNavItem>
@@ -174,10 +180,10 @@ const Header = () => {
 const Logo = styled.div`
     // width: 18.75rem;
     // height: 6.25rem;
-    width: 200px;
+    width: 180px;
     height: 60px;
     // object-fit: contain;
-    margin-left: 40px;
+    margin: 10px 0 0 40px;
     background-image: url(${process.env.PUBLIC_URL}/mirlogo.png);
     background-size: contain;
     background-repeat: no-repeat;
@@ -195,6 +201,8 @@ const Nav = styled.div`
     top: 0;
     left: 0;
     width: 100%;
+
+    z-index: 1000;
 `;
 
 const NavMenu = styled.div`
@@ -225,7 +233,7 @@ const IconArea = styled.div`
     padding: 0 20px;
     display: flex;
     justify-content: space-between;
-    min-width: 100px;
+    min-width: 120px;
 `;
 
 const ChatIcon = styled.div`
@@ -242,6 +250,18 @@ const ChatIcon = styled.div`
 
 const FriendsIcon = styled.div`
     background-image: url(${friends});
+    background-size: cover;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    &:hover {
+        transform: scale(1.2);
+    }
+`;
+
+const SearchIcon = styled.div`
+    background-image: url(${Search});
     background-size: cover;
     width: 20px;
     height: 20px;

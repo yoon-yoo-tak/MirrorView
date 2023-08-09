@@ -132,21 +132,21 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
     //     }
     // };
 
-    const toggleFriendsContent = () => {
-        if (isFriendsContentVisible) {
-            setFriendsContentHeight(
-                `${friendsContentRef.current.scrollHeight}px`
-            );
-        }
-        setFriendsContentVisible(!isFriendsContentVisible);
-    };
+    // const toggleFriendsContent = () => {
+    //     if (isFriendsContentVisible) {
+    //         setFriendsContentHeight(
+    //             `${friendsContentRef.current.scrollHeight}px`
+    //         );
+    //     }
+    //     setFriendsContentVisible(!isFriendsContentVisible);
+    // };
 
-    const toggleChatsContent = () => {
-        if (isChatsContentVisible) {
-            setChatsContentHeight(`${chatsContentRef.current.scrollHeight}px`);
-        }
-        setChatsContentVisible(!isChatsContentVisible);
-    };
+    // const toggleChatsContent = () => {
+    //     if (isChatsContentVisible) {
+    //         setChatsContentHeight(`${chatsContentRef.current.scrollHeight}px`);
+    //     }
+    //     setChatsContentVisible(!isChatsContentVisible);
+    // };
 
     useEffect(() => {
         if (!isFriendsContentVisible) {
@@ -226,13 +226,13 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
                     <div className="section-title">
                         <h4>채팅</h4>
                         접속 인원: {userCount}
-                        <button onClick={toggleChatsContent}>
+                        {/* <button onClick={toggleChatsContent}>
                             {isChatsContentVisible ? (
                                 <FaChevronUp />
                             ) : (
                                 <FaChevronDown />
                             )}
-                        </button>
+                        </button> */}
                     </div>
                     <div className="underline"></div>
                     <div
