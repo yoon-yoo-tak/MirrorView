@@ -50,6 +50,7 @@ public class InterviewRoom {
                 .ready(false)
                 .essays(essayList)
                 .role("interviewee")
+                .photo(member.getPhoto())
                 .build());
     }
 

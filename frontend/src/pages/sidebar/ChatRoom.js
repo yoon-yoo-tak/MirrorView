@@ -53,6 +53,11 @@ function ChatRoom() {
 
   // 채팅 보내기
   const sendMessage = () => {
+    if (!message.trim()) {
+      alert("메시지를 입력하세요."); // 알림을 표시하거나 원하는 대응 로직을 넣을 수 있습니다.
+      return;
+    }
+
     const client = getClient();
     if (client == null) return;
 

@@ -68,6 +68,7 @@ public class InterviewWebSocketController {
 					data.put("ready", false);
 					data.put("essays", new ArrayList<>());
 					data.put("role", "interviewee");
+					data.put("photo", member.getPhoto());
 
 					messageDto.setData(data);
 					System.out.println(messageDto);
