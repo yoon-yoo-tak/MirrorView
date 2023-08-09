@@ -92,7 +92,7 @@ const EssayCreatePage = () => {
             {essayList.essayDetails
               .filter((essay,index) => index === currentPage)
               .map((essay,index) => (
-                <S.EssayFormContainer key={index}>``
+                <S.EssayFormContainer key={index}>
                   <div className="essayCreateBox">
               
             <S.btn theme="save" style={{ position: "relative", top: "5px", left: "1040px" }} onClick={onclickSave}>

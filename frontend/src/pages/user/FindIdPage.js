@@ -11,7 +11,7 @@ const FindId = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         await axios
-            .get("http://localhost:8000/api/users/find/id", {
+            .get("/api/users/find/id", {
                 params: {
                     email: inputEmail,
                 },
@@ -52,17 +52,18 @@ const FindId = () => {
                         </S.contentWrap>
                         <div>
                             <S.submitButton
+                                typeof="submit"
                                 className="bottomButton"
-                                // onClick={handleSubmit}
+                                onClick={handleSubmit}
                             >
                                 찾기
                             </S.submitButton>
+                            {foundId && <p>찾은 아이디 : {foundId}</p>}
+                            {error && <p>{error}</p>}
                         </div>
                     </S.wrap>
                 </S.page>
             </form>
-            {foundId && <p>찾은 아이디 : {foundId}</p>}
-            {error && <p>{error}</p>}
         </S.form>
     );
 };

@@ -34,22 +34,23 @@ public class ChatWebSocketController {
 	// 전체 방 가져오기
 	@MessageMapping("/chatrooms.get")
 	public void getChatRooms(@Payload(required = false) String payload, Principal principal) {
-		Authentication authentication = (Authentication) principal;
-		CustomMemberDetails user = (CustomMemberDetails) authentication.getPrincipal();
-		log.info("전체 방 가져오기");
+		// Authentication authentication = (Authentication) principal;
+		// CustomMemberDetails user = (CustomMemberDetails) authentication.getPrincipal();
+		// String userNickname = user.getUsername();
+		String userNickname = principal.getName();
+		log.info("전체 방 가져오기 {} 에게", userNickname);
 		List<ChatRoom> chatRooms = chatService.allRoom();
-		System.out.println(user.getNickname());
-		simpMessagingTemplate.convertAndSendToUser(user.getNickname(), "/sub/chatrooms", chatRooms);
+		simpMessagingTemplate.convertAndSendToUser(userNickname, "/sub/chatrooms", chatRooms);
 	}
 	
 	// 채팅 방 채팅기록
 	@MessageMapping("/chatrooms/{roomId}")
 	public void getChat(@DestinationVariable String roomId, Principal principal){
-		Authentication authentication = (Authentication) principal;
-		CustomMemberDetails user = (CustomMemberDetails) authentication.getPrincipal();
-		log.info("{} 채팅방 채팅 기록", roomId);
+		String userNickname = principal.getName();
+		log.info("{} 채팅방 채팅 기록 {}에게", roomId, userNickname);
 		List<ChatMessage> chatMessages = chatService.getChat(roomId);
-		simpMessagingTemplate.convertAndSendToUser(user.getNickname(), "/sub/chatrooms/"+roomId, chatMessages);
+		System.out.println(chatMessages);
+		simpMessagingTemplate.convertAndSendToUser(userNickname, "/sub/chatrooms/"+roomId, chatMessages);
 	}
 
 	// 채팅 보내기

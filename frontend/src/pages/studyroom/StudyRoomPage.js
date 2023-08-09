@@ -229,7 +229,7 @@ const StudyRoom = () => {
         newSession
           .connect(token, { clientData: user.nickname })
           .then(async () => {
-            newOpenVidu
+            await newOpenVidu
               .getUserMedia({
                 audioSource: false,
                 videoSource: undefined,

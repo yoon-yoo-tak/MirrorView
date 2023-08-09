@@ -34,7 +34,8 @@ public class OpenAIController {
     }
 
     @PostMapping("/api/createQuestions")
-    public ResponseEntity<List<String>> createQuestionsBasedOnIntro(@RequestBody Map<String, String> body) {
+    public ResponseEntity<?> createQuestionsBasedOnIntro(@RequestBody Map<String, String> body) {
+        log.info("AI 질문 Generate!");
         try {
             String introduction = body.get("introduction");
             String job = body.get("job");
@@ -71,7 +72,8 @@ public class OpenAIController {
             if (response.getStatusCode() == HttpStatus.OK) {
                 log.info("GPT Response 200");
                 GptResponseDto gptResponseDto = objectMapper.readValue(response.getBody(), GptResponseDto.class);
-                return new ResponseEntity<>(List.of(gptResponseDto.getContent()), HttpStatus.OK);
+                log.info("자소서 = {}", gptResponseDto.getContent());
+                return new ResponseEntity<>(gptResponseDto.getContent(), HttpStatus.OK);
             } else {
                 log.info("Server Error");
                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
