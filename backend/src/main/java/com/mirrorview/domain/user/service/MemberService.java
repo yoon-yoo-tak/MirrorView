@@ -19,6 +19,8 @@ public interface MemberService {
 
 	String findByEmail(String email);
 
+	Optional<Member> findByNickname(String userNickname);
+
 	Member findPassword(FindMemberRequestDto requestDto);
 
 	float saveScore(String userId, RatingDto ratingDto);

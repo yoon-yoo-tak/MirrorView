@@ -37,7 +37,6 @@ public class WebSocketEvents {
 	public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
 		Authentication authentication = (Authentication) event.getUser();
 		String userId = authentication.getName();
-		System.out.println(userId + " 유저 나감 인터뷰에서");
 		subscriptionService.handleInterviewRoomUnsubscribe(userId);
 		ConcurrentMap<String, String> userSubscriptions = subscriptionService.getUserIdToSubscriptionMap().get(userId);
 		if (userSubscriptions != null) {
@@ -67,7 +66,6 @@ public class WebSocketEvents {
 			subscriptionService.handleChatRoomSubscribe(userId, subscriptionId, roomId);
 		}
 		else if (channel.startsWith("/sub/interviewrooms/")) {
-			log.info("면접방 입장 {}", userId);
 			String roomId = channel.split("/")[3];
 			subscriptionService.handleInterviewRoomSubscribe(userId, subscriptionId, roomId);
 		}

@@ -64,6 +64,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Optional<Member> findByNickname(String userNickname) {
+        return memberRepository.findByNickname(userNickname);
+    }
+
+    @Override
     public Member findPassword(FindMemberRequestDto requestDto) {
         Optional<Member> findMember = memberRepository.findByEmailAndUserId(requestDto.getEmail(),
                 requestDto.getUserId());

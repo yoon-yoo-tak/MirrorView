@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@RedisHash("User")
+@RedisHash("ChatUser")
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString

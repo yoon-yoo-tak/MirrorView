@@ -42,14 +42,15 @@ const Header = () => {
 
     const [clickFriends, setClickFriends] = useState(false);
     const [clickChat, setClickChat] = useState(false);
+    
     const handleFriendsSideBar = () => {
-        setClickFriends(true);
+        setClickFriends(prevState => !prevState);
     };
-
+    
     const handleChatSidebar = () => {
-        setClickChat(true);
+        setClickChat(prevState => !prevState);
     };
-
+    
     const openSearch = () => {
         // console.log("사람찾아요");
     };
@@ -170,7 +171,7 @@ const Header = () => {
                 clickFriends={clickFriends}
             ></SidebarFriends>
             <SidebarChat clickChat={clickChat} setClickChat={setClickChat}>
-                <ChatList />
+                <ChatList />    
                 <PrivateChatRoom />
             </SidebarChat>
         </div>
