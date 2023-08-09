@@ -24,8 +24,11 @@ public class RoomRequestDto {
         if (password == null) {
             password = "";
         }
-        if (maxMemberCount == null) {
+        if (maxMemberCount == null || maxMemberCount > 6) {
             maxMemberCount = 6;
+        }
+        if (maxMemberCount < 1) {
+            maxMemberCount = 1;
         }
 
         return InterviewRoom.builder()
