@@ -28,17 +28,15 @@ public class WebSocketEvents {
 	// 웹 소켓 연결 이벤트
 	@EventListener
 	public void handleWebSocketConnectListener(SessionConnectEvent event) {
-		Authentication authentication = (Authentication) event.getUser();
-		CustomMemberDetails user = (CustomMemberDetails) authentication.getPrincipal();
+		// Authentication authentication = (Authentication) event.getUser();
+		// CustomMemberDetails user = (CustomMemberDetails) authentication.getPrincipal();
 	}
 
 	// 웹 소켓 종료 이벤트 - 사용자가 강제 종료 시 구독한 채널들을 취소
 	@EventListener
 	public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
 		Authentication authentication = (Authentication) event.getUser();
-		CustomMemberDetails user = (CustomMemberDetails) authentication.getPrincipal();
-
-		String userId = user.getNickname();
+		String userId = authentication.getName();
 		System.out.println(userId + " 유저 나감 인터뷰에서");
 		subscriptionService.handleInterviewRoomUnsubscribe(userId);
 		ConcurrentMap<String, String> userSubscriptions = subscriptionService.getUserIdToSubscriptionMap().get(userId);
@@ -57,9 +55,7 @@ public class WebSocketEvents {
 	@EventListener
 	public void handleWebSocketSubscribeListener(SessionSubscribeEvent event) {
 		Authentication authentication = (Authentication) event.getUser();
-		CustomMemberDetails user = (CustomMemberDetails) authentication.getPrincipal();
-
-		String userId = user.getNickname();
+		String userId = authentication.getName();
 		String channel = (String)event.getMessage().getHeaders().get("simpDestination");
 		String subscriptionId = event.getMessage().getHeaders().get("simpSubscriptionId").toString();
 
@@ -81,9 +77,7 @@ public class WebSocketEvents {
 	@EventListener
 	public void handleSessionUnsubscribeEvent(SessionUnsubscribeEvent event) {
 		Authentication authentication = (Authentication) event.getUser();
-		CustomMemberDetails user = (CustomMemberDetails) authentication.getPrincipal();
-
-		String userId = user.getNickname();
+		String userId = authentication.getName();
 		String subscriptionId = event.getMessage().getHeaders().get("simpSubscriptionId").toString();
 		log.info("{}가 unsub {}", userId, subscriptionId);
 		subscriptionService.handleUnsubscribe(userId, subscriptionId);

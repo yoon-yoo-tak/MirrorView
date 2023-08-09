@@ -58,9 +58,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     if (jwtTokenUtil.validateToken(token)) {
                         String username = jwtTokenUtil.getUsernameFromToken(token);
                         CustomMemberDetails customMemberDetails = (CustomMemberDetails) userDetailsService.loadUserByUsername(username);
+
+                        // 유저를 닉네임으로 구분해서 사용할거임
                         Authentication authentication =
-                            new UsernamePasswordAuthenticationToken(customMemberDetails, null, customMemberDetails.getAuthorities());
+                            new UsernamePasswordAuthenticationToken(customMemberDetails.getUser().getNickname(), null, customMemberDetails.getAuthorities());
                         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                        //attributes.put("nickname", customMemberDetails.getUser().getNickname());
                         return authentication;
                     } else {
                         return null;
