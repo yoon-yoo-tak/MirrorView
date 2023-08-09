@@ -11,7 +11,7 @@ const FindId = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         await axios
-            .get("http://localhost:8000/api/users/find/id", {
+            .get("/api/users/find/id", {
                 params: {
                     email: inputEmail,
                 },

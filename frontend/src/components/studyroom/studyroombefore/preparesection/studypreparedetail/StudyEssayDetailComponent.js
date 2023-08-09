@@ -28,13 +28,10 @@ const StudyEssayDetail = ({ nickname, onAir }) => {
                 console.log(index);
                 console.log(question);
                 console.log(answer);
-                const response = await axios.post(
-                    "http://localhost:8000/api/createQuestions",
-                    {
-                        instroduction: `${question}\n${answer}`,
-                        job: category,
-                    }
-                );
+                const response = await axios.post("/api/createQuestions", {
+                    instroduction: `${question}\n${answer}`,
+                    job: category,
+                });
                 const questionList = response.data.split("\n");
                 questionList.forEach((element) => {
                     dispatch(

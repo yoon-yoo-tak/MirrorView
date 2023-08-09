@@ -12,7 +12,7 @@ const FindPassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         await axios
-            .get("http://localhost:8000/api/users/find/password", {
+            .get("/api/users/find/password", {
                 params: {
                     userId: inputUserId,
                     email: inputEmail,
