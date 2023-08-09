@@ -1,11 +1,17 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as S from "./StudyStyledComponents";
 import { useNavigate } from "react-router-dom";
 
 const StudyRoomThumbnail = (info) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const {user} = useSelector((state)=>state.auth);
   const handleEnter = () => {
+    if(!user){
+      alert("로그인 후 이용 가능합니다.");
+      navigate("/login");
+      return;
+    }
     if (
       window.confirm(
         `${info.host}님이 생성한 ${info.title}에 입장하시겠습니까?`
