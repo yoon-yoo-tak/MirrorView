@@ -54,7 +54,6 @@ function ChatRoom() {
   };
 
   useEffect(() => {
-    getPreviousChats();
     const client = getClient();
     if (client == null) return;
     console.log("선택방 ", roomId);
@@ -80,6 +79,8 @@ function ChatRoom() {
         }
       }
     );
+    new Promise((resolve) => setTimeout(resolve, 500)); 
+    getPreviousChats();
 
     return () => {
       subscription.unsubscribe();

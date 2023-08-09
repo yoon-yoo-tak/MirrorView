@@ -46,7 +46,7 @@ public class InterviewWebSocketController {
 		log.info("interview - {} 동작, {}", messageDto.getType(), messageDto.getData());
 
 		Authentication authentication = (Authentication) principal;
-		CustomMemberDetails user = (CustomMemberDetails) authentication.getPrincipal();
+		String name = authentication.getName();
 
 		switch (messageDto.getType()) {
 
@@ -57,7 +57,7 @@ public class InterviewWebSocketController {
 			/** 멤버에 대한 처리 (JOIN, EXIT, READY_CHANGE, ROLE_CHANGE) */
 
 			case "JOIN": // sub 하면서 터뜨리기
-				Optional<Member> byUser = memberService.findByUserId(user.getUsername());
+				Optional<Member> byUser = memberService.findByUserId(name);
 				if(byUser.isPresent()){
 					Member member = byUser.get();
 
