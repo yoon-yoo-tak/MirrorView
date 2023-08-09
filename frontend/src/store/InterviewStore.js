@@ -76,6 +76,7 @@ const interviewSlice = createSlice({
     extraReducers: {
         [getInterviewRoom.fulfilled]: (state, { payload }) => {
             state.room = payload.data;
+            console.log(state);
         },
         [getInterviewRoomByCategory.fulfilled]: (state, { payload }) => {
             state.room = payload.data;
