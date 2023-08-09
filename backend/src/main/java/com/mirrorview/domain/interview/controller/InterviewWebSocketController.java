@@ -36,11 +36,9 @@ public class InterviewWebSocketController {
 
 	private final InterviewService interviewService;
 	private final MemberService memberService;
-	//private final EssayService essayService;
 	private final SimpMessagingTemplate simpMessagingTemplate;
 
-
-	// 채널 하나만 구독해서 전부 처리할거임
+	// 채널 하나만 구독해서 전부 처리
 	@MessageMapping("/interviewrooms/{roomId}")
 	public void sendToAll(@DestinationVariable String roomId, @Payload MessageDto messageDto, Principal principal) {
 		log.info("interview - {} 동작, {}", messageDto.getType(), messageDto.getData());
@@ -50,11 +48,13 @@ public class InterviewWebSocketController {
 
 		switch (messageDto.getType()) {
 
+			case "ROOM_START_CANCEL":
+			case "EXIT": // unsub, unconnected
 			case "CHAT":
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 				break;
 
-			/** 멤버에 대한 처리 (JOIN, EXIT, READY_CHANGE, ROLE_CHANGE) */
+			/** 멤버에 대한 처리 (JOIN, EXIT, READY_CHANGE, ROLE_CHANGE...) */
 
 			case "JOIN": // sub 하면서 터뜨리기
 				Optional<Member> byUser = memberService.findByNickname(name);
@@ -74,9 +74,7 @@ public class InterviewWebSocketController {
 					simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 				}
 				break;
-			case "EXIT": // unsub, unconnected
-				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
-				break;
+
 			case "READY_CHANGE":
 				Map<String, Object> readyData = messageDto.getData();
 				String userNicknameReady = (String)readyData.get("nickname");
@@ -124,11 +122,6 @@ public class InterviewWebSocketController {
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 				interviewService.systemMessage(principal.getName(), roomId, "님이 대표 자소서를 변경했습니다.");
 				break;
-
-			case "ROOM_START_CANCEL":
-				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
-				break;
-
 
 		}
 	}

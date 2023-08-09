@@ -76,7 +76,6 @@ const chatRoomSlice = createSlice({
       state.chatRooms.push(action.payload);
     },
     updateRoomCount: (state, action) => {
-      console.log("update 터짐");
       const index = state.chatRooms.findIndex(
         (room) => room.id === action.payload.roomId
       );

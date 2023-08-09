@@ -38,9 +38,6 @@ public class ChatController {
 	public ResponseEntity<?> getFavoritesByUserId( @AuthenticationPrincipal
 		CustomMemberDetails customMemberDetails) {
 		String userId = customMemberDetails.getUsername();
-		System.out.println(userId);
-		System.out.println(userId);
-		System.out.println("111?" + customMemberDetails.getUser().getUsername());
 		Set<ChatRoom> favoriteRooms = chatUserService.findFavoriteRoomsByUserId(userId);
 		return BaseResponse.okWithData(HttpStatus.OK, "유저 즐겨찾기 방 리스트 가져오기", favoriteRooms);
 	}
@@ -49,7 +46,6 @@ public class ChatController {
 	public ResponseEntity<?> addChatRoomToFavorites(@PathVariable String roomId,
 	@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 		String userId = customMemberDetails.getUsername();
-		System.out.println(" 유저 아이디 " + userId);
 		chatUserService.addChatRoomToFavorites(userId, roomId);
 		Set<ChatRoom> favoriteRooms = chatUserService.findFavoriteRoomsByUserId(userId);
 		return BaseResponse.okWithData(HttpStatus.OK, "유저 즐겨찾기 등록 완료", favoriteRooms);
