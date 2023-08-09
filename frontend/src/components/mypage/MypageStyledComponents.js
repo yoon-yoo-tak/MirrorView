@@ -434,7 +434,7 @@ export const btn = styled.button`
     justify-content: center;
     align-items: center;
     border: 0;
-
+    z-index:100;
     width: 80px;
     height: 35px;
 
@@ -621,11 +621,11 @@ export const EssayFormContainer = styled.div`
 
 export const PaginationContainer = styled.div`
     display: flex;
-    justify-content: center;
+    // justify-content: center;
     margin-top: 20px;
     position: relative;
-    bottom: 65px; /* 하늘색 박스 위로 위치 조정 */
-    right: 405px;
+    bottom: 20px; /* 하늘색 박스 위로 위치 조정 */
+    right: -10px;
 `;
 
 export const PaginationButton = styled.button`

@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as S from "../../../StudyRoomStyledComponents";
 import { interviewActions } from "store/InterviewStore";
 import { addQuestion } from 'store/InterviewWebSocketStore';
-
+import * as ST from "components/mypage/MypageStyledComponents";
 const StudyProfileDetail = (props) => {
   const {
     profile,
@@ -15,7 +15,9 @@ const StudyProfileDetail = (props) => {
   } = props;
   const [newQuestion, setNewQuestion] = useState("");
   const dispatch = useDispatch();
-
+  useEffect(()=>{
+    console.log(profile);
+  },[])
   const feedbackList = useSelector((state) => state.interviewWebSocket.feedbackList);
   // questionList : 사람과 질문 모두가 들어있는 객체 배열
   // 그러니 지금 프로필에 접속한 사람과 일치하는 객체만 뽑아와보자.
@@ -86,12 +88,27 @@ const StudyProfileDetail = (props) => {
     console.log(feedbackList);
   };
 
+  const imageStyle = {
+    width: "160px",
+    height: "160px",
+    filter: "drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.4))",
+    position: "relatice",
+    borderRadius: "50%",
+};
+
   return (
     <div>
       {profile.name === "" && <div>참여자를 클릭해서 정보를 확인하세요!</div>}
       {profile && (
         <S.profileWrap>
           <S.profileInfo>
+          <ST.profileImage>
+                <img
+                    src={profile.photo}
+                    alt="profileImage"
+                    style={imageStyle}
+                />
+              </ST.profileImage>
             <S.profileKey>
               <S.profileContent>닉네임</S.profileContent>
               <S.profileContent>EMAIL</S.profileContent>

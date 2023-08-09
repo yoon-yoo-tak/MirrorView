@@ -16,8 +16,7 @@ const EssayCreatePage = () => {
         title:"",
         essayDetails:[
           {question:"",answer:""},
-          {question:"",answer:""},
-          {question:"",answer:""},
+
         ]
       }
     )
@@ -78,7 +77,21 @@ const EssayCreatePage = () => {
         {question:"",answer:""},
       ]
       
-    }))};
+    }));
+  };
+
+  const deleteEssay = () => {
+    // console.log(currentPage);
+    const updatedEssayDetails = essayList.essayDetails.filter((_, index) => index !== currentPage);
+    if (currentPage!=0) {
+      setCurrentPage(currentPage-1);
+    }
+    if(essayList.essayDetails.length==1){
+      alert("삭제 안됨");
+      return;
+    }
+    setEssayList({ ...essayList, essayDetails: updatedEssayDetails });
+  };
 
   return (
     <div>
@@ -110,15 +123,15 @@ const EssayCreatePage = () => {
                       <S.essayAnswer>
                         <S.RoundedTextareaAns value={essay.answer} onChange={handleAnswer} placeholder="문항에 대한 자기소개서를 입력하세요"></S.RoundedTextareaAns>
                       </S.essayAnswer>
-
-                      <S.btn theme="save" style={{ position: "relative", top: "-5px", left: "990px" }} onClick={addEssay}>문항 추가</S.btn>
-                 
+                      
                  <S.PaginationContainer>
                        {[...Array(essayList.essayDetails.length).keys()].map((page,index) => (
                        <S.PaginationButton key={index} onClick={() => goToPage(index)}>
                        <S.CircleNumber>{page + 1}</S.CircleNumber>
                        </S.PaginationButton>
                         ))}
+                        <S.btn theme="save" style={{ position: "absolute", left: "880px" }} onClick={deleteEssay}>문항 삭제</S.btn>
+                      <S.btn theme="save" style={{ position: "absolute", left: "980px" }} onClick={addEssay}>문항 추가</S.btn>
                        </S.PaginationContainer>
                  
                     </S.essayCreateBox>

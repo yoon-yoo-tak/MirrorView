@@ -99,6 +99,19 @@ const EssayDetail = () => {
           
         }))};
 
+    const deleteEssay = () => {
+        // console.log(currentPage);
+        const updatedEssayDetails = essayList.essayDetails.filter((_, index) => index !== currentPage);
+        if (currentPage!=0) {
+        setCurrentPage(currentPage-1);
+        }
+        if(essayList.essayDetails.length==1){
+            alert("삭제 안됨");
+            return;
+        }
+        setEssayList({ ...essayList, essayDetails: updatedEssayDetails });
+  };
+
     return (
         <div>
             <S.page>
@@ -142,17 +155,7 @@ const EssayDetail = () => {
                                                 ></S.RoundedTextareaAns>
                                             </S.essayAnswer>
 
-                                            <S.btn
-                                                theme="save"
-                                                style={{
-                                                    position: "relative",
-                                                    top: "-5px",
-                                                    left: "990px",
-                                                }}
-                                                onClick={addEssay}
-                                            >
-                                                문항 추가
-                                            </S.btn>
+                                           
 
                                             <S.PaginationContainer>
                                                 {[
@@ -169,6 +172,8 @@ const EssayDetail = () => {
                                                         </S.CircleNumber>
                                                     </S.PaginationButton>
                                                 ))}
+                                                 <S.btn theme="save" style={{ position: "absolute", left: "880px" }} onClick={deleteEssay}>문항 삭제</S.btn>
+                      <S.btn theme="save" style={{ position: "absolute", left: "980px" }} onClick={addEssay}>문항 추가</S.btn>
                                             </S.PaginationContainer>
                                         </S.essayCreateBox>
                                     </div>
