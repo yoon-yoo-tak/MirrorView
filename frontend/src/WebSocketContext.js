@@ -43,10 +43,6 @@ export const WebSocketProvider = ({ children }) => {
         dispatch(subscribeUserChatRooms(stompClient));
         dispatch(subscribeChatRoomCreate(stompClient));
         dispatch(subscribeRoomCountAsync(stompClient));
-
-        stompClient.subscribe("/sub/global", (message) => {
-          console.log("Received global message: ", message.body);
-        });
       },
       (error) => {
         console.error("웹 소켓 에러 ", error);
