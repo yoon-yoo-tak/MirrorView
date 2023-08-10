@@ -6,27 +6,32 @@ import com.mirrorview.domain.user.domain.Rating;
 import com.mirrorview.domain.user.dto.FindMemberRequestDto;
 import com.mirrorview.domain.user.dto.JoinDto;
 import com.mirrorview.domain.user.dto.RatingDto;
+import com.mirrorview.domain.user.dto.SearchedMemberDto;
 import com.mirrorview.domain.user.repository.MemberRepository;
 import com.mirrorview.domain.user.repository.RatingRepository;
+import com.mirrorview.global.alarm.domain.RealTimeUser;
+import com.mirrorview.global.alarm.repository.RealTimeUserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberServiceImpl implements MemberService {
-
     private final MemberRepository memberRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final RatingRepository ratingRepository;
     private final FriendRepository friendRepository;
+    private final RealTimeUserRepository realTimeUserRepository;
 
     @Override
     public boolean duplicatedUserId(String userId) {
@@ -102,12 +107,20 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<String> findMemberList(String input) {
-        return memberRepository.findByUserIdContaining(input)
+    public Set<SearchedMemberDto> findMemberList(String input) {
+        Set<SearchedMemberDto> result = new HashSet<>();
+        memberRepository.findByNicknameContaining(input)
                 .stream()
                 .filter(member -> !member.getDelete())
-                .map(Member::getUserId)
-                .collect(Collectors.toList());
+                .map(member -> SearchedMemberDto.builder()
+                        .nickname(member.getNickname())
+                        .build())
+                .forEach((member) -> result.add(member));
+        realTimeUserRepository.findAll()
+                .stream()
+                .map(RealTimeUser::toSearchedMemberDtos)
+                .forEach((member) -> result.add(member));
+        return result;
     }
 
     @Override
