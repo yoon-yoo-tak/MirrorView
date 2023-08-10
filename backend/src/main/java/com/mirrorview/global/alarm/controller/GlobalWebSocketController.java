@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,17 +25,27 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalWebSocketController {
 
-	@MessageMapping("/alarm")
-	public void sendToAll(@Payload GlobalMessageDto alarmMessageDto, Principal principal){
-		log.info("alarm - {} 동작, {}", alarmMessageDto.getType(), alarmMessageDto.getData());
+	private final SimpMessagingTemplate simpMessagingTemplate;
+
+	@MessageMapping("/global")
+	public void sendToAll(@Payload GlobalMessageDto globalMessageDto, Principal principal){
+		log.info("alarm - {} 동작, {}", globalMessageDto.getType(), globalMessageDto.getData());
 
 		Authentication authentication = (Authentication) principal;
 		String nickname = authentication.getName(); // 닉네임임
 
-		switch (alarmMessageDto.getType()) {
-			case "1":
+		switch (globalMessageDto.getType()) {
+			case "SEARCH_USER":
 
 				break;
+			case "FRIEND_REQUEST":
+				System.out.println(globalMessageDto.getData());
+				String fromUser = (String) globalMessageDto.getData().get("toUser");
+				String toUser = (String) globalMessageDto.getData().get("toUser");
+				simpMessagingTemplate.convertAndSendToUser(toUser, "/sub/global", globalMessageDto);
+				break;
+
+
 
 		}
 	}

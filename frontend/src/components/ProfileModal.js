@@ -2,6 +2,7 @@ import * as S from "./otherStyledComponents";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { getClient } from "store/WebSocketStore";
 
 const ProfileModal = ({ isOpen, onClose, id }) => {
     const accessToken = useSelector((state) => state.auth.accessToken);
@@ -98,6 +99,23 @@ const ProfileModal = ({ isOpen, onClose, id }) => {
                 console.error(error);
                 console.log("요청 실패");
             });
+
+        // 친구 신청 알람
+        const friendRequestData = {
+            type: "FRIEND_REQUEST",
+            data: {
+                fromuser: user.nickname,
+                toUser: nowProfile.nickname
+            },
+        }
+
+        const client = getClient();
+        client.send(
+            `/app/global`,
+            {},
+            JSON.stringify(friendRequestData)
+        );
+
     };
 
     const acceptFriend = () => {
