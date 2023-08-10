@@ -5,10 +5,10 @@ import * as S from "./MypageStyledComponents";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const FeedbackComponent = ({feedbackList}) => {
+const FeedbackComponent = ({ feedbackList }) => {
     // 더미데이터
-    const [feedbacks,setFeedbacks] = useState([]);
-    const {user,accessToken} = useSelector((state)=>state.auth);
+    const [feedbacks, setFeedbacks] = useState([]);
+    const { user, accessToken } = useSelector((state) => state.auth);
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
     // useEffect(()=>{
@@ -22,10 +22,10 @@ const FeedbackComponent = ({feedbackList}) => {
     //     })
     // },[])
 
-    useEffect(()=>{
-        setModalStates(feedbackList.map(()=>false));
-    },[feedbackList])
-    
+    useEffect(() => {
+        setModalStates(feedbackList.map(() => false));
+    }, [feedbackList]);
+
     // const archive = [
     //     { id: 1, nickname: "히히", time: 10 },
     //     { id: 2, nickname: "헤헤", time: 20 },
@@ -38,14 +38,15 @@ const FeedbackComponent = ({feedbackList}) => {
     //     { id: 9, nickname: "악악", time: 90 },
     // ];
 
-    const [modalStates, setModalStates] = useState(feedbackList.map(() => false));
+    const [modalStates, setModalStates] = useState(
+        feedbackList.map(() => false)
+    );
 
     const handleModal = (index) => {
-        const newModalStates = modalStates.map((state, idx) =>{
+        const newModalStates = modalStates.map((state, idx) => {
             console.log(state);
             return idx === index ? true : state;
-        }
-        );
+        });
         setModalStates(newModalStates);
     };
 
@@ -65,8 +66,25 @@ const FeedbackComponent = ({feedbackList}) => {
                         key={item.id}
                         onClick={() => handleModal(index)}
                     >
-                        <div>작성자 : {item.senderNickname}</div>
-                        <div>도착한 날짜 : {item.createdTime.substring(0,10)}</div>
+                        <div
+                            style={{
+                                position: "relative",
+                                top: "0px",
+                                fontFamily: "KCC",
+                            }}
+                        >
+                            작성자 : {item.senderNickname}
+                        </div>
+                        <div
+                            style={{
+                                position: "relative",
+                                top: "200px",
+                                fontFamily: "KCC",
+                                fontSize: "15px",
+                            }}
+                        >
+                            도착한 날짜 : {item.createdTime.substring(0, 10)}
+                        </div>
                         {modalStates[index] && (
                             <FeedbackModal
                                 item={item}

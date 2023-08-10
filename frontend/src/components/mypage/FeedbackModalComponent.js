@@ -4,17 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import * as S from "./MypageStyledComponents";
 
 const FeedbackModal = ({ item, setModalStates }) => {
-
     const closeModal = () => {
         setModalStates(false);
     };
-    const [content,setContent] = useState("");
+    const [content, setContent] = useState("");
     const modalRef = useRef(null);
 
-    useEffect(()=>{
-        document.getElementById("content").innerHTML=item.content.replaceAll('\n','<br/>');
-        
-    },[]);
+    useEffect(() => {
+        document.getElementById("content").innerHTML = item.content.replaceAll(
+            "\n",
+            "<br/>"
+        );
+    }, []);
     useEffect(() => {
         const handler = (e) => {
             if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -56,11 +57,36 @@ const FeedbackModal = ({ item, setModalStates }) => {
             <S.modalBackDrop>
                 <S.modalContainer ref={modalRef} onClick={handleInsideClick}>
                     <S.modalButton onClick={closeModal}>닫기</S.modalButton>
-                    <S.modalContent>작성자 : {item.senderNickname}</S.modalContent>
-                    날짜 : {item.createdTime.substring(0,10)}
-                    <br/>
-                    <br/>
-                    <div id = "content"></div>
+                    <S.modalScrollContent>
+                        <S.modalContent
+                            style={{
+                                top: "-25px",
+                                left: "-25px",
+                                fontSize: "20px",
+                                color: "black",
+                                fontFamily: "Imcre",
+                                whiteSpace: "pre-line",
+                                lineHeight: "2",
+                            }}
+                        >
+                            작성자 : {item.senderNickname}
+                            {"\n"}날짜 : {item.createdTime.substring(0, 10)}
+                        </S.modalContent>
+                        <S.hr style={{ top: "-75px" }}></S.hr>
+                        <div
+                            id="content"
+                            style={{
+                                position: "relative",
+                                padding: "50px",
+                                top: "-110px",
+                                left: "-15px",
+                                fontSize: "14px",
+                                color: "black",
+                                fontFamily: "KimjungchulGothic",
+                                lineHeight: "1.5",
+                            }}
+                        ></div>
+                    </S.modalScrollContent>
                 </S.modalContainer>
             </S.modalBackDrop>
         </div>
