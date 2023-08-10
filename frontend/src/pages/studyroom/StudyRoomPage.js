@@ -12,488 +12,510 @@ import { getClient } from "store/WebSocketStore";
 import { initializeWebSocket, closeWebSocket } from "store/WebSocketStore";
 import { useDispatch } from "react-redux";
 import {
-  clearCurrentRoom,
-  hostJoinInterviewRoom,
-  interviewSubscribe,
-  joinInterviewRoom,
-  userJoinRoom,
-  userJoinRoomPub,
+    clearCurrentRoom,
+    hostJoinInterviewRoom,
+    interviewSubscribe,
+    joinInterviewRoom,
+    userJoinRoom,
+    userJoinRoomPub,
 } from "store/InterviewWebSocketStore";
 import StudyRoomInterviewee from "components/studyroom/StudyRoomIntervieweeComponent";
 import { interviewActions } from "../../store/InterviewStore";
-
+import { Oval } from "react-loader-spinner";
+import { styled } from "styled-components";
 const StudyRoom = () => {
-  const [initialized, setInitialized] = useState(false);
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const isStarted = useSelector((state) => state.interviewWebSocket.currentRoom.started);
-  const accessToken = useSelector((state) => state.auth.accessToken);
-  const { user } = useSelector((state) => state.auth);
-  const role = useSelector((state) => state.interview.myRole);
-  const currentRoom = useSelector((state) => state.currentRoom);
+    const [initialized, setInitialized] = useState(false);
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const isStarted = useSelector(
+        (state) => state.interviewWebSocket.currentRoom.started
+    );
+    const accessToken = useSelector((state) => state.auth.accessToken);
+    const { user } = useSelector((state) => state.auth);
+    const role = useSelector((state) => state.interview.myRole);
+    const currentRoom = useSelector((state) => state.currentRoom);
 
-  const isHost = location.state?.isHost;
-  // 방장을 다시 찾아줘야함
+    const isHost = location.state?.isHost;
+    // 방장을 다시 찾아줘야함
 
-  useEffect(() => {
-    // dispatch(interviewActions.updateStarted(false));s
-    console.log(isStarted);
-    return () => { };
-  }, [isStarted]);
-  // 참가자 더미데이터 (자신 제외)
-  const peopleList = [
-    {
-      name: "최고심",
-      rate: 3.4,
-      email: "gosim@ssafy.com",
-      essay: [
-        { quest: "고심이1번질문이에요", answer: "고심이1번답변이에요" },
-        { quest: "고심이2번질문이에요", answer: "고심이2번답변이에요" },
-        { quest: "고심이3번질문이에요", answer: "고심이3번답변이에요" },
-      ],
-    },
-    {
-      name: "춘식이",
-      rate: 4.3,
-      email: "sick@ssafy.com",
-      essay: [
-        { quest: "춘식이1번질문이에요", answer: "춘식이1번답변이에요" },
-        { quest: "춘식이2번질문이에요", answer: "춘식이2번답변이에요" },
-      ],
-    },
-    {
-      name: "빤쮸토끼",
-      rate: 1.3,
-      email: "rabbit@ssafy.com",
-      essay: [
+    useEffect(() => {
+        // dispatch(interviewActions.updateStarted(false));s
+        console.log(isStarted);
+        return () => {};
+    }, [isStarted]);
+    // 참가자 더미데이터 (자신 제외)
+    const peopleList = [
         {
-          quest: "빤쮸토끼1번질문이에요",
-          answer: "빤쮸토끼1번답변이에요",
+            name: "최고심",
+            rate: 3.4,
+            email: "gosim@ssafy.com",
+            essay: [
+                { quest: "고심이1번질문이에요", answer: "고심이1번답변이에요" },
+                { quest: "고심이2번질문이에요", answer: "고심이2번답변이에요" },
+                { quest: "고심이3번질문이에요", answer: "고심이3번답변이에요" },
+            ],
         },
         {
-          quest: "빤쮸토끼2번질문이에요",
-          answer: "빤쮸토끼2번답변이에요",
+            name: "춘식이",
+            rate: 4.3,
+            email: "sick@ssafy.com",
+            essay: [
+                { quest: "춘식이1번질문이에요", answer: "춘식이1번답변이에요" },
+                { quest: "춘식이2번질문이에요", answer: "춘식이2번답변이에요" },
+            ],
         },
         {
-          quest: "빤쮸토끼3번질문이에요",
-          answer: "빤쮸토끼3번답변이에요",
+            name: "빤쮸토끼",
+            rate: 1.3,
+            email: "rabbit@ssafy.com",
+            essay: [
+                {
+                    quest: "빤쮸토끼1번질문이에요",
+                    answer: "빤쮸토끼1번답변이에요",
+                },
+                {
+                    quest: "빤쮸토끼2번질문이에요",
+                    answer: "빤쮸토끼2번답변이에요",
+                },
+                {
+                    quest: "빤쮸토끼3번질문이에요",
+                    answer: "빤쮸토끼3번답변이에요",
+                },
+                {
+                    quest: "빤쮸토끼4번질문이에요",
+                    answer: "빤쮸토끼4번답변이에요. wrap 확인용으로 이것저것 길게 적어보기 알아서 잘 넘어가나 확인 해보게... 아무마ㅏㄴㄴㅇㄹㄴㅇㄹㄴ얼니ㅏ어라니어라니어리ㅏㄴ얼니ㅏㅇ러니ㅏ러니아러니아러니아러니아러니아러니아런이ㅏ러닝란디러내ㅑㄷㄹ나ㅣ츠니ㅏ읖나ㅣㄷㅎ러나ㅣㅇ런이ㅇㄴ로어ㅏㄴ로이ㅏ런아ㅣㄹㄴ어ㅏㄹㄴ아ㅓ가나다라마다ㅣ너ㅣ아런이ㅏ러니아ㅓㄹ니다ㅗㄹ냐ㅣㄷ러니ㅏㅇ러니ㅏㅇ러니ㅏ얼니ㅏ얼니ㅏㅇ러니댜ㅓㄹ냐얼니ㅏㅇ러니ㅏㄷ러니다러니아러니아러니아러니다러니다러니ㅏㅇ렁니ㅏㅇ러니덜댜널재ㅑ더래자어리나얼니ㅏㅇ러니ㅏ어라ㅣㅏ러니아ㅓㄹㄴ아ㅣ러닝러니아러니아런이라ㅓㄴ이ㅏ런이ㅏ런이라너다런디ㅏ런아ㅣ런이ㅏ츰니ㅏ얼니ㅑ덜니ㅏㄷ루니ㅏㅇ루니ㅏㅇ러니ㅏㅇ러니댜러니아룬아ㅣㄹㄴㅁㅇ리ㅏㅁㄴㅇ라ㅓㅣㄴㅇ러ㅣ낟ㄹㄴ다ㅣ러나ㅣㄷ러니다러닏아ㅓㄴ디라",
+                },
+            ],
         },
-        {
-          quest: "빤쮸토끼4번질문이에요",
-          answer:
-            "빤쮸토끼4번답변이에요. wrap 확인용으로 이것저것 길게 적어보기 알아서 잘 넘어가나 확인 해보게... 아무마ㅏㄴㄴㅇㄹㄴㅇㄹㄴ얼니ㅏ어라니어라니어리ㅏㄴ얼니ㅏㅇ러니ㅏ러니아러니아러니아러니아러니아러니아런이ㅏ러닝란디러내ㅑㄷㄹ나ㅣ츠니ㅏ읖나ㅣㄷㅎ러나ㅣㅇ런이ㅇㄴ로어ㅏㄴ로이ㅏ런아ㅣㄹㄴ어ㅏㄹㄴ아ㅓ가나다라마다ㅣ너ㅣ아런이ㅏ러니아ㅓㄹ니다ㅗㄹ냐ㅣㄷ러니ㅏㅇ러니ㅏㅇ러니ㅏ얼니ㅏ얼니ㅏㅇ러니댜ㅓㄹ냐얼니ㅏㅇ러니ㅏㄷ러니다러니아러니아러니아러니다러니다러니ㅏㅇ렁니ㅏㅇ러니덜댜널재ㅑ더래자어리나얼니ㅏㅇ러니ㅏ어라ㅣㅏ러니아ㅓㄹㄴ아ㅣ러닝러니아러니아런이라ㅓㄴ이ㅏ런이ㅏ런이라너다런디ㅏ런아ㅣ런이ㅏ츰니ㅏ얼니ㅑ덜니ㅏㄷ루니ㅏㅇ루니ㅏㅇ러니ㅏㅇ러니댜러니아룬아ㅣㄹㄴㅁㅇ리ㅏㅁㄴㅇ라ㅓㅣㄴㅇ러ㅣ낟ㄹㄴ다ㅣ러나ㅣㄷ러니다러닏아ㅓㄴ디라",
-        },
-      ],
-    },
-  ];
-  const qlist = peopleList.map((person) => ({
-    name: person.name,
-    questions: [],
-  }));
-
-  const APPLICATION_SERVER_URL =
-    process.env.NODE_ENV === "production" ? "" : "http://localhost:8000/";
-  const [questionList, setQuestionList] = useState(qlist);
-  const [OV, setOV] = useState(null);
-  const [OVForScreenSharing, setOVForScreenSharing] = useState();
-  const [sessionForScreenSharing, setSessionForScreenSharing] = useState();
-  const [session, setSession] = useState(null);
-  const [mySession, setMySession] = useState("");
-  const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
-  const [mainStreamManager, setMainStreamManager] = useState(null);
-  const [initScreenData, setInitScreenData] = useState({
-    mySessionId: mySession + "_screen",
-    myScreenName: user.nickname + "님의 화면",
-  });
-  const [publisher, setPublisher] = useState(null);
-  const [subscribers, setSubscribers] = useState([]);
-  const [isSpeakList, setIsSpeakList] = useState([]);
-  const [publisherForScreenSharing, setPublisherForScreenSharing] =
-    useState(null);
-  const [isAudioOn, setIsAudioOn] = useState(true);
-  const [isVideoOn, setIsVideoOn] = useState(true);
-  const [doScreenSharing, setDoScreenSharing] = useState(false);
-  const [doStartScreenSharing, setDoStartScreenSharing] = useState(false);
-  const [doStopScreenSharing, setDoStopScreenSharing] = useState(false);
-  const [isScreenSharing, setIsScreenSharing] = useState(false);
-  const [doPauseScreenSharing, setDoPauseScreenSharing] = useState(false);
-  const [checkMyScreen, setCheckMyScreen] = useState(false);
-  const [destroyedStream, setDestroyedStream] = useState(null);
-  const [choiceScreen, setChoiceScreen] = useState("");
-  const [openScreenModal, setOpenScreenModal] = useState(false);
-  const [isHideCam, setIsHideCam] = useState(false);
-
-  useEffect(() => {
-    const storedList = localStorage.getItem("questionList");
-    if (storedList) {
-      setQuestionList(JSON.parse(storedList));
-    }
-  }, []);
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    setMySession(pathname.substring(11));
-    joinSession();
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("beforeunload", leaveSession);
-    return () => {
-      leaveSession();
-      window.removeEventListener("beforeunload", leaveSession);
-    };
-  }, [session]);
-
-  useEffect(() => {
-    window.addEventListener("beforeunload", leaveSessionForScreenSharing);
-    return () => {
-      leaveSessionForScreenSharing();
-      window.removeEventListener("beforeunload", leaveSessionForScreenSharing);
-    };
-  }, [sessionForScreenSharing]);
-
-  useEffect(() => {
-    // 더미데이터대로 일단 추가
-    const updatedFeedbackList = [
-      {
-        name: "최고심",
-        feedbacks: [{ question: [], feedback: [] }],
-      },
-      {
-        name: "춘식이",
-        feedbacks: [{ question: [], feedback: [] }],
-      },
-      {
-        name: "빤쮸토끼",
-        feedbacks: [{ question: [], feedback: [] }],
-      },
     ];
-    dispatch(interviewActions.updateFeedbacks(updatedFeedbackList));
-  }, [dispatch]);
+    const qlist = peopleList.map((person) => ({
+        name: person.name,
+        questions: [],
+    }));
 
-  const joinSession = () => {
-    const newOpenVidu = new OpenVidu();
-    newOpenVidu.enableProdMode();
-    const newSession = newOpenVidu.initSession();
-
-    setOV(newOpenVidu);
-    setSession(newSession);
-
-    const connection = () => {
-      newSession.on("streamCreated", (event) => {
-        const newSubscriber = newSession.subscribe(
-          event.stream,
-          JSON.parse(event.stream.connection.data).clientData
-        );
-        if (newSubscriber.stream.typeOfVideo === "CUSTOM") {
-          const newSubscribers = subscribers;
-          newSubscribers.push(newSubscriber);
-
-          setSubscribers([...newSubscribers]);
-        } else {
-          // 비디오인 경우 화면 공유 스트림
-          setMainStreamManager(newSubscriber);
-          setIsScreenSharing(true);
-          setDoPauseScreenSharing(true);
-        }
-      });
-
-      newSession.on("streamDestroyed", (event) => {
-        if (event.stream.typeOfVideo === "CUSTOM") {
-          deleteSubscriber(event.stream.streamManager);
-        } else {
-          setDestroyedStream(event.stream.streamManager);
-          setCheckMyScreen(true);
-        }
-      });
-
-      newSession.on("publisherStartSpeaking", (event) => {
-        const newIsSpeakList = isSpeakList;
-        newIsSpeakList.push(event.connection.connectionId);
-        setIsSpeakList([...newIsSpeakList]);
-      });
-
-      newSession.on("publisherStopSpeaking", (event) => {
-        deleteIsSperker(event.connection.connectionId);
-      });
-
-      // newSession.on('sessionDisconnected', (event) => {
-      //   console.log(event);
-      // });
-
-      newSession.on("exception", (exception) => {
-        console.warn(exception);
-      });
-
-      getToken().then((token) => {
-        newSession
-          .connect(token, { clientData: user.nickname })
-          .then(async () => {
-            await newOpenVidu
-              .getUserMedia({
-                audioSource: false,
-                videoSource: undefined,
-                resolution: "330x180",
-                frameRate: 10,
-              })
-              .then((mediaStream) => {
-                var videoTrack = mediaStream.getVideoTracks()[0];
-
-                var newPublisher = newOpenVidu.initPublisher(user.nickname, {
-                  audioSource: undefined,
-                  videoSource: videoTrack,
-                  publishAudio: isAudioOn,
-                  publishVideo: isVideoOn,
-                  // resolution: '1280x720',
-                  // frameRate: 10,
-                  insertMode: "APPEND",
-                  mirror: true,
-                });
-
-                newPublisher.once("accessAllowed", () => {
-                  newSession.publish(newPublisher);
-                  setPublisher(newPublisher);
-                });
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          });
-      });
-    };
-    connection();
-  };
-
-  useEffect(() => {
-    if (doStartScreenSharing) {
-      startScreenShare();
-    }
-  }, [doStartScreenSharing]);
-
-  useEffect(() => {
-    if (doStartScreenSharing && choiceScreen) {
-      startScreenShare();
-    }
-  }, [choiceScreen]);
-
-  useEffect(() => {
-    if (doStopScreenSharing) {
-      stopScreenShare();
-      setIsHideCam(false);
-    }
-  }, [doStopScreenSharing]);
-
-  useEffect(() => {
-    if (doPauseScreenSharing) {
-      if (
-        doScreenSharing &&
-        mainStreamManager?.stream.connection.connectionId !==
-        publisherForScreenSharing?.stream.connection.connectionId
-      ) {
-        stopScreenShare();
-      }
-      setDoPauseScreenSharing(false);
-    }
-  }, [doPauseScreenSharing]);
-
-  useEffect(() => {
-    if (checkMyScreen) {
-      if (
-        destroyedStream?.stream.connection.connectionId ===
-        mainStreamManager?.stream.connection.connectionId
-      ) {
-        setIsScreenSharing(false);
-        setMainStreamManager(null);
-        setIsHideCam(false);
-      }
-      setDestroyedStream(null);
-      setCheckMyScreen(false);
-    }
-  }, [checkMyScreen]);
-
-  const deleteSubscriber = (streamManger) => {
-    let subs = subscribers;
-    let index = subs.indexOf(streamManger, 0);
-    if (index > -1) {
-      subs.splice(index, 1);
-      setSubscribers([...subs]);
-    }
-  };
-
-  const deleteIsSperker = (connectionId) => {
-    let prevIsSpeakList = isSpeakList;
-    let index = prevIsSpeakList.indexOf(connectionId, 0);
-    if (index > -1) {
-      prevIsSpeakList.splice(index, 1);
-      setIsSpeakList([...prevIsSpeakList]);
-    }
-  };
-
-  const leaveSession = () => {
-    if (!session) return;
-    session?.disconnect();
-
-    // Empty all properties...
-    setPublisher(null);
-    setSubscribers([]);
-  };
-
-  const leaveSessionForScreenSharing = () => {
-    if (!sessionForScreenSharing) return;
-    sessionForScreenSharing?.disconnect();
-    setMainStreamManager(null);
-  };
-
-  const stopScreenShare = () => {
-    if (!sessionForScreenSharing) return;
-    if (!publisherForScreenSharing) return;
-    sessionForScreenSharing.unpublish(publisherForScreenSharing);
-    setDoStopScreenSharing(false);
-    setDoScreenSharing(false);
-  };
-
-  const startScreenShare = async () => {
-    const newOV = new OpenVidu();
-    newOV.enableProdMode();
-    const newSession = newOV.initSession();
-
-    await getToken().then((token) => {
-      // First param is the token got from OpenVidu Server. Second param can be retrieved by every user on event
-      // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-      newSession
-        .connect(token, { clientData: initScreenData.myScreenName })
-        .then(() => {
-          // --- 5) Get your own camera stream ---
-
-          // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
-          // element: we will manage it on our own) and with the desired properties
-          newOV
-            .initPublisherAsync(initScreenData.myScreenName, {
-              audioSource: false, // The source of audio. If undefined default microphone
-              // videoSource: videoDevices[0].deviceId, // The source of video. If undefined default webcam
-              videoSource: "screen", // The source of video. If undefined default webcam
-              publishAudio: false,
-              publishVideo: true,
-              resolution: "1280x720", // The resolution of your video
-              frameRate: 10, // The frame rate of your video
-              // insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-            })
-            .then((newPublisher) => {
-              newSession.publish(newPublisher);
-              setPublisherForScreenSharing(newPublisher);
-              setDoScreenSharing(true);
-              setDoStartScreenSharing(false);
-
-              setOVForScreenSharing(newOV);
-              setSessionForScreenSharing(newSession);
-            })
-            .catch(() => {
-              setDoStartScreenSharing(false);
-            });
-        })
-        .catch((error) => {
-          console.warn(
-            "There was an error connecting to the session:",
-            error.code,
-            error.message
-          );
-        });
+    const APPLICATION_SERVER_URL =
+        process.env.NODE_ENV === "production" ? "" : "http://localhost:8000/";
+    const [questionList, setQuestionList] = useState(qlist);
+    const [OV, setOV] = useState(null);
+    const [OVForScreenSharing, setOVForScreenSharing] = useState();
+    const [sessionForScreenSharing, setSessionForScreenSharing] = useState();
+    const [session, setSession] = useState(null);
+    const [mySession, setMySession] = useState("");
+    const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
+    const [mainStreamManager, setMainStreamManager] = useState(null);
+    const [initScreenData, setInitScreenData] = useState({
+        mySessionId: mySession + "_screen",
+        myScreenName: user.nickname + "님의 화면",
     });
-  };
+    const [publisher, setPublisher] = useState(null);
+    const [subscribers, setSubscribers] = useState([]);
+    const [isSpeakList, setIsSpeakList] = useState([]);
+    const [publisherForScreenSharing, setPublisherForScreenSharing] =
+        useState(null);
+    const [isAudioOn, setIsAudioOn] = useState(true);
+    const [isVideoOn, setIsVideoOn] = useState(true);
+    const [doScreenSharing, setDoScreenSharing] = useState(false);
+    const [doStartScreenSharing, setDoStartScreenSharing] = useState(false);
+    const [doStopScreenSharing, setDoStopScreenSharing] = useState(false);
+    const [isScreenSharing, setIsScreenSharing] = useState(false);
+    const [doPauseScreenSharing, setDoPauseScreenSharing] = useState(false);
+    const [checkMyScreen, setCheckMyScreen] = useState(false);
+    const [destroyedStream, setDestroyedStream] = useState(null);
+    const [choiceScreen, setChoiceScreen] = useState("");
+    const [openScreenModal, setOpenScreenModal] = useState(false);
+    const [isHideCam, setIsHideCam] = useState(false);
 
-  useEffect(() => {
-    localStorage.setItem("questionList", JSON.stringify(questionList));
-  }, [questionList]);
-
-  const getToken = async () => {
-    return createSession(pathname.substring(11)).then((sId) =>
-      createToken(sId)
-    );
-  };
-
-  const createSession = async (sessionId) => {
-    const response = await axios.post(
-      `${APPLICATION_SERVER_URL}api/sessions`,
-      { customSessionId: sessionId },
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    return response.data;
-  };
-
-  const createToken = async (sessionId) => {
-    const response = await axios.post(
-      `${APPLICATION_SERVER_URL}api/sessions/${sessionId}/connections`,
-      {},
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    return response.data;
-  };
-
-  // 면접방 웹 소켓 연결
-  useEffect(() => {
-    async function initialize() {
-      try {
-        const interviewRoomId = location.pathname.replace("/studyroom/", "");
-
-        // 웹소켓 연결
-        await dispatch(closeWebSocket());
-
-        await new Promise((resolve) => setTimeout(resolve, 330));
-
-        await dispatch(initializeWebSocket(accessToken))
-          .unwrap().then(() => {
-            const client = getClient();
-            dispatch(interviewSubscribe({ client, interviewRoomId }));
-          });
-
-        console.log("구독 성공");
-
-        // 일반 유저일 때만 pub함, 방장은 pub 불필요
-        if (!isHost) {
-          await dispatch(
-            userJoinRoomPub({
-              interviewRoomId,
-              userJoinData: user,
-            })
-          );
-          console.log("일반 유저가 pub ", interviewRoomId, user);
+    useEffect(() => {
+        const storedList = localStorage.getItem("questionList");
+        if (storedList) {
+            setQuestionList(JSON.parse(storedList));
         }
+    }, []);
+    const { pathname } = useLocation();
 
-        // 조인 이후, DB에서 방 데이터 가져와서 curretRoom에 넣기.
-        if (!isHost) {
-          await dispatch(joinInterviewRoom(interviewRoomId));
-          console.log("일반 유저 입장 (조인작업까지 진행) - DB 데이터 가져오기");
-        } else {
-          await dispatch(hostJoinInterviewRoom(interviewRoomId));
-          console.log("방장 입장 - 단순 DB 데이터 가져오기");
-        }
+    useEffect(() => {
+        setMySession(pathname.substring(11));
+        joinSession();
+    }, []);
 
-        // 여기서도 약간의 대기가 필요한 경우만 setTimeout을 사용하십시오.
-        await new Promise((resolve) => setTimeout(resolve, 330));
+    useEffect(() => {
+        window.addEventListener("beforeunload", leaveSession);
+        return () => {
+            leaveSession();
+            window.removeEventListener("beforeunload", leaveSession);
+        };
+    }, [session]);
 
-        setInitialized(true);
-      } catch (error) {
-        console.log("웹소켓 연결 --> 구독이.. 실패!", error);
-        dispatch(clearCurrentRoom());
-      }
-    }
+    useEffect(() => {
+        window.addEventListener("beforeunload", leaveSessionForScreenSharing);
+        return () => {
+            leaveSessionForScreenSharing();
+            window.removeEventListener(
+                "beforeunload",
+                leaveSessionForScreenSharing
+            );
+        };
+    }, [sessionForScreenSharing]);
 
-    initialize();
+    useEffect(() => {
+        // 더미데이터대로 일단 추가
+        const updatedFeedbackList = [
+            {
+                name: "최고심",
+                feedbacks: [{ question: [], feedback: [] }],
+            },
+            {
+                name: "춘식이",
+                feedbacks: [{ question: [], feedback: [] }],
+            },
+            {
+                name: "빤쮸토끼",
+                feedbacks: [{ question: [], feedback: [] }],
+            },
+        ];
+        dispatch(interviewActions.updateFeedbacks(updatedFeedbackList));
+    }, [dispatch]);
 
-    return () => {
-      dispatch(closeWebSocket());
-      dispatch(clearCurrentRoom());
-      dispatch(initializeWebSocket(accessToken));
+    const joinSession = () => {
+        const newOpenVidu = new OpenVidu();
+        newOpenVidu.enableProdMode();
+        const newSession = newOpenVidu.initSession();
+
+        setOV(newOpenVidu);
+        setSession(newSession);
+
+        const connection = () => {
+            newSession.on("streamCreated", (event) => {
+                const newSubscriber = newSession.subscribe(
+                    event.stream,
+                    JSON.parse(event.stream.connection.data).clientData
+                );
+                if (newSubscriber.stream.typeOfVideo === "CUSTOM") {
+                    const newSubscribers = subscribers;
+                    newSubscribers.push(newSubscriber);
+
+                    setSubscribers([...newSubscribers]);
+                } else {
+                    // 비디오인 경우 화면 공유 스트림
+                    setMainStreamManager(newSubscriber);
+                    setIsScreenSharing(true);
+                    setDoPauseScreenSharing(true);
+                }
+            });
+
+            newSession.on("streamDestroyed", (event) => {
+                if (event.stream.typeOfVideo === "CUSTOM") {
+                    deleteSubscriber(event.stream.streamManager);
+                } else {
+                    setDestroyedStream(event.stream.streamManager);
+                    setCheckMyScreen(true);
+                }
+            });
+
+            newSession.on("publisherStartSpeaking", (event) => {
+                const newIsSpeakList = isSpeakList;
+                newIsSpeakList.push(event.connection.connectionId);
+                setIsSpeakList([...newIsSpeakList]);
+            });
+
+            newSession.on("publisherStopSpeaking", (event) => {
+                deleteIsSperker(event.connection.connectionId);
+            });
+
+            // newSession.on('sessionDisconnected', (event) => {
+            //   console.log(event);
+            // });
+
+            newSession.on("exception", (exception) => {
+                console.warn(exception);
+            });
+
+            getToken().then((token) => {
+                newSession
+                    .connect(token, { clientData: user.nickname })
+                    .then(async () => {
+                        await newOpenVidu
+                            .getUserMedia({
+                                audioSource: false,
+                                videoSource: undefined,
+                                resolution: "330x180",
+                                frameRate: 10,
+                            })
+                            .then((mediaStream) => {
+                                var videoTrack =
+                                    mediaStream.getVideoTracks()[0];
+
+                                var newPublisher = newOpenVidu.initPublisher(
+                                    user.nickname,
+                                    {
+                                        audioSource: undefined,
+                                        videoSource: videoTrack,
+                                        publishAudio: isAudioOn,
+                                        publishVideo: isVideoOn,
+                                        // resolution: '1280x720',
+                                        // frameRate: 10,
+                                        insertMode: "APPEND",
+                                        mirror: true,
+                                    }
+                                );
+
+                                newPublisher.once("accessAllowed", () => {
+                                    newSession.publish(newPublisher);
+                                    setPublisher(newPublisher);
+                                });
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                    });
+            });
+        };
+        connection();
     };
-  }, [currentRoom]);
 
-  return (
-    <div>
-      {/* {isStarted && role === "interviewer" && (
+    useEffect(() => {
+        if (doStartScreenSharing) {
+            startScreenShare();
+        }
+    }, [doStartScreenSharing]);
+
+    useEffect(() => {
+        if (doStartScreenSharing && choiceScreen) {
+            startScreenShare();
+        }
+    }, [choiceScreen]);
+
+    useEffect(() => {
+        if (doStopScreenSharing) {
+            stopScreenShare();
+            setIsHideCam(false);
+        }
+    }, [doStopScreenSharing]);
+
+    useEffect(() => {
+        if (doPauseScreenSharing) {
+            if (
+                doScreenSharing &&
+                mainStreamManager?.stream.connection.connectionId !==
+                    publisherForScreenSharing?.stream.connection.connectionId
+            ) {
+                stopScreenShare();
+            }
+            setDoPauseScreenSharing(false);
+        }
+    }, [doPauseScreenSharing]);
+
+    useEffect(() => {
+        if (checkMyScreen) {
+            if (
+                destroyedStream?.stream.connection.connectionId ===
+                mainStreamManager?.stream.connection.connectionId
+            ) {
+                setIsScreenSharing(false);
+                setMainStreamManager(null);
+                setIsHideCam(false);
+            }
+            setDestroyedStream(null);
+            setCheckMyScreen(false);
+        }
+    }, [checkMyScreen]);
+
+    const deleteSubscriber = (streamManger) => {
+        let subs = subscribers;
+        let index = subs.indexOf(streamManger, 0);
+        if (index > -1) {
+            subs.splice(index, 1);
+            setSubscribers([...subs]);
+        }
+    };
+
+    const deleteIsSperker = (connectionId) => {
+        let prevIsSpeakList = isSpeakList;
+        let index = prevIsSpeakList.indexOf(connectionId, 0);
+        if (index > -1) {
+            prevIsSpeakList.splice(index, 1);
+            setIsSpeakList([...prevIsSpeakList]);
+        }
+    };
+
+    const leaveSession = () => {
+        if (!session) return;
+        session?.disconnect();
+
+        // Empty all properties...
+        setPublisher(null);
+        setSubscribers([]);
+    };
+
+    const leaveSessionForScreenSharing = () => {
+        if (!sessionForScreenSharing) return;
+        sessionForScreenSharing?.disconnect();
+        setMainStreamManager(null);
+    };
+
+    const stopScreenShare = () => {
+        if (!sessionForScreenSharing) return;
+        if (!publisherForScreenSharing) return;
+        sessionForScreenSharing.unpublish(publisherForScreenSharing);
+        setDoStopScreenSharing(false);
+        setDoScreenSharing(false);
+    };
+
+    const startScreenShare = async () => {
+        const newOV = new OpenVidu();
+        newOV.enableProdMode();
+        const newSession = newOV.initSession();
+
+        await getToken().then((token) => {
+            // First param is the token got from OpenVidu Server. Second param can be retrieved by every user on event
+            // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
+            newSession
+                .connect(token, { clientData: initScreenData.myScreenName })
+                .then(() => {
+                    // --- 5) Get your own camera stream ---
+
+                    // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
+                    // element: we will manage it on our own) and with the desired properties
+                    newOV
+                        .initPublisherAsync(initScreenData.myScreenName, {
+                            audioSource: false, // The source of audio. If undefined default microphone
+                            // videoSource: videoDevices[0].deviceId, // The source of video. If undefined default webcam
+                            videoSource: "screen", // The source of video. If undefined default webcam
+                            publishAudio: false,
+                            publishVideo: true,
+                            resolution: "1280x720", // The resolution of your video
+                            frameRate: 10, // The frame rate of your video
+                            // insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
+                        })
+                        .then((newPublisher) => {
+                            newSession.publish(newPublisher);
+                            setPublisherForScreenSharing(newPublisher);
+                            setDoScreenSharing(true);
+                            setDoStartScreenSharing(false);
+
+                            setOVForScreenSharing(newOV);
+                            setSessionForScreenSharing(newSession);
+                        })
+                        .catch(() => {
+                            setDoStartScreenSharing(false);
+                        });
+                })
+                .catch((error) => {
+                    console.warn(
+                        "There was an error connecting to the session:",
+                        error.code,
+                        error.message
+                    );
+                });
+        });
+    };
+
+    useEffect(() => {
+        localStorage.setItem("questionList", JSON.stringify(questionList));
+    }, [questionList]);
+
+    const getToken = async () => {
+        return createSession(pathname.substring(11)).then((sId) =>
+            createToken(sId)
+        );
+    };
+
+    const createSession = async (sessionId) => {
+        const response = await axios.post(
+            `${APPLICATION_SERVER_URL}api/sessions`,
+            { customSessionId: sessionId },
+            {
+                headers: { "Content-Type": "application/json" },
+            }
+        );
+        return response.data;
+    };
+
+    const createToken = async (sessionId) => {
+        const response = await axios.post(
+            `${APPLICATION_SERVER_URL}api/sessions/${sessionId}/connections`,
+            {},
+            {
+                headers: { "Content-Type": "application/json" },
+            }
+        );
+        return response.data;
+    };
+
+    // 면접방 웹 소켓 연결
+    useEffect(() => {
+        async function initialize() {
+            try {
+                const interviewRoomId = location.pathname.replace(
+                    "/studyroom/",
+                    ""
+                );
+
+                // 웹소켓 연결
+                await dispatch(closeWebSocket());
+
+                await new Promise((resolve) => setTimeout(resolve, 330));
+
+                await dispatch(initializeWebSocket(accessToken))
+                    .unwrap()
+                    .then(() => {
+                        const client = getClient();
+                        dispatch(
+                            interviewSubscribe({ client, interviewRoomId })
+                        );
+                    });
+
+                console.log("구독 성공");
+
+                // 일반 유저일 때만 pub함, 방장은 pub 불필요
+                if (!isHost) {
+                    await dispatch(
+                        userJoinRoomPub({
+                            interviewRoomId,
+                            userJoinData: user,
+                        })
+                    );
+                    console.log("일반 유저가 pub ", interviewRoomId, user);
+                }
+
+                // 조인 이후, DB에서 방 데이터 가져와서 curretRoom에 넣기.
+                if (!isHost) {
+                    await dispatch(joinInterviewRoom(interviewRoomId));
+                    console.log(
+                        "일반 유저 입장 (조인작업까지 진행) - DB 데이터 가져오기"
+                    );
+                } else {
+                    await dispatch(hostJoinInterviewRoom(interviewRoomId));
+                    console.log("방장 입장 - 단순 DB 데이터 가져오기");
+                }
+
+                // 여기서도 약간의 대기가 필요한 경우만 setTimeout을 사용하십시오.
+                await new Promise((resolve) => setTimeout(resolve, 330));
+                setInitialized(true);
+            } catch (error) {
+                console.log("웹소켓 연결 --> 구독이.. 실패!", error);
+                dispatch(clearCurrentRoom());
+            }
+        }
+
+        initialize();
+
+        return () => {
+            dispatch(closeWebSocket());
+            dispatch(clearCurrentRoom());
+            dispatch(initializeWebSocket(accessToken));
+        };
+    }, [currentRoom]);
+    const loadingStyle = styled.div`
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 420px;
+        height: 240px;
+    `;
+    return (
+        <div>
+            {/* {isStarted && role === "interviewer" && (
                 <StudyRoomInterviewer
                     questionList={questionList}
                     setQuestionList={setQuestionList}
@@ -512,42 +534,63 @@ const StudyRoom = () => {
                     peopleList={peopleList}
                 />
             )} */}
-      {initialized ? (
-        !isStarted ? (
-          <StudyRoomBefore
-            streamManager={publisher}
-            questionList={questionList}
-            setQuestionList={setQuestionList}
-            peopleList={peopleList}
-            leaveSession={leaveSession}
-          />
-        ) : role === "interviewer" ? (
-          <StudyRoomInterviewer
-            questionList={questionList}
-            setQuestionList={setQuestionList}
-            // feedbackList={feedbackList}
-            // setFeedbackList={setFeedbackList}
-            streamManager={publisher}
-            subscribers={subscribers}
-            isScreenSharing={isScreenSharing}
-            isSpeakList={isSpeakList}
-            isHideCam={isHideCam}
-            peopleList={peopleList}
-          />
-        ) : (
-          <StudyRoomInterviewee
-            questionList={questionList}
-            setQuestionList={setQuestionList}
-            peopleList={peopleList}
-            subscribers={subscribers}
-            streamManager={publisher}
-          />
-        )
-      ) : (
-        <p>Loading...</p> // 이 부분은 로딩 표시로 대체할 수 있습니다.
-      )}
-    </div>
-  );
+            {initialized ? (
+                !isStarted ? (
+                    <StudyRoomBefore
+                        streamManager={publisher}
+                        questionList={questionList}
+                        setQuestionList={setQuestionList}
+                        peopleList={peopleList}
+                        leaveSession={leaveSession}
+                    />
+                ) : role === "interviewer" ? (
+                    <StudyRoomInterviewer
+                        questionList={questionList}
+                        setQuestionList={setQuestionList}
+                        // feedbackList={feedbackList}
+                        // setFeedbackList={setFeedbackList}
+                        streamManager={publisher}
+                        subscribers={subscribers}
+                        isScreenSharing={isScreenSharing}
+                        isSpeakList={isSpeakList}
+                        isHideCam={isHideCam}
+                        peopleList={peopleList}
+                    />
+                ) : (
+                    <StudyRoomInterviewee
+                        questionList={questionList}
+                        setQuestionList={setQuestionList}
+                        peopleList={peopleList}
+                        subscribers={subscribers}
+                        streamManager={publisher}
+                    />
+                )
+            ) : (
+                <>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    센터에 들어가고싶어
+                    {/* <Oval
+                        height={100}
+                        width={100}
+                        color="#d4d4d4"
+                        wrapperStyle={{ loadingStyle }}
+                        wrapperClass=""
+                        visible={true}
+                        ariaLabel="oval-loading"
+                        secondaryColor="#4fa94d"
+                        strokeWidth={2}
+                        strokeWidthSecondary={2}
+                    /> */}
+                </>
+            )}
+        </div>
+    );
 };
 
 export default StudyRoom;
