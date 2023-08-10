@@ -47,6 +47,32 @@ const StudyEssayDetail = ({ nickname, onAir }) => {
             }
         }
     };
+    const [newQuestion, setNewQuestion] = useState("");
+    const handleQuestion = (e) => {
+        setNewQuestion(e.target.value);
+    };
+
+    const handleOnKeyPress = (e) => {
+        if (e.key === "Enter") {
+            submitQuestion(); // Enter 입력이 되면 클릭 이벤트 실행
+        }
+    };
+    const submitQuestion = () => {
+        // if (newQuestion.trim() !== "") {
+        //     setTargetObject((prevTarget) => ({
+        //         ...prevTarget,
+        //         questions: [...prevTarget.questions, newQuestion],
+        //     }));
+
+        //     addQuestionToProfile(newQuestion); // 새로운 질문을 부모 컴포넌트에 추가
+        // }
+
+        // const handleUpdateArray = (newQuestion) => {
+        // const updatedMatchingObject = updateMatchingObject(newQuestion);
+        dispatch(addQuestion({ nickname: nickname, question: newQuestion }));
+        setNewQuestion("");
+        console.log(feedbackList);
+    };
 
     // const updateMatchingObject = (value) => {
     //     const targetUserIdx = feedbackList.findIndex(
@@ -97,10 +123,10 @@ const StudyEssayDetail = ({ nickname, onAir }) => {
         );
     }
     return (
-        <div>
-            {nickname}
+        <S.essaySectionWrap>
             <S.essayDetailWrap>
-                {essay.title}
+                <S.essayNickname>{nickname}님의 자기소개서</S.essayNickname>
+                <S.essayTitle>{essay.title}</S.essayTitle>
                 {essay.essayDetails.map((item, index) => (
                     <S.essayDetailEach key={index}>
                         <S.essayDetailQuest>
@@ -121,7 +147,23 @@ const StudyEssayDetail = ({ nickname, onAir }) => {
                     </S.essayDetailEach>
                 ))}
             </S.essayDetailWrap>
-        </div>
+            <S.hline />
+            <S.questionWrap>
+                <S.questInputText>
+                    {nickname}님에게 사전 질문 등록하기
+                </S.questInputText>
+                <S.questSubmit>
+                    <S.questionInput
+                        value={newQuestion}
+                        onChange={handleQuestion}
+                        onKeyPress={handleOnKeyPress}
+                    />
+                    <S.questionButton onClick={submitQuestion}>
+                        질문등록
+                    </S.questionButton>
+                </S.questSubmit>
+            </S.questionWrap>
+        </S.essaySectionWrap>
     );
 };
 
