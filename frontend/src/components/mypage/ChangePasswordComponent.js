@@ -7,15 +7,15 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const ChangePwComponent = () => {
-    
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [passwordCheckVaild,setPasswordCheckValid] = useState('');
-    const [confirmVaild, setConfirmVaild] = useState('');
-    const [confirmCheckVaild, setConfirmCheckVaild] = useState('');
+    const [passwordCheckVaild,setPasswordCheckValid] = useState(null);
+    const [confirmVaild, setConfirmVaild] = useState(null);
+    const [confirmCheckVaild, setConfirmCheckVaild] = useState(null);
     const correctStyle = {
         color: "green",
         fontWeight: "bold",
@@ -34,19 +34,30 @@ const ChangePwComponent = () => {
 
     const handlePassword = (e) => {
         const value = e.target.value
+        const regex = new RegExp(
+            "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[$@!%*#?&])[a-zA-Z0-9$@!%*#?&]{8,}$"
+        )
         setNewPassword(value);
-        setPasswordCheckValid(value > 0)
+        setPasswordCheckValid(regex.test(value));
         // setPasswordValid(value);
     };
 
     const handleConfirmPassword = (e) => {
         const value = e.target.value;
         setConfirmPassword(value);
-        setConfirmCheckVaild(value >0);
-        setConfirmVaild(newPassword === value && value.length > 0);
+        setConfirmVaild(newPassword === value);
     };
 
     const onClickChangePassword = async (e) => {
+        e.preventDefault();
+        if (!passwordCheckVaild){
+            alert("올바른 비밀번호를 입력해주세요.");
+            return;
+        }
+        if (!confirmVaild){
+            alert("새로운 비밀번호가 일치하지 않습니다.");
+            return;
+        }
         try {
             const response = await axios.post("/api/mypage/password",{
                 originPass: currentPassword,
@@ -58,7 +69,7 @@ const ChangePwComponent = () => {
                 navigate("/mypage/profile");
             }
         } catch(error){
-            console.error(error);
+            alert(error.response.data.msg);
         }
     };
 
@@ -77,46 +88,44 @@ const ChangePwComponent = () => {
                         <div>새로운 비밀번호</div>
                         <S.changeInput
                             type="password"
+                            value={newPassword}
                             onChange={handlePassword}
+                            placeholder="영문,숫자,특수기호 포함 8글자 이상 되어야 합니다."
                         />
-                        <S.errorMessageWrap>
-                            {newPassword.length === 0 && (
-                                <div style={hiddenStyle}>숨김</div>
+                            {!passwordCheckVaild &&
+                                newPassword.length != 0 && (
+                                    <S.errorMessageWrap style={failStyle}>
+                                        형식에 맞게 입력해 주세요.
+                                    </S.errorMessageWrap>
+                                )}
+                            {passwordCheckVaild && (
+                                <S.errorMessageWrap style={correctStyle}>
+                                    사용가능한 비밀번호 입니다.
+                                </S.errorMessageWrap>
                             )}
-                            {newPassword.length <= 4 &&  passwordCheckVaild && (
-                                <div style={failStyle}>
-                                    사용할 수 없는 비밀번호입니다
-                                </div>
-                            )}
-                            {newPassword.length > 4 && passwordCheckVaild && (
-                                <div style={correctStyle}>
-                                    사용할 수 있는 비밀번호입니다
-                                </div>
-                            )}
-                            
-                        </S.errorMessageWrap>
+                            {!passwordCheckVaild &&
+                                newPassword.length === 0 && (
+                                    <S.hidden>숨김</S.hidden>
+                                )}
                     </S.changePwFormEach>
                     <S.changePwFormEach>
                         <div>새로운 비밀번호 (확인)</div>
                         <S.changeInput
                             type="password"
+                            value={confirmPassword}
                             onChange={handleConfirmPassword}
+                            placeholder="영문,숫자,특수기호 포함 8글자 이상 되어야 합니다."
                         />
-                        <S.errorMessageWrap>
-                            {!confirmVaild && confirmCheckVaild &&(
-                                    <div style={failStyle}>
-                                        비밀번호가 일치하지 않습니다!
-                                    </div>
-                                )}
-                            {confirmVaild && confirmCheckVaild && (
-                                    <div style={correctStyle}>
-                                        비밀번호가 일치합니다!
-                                    </div>
-                                )}
-                            {confirmPassword.length === 0 && (
-                                <div style={hiddenStyle}>숨김</div>
+                        {!confirmVaild && confirmPassword.length > 0 && (
+                                <S.errorMessageWrap style={failStyle}>
+                                    비밀번호가 일치하지 않습니다.
+                                </S.errorMessageWrap>
                             )}
-                        </S.errorMessageWrap>
+                        {confirmVaild&&
+                                <S.errorMessageWrap style={correctStyle}>
+                                    비밀번호가 일치합니다.
+                                </S.errorMessageWrap>
+                        }
                     </S.changePwFormEach>
                 </div>
                 <div>
