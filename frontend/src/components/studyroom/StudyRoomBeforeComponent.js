@@ -28,12 +28,15 @@ const StudyRoomBefore = (props) => {
   const { user } = useSelector((state) => state.auth);
   const nickname = useSelector((state) => state.auth.user.nickname);
   const host = currentRoom?.host;
+  const availableStart = () => {
 
+    return currentRoom.members.filter(member => member.ready).length === currentRoom.members.length - 1;
+  }
 
   // 누르면 start로, state 변경, db도 변경
   const handleStart = () => {
     const readyCount = currentRoom.members.filter(member => member.ready).length;
-    if (readyCount === currentRoom.members.length - 1) {
+    if (availableStart()) {
       dispatch(setStartedState(currentRoom.id));
     } else {
       alert("모든 참가자가 준비되지 않았습니다.");
@@ -138,6 +141,7 @@ const StudyRoomBefore = (props) => {
                   <S.startButton
                     onClick={handleStart}
                     disabled={ready}
+                    status={availableStart() ? "true" : ""}
                   >
                     면접시작
                   </S.startButton>
@@ -156,7 +160,7 @@ const StudyRoomBefore = (props) => {
           <S.myVideo>
             본인 화면 (WebRTC)
             <video autoPlay={true} ref={videoRef} />
-            <button onClick={handleTest}>테스트</button>
+            {/* <button onClick={handleTest}>테스트</button> */}
           </S.myVideo>
           <S.selectSection>
             <SelectInterviewee username={nickname} />

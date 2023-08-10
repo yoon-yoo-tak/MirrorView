@@ -8,7 +8,6 @@ import { roleChange } from "store/InterviewWebSocketStore";
 
 const SelectInterviewee = (props) => {
   const [interviewee, setInterviewee] = useState(true);
-  const [myRole, setMyRole] = useState("interviewee");
   const dispatch = useDispatch();
   const members = useSelector(
     (state) => state.interviewWebSocket.currentRoom.members
@@ -18,10 +17,11 @@ const SelectInterviewee = (props) => {
   );
   const { user } = useSelector((state) => state.auth);
   const nickname = useSelector((state) => state.auth.nickname);
+  const {myRole} = useSelector((state)=>state.interview);
 
   useEffect(() => {
     if (members == null) return;
-
+    console.log(myRole);
     const interviewee = [];
     const interviewer = [];
 
@@ -60,9 +60,8 @@ const SelectInterviewee = (props) => {
 
   const changeRole = () => {
     const client = getClient();
-    const newRole = interviewee ? "interviewer" : "interviewee"; // 현재 상태를 기반으로 새 역할 결정
-
-    setMyRole(newRole);
+    const newRole = myRole==="interviewee" ? "interviewer" : "interviewee"; // 현재 상태를 기반으로 새 역할 결정
+    dispatch(interviewActions.setMyRoll(newRole));
     setInterviewee(!interviewee); // 상태 토글
 
     const sendData = {
@@ -79,9 +78,7 @@ const SelectInterviewee = (props) => {
     dispatch(roleChange({ nickname: user.nickname, role: newRole })); // 리듀서 액션 디스패치
   };
 
-  useEffect(() => {
-    dispatch(interviewActions.setMyRoll(myRole));
-  }, [myRole]);
+
 
   return (
     <S.selectPage>
@@ -89,13 +86,13 @@ const SelectInterviewee = (props) => {
         <S.selectSectionTop>
           <S.nowText now="interviewee">면접자</S.nowText>
           <label htmlFor="interviewee">
-            {!interviewee && (
+            {myRole==="interviewer" && (
               <S.changeButtonActive onClick={changeRole}>
                 전환하기
               </S.changeButtonActive>
             )}
-            {interviewee && (
-              <S.changeButtonGray onClick={changeRole}>
+            {myRole === "interviewee" && (
+              <S.changeButtonGray disabled={myRole==="interviewee"} onClick={changeRole} >
                 전환하기
               </S.changeButtonGray>
             )}
@@ -123,13 +120,13 @@ const SelectInterviewee = (props) => {
         <S.selectSectionTop>
           <S.nowText now="interviewer">면접관</S.nowText>
           <label htmlFor="interviewer">
-            {interviewee && (
+            {myRole==="interviewee" && (
               <S.changeButtonActive onClick={changeRole}>
                 전환하기
               </S.changeButtonActive>
             )}
-            {!interviewee && (
-              <S.changeButtonGray onClick={changeRole}>
+            {myRole==="interviewer" && (
+              <S.changeButtonGray disabled={myRole==="interviewer"} onClick={changeRole}>
                 전환하기
               </S.changeButtonGray>
             )}
