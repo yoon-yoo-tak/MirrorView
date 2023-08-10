@@ -437,22 +437,23 @@ const StudyRoom = () => {
   useEffect(() => {
     async function initialize() {
       try {
-        // 내부 컴포넌트가 먼저 동작하지 않도록 설정
         const interviewRoomId = location.pathname.replace("/studyroom/", "");
 
         // 웹소켓 연결
         await dispatch(closeWebSocket());
-        await dispatch(initializeWebSocket(accessToken));
 
-        // 구독
-        const client = getClient();
-        await dispatch(interviewSubscribe({ client, interviewRoomId }));
+        await new Promise((resolve) => setTimeout(resolve, 330));
+
+        await dispatch(initializeWebSocket(accessToken))
+          .unwrap().then(() => {
+            const client = getClient();
+            dispatch(interviewSubscribe({ client, interviewRoomId }));
+          });
+
         console.log("구독 성공");
 
-        //await new Promise((resolve) => setTimeout(resolve, 150)); // 대기
-
         // 일반 유저일 때만 pub함, 방장은 pub 불필요
-        if (isHost === false) {
+        if (!isHost) {
           await dispatch(
             userJoinRoomPub({
               interviewRoomId,
@@ -463,19 +464,17 @@ const StudyRoom = () => {
         }
 
         // 조인 이후, DB에서 방 데이터 가져와서 curretRoom에 넣기.
-        if (isHost === false) {
+        if (!isHost) {
           await dispatch(joinInterviewRoom(interviewRoomId));
-          console.log(
-            "일반 유저 입장 (조인작업까지 진행) - DB 데이터 가져오기"
-          );
+          console.log("일반 유저 입장 (조인작업까지 진행) - DB 데이터 가져오기");
         } else {
           await dispatch(hostJoinInterviewRoom(interviewRoomId));
           console.log("방장 입장 - 단순 DB 데이터 가져오기");
         }
 
-        await new Promise((resolve) => setTimeout(resolve, 330)); // 대기
+        // 여기서도 약간의 대기가 필요한 경우만 setTimeout을 사용하십시오.
+        await new Promise((resolve) => setTimeout(resolve, 330));
 
-        // 내부 컴포넌트 동작되게 설정
         setInitialized(true);
       } catch (error) {
         console.log("웹소켓 연결 --> 구독이.. 실패!", error);
@@ -490,7 +489,6 @@ const StudyRoom = () => {
       dispatch(clearCurrentRoom());
       dispatch(initializeWebSocket(accessToken));
     };
-    // currentRoom의 상태를 감지함
   }, [currentRoom]);
 
   return (
