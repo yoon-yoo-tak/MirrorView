@@ -78,17 +78,18 @@ const AdminManagePage = () => {
                     </thead>
                     <tbody>
                         {paginatedData.map((admindata1) => (
-                            <tr key={admindata1.id}>
+                            <tr
+                                style={{ width: "50%", cursor: "pointer" }}
+                                key={admindata1.id}
+                                onClick={() =>
+                                    handleContentClick(admindata1.content)
+                                }
+                            >
                                 <td>{admindata1.userid}</td>
                                 <td>{admindata1.count}</td>
-                                <td style={{ width: "50%", cursor: "pointer" }}>
-                                    <div
-                                        onClick={() =>
-                                            handleContentClick(
-                                                admindata1.content
-                                            )
-                                        }
-                                    >
+                                <td>
+                                    {/* content를 클릭했을 때 handleContentClick 함수 호출 */}
+                                    <div>
                                         {admindata1.content.length > 30
                                             ? admindata1.content.substring(
                                                   0,
