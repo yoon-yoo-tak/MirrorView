@@ -1,16 +1,18 @@
 import { styled } from "styled-components";
 
 import plusIcon from "../../assets/studylist/plus.png";
+import cloud from "../../assets/cloudbg3.svg";
 
 export const hidden = styled.div`
     visibility: hidden;
 `;
 
 export const page = styled.div`
-    background-image: url(${process.env.PUBLIC_URL}/background2.png);
+    // background-image: url(${process.env.PUBLIC_URL}/background2.png);
+    background-image: url(${cloud});
     background-size: cover;
     width: auto;
-    height: 855px;
+    height: calc(100vh - 60px);
     justify-content: center;
     display: flex;
     font-family: "HakgyoansimWoojuR";
@@ -24,27 +26,65 @@ export const studylistContainer = styled.div`
     // position: relative;
 `;
 
+export const studylistWrap = styled.div``;
+
+export const paginate = styled.div`
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+`;
+
+export const paginateEl = styled.button`
+    margin: 10px;
+    padding: 3px 8px;
+    font-size: 20px;
+    font-weight: bold;
+    color: ${(props) => (props.current === "page" ? "#EFEDFD" : "#6284FF")};
+    background-color: ${(props) =>
+        props.current === "page"
+            ? "#6284FF"
+            : props.current === "arrow"
+            ? "transparent"
+            : "#EFEDFD"};
+    border: 0;
+    border-radius: 40%;
+    font-family: "HakgyoansimWoojuR";
+`;
+
 export const studylistTop = styled.div`
     // position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 20px 0;
+    margin: 15px 0;
 `;
 
 export const studyNowText = styled.div`
-    margin-left: 100px;
+    // margin-left: 100px;
     display: flex;
-    padding: 5px;
     font-weight: bold;
-    font-size: large;
+    font-size: 25px;
+    font-family: "TheJamsil5Bold";
+`;
+
+export const divText = styled.div`
+    padding-top: 10px;
+    font-weight: bold;
+    font-size: 15px;
+`;
+
+export const testWrap = styled.div`
+    color: white;
+    padding: 5px;
+    margin-left: 60px;
 `;
 
 export const studylistMain = styled.div`
-    display: flex;
+    display: grid;
     justify-content: space-between;
     flex-wrap: wrap;
     flex-direction: row;
+    grid-template-columns: 1fr 1fr 1fr;
 `;
 
 // StudyRoomCategory
@@ -57,12 +97,14 @@ export const categoryPage = styled.div`
     border-radius: 10px;
     margin-right: 70px;
     padding: 5px 10px;
+    display: flex;
 `;
 
 export const categoryWrap = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
 `;
 
 export const categoryList = styled.div`
@@ -97,17 +139,17 @@ export const categoryButton = styled.button`
     align-items: center;
     border: 0;
 
-    // position: relative;
     width: 50px;
     height: 30px;
 
-    background: lightblue;
+    background: #a5b7f8;
     box-shadow: 0px 0px 10px #bdbdbd;
-    border-radius: 13px;
+    border-radius: 10px;
     cursor: pointer;
     &:hover {
-        background-color: gray;
+        background-color: #ced9ff;
     }
+    font-family: "HakgyoansimWoojuR";
 `;
 
 // 방 생성 버튼
@@ -117,7 +159,7 @@ export const createRoomButton = styled.button`
     background-size: 50% auto;
     background-repeat: no-repeat;
     background-position: center;
-    background-color: #ffadba;
+    background-color: #809cff;
     position: fixed;
     right: 100px;
     bottom: 100px;
@@ -137,8 +179,9 @@ export const createRoomButton = styled.button`
     border-radius: 100px;
     cursor: pointer;
     &:hover {
-        background-color: #ff6980;
+        background-color: #a5b7f8;
     }
+    font-family: "HakgyoansimWoojuR";
 `;
 
 // StudyRoomThumbnail
@@ -154,7 +197,25 @@ export const thumbnailPage = styled.div`
     align-content: space-between;
     display: grid;
 `;
-export const titleAndHost = styled.div``;
+export const titleAndHost = styled.div`
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+export const host = styled.div`
+    margin: 5px 0;
+`;
+export const title = styled.div`
+    font-weight: bold;
+    font-size: large;
+`;
+
+export const cate = styled.span`
+    background-color: #dedede;
+    padding: 3px;
+    border-radius: 8px;
+`;
+
 export const personAndButton = styled.div`
     display: flex;
     align-items: center;
@@ -172,7 +233,7 @@ export const enterButton = styled.button`
     justify-content: center;
     align-items: center;
     border: 0;
-
+    font-family: "HakgyoansimWoojuR";
     position: relative;
     width: 70px;
     height: 30px;
@@ -182,7 +243,7 @@ export const enterButton = styled.button`
     border-radius: 19px;
     cursor: pointer;
     &:hover {
-        background-color: #e9e4ff;
+        background-color: #ced9ff;
     }
 `;
 

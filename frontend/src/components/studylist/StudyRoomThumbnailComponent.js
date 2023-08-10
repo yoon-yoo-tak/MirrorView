@@ -37,9 +37,7 @@ const StudyRoomThumbnail = (info) => {
             return;
         }
         if (
-            window.confirm(
-                `${info.host}님이 생성한 ${info.title}에 입장하시겠습니까?`
-            )
+            window.confirm(`${info.host}님의 ${info.title}에 입장하시겠습니까?`)
         ) {
             navigate(`/studyroom/${info.roomId}`, {
                 state: { isHost: false },
@@ -49,9 +47,9 @@ const StudyRoomThumbnail = (info) => {
     return (
         <S.thumbnailPage>
             <S.titleAndHost>
-                <div>{info.title}</div>
-                <div>{info.host}</div>
-                <div>{info.category}</div>
+                <S.title>{info.title}</S.title>
+                <S.host>{info.host}</S.host>
+                <S.cate>{info.category}</S.cate>
             </S.titleAndHost>
             <S.personAndButton>
                 <div>
