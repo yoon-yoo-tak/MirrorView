@@ -124,7 +124,7 @@ public class MemberController {
         }
         try {
             Member findMember = memberService.findPassword(requestDto);
-            emailService.sendEmail(findMember);
+            emailService.sendPasswordEmail(findMember);
         } catch (Exception e) {
             return BaseResponse.fail(e.getMessage(), 400);
         }

@@ -10,4 +10,6 @@ public interface EmailService {
     void checkEmail(String email);
 
     void sendEmail(Member member);
+
+    void sendPasswordEmail(Member member);
 }
