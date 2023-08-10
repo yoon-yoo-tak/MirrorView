@@ -1,16 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactPaginate from "react-paginate";
-import { Link } from "react-router-dom";
 import * as S from "../../pages/adminpage/AdminComponent";
 import { useSelector } from "react-redux";
 import { admindata } from "./admindata";
-import styled from "styled-components";
 
 const AdminManagePage = () => {
     const perPage = 7;
     const paginationPos = 30 + perPage;
     const [currentPage, setCurrentPage] = useState(0);
-    const { user } = useSelector((state) => state.auth);
     const totalPages = Math.ceil(admindata.length / perPage);
 
     const handlePageChange = (selectedPage) => {
@@ -22,14 +19,14 @@ const AdminManagePage = () => {
         (currentPage + 1) * perPage
     );
 
-    const [selectedContent, setSelectedContent] = useState(null);
+    const [selectedId, setSelectedId] = useState(null);
 
-    const handleContentClick = (content) => {
-        setSelectedContent(content);
+    const handleContentClick = (id) => {
+        setSelectedId(id);
     };
 
     const handleModalClose = () => {
-        setSelectedContent(null);
+        setSelectedId(null);
     };
 
     const handleModalBackgroundClick = (event) => {
@@ -42,23 +39,21 @@ const AdminManagePage = () => {
 
     useEffect(() => {
         const container = scrollContainerRef.current;
-        const modalContainer = document.querySelector(".modalContainer"); // 모달 컨테이너 선택
+        const modalContainer = document.querySelector(".modalContainer");
 
         if (container && modalContainer) {
             if (
-                selectedContent &&
+                selectedId !== null &&
                 container.scrollHeight >= modalContainer.clientHeight
             ) {
-                console.log(
-                    container.scrollHeight,
-                    modalContainer.clientHeight
-                );
                 container.style.overflow = "auto";
             } else {
                 container.style.overflow = "hidden";
             }
         }
-    }, [selectedContent]);
+    }, [selectedId]);
+
+    const selectedData = admindata.find((item) => item.id === selectedId);
 
     return (
         <S.Container>
@@ -78,15 +73,19 @@ const AdminManagePage = () => {
                     </thead>
                     <tbody>
                         {paginatedData.map((admindata1) => (
-                            <tr key={admindata1.id}>
+                            <tr
+                                style={{ width: "50%", cursor: "pointer" }}
+                                key={admindata1.id}
+                                onClick={() =>
+                                    handleContentClick(admindata1.id)
+                                }
+                            >
                                 <td>{admindata1.userid}</td>
                                 <td>{admindata1.count}</td>
                                 <td style={{ width: "50%", cursor: "pointer" }}>
                                     <div
                                         onClick={() =>
-                                            handleContentClick(
-                                                admindata1.content
-                                            )
+                                            handleContentClick(admindata1.id)
                                         }
                                     >
                                         {admindata1.content.length > 30
@@ -100,7 +99,7 @@ const AdminManagePage = () => {
                             </tr>
                         ))}
                     </tbody>
-                    {selectedContent && (
+                    {selectedId !== null && (
                         <S.modalContainer className="modalContainer">
                             <S.modalScrollContent ref={scrollContainerRef}>
                                 <S.modalContent
@@ -130,7 +129,20 @@ const AdminManagePage = () => {
                                     >
                                         정지
                                     </S.modalButton>
-                                    {selectedContent}
+                                    {selectedData &&
+                                        Object.keys(selectedData).map(
+                                            (key, index) => {
+                                                if (key.startsWith("content")) {
+                                                    return (
+                                                        <div key={index}>
+                                                            {selectedData[key]}{" "}
+                                                            <br /> <br />
+                                                        </div>
+                                                    );
+                                                }
+                                                return null;
+                                            }
+                                        )}
                                 </S.modalContent>
                             </S.modalScrollContent>
                         </S.modalContainer>
