@@ -3,6 +3,9 @@ import { login, getUserInfo } from "../../store/AuthStore";
 import * as S from "../../components/auth/UserStyledComponents";
 import axios from "axios";
 
+import Header from "../../components/common/HeaderComponent";
+import Footer from "../../components/common/FooterComponent";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useState, useEffect } from "react";
 import { getClient, initializeWebSocket } from "store/WebSocketStore";
@@ -39,21 +42,21 @@ const Login = () => {
                 .then(async ({ data }) => {
                     console.log(data);
                     dispatch(getUserInfo(data["access-token"]));
-                    const connectionResult = await dispatch(initializeWebSocket(data["access-token"]));
+                    const connectionResult = await dispatch(
+                        initializeWebSocket(data["access-token"])
+                    );
 
                     if (connectionResult.payload === true) {
                         const client = getClient();
                         dispatch(globalSubscribe());
-                    }else{
+                    } else {
                         console.log("구독 x");
                     }
-
                 })
                 .catch((error) => {
                     console.log(error);
                     alert("회원 정보가 존재하지 않습니다."); //todo 이쁜 거로 바꾸기 sweetalert (?)
                 });
-
         },
         [inputId, inputPassword]
     );
@@ -97,68 +100,75 @@ const Login = () => {
     };
 
     return (
-        <S.form>
-            <form onSubmit={handleSubmit}>
-                <S.page>
-                    <S.wrap>
-                        <S.pageTitle>LOGIN</S.pageTitle>
-                        <S.contentWrap>
-                            <S.inputTitle>ID</S.inputTitle>
-                            <S.inputWrap>
-                                <S.inputContent
-                                    type="text"
-                                    className="input"
-                                    placeholder="아이디를 입력해주세요"
-                                    onChange={handleId}
-                                />
-                            </S.inputWrap>
+        <div>
+            <Header />
+            <S.form>
+                <form onSubmit={handleSubmit}>
+                    <S.page>
+                        <S.wrap>
+                            <S.pageTitle>LOGIN</S.pageTitle>
+                            <S.contentWrap>
+                                <S.inputTitle>ID</S.inputTitle>
+                                <S.inputWrap>
+                                    <S.inputContent
+                                        type="text"
+                                        className="input"
+                                        placeholder="아이디를 입력해주세요"
+                                        onChange={handleId}
+                                    />
+                                </S.inputWrap>
 
-                            <S.inputTitle>PASSWORD</S.inputTitle>
-                            <S.inputWrap>
-                                <S.inputContent
-                                    type="password"
-                                    className="input"
-                                    onChange={handlePassword}
-                                    placeholder="비밀번호를 입력해주세요"
-                                />
-                            </S.inputWrap>
-                            <S.textWrap>
-                                <S.findWrap>
-                                    <S.findInfo onClick={goFindIDPage}>
-                                        아이디 찾기
-                                    </S.findInfo>
-                                    &nbsp; | &nbsp;
-                                    <S.findInfo onClick={goFindPasswordPage}>
-                                        비밀번호 찾기
-                                    </S.findInfo>
-                                </S.findWrap>
-                                <S.goSignUp onClick={goSignUpPage}>
-                                    계정이 없으신가요?
-                                </S.goSignUp>
-                            </S.textWrap>
-                            <S.goLoginWrap>
-                                <S.submitButton
-                                    // disabled={notAllow}
-                                    // className="bottomButton"
-                                    onClick={handleSubmit}
-                                >
-                                    로그인
-                                </S.submitButton>
+                                <S.inputTitle>PASSWORD</S.inputTitle>
+                                <S.inputWrap>
+                                    <S.inputContent
+                                        type="password"
+                                        className="input"
+                                        onChange={handlePassword}
+                                        placeholder="비밀번호를 입력해주세요"
+                                    />
+                                </S.inputWrap>
+                                <S.textWrap>
+                                    <S.findWrap>
+                                        <S.findInfo onClick={goFindIDPage}>
+                                            아이디 찾기
+                                        </S.findInfo>
+                                        &nbsp; | &nbsp;
+                                        <S.findInfo
+                                            onClick={goFindPasswordPage}
+                                        >
+                                            비밀번호 찾기
+                                        </S.findInfo>
+                                    </S.findWrap>
+                                    <S.goSignUp onClick={goSignUpPage}>
+                                        계정이 없으신가요?
+                                    </S.goSignUp>
+                                </S.textWrap>
+                                <S.goLoginWrap>
+                                    <S.submitButton
+                                        // disabled={notAllow}
+                                        // className="bottomButton"
+                                        onClick={handleSubmit}
+                                    >
+                                        로그인
+                                    </S.submitButton>
 
-                                <S.kakaoLogin
-                                    src={
-                                        process.env.PUBLIC_URL +
-                                        "/kakao_login_medium_narrow.png"
-                                    }
-                                    alt="kakao_login"
-                                    onClick={onClickKakaoLogin}
-                                />
-                            </S.goLoginWrap>
-                        </S.contentWrap>
-                    </S.wrap>
-                </S.page>
-            </form>
-        </S.form>
+                                    <S.kakaoLogin
+                                        src={
+                                            process.env.PUBLIC_URL +
+                                            "/kakao_login_medium_narrow.png"
+                                        }
+                                        alt="kakao_login"
+                                        onClick={onClickKakaoLogin}
+                                    />
+                                </S.goLoginWrap>
+                            </S.contentWrap>
+                        </S.wrap>
+                    </S.page>
+                </form>
+            </S.form>
+
+            <Footer />
+        </div>
     );
 };
 

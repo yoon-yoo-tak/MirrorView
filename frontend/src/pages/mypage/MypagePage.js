@@ -13,8 +13,11 @@ import ChangeEmail from "./profile/ChangeEmailPage";
 import ChangeNickname from "./profile/ChangeNicknamePage";
 import { getUserInfo } from "../../store/AuthStore";
 
+import Header from "../../components/common/HeaderComponent";
+import Footer from "../../components/common/FooterComponent";
+
 const MyPage = () => {
-    const {user} = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
 
     // ---- 임의 사용자 생성 ----
     // const user = {
@@ -40,6 +43,8 @@ const MyPage = () => {
 
     return (
         <div>
+            <Header />
+
             <Routes>
                 {user ? (
                     <>
@@ -76,6 +81,7 @@ const MyPage = () => {
                     />
                 )}
             </Routes>
+            <Footer />
         </div>
     );
 };

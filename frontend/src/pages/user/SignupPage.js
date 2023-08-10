@@ -11,6 +11,8 @@ import {
     setNotAllow,
 } from "../../store/AuthStore";
 import axios from "axios";
+import Header from "../../components/common/HeaderComponent";
+import Footer from "../../components/common/FooterComponent";
 
 const Signup = () => {
     //   const {
@@ -243,172 +245,182 @@ const Signup = () => {
     };
 
     return (
-        <S.form>
-            <form onSubmit={handleSubmit}>
-                <S.page>
-                    <S.wrap>
-                        <S.pageTitle>SIGN UP</S.pageTitle>
-                        <S.contentWrap>
-                            <S.inputTitle>아이디</S.inputTitle>
-                            <S.inputWrap>
-                                <S.inputContent
-                                    type="text"
-                                    className="input"
-                                    name="userId"
-                                    placeholder="사용하실 ID를 입력하세요"
-                                    value={formData.userId}
-                                    onChange={handleChange}
-                                    menu="dup"
-                                />
-                                <S.CheckBtn
-                                    type="button"
-                                    onClick={onClickCheckId}
-                                >
-                                    중복 확인
-                                </S.CheckBtn>
-                            </S.inputWrap>
-                            {userIdCheck && (
-                                <S.errorMessage style={correctStyle}>
-                                    사용 가능한 아이디입니다
-                                </S.errorMessage>
-                            )}
-                            {!userIdCheck && <S.hidden>숨김</S.hidden>}
-                            {/* ... (나머지 입력 항목) */}
-                            <S.inputTitle>이메일</S.inputTitle>
-                            <S.inputWrap>
-                                <S.inputContent
-                                    type="text"
-                                    className="input"
-                                    placeholder="사용하실 email을 입력하세요"
-                                    value={formData.email}
-                                    onChange={handleEmail}
-                                    menu="dup"
-                                />
-                                <S.CheckBtn type="button" onClick={emailAuth}>
-                                    인증 요청
-                                </S.CheckBtn>
-                            </S.inputWrap>
-
-                            {!emailValid && formData.email.length !== 0 ? (
-                                <S.errorMessage style={failStyle}>
-                                    올바른 이메일을 입력하세요
-                                </S.errorMessage>
-                            ) : (
-                                <S.hidden>숨김</S.hidden>
-                            )}
-                            <S.inputWrap>
-                                <S.inputContent
-                                    type="text"
-                                    className="verificationInput"
-                                    placeholder="인증번호 입력"
-                                    value={verificationCode}
-                                    onChange={handleVerificationCode}
-                                    menu="dup"
-                                />
-                                <S.CheckBtn
-                                    type="button"
-                                    onClick={onClickVerficationCode}
-                                >
-                                    인증 확인
-                                </S.CheckBtn>
-                            </S.inputWrap>
-                            {verificationCodeValid && (
-                                <S.errorMessage style={correctStyle}>
-                                    이메일 인증 완료.
-                                </S.errorMessage>
-                            )}
-                            {verificationCodeValid !== null &&
-                            !verificationCodeValid ? (
-                                <S.errorMessage style={failStyle}>
-                                    이메일 인증 실패
-                                </S.errorMessage>
-                            ) : (
-                                <S.hidden>숨김</S.hidden>
-                            )}
-                            <div className="inputTitle">닉네임</div>
-                            <S.inputWrap>
-                                <S.inputContent
-                                    type="text"
-                                    className="input"
-                                    name="nickname"
-                                    placeholder="사용하실 닉네임을 입력하세요"
-                                    value={formData.nickname}
-                                    onChange={handleChange}
-                                    menu="dup"
-                                />
-                                <S.CheckBtn
-                                    type="button"
-                                    onClick={onClickCheckNickName}
-                                >
-                                    중복 확인
-                                </S.CheckBtn>
-                            </S.inputWrap>
-                            {userNickNameCheck && (
-                                <S.errorMessage style={correctStyle}>
-                                    사용 가능한 닉네임입니다.
-                                </S.errorMessage>
-                            )}
-                            {!userNickNameCheck && <S.hidden>숨김</S.hidden>}
-                            <S.inputTitle>비밀번호</S.inputTitle>
-                            <S.inputWrap>
-                                <S.inputContent
-                                    type="password"
-                                    className="input"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handlePassword}
-                                    placeholder="영문,숫자,특수기호 포함 8글자 이상 되어야 합니다."
-                                />
-                            </S.inputWrap>
-                            {!inputCheckPassword &&
-                                formData.password.length != 0 && (
-                                    <S.errorMessage style={failStyle}>
-                                        형식에 맞게 입력해 주세요.
+        <div>
+            <Header />
+            <S.form>
+                <form onSubmit={handleSubmit}>
+                    <S.page>
+                        <S.wrap>
+                            <S.pageTitle>SIGN UP</S.pageTitle>
+                            <S.contentWrap>
+                                <S.inputTitle>아이디</S.inputTitle>
+                                <S.inputWrap>
+                                    <S.inputContent
+                                        type="text"
+                                        className="input"
+                                        name="userId"
+                                        placeholder="사용하실 ID를 입력하세요"
+                                        value={formData.userId}
+                                        onChange={handleChange}
+                                        menu="dup"
+                                    />
+                                    <S.CheckBtn
+                                        type="button"
+                                        onClick={onClickCheckId}
+                                    >
+                                        중복 확인
+                                    </S.CheckBtn>
+                                </S.inputWrap>
+                                {userIdCheck && (
+                                    <S.errorMessage style={correctStyle}>
+                                        사용 가능한 아이디입니다
                                     </S.errorMessage>
                                 )}
-                            {inputCheckPassword && (
-                                <S.errorMessage style={correctStyle}>
-                                    사용가능한 비밀번호 입니다.
-                                </S.errorMessage>
-                            )}
-                            {!inputCheckPassword &&
-                                formData.password.length === 0 && (
+                                {!userIdCheck && <S.hidden>숨김</S.hidden>}
+                                {/* ... (나머지 입력 항목) */}
+                                <S.inputTitle>이메일</S.inputTitle>
+                                <S.inputWrap>
+                                    <S.inputContent
+                                        type="text"
+                                        className="input"
+                                        placeholder="사용하실 email을 입력하세요"
+                                        value={formData.email}
+                                        onChange={handleEmail}
+                                        menu="dup"
+                                    />
+                                    <S.CheckBtn
+                                        type="button"
+                                        onClick={emailAuth}
+                                    >
+                                        인증 요청
+                                    </S.CheckBtn>
+                                </S.inputWrap>
+
+                                {!emailValid && formData.email.length !== 0 ? (
+                                    <S.errorMessage style={failStyle}>
+                                        올바른 이메일을 입력하세요
+                                    </S.errorMessage>
+                                ) : (
                                     <S.hidden>숨김</S.hidden>
                                 )}
-                            <S.inputTitle>비밀번호 확인</S.inputTitle>
-                            <S.inputWrap>
-                                <S.inputContent
-                                    type="password"
-                                    className="input"
-                                    value={confirmPassword}
-                                    onChange={handleConfirmPassword}
-                                    placeholder="비밀번호 확인"
-                                />
-                            </S.inputWrap>
-                            {passwordMatchError && (
-                                <S.errorMessage style={failStyle}>
-                                    비밀번호가 일치하지 않습니다.
-                                </S.errorMessage>
-                            )}
-                            {passwordMatchError !== null &&
-                                !passwordMatchError && (
+                                <S.inputWrap>
+                                    <S.inputContent
+                                        type="text"
+                                        className="verificationInput"
+                                        placeholder="인증번호 입력"
+                                        value={verificationCode}
+                                        onChange={handleVerificationCode}
+                                        menu="dup"
+                                    />
+                                    <S.CheckBtn
+                                        type="button"
+                                        onClick={onClickVerficationCode}
+                                    >
+                                        인증 확인
+                                    </S.CheckBtn>
+                                </S.inputWrap>
+                                {verificationCodeValid && (
                                     <S.errorMessage style={correctStyle}>
-                                        비밀번호가 일치합니다.
+                                        이메일 인증 완료.
                                     </S.errorMessage>
                                 )}
-                            {passwordMatchError === null && (
-                                <S.hidden>숨김</S.hidden>
-                            )}
-                            <S.signupWrap>
-                                <S.signupButton onClick={handleSubmit}>
-                                    회원가입
-                                </S.signupButton>
-                            </S.signupWrap>
-                        </S.contentWrap>
-                    </S.wrap>
-                </S.page>
-            </form>
-        </S.form>
+                                {verificationCodeValid !== null &&
+                                !verificationCodeValid ? (
+                                    <S.errorMessage style={failStyle}>
+                                        이메일 인증 실패
+                                    </S.errorMessage>
+                                ) : (
+                                    <S.hidden>숨김</S.hidden>
+                                )}
+                                <div className="inputTitle">닉네임</div>
+                                <S.inputWrap>
+                                    <S.inputContent
+                                        type="text"
+                                        className="input"
+                                        name="nickname"
+                                        placeholder="사용하실 닉네임을 입력하세요"
+                                        value={formData.nickname}
+                                        onChange={handleChange}
+                                        menu="dup"
+                                    />
+                                    <S.CheckBtn
+                                        type="button"
+                                        onClick={onClickCheckNickName}
+                                    >
+                                        중복 확인
+                                    </S.CheckBtn>
+                                </S.inputWrap>
+                                {userNickNameCheck && (
+                                    <S.errorMessage style={correctStyle}>
+                                        사용 가능한 닉네임입니다.
+                                    </S.errorMessage>
+                                )}
+                                {!userNickNameCheck && (
+                                    <S.hidden>숨김</S.hidden>
+                                )}
+                                <S.inputTitle>비밀번호</S.inputTitle>
+                                <S.inputWrap>
+                                    <S.inputContent
+                                        type="password"
+                                        className="input"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handlePassword}
+                                        placeholder="영문,숫자,특수기호 포함 8글자 이상 되어야 합니다."
+                                    />
+                                </S.inputWrap>
+                                {!inputCheckPassword &&
+                                    formData.password.length != 0 && (
+                                        <S.errorMessage style={failStyle}>
+                                            형식에 맞게 입력해 주세요.
+                                        </S.errorMessage>
+                                    )}
+                                {inputCheckPassword && (
+                                    <S.errorMessage style={correctStyle}>
+                                        사용가능한 비밀번호 입니다.
+                                    </S.errorMessage>
+                                )}
+                                {!inputCheckPassword &&
+                                    formData.password.length === 0 && (
+                                        <S.hidden>숨김</S.hidden>
+                                    )}
+                                <S.inputTitle>비밀번호 확인</S.inputTitle>
+                                <S.inputWrap>
+                                    <S.inputContent
+                                        type="password"
+                                        className="input"
+                                        value={confirmPassword}
+                                        onChange={handleConfirmPassword}
+                                        placeholder="비밀번호 확인"
+                                    />
+                                </S.inputWrap>
+                                {passwordMatchError && (
+                                    <S.errorMessage style={failStyle}>
+                                        비밀번호가 일치하지 않습니다.
+                                    </S.errorMessage>
+                                )}
+                                {passwordMatchError !== null &&
+                                    !passwordMatchError && (
+                                        <S.errorMessage style={correctStyle}>
+                                            비밀번호가 일치합니다.
+                                        </S.errorMessage>
+                                    )}
+                                {passwordMatchError === null && (
+                                    <S.hidden>숨김</S.hidden>
+                                )}
+                                <S.signupWrap>
+                                    <S.signupButton onClick={handleSubmit}>
+                                        회원가입
+                                    </S.signupButton>
+                                </S.signupWrap>
+                            </S.contentWrap>
+                        </S.wrap>
+                    </S.page>
+                </form>
+            </S.form>
+
+            <Footer />
+        </div>
     );
 };
 

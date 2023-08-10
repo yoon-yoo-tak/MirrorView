@@ -8,6 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getInterviewRoom } from "../../store/InterviewStore";
 import { useNavigate } from "react-router-dom";
 
+import Header from "../../components/common/HeaderComponent";
+import Footer from "../../components/common/FooterComponent";
+
 const StudyRoomList = () => {
     // 데이터
     const dispatch = useDispatch();
@@ -70,6 +73,7 @@ const StudyRoomList = () => {
 
     return (
         <div>
+            <Header />
             <S.page>
                 <S.studylistWrap>
                     <S.studylistContainer>
@@ -128,6 +132,7 @@ const StudyRoomList = () => {
             {modalStates && (
                 <StudyRoomCreateModal setModalStates={handleModalClose} />
             )}
+            <Footer />
         </div>
     );
 };

@@ -43,7 +43,7 @@ const App = () => {
         // }else{
         //     console.log("로그인 유저가 없어서, 웹 소켓 연결이 되지 않음")
         // }
-    },); // Re-run effect when accessToken changes
+    }); // Re-run effect when accessToken changes
 
     return (
         <div>
@@ -52,7 +52,7 @@ const App = () => {
                 <PrivateChatRoom />
             </Sidebar> */}
 
-            <Header></Header>
+            {/* <Header></Header> */}
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/signup" element={<Signup />} />
@@ -72,7 +72,7 @@ const App = () => {
                 />
                 <Route path="/adminpage" element={<AdminManagePage />} />
             </Routes>
-            <Footer></Footer>
+            {/* <Footer></Footer> */}
         </div>
     );
 };
