@@ -40,7 +40,7 @@ const SidebarSearch = ({ setClickSearch, clickSearch }) => {
                 // alert("로그인 필요");
                 // return;
             }
-
+            setIsOpen(true);
             const currentIsOpen = isOpen;
             setIsOpen(!currentIsOpen);
 
@@ -65,10 +65,12 @@ const SidebarSearch = ({ setClickSearch, clickSearch }) => {
                 //         dispatch(subscribeRoomCountAsync());
                 //     });
             }
-            setClickSearch(false);
+            //setClickSearch(false);
+        } else {
+            setIsOpen(false); // 사이드바를 닫습니다.
         }
         setSearchedList([]);
-    }, [clickSearch, setClickSearch]);
+    }, [clickSearch]);
     // ---------------------------------------------------
     const handleSearch = (e) => {
         setSearchingId(e.target.value);

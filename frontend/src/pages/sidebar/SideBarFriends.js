@@ -54,7 +54,7 @@ const SidebarFriends = ({ setClickFriends, clickFriends }) => {
         // alert("로그인 필요");
         // return;
       }
-
+      setIsOpen(true);
       console.log(webSocketState);
       const currentIsOpen = isOpen;
       setIsOpen(!currentIsOpen);
@@ -65,9 +65,12 @@ const SidebarFriends = ({ setClickFriends, clickFriends }) => {
         setFriendContent("friendList");
         setSelectedButton("friendList");
       }
-      setClickFriends(false);
+      // setClickFriends(false);
     }
-  }, [clickFriends, setClickFriends]);
+    else {
+      setIsOpen(false); // 사이드바를 닫습니다.
+    }
+  }, [clickFriends]);
 
   const toggleFriendsContent = () => {
     if (isFriendsContentVisible) {

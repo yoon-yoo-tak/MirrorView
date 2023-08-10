@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
@@ -26,13 +26,25 @@ import FindPassword from "./pages/user/FindPasswordPage";
 
 // axios 전역 설정
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getClient, initializeWebSocket } from "store/WebSocketStore";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const App = () => {
-    const { accessToken } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const { accessToken, user } = useSelector((state) => state.auth);
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+    useEffect(() => {
+        if (user !== null) {
+            console.log("메인화면")
+            dispatch(initializeWebSocket(accessToken));
+        }else{
+            console.log("로그인 유저가 없어서, 웹 소켓 연결이 되지 않음")
+        }
+    },); // Re-run effect when accessToken changes
+
     return (
         <div>
             {/* <Sidebar>

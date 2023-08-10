@@ -47,17 +47,33 @@ const Header = () => {
     const [clickFriends, setClickFriends] = useState(false);
     const [clickChat, setClickChat] = useState(false);
     const [clickSearch, setClickSearch] = useState(false);
-    const handleFriendsSideBar = () => {
-        setClickFriends((prevState) => !prevState);
-    };
 
-    const handleChatSidebar = () => {
-        setClickChat((prevState) => !prevState);
-    };
+  const handleFriendsSideBar = () => {
+    setClickFriends((prevState) => !prevState);
 
-    const handleSearchSidebar = () => {
-        setClickSearch(true);
-    };
+    if (clickChat || clickSearch) {
+      setClickChat(false);
+      setClickSearch(false);
+    }
+  };
+
+  const handleChatSidebar = () => {
+    setClickChat((prevState) => !prevState);
+
+    if (clickFriends || clickSearch) {
+      setClickFriends(false);
+      setClickSearch(false);
+    }
+  };
+
+  const handleSearchSidebar = () => {
+    setClickSearch((prevState) => !prevState);
+
+    if (clickFriends || clickChat) {
+      setClickFriends(false);
+      setClickChat(false);
+    }
+  };
 
     const openSearch = () => {
         // console.log("사람찾아요");

@@ -38,7 +38,7 @@ const StudyRoom = () => {
   useEffect(() => {
     // dispatch(interviewActions.updateStarted(false));s
     console.log(isStarted);
-    return () => {};
+    return () => { };
   }, [isStarted]);
   // 참가자 더미데이터 (자신 제외)
   const peopleList = [
@@ -288,7 +288,7 @@ const StudyRoom = () => {
       if (
         doScreenSharing &&
         mainStreamManager?.stream.connection.connectionId !==
-          publisherForScreenSharing?.stream.connection.connectionId
+        publisherForScreenSharing?.stream.connection.connectionId
       ) {
         stopScreenShare();
       }
@@ -441,6 +441,7 @@ const StudyRoom = () => {
         const interviewRoomId = location.pathname.replace("/studyroom/", "");
 
         // 웹소켓 연결
+        await dispatch(closeWebSocket());
         await dispatch(initializeWebSocket(accessToken));
 
         // 구독
@@ -468,7 +469,7 @@ const StudyRoom = () => {
             "일반 유저 입장 (조인작업까지 진행) - DB 데이터 가져오기"
           );
         } else {
-          await dispatch(hostJoinInterviewRoom(interviewRoomId)); 
+          await dispatch(hostJoinInterviewRoom(interviewRoomId));
           console.log("방장 입장 - 단순 DB 데이터 가져오기");
         }
 
@@ -487,6 +488,7 @@ const StudyRoom = () => {
     return () => {
       dispatch(closeWebSocket());
       dispatch(clearCurrentRoom());
+      dispatch(initializeWebSocket(accessToken));
     };
     // currentRoom의 상태를 감지함
   }, [currentRoom]);

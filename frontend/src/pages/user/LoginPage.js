@@ -5,6 +5,7 @@ import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useState, useEffect } from "react";
+import { getClient, initializeWebSocket } from "store/WebSocketStore";
 
 const Login = () => {
     const [inputId, setInputId] = useState("");
@@ -37,6 +38,7 @@ const Login = () => {
                 .then(({ data }) => {
                     console.log(data);
                     dispatch(getUserInfo(data["access-token"]));
+                    dispatch(initializeWebSocket(accessToken));
                 })
                 .catch((error) => {
                     console.log(error);
