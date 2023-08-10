@@ -5,16 +5,13 @@ import {
 } from "@reduxjs/toolkit";
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import {
-  createChatRoomAsync,
-  updateChatRooms,
-  addChatRoom,
-} from "store/ChatRoomStore";
+import { updateChatRooms, addChatRoom } from "store/ChatRoomStore";
+
+// 여기는 오픈 채팅 global sub/pub 로 사용
 
 // state에 client 객체를 직렬화 문제 때문에 저장할 수가 없다.
 let client;
 
-// 웹소켓 연결 Thunk 정의
 export const initializeWebSocket = createAsyncThunk(
   "webSocket/initialize",
   async (accessToken, { dispatch }) => {
@@ -165,9 +162,6 @@ export const store = configureStore({
 // state에 client 객체를 직렬화 문제 때문에 저장할 수가 없다.
 // 다른 컴포넌트에서 사용할 수 있는 getClient 함수
 // 이제 client는 전역 변수로 관리되며, 필요한 경우 getClient() 함수를 통해 접근할 수 있습니다.
-export function getClient() {
-  return client;
-}
 
 // 리듀서 export 추가
 export default webSocketSlice.reducer;
