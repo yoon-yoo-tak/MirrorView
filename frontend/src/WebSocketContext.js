@@ -36,7 +36,8 @@ export const WebSocketProvider = ({ children }) => {
         setClient(stompClient);
         setReconnectAttempts(0); // 성공적인 연결이 이루어지면 재연결 시도 횟수를 초기화합니다.
 
-        dispatch(globalSubscribe());
+        // (알람) 친구요청 관련 sub
+        dispatch(globalSubscribe(stompClient));
         // 채팅방 관련 sub
         dispatch(subscribeUserCount(stompClient));
         dispatch(subscribeUserChatRooms(stompClient));

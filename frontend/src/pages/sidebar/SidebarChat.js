@@ -10,11 +10,6 @@ import ChatMyList from "pages/sidebar/ChatMyList";
 import axios from "axios"; // <-- axios 불러오기
 
 import { useDispatch } from "react-redux"; // <-- useDispatch 불러오기
-import {
-  subscribeUserCount,
-  subscribeChatRoomCreate,
-  subscribeUserChatRooms,
-} from "store/WebSocketStore"; // <-- WebSocket 액션 불러오기
 import { loadChatRooms, subscribeRoomCountAsync } from "store/ChatRoomStore"; // loadRoom
 import ChatModal from "pages/sidebar/ChatModal"; // <-- 추가
 import { switchView } from "store/ChatViewStore";
@@ -48,8 +43,8 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
     setShowCreateChatModal(false);
   };
 
+  // 만약 state.auth가 null이면, 사이드바를 닫는다.
   useEffect(() => {
-    // 만약 state.auth가 null이면, 사이드바를 닫는다.
     if (!user) {
       setIsOpen(false);
     }
@@ -58,11 +53,6 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
   useEffect(() => {
     if (clickChat) {
       setIsOpen(true);
-
-      // dispatch(subscribeUserCount(client));
-      // dispatch(subscribeUserChatRooms(client));
-      // dispatch(subscribeChatRoomCreate(client));
-      // dispatch(subscribeRoomCountAsync(client));
 
       // 유저를 redis에 등록함
       const fetchUserData = async () => {
@@ -111,7 +101,7 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
     if (chatContent === "openChat") {
       dispatch(loadChatRooms());
     } else if (chatContent === "myChat") {
-      dispatch(loadChatRooms()); // 이부분을 나중에loadMyChatRooms로 변경해야 한다.
+      dispatch(loadChatRooms());
     }
   }, [chatContent]);
 

@@ -1,19 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getClient } from "./WebSocketStore";
+import React, { useContext } from "react";
+import { WebSocketContext } from "WebSocketContext";
 import axios from "axios";
 
 // 친구 신청 알람
 
-const initialState = {
-
-
-
-};
+const initialState = {};
 
 export const globalSubscribe = createAsyncThunk(
   "global/subscribe",
-  async (_ , { dispatch, getState }) => {
-    const client = getClient();
+  async (client, { dispatch, getState }) => {
     await client.subscribe("/sub/global", (message) => {
       console.log("asd");
       const parsedMessage = JSON.parse(message.body);
@@ -22,29 +18,20 @@ export const globalSubscribe = createAsyncThunk(
         case "FRIEND_REQUEST":
           console.log(parsedMessage.data);
 
-        break;
+          break;
         // case "CHAT":
         //   dispatch(receiveMessage(parsedMessage));
         //   break;
-
       }
     });
   }
 );
 
-
 export const globalSlice = createSlice({
   name: "global",
   initialState,
-  reducers: {
-   
-
-
-  },
+  reducers: {},
 });
 
-export const {
-
-
-} = globalSlice.actions;
+export const {} = globalSlice.actions;
 export default globalSlice.reducer;

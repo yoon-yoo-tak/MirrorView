@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -10,23 +10,24 @@ import Divider from "@mui/material/Divider";
 import friends from "../../assets/adduser-image.png";
 import chat from "../../assets/chatting.png";
 import myInfo from "../../assets/person-image.png";
-import Sidebar from "pages/sidebar/SideBar";
 import SidebarChat from "pages/sidebar/SidebarChat";
 import SidebarFriends from "pages/sidebar/SideBarFriends";
 import SidebarSearch from "pages/sidebar/SIdeBarSearchUser";
 import ChatList from "pages/sidebar/ChatList";
 import PrivateChatRoom from "pages/sidebar/ChatRoom";
 import Search from "../../assets/searchicon.png";
-import { closeWebSocket, getClient } from "store/WebSocketStore";
+import { closeWebSocket } from "store/WebSocketStore";
+import { WebSocketContext } from "WebSocketContext";
 import { NotificationsNone } from "@material-ui/icons";
 
 const Header = () => {
+  const { client } = useContext(WebSocketContext);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const onClickLogout = (e) => {
     alert("로그아웃 되었습니다!");
     dispatch(logout());
-    if (getClient !== null) dispatch(closeWebSocket());
+    dispatch(closeWebSocket());
 
     navigate("");
   };

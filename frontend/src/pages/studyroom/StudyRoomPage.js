@@ -10,7 +10,6 @@ import { useLocation } from "react-router";
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { getClient } from "store/WebSocketStore";
 import { useDispatch } from "react-redux";
 import {
   clearCurrentRoom,
@@ -439,25 +438,23 @@ const StudyRoom = () => {
   };
 
   useEffect(() => {
+    const interviewRoomId = location.pathname.replace("/studyroom/", "");
+    let subscription;
+
     async function initialize() {
-      const interviewRoomId = location.pathname.replace("/studyroom/", "");
+      const resultAction = await dispatch(
+        interviewSubscribe({ client, interviewRoomId })
+      );
 
-      // // 웹소켓 연결 종료
-      // await dispatch(closeWebSocket());
+      // action.payload에서 subscription 객체를 추출
+      if (interviewSubscribe.fulfilled.match(resultAction)) {
+        subscription = resultAction.payload;
+      }
 
-      // // 웹소켓 연결 초기화 및 연결
-      // const connectionResult = await dispatch(initializeWebSocket(accessToken));
-
-      // // 만약 웹소켓 연결이 성공했다면, 구독 시작
-      // if (connectionResult.payload === true) {
-      const client = getClient();
-      dispatch(interviewSubscribe({ client, interviewRoomId }));
-
-      //await new Promise((resolve) => setTimeout(resolve, 330));
-      // 일반 유저일 때만 pub함, 방장은 pub 불필요
       if (!isHost) {
         dispatch(
           userJoinRoomPub({
+            client: client,
             interviewRoomId,
             userJoinData: user,
           })
@@ -468,13 +465,12 @@ const StudyRoom = () => {
       // 조인 이후, DB에서 방 데이터 가져와서 curretRoom에 넣기.
       if (!isHost) {
         dispatch(joinInterviewRoom(interviewRoomId));
-        console.log("일반 유저 입장 (조인작업까지 진행) - DB 데이터 가져오기");
+        console.log("일반 유저 입장 (입장 로직까지 진행) - DB 데이터 가져오기");
       } else {
         dispatch(hostJoinInterviewRoom(interviewRoomId));
         console.log("방장 입장 - 단순 DB 데이터 가져오기");
       }
 
-      // 여기서도 약간의 대기가 필요한 경우만 setTimeout을 사용하십시오.
       setInitialized(true);
     }
 
@@ -482,7 +478,7 @@ const StudyRoom = () => {
     return () => {
       // dispatch(closeWebSocket());
       dispatch(clearCurrentRoom());
-      // dispatch(initializeWebSocket(accessToken));
+      subscription.unsubscribe();
     };
   }, [currentRoom]);
 

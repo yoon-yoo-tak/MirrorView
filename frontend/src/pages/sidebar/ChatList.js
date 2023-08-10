@@ -29,10 +29,11 @@ function ChatList() {
     axios
       .post(`/api/chat/favorites/${roomId}`) // user id와 room id를 사용하여 요청
       .then((response) => {
-        console.log(response.data);
+        alert("즐겨찾기 완료!");
       })
       .catch((error) => {
         console.error("즐겨찾기 추가 중 오류 발생:", error);
+        alert("이미 등록한 방입니다.");
       });
   };
   return (

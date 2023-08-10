@@ -31,6 +31,13 @@ const SidebarSearch = ({ setClickSearch, clickSearch }) => {
     setOpenProfileModal(false);
   };
 
+  // 만약 state.auth가 null이면, 사이드바를 닫는다.
+  useEffect(() => {
+    if (!user) {
+      setIsOpen(false);
+    }
+  }, [user]);
+
   useEffect(() => {
     if (clickSearch) {
       if (user === null) {

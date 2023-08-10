@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendMessage } from "store/InterviewWebSocketStore"; // 경로 수정 필요
+import { WebSocketContext } from "WebSocketContext";
 import {
   ChatContainer,
   ChatWindow,
@@ -37,6 +38,7 @@ const getUserColor = (userId) => {
 };
 
 const StudyChatting = () => {
+  const { client } = useContext(WebSocketContext);
   const chatWindowRef = useRef(null);
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
@@ -69,7 +71,13 @@ const StudyChatting = () => {
       },
     };
 
-    dispatch(sendMessage({ roomId: interviewRoomId, data: messageToSend }));
+    dispatch(
+      sendMessage({
+        client: client,
+        roomId: interviewRoomId,
+        data: messageToSend,
+      })
+    );
     setMessage("");
   };
 
