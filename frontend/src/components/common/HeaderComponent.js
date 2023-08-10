@@ -17,40 +17,44 @@ import SidebarSearch from "pages/sidebar/SideBarSearch";
 import ChatList from "pages/sidebar/ChatList";
 import PrivateChatRoom from "pages/sidebar/ChatRoom";
 import Search from "../../assets/searchicon.png";
+import { closeWebSocket, getClient } from "store/WebSocketStore";
 
 const Header = () => {
-    const { user } = useSelector((state) => state.auth);
-    const dispatch = useDispatch();
-    const onClickLogout = (e) => {
-        alert("로그아웃 되었습니다!");
-        dispatch(logout());
-        navigate("");
-    };
-    const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const onClickLogout = (e) => {
+    alert("로그아웃 되었습니다!");
+    dispatch(logout());
+    if (getClient !== null) dispatch(closeWebSocket());
 
-    const movePage = (props) => {
-        navigate(`/${props}`);
-    };
+    navigate("");
+  };
+  const navigate = useNavigate();
 
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+  const movePage = (props) => {
+    navigate(`/${props}`);
+  };
 
-    const [clickFriends, setClickFriends] = useState(false);
-    const [clickChat, setClickChat] = useState(false);
-    const [clickSearch, setClickSearch] = useState(false);
-    const handleFriendsSideBar = () => {
-        setClickFriends(true);
-    };
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-    const handleChatSidebar = () => {
-        setClickChat(true);
-    };
+  const [clickFriends, setClickFriends] = useState(false);
+  const [clickChat, setClickChat] = useState(false);
+  const [clickSearch, setClickSearch] = useState(false);
+  const handleFriendsSideBar = () => {
+    setClickFriends((prevState) => !prevState);
+  };
+
+
+  const handleChatSidebar = () => {
+    setClickChat((prevState) => !prevState);
+  };
 
     const handleSearchSidebar = () => {
         setClickSearch(true);
@@ -60,9 +64,9 @@ const Header = () => {
         // console.log("사람찾아요");
     };
 
-    const font = {
-        fontFamily: "HakgyoansimWoojuR",
-    };
+  const font = {
+    fontFamily: "HakgyoansimWoojuR",
+  };
 
     return (
         <div>

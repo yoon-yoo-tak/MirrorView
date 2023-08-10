@@ -28,8 +28,6 @@ public class WebSocketEvents {
 	// 웹 소켓 연결 이벤트
 	@EventListener
 	public void handleWebSocketConnectListener(SessionConnectEvent event) {
-		// Authentication authentication = (Authentication) event.getUser();
-		// CustomMemberDetails user = (CustomMemberDetails) authentication.getPrincipal();
 	}
 
 	// 웹 소켓 종료 이벤트 - 사용자가 강제 종료 시 구독한 채널들을 취소
@@ -37,7 +35,6 @@ public class WebSocketEvents {
 	public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
 		Authentication authentication = (Authentication) event.getUser();
 		String userId = authentication.getName();
-		System.out.println(userId + " 유저 나감 인터뷰에서");
 		subscriptionService.handleInterviewRoomUnsubscribe(userId);
 		ConcurrentMap<String, String> userSubscriptions = subscriptionService.getUserIdToSubscriptionMap().get(userId);
 		if (userSubscriptions != null) {
@@ -67,7 +64,6 @@ public class WebSocketEvents {
 			subscriptionService.handleChatRoomSubscribe(userId, subscriptionId, roomId);
 		}
 		else if (channel.startsWith("/sub/interviewrooms/")) {
-			log.info("면접방 입장 {}", userId);
 			String roomId = channel.split("/")[3];
 			subscriptionService.handleInterviewRoomSubscribe(userId, subscriptionId, roomId);
 		}

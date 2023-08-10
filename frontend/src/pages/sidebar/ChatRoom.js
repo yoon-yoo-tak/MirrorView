@@ -11,157 +11,161 @@ import TextField from "@mui/material/TextField";
 
 // 닉네임에 색주기
 function getNicknameColor(userNickname) {
-    let hash = 0;
-    for (let i = 0; i < userNickname.length; i++) {
-        hash = userNickname.charCodeAt(i) + ((hash << 5) - hash);
-    }
+  let hash = 0;
+  for (let i = 0; i < userNickname.length; i++) {
+    hash = userNickname.charCodeAt(i) + ((hash << 5) - hash);
+  }
 
-    const c = (hash & 0x00ffffff).toString(16).toUpperCase();
-    return "#" + "00000".substring(0, 6 - c.length) + c;
+  const c = (hash & 0x00ffffff).toString(16).toUpperCase();
+  return "#" + "00000".substring(0, 6 - c.length) + c;
 }
 
 function ChatRoom() {
-    const dispatch = useDispatch();
-    const { user } = useSelector((state) => state.auth);
-    const roomId = useSelector((state) => state.chatRoom.selectedRoom);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
 
-    const chatContainerRef = useRef(null);
-    const [chatMessages, setChatMessages] = useState([]);
-    const [message, setMessage] = useState("");
+  const roomId = useSelector((state) => state.chatRoom.selectedRoom);
+  const selectedRoomCount = useSelector((state) => {
+    const selectedRoom = state.chatRoom.chatRooms.find(
+      (room) => room.id === roomId
+    );
+    return selectedRoom ? selectedRoom.count : null;
+  });
 
-    const handleKeyDown = (event) => {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            sendMessage();
+  const chatContainerRef = useRef(null);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [message, setMessage] = useState("");
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendMessage();
+    }
+  };
+
+  // 이전 채팅 가져오기
+  const getPreviousChats = () => {
+    const client = getClient();
+    if (client == null) return;
+
+    client.send(`/app/chatrooms/${roomId}`);
+  };
+
+  // 채팅 보내기
+  const sendMessage = () => {
+    if (!message.trim()) {
+      alert("메시지를 입력하세요."); // 알림을 표시하거나 원하는 대응 로직을 넣을 수 있습니다.
+      return;
+    }
+
+    const client = getClient();
+    if (client == null) return;
+
+    client.send(
+      `/app/chatrooms.send/${roomId}`,
+      {},
+      JSON.stringify({ userNickname: user.nickname, message })
+    );
+    setMessage("");
+  };
+
+  useEffect(() => {
+    const client = getClient();
+    if (client == null) return;
+    const historySubscription = client.subscribe(
+      `/user/sub/chatrooms/${roomId}`, // 이전 채팅 기록을 가져오는 엔드포인트
+      (message) => {
+        if (message.body) {
+          const newMessages = JSON.parse(message.body);
+          setChatMessages(newMessages);
         }
+      }
+    );
+
+    // 다른 유저의 채팅
+    const subscription = client.subscribe(
+      `/sub/chatrooms/${roomId}`, // 신규 채팅 메시지를 가져오는 엔드포인트
+      (message) => {
+        if (message.body) {
+          const newMessage = JSON.parse(message.body);
+          setChatMessages((prevMessages) => [...prevMessages, newMessage]);
+          console.log(chatMessages);
+        }
+      }
+    );
+    new Promise((resolve) => setTimeout(resolve, 330));
+    getPreviousChats();
+
+    return () => {
+      subscription.unsubscribe();
+      historySubscription.unsubscribe();
     };
+  }, [roomId]);
 
-    // 이전 채팅
-    const getPreviousChats = () => {
-        const client = getClient();
-        if (client == null) return;
+  // 채팅방 화면 가장 아래로
+  useEffect(() => {
+    const chatContainer = chatContainerRef.current;
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }, [chatMessages]);
 
-        client.send(`/app/chatrooms/${roomId}`);
-    };
-
-    // 채팅 보내기
-    const sendMessage = () => {
-        const client = getClient();
-        if (client == null) return;
-
-        client.send(
-            `/app/chatrooms.send/${roomId}`,
-            {},
-            JSON.stringify({ userNickname: user.nickname, message })
-        );
-        setMessage("");
-    };
-
-    useEffect(() => {
-        const client = getClient();
-        if (client == null) return;
-        console.log("선택방 ", roomId);
-        const historySubscription = client.subscribe(
-            `/user/sub/chatrooms/${roomId}`, // 이전 채팅 기록을 가져오는 엔드포인트
-            (message) => {
-                if (message.body) {
-                    const newMessages = JSON.parse(message.body);
-                    setChatMessages(newMessages);
-                }
-            }
-        );
-
-        // 다른 유저의 채팅
-        const subscription = client.subscribe(
-            `/sub/chatrooms/${roomId}`, // 신규 채팅 메시지를 가져오는 엔드포인트
-            (message) => {
-                if (message.body) {
-                    console.log(message.body);
-                    const newMessage = JSON.parse(message.body);
-                    setChatMessages((prevMessages) => [
-                        ...prevMessages,
-                        newMessage,
-                    ]);
-                    console.log(chatMessages);
-                }
-            }
-        );
-        new Promise((resolve) => setTimeout(resolve, 330));
-        getPreviousChats();
-
-        return () => {
-            subscription.unsubscribe();
-            historySubscription.unsubscribe();
-        };
-    }, [roomId]);
-
-    // 채팅방 화면 가장 아래로
-    useEffect(() => {
-        const chatContainer = chatContainerRef.current;
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }, [chatMessages]);
-
-    return (
-        <div className="chat-room-container">
-            <div className="header">
-                <div className="back-button-container">
-                    <button className="back-button">
-                        <MdArrowBack size={24} />
-                    </button>
-                </div>
-                <div className="chat-title">{roomId}</div>
-                <div className="back-button-container" />
+  return (
+    <div className="chat-room-container">
+      <div className="header">
+        <div className="back-button-container">
+          <button className="back-button">
+            <MdArrowBack size={24} />
+          </button>
+        </div>
+        <div className="chat-title">
+          {roomId} ({selectedRoomCount} 명)
+        </div>
+        <div className="back-button-container" />
+      </div>
+      <div className="chat-container" ref={chatContainerRef}>
+        {chatMessages.map((chatMessage, index) => (
+          <div>
+            <div
+              className="chat-user-id"
+              style={{
+                color: getNicknameColor(chatMessage.userNickname),
+              }}>
+              {chatMessage.userNickname}
             </div>
-            <div className="chat-container" ref={chatContainerRef}>
-                {chatMessages.map((chatMessage, index) => (
-                    <div>
-                        <div
-                            className="chat-user-id"
-                            style={{
-                                color: getNicknameColor(
-                                    chatMessage.userNickname
-                                ),
-                            }}
-                        >
-                            {chatMessage.userNickname}
-                        </div>
-                        <div className="chat-message-container" key={index}>
-                            <p className="chat-message">
-                                {chatMessage.message}
-                            </p>
-                            <span className="chat-time">
-                                {new Date(chatMessage.timestamp).getHours()}:
-                                {new Date(chatMessage.timestamp).getMinutes()}
-                            </span>
-                        </div>
-                    </div>
-                ))}
+            <div className="chat-message-container" key={index}>
+              <p className="chat-message">{chatMessage.message}</p>
+              <span className="chat-time">
+                {new Date(chatMessage.timestamp).getHours()}:
+                {new Date(chatMessage.timestamp).getMinutes()}
+              </span>
             </div>
-            <div className="input-button-container">
-                {/* <input
+          </div>
+        ))}
+      </div>
+      <div className="input-button-container">
+        {/* <input
                     className="chatInput"
                     
                 /> */}
-                <TextField
-                    id="standard-basic"
-                    className="chatInput"
-                    variant="standard"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                />
-                {/* <button className="sendButton" onClick={sendMessage}>
+        <TextField
+          id="standard-basic"
+          className="chatInput"
+          variant="standard"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        {/* <button className="sendButton" onClick={sendMessage}>
                     Send
                 </button> */}
-                <img
-                    src={sendIcon}
-                    className="sendButton"
-                    onClick={sendMessage}
-                    alt="send"
-                />
-            </div>
-        </div>
-    );
+        <img
+          src={sendIcon}
+          className="sendButton"
+          onClick={sendMessage}
+          alt="send"
+        />
+      </div>
+    </div>
+  );
 }
 
 export default ChatRoom;

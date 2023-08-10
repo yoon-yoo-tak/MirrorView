@@ -20,6 +20,7 @@ import StudyRoom from "./pages/studyroom/StudyRoomPage";
 // import ChatList from "pages/sidebar/ChatList";
 // import PrivateChatRoom from "pages/sidebar/ChatRoom";
 import KakaoLoginRedirectPage from "pages/user/KakaoLoginRedirectPage";
+import AdminManagePage from "pages/adminpage/AdminManagePage";
 import FindId from "./pages/user/FindIdPage";
 import FindPassword from "./pages/user/FindPasswordPage";
 
@@ -57,6 +58,7 @@ const App = () => {
                     path="/login/kakao/code"
                     element={<KakaoLoginRedirectPage />}
                 />
+                <Route path="/adminpage" element={<AdminManagePage />} />
             </Routes>
             <Footer></Footer>
         </div>

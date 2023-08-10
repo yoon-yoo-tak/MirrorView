@@ -37,18 +37,15 @@ public class ChatServiceImpl implements ChatService{
 	public ChatRoom createChatRoom(String roomId) {
 		Optional<ChatRoom> byId = chatRepository.findById(roomId);
 		if(byId.isPresent()){
-			throw new RuntimeException("방이 존재합니다.");
+			throw new RuntimeException("같은 이름의 방이 존재합니다.");
 		}
-
-		Set<String> users = new HashSet<>();
-		List<ChatMessage> messages = new ArrayList<>();
-
 		ChatRoom chatRoom = ChatRoom.builder()
 			.id(roomId)
-			.users(users)
-			.messages(messages)
+			.users(new HashSet<>())
+			.messages(new ArrayList<>())
 			.count(0)
 			.build();
+
 		chatRepository.save(chatRoom);
 		return chatRoom;
 	}
