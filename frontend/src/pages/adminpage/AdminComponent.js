@@ -114,17 +114,11 @@ export const modalContainer = styled.div`
     /* 모달창 크기 */
     width: 800px;
     height: 600px;
-
-    /* 최상단 위치 */
     z-index: 999;
-
-    /* 중앙 배치 */
-    /* top, bottom, left, right 는 브라우저 기준으로 작동한다. */
-    /* translate는 본인의 크기 기준으로 작동한다. */
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-45%, -50%);
+    top: 200px;
+    left: 610px;
+    transform: translate(-50%, -40%);
 
     /* 모달창 디자인 */
     background: #ffffff;
