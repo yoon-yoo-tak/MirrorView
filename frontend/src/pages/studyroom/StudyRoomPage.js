@@ -433,67 +433,60 @@ const StudyRoom = () => {
     return response.data;
   };
 
-  // 면접방 웹 소켓 연결
   useEffect(() => {
     async function initialize() {
-      try {
-        const interviewRoomId = location.pathname.replace("/studyroom/", "");
+      const interviewRoomId = location.pathname.replace("/studyroom/", "");
 
-        // 웹소켓 연결
-        await dispatch(closeWebSocket());
+      // 웹소켓 연결 종료
+      await dispatch(closeWebSocket());
 
-        await new Promise((resolve) => setTimeout(resolve, 330));
+      // 웹소켓 연결 초기화 및 연결
+      const connectionResult = await dispatch(initializeWebSocket(accessToken));
 
-        await dispatch(initializeWebSocket(accessToken))
-          .unwrap().then(() => {
-            const client = getClient();
-            dispatch(interviewSubscribe({ client, interviewRoomId }));
-          });
-
-        console.log("구독 성공");
-
-        // 일반 유저일 때만 pub함, 방장은 pub 불필요
-        if (!isHost) {
-          await dispatch(
-            userJoinRoomPub({
-              interviewRoomId,
-              userJoinData: user,
-            })
-          );
-          console.log("일반 유저가 pub ", interviewRoomId, user);
-        }
-
-        // 조인 이후, DB에서 방 데이터 가져와서 curretRoom에 넣기.
-        if (!isHost) {
-          await dispatch(joinInterviewRoom(interviewRoomId));
-          console.log("일반 유저 입장 (조인작업까지 진행) - DB 데이터 가져오기");
-        } else {
-          await dispatch(hostJoinInterviewRoom(interviewRoomId));
-          console.log("방장 입장 - 단순 DB 데이터 가져오기");
-        }
-
-        // 여기서도 약간의 대기가 필요한 경우만 setTimeout을 사용하십시오.
-        await new Promise((resolve) => setTimeout(resolve, 330));
-
-        setInitialized(true);
-      } catch (error) {
-        console.log("웹소켓 연결 --> 구독이.. 실패!", error);
-        dispatch(clearCurrentRoom());
+      // 만약 웹소켓 연결이 성공했다면, 구독 시작
+      if (connectionResult.payload === true) {
+        const client = getClient();
+        dispatch(interviewSubscribe({ client, interviewRoomId }));
       }
-    }
+      //await new Promise((resolve) => setTimeout(resolve, 330));
+      // 일반 유저일 때만 pub함, 방장은 pub 불필요
+      if (!isHost) {
+        await dispatch(
+          userJoinRoomPub({
+            interviewRoomId,
+            userJoinData: user,
+          })
+        );
+        console.log("일반 유저가 pub ", interviewRoomId, user);
+      }
+
+      // 조인 이후, DB에서 방 데이터 가져와서 curretRoom에 넣기.
+      if (!isHost) {
+        await dispatch(joinInterviewRoom(interviewRoomId));
+        console.log("일반 유저 입장 (조인작업까지 진행) - DB 데이터 가져오기");
+      } else {
+        await dispatch(hostJoinInterviewRoom(interviewRoomId));
+        console.log("방장 입장 - 단순 DB 데이터 가져오기");
+      }
+
+      // 여기서도 약간의 대기가 필요한 경우만 setTimeout을 사용하십시오.
+
+
+      setInitialized(true);
+  }
 
     initialize();
 
-    return () => {
-      dispatch(closeWebSocket());
-      dispatch(clearCurrentRoom());
-      dispatch(initializeWebSocket(accessToken));
-    };
-  }, [currentRoom]);
+  return () => {
+    dispatch(closeWebSocket());
+    dispatch(clearCurrentRoom());
+    dispatch(initializeWebSocket(accessToken));
+  };
+}, [currentRoom]);
 
-  return (
-    <div>
-      {/* {isStarted && role === "interviewer" && (
+return (
+  <div>
+    {/* {isStarted && role === "interviewer" && (
                 <StudyRoomInterviewer
                     questionList={questionList}
                     setQuestionList={setQuestionList}
@@ -512,42 +505,42 @@ const StudyRoom = () => {
                     peopleList={peopleList}
                 />
             )} */}
-      {initialized ? (
-        !isStarted ? (
-          <StudyRoomBefore
-            streamManager={publisher}
-            questionList={questionList}
-            setQuestionList={setQuestionList}
-            peopleList={peopleList}
-            leaveSession={leaveSession}
-          />
-        ) : role === "interviewer" ? (
-          <StudyRoomInterviewer
-            questionList={questionList}
-            setQuestionList={setQuestionList}
-            // feedbackList={feedbackList}
-            // setFeedbackList={setFeedbackList}
-            streamManager={publisher}
-            subscribers={subscribers}
-            isScreenSharing={isScreenSharing}
-            isSpeakList={isSpeakList}
-            isHideCam={isHideCam}
-            peopleList={peopleList}
-          />
-        ) : (
-          <StudyRoomInterviewee
-            questionList={questionList}
-            setQuestionList={setQuestionList}
-            peopleList={peopleList}
-            subscribers={subscribers}
-            streamManager={publisher}
-          />
-        )
+    {initialized ? (
+      !isStarted ? (
+        <StudyRoomBefore
+          streamManager={publisher}
+          questionList={questionList}
+          setQuestionList={setQuestionList}
+          peopleList={peopleList}
+          leaveSession={leaveSession}
+        />
+      ) : role === "interviewer" ? (
+        <StudyRoomInterviewer
+          questionList={questionList}
+          setQuestionList={setQuestionList}
+          // feedbackList={feedbackList}
+          // setFeedbackList={setFeedbackList}
+          streamManager={publisher}
+          subscribers={subscribers}
+          isScreenSharing={isScreenSharing}
+          isSpeakList={isSpeakList}
+          isHideCam={isHideCam}
+          peopleList={peopleList}
+        />
       ) : (
-        <p>Loading...</p> // 이 부분은 로딩 표시로 대체할 수 있습니다.
-      )}
-    </div>
-  );
+        <StudyRoomInterviewee
+          questionList={questionList}
+          setQuestionList={setQuestionList}
+          peopleList={peopleList}
+          subscribers={subscribers}
+          streamManager={publisher}
+        />
+      )
+    ) : (
+      <p>Loading...</p> // 이 부분은 로딩 표시로 대체할 수 있습니다.
+    )}
+  </div>
+);
 };
 
 export default StudyRoom;
