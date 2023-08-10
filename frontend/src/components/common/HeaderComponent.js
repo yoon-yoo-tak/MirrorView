@@ -101,6 +101,9 @@ const Header = () => {
           <NavItem onClick={() => movePage("aboutus")}>
             About us
           </NavItem>
+          <NavItem onClick={() => movePage("adminpage")}>
+            admin
+          </NavItem>
           <NavItem onClick={() => movePage("notice")}>Notice</NavItem>
           <NavItem onClick={() => movePage("studylist")}>
             StudyList
