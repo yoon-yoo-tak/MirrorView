@@ -3,6 +3,8 @@ package com.mirrorview.global.config;
 import com.mirrorview.global.auth.security.CustomMemberDetails;
 import com.mirrorview.global.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -23,6 +25,7 @@ import java.util.Map;
 @Configuration
 @EnableWebSocketMessageBroker
 @RequiredArgsConstructor
+@Slf4j
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final JwtTokenUtil jwtTokenUtil;
@@ -41,6 +44,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         CustomMemberDetails customMemberDetails = (CustomMemberDetails) userDetailsService.loadUserByUsername(username);
 
                         // 유저를 닉네임으로 구분해서 사용할거임
+                        // 닉네임으로 구분하면 웹 소켓 중복 유저는 발생하지 않는다.
                         Authentication authentication =
                             new UsernamePasswordAuthenticationToken(customMemberDetails.getUser().getNickname(), null, customMemberDetails.getAuthorities());
                         SecurityContextHolder.getContext().setAuthentication(authentication);

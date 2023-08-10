@@ -9,9 +9,12 @@ import StudyQustionList from "./preparesection/StudyQuestionListComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { exitRoom } from "store/InterviewWebSocketStore";
-import { getClient } from "store/WebSocketStore";
 import StudyRating from "../starrating/StudyRatingComponent";
+import React, { useContext } from "react";
+import { WebSocketContext } from "WebSocketContext";
+
 const PrepareSection = (props) => {
+  const { client } = useContext(WebSocketContext);
   const [section, setSection] = useState("info");
   const { peopleList, questionList, setQuestionList, leaveSession } = props;
   const dispatch = useDispatch();
@@ -41,7 +44,6 @@ const PrepareSection = (props) => {
   const handleExit = () => {
     console.log(nicknames);
     if (!nicknames) {
-      const client = getClient();
       const sendUserData = {
         type: "EXIT",
         data: {
