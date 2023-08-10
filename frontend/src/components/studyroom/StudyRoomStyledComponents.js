@@ -199,7 +199,7 @@ export const changeButtonActive = styled.div`
     }
 `;
 
-export const changeButtonGray = styled.div`
+export const changeButtonGray = styled.button`
     margin: 5px;
     display: flex;
     flex-direction: row;

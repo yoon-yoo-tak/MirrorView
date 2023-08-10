@@ -6,11 +6,14 @@ import { useEffect, useState } from "react";
 import useUpdateEffect from "../../lib/UseUpdateEffect";
 import { useDispatch, useSelector } from "react-redux";
 import { getInterviewRoom } from "../../store/InterviewStore";
+import { useNavigate } from "react-router-dom";
 
 const StudyRoomList = () => {
   // 데이터
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { room } = useSelector((state) => state.interview);
+  const{user} = useSelector((state)=>state.auth);
   useEffect(() => {
     dispatch(getInterviewRoom());
   }, []);
@@ -49,6 +52,11 @@ const StudyRoomList = () => {
   const [modalStates, setModalStates] = useState(false);
 
   const handleModal = () => {
+    if(!user){
+      alert("로그인 후 이용 가능합니다.");
+      navigate("/login");
+      return;
+    }
     setModalStates(true);
   };
 
