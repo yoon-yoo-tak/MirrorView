@@ -6,6 +6,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useState, useEffect } from "react";
 import { getClient, initializeWebSocket } from "store/WebSocketStore";
+import { globalSubscribe } from "store/GlobalStore";
 
 const Login = () => {
     const [inputId, setInputId] = useState("");
@@ -35,15 +36,24 @@ const Login = () => {
                 })
             )
                 .unwrap()
-                .then(({ data }) => {
+                .then(async ({ data }) => {
                     console.log(data);
                     dispatch(getUserInfo(data["access-token"]));
-                    dispatch(initializeWebSocket(accessToken));
+                    const connectionResult = await dispatch(initializeWebSocket(data["access-token"]));
+
+                    if (connectionResult.payload === true) {
+                        const client = getClient();
+                        dispatch(globalSubscribe());
+                    }else{
+                        console.log("구독 x");
+                    }
+
                 })
                 .catch((error) => {
                     console.log(error);
                     alert("회원 정보가 존재하지 않습니다."); //todo 이쁜 거로 바꾸기 sweetalert (?)
                 });
+
         },
         [inputId, inputPassword]
     );

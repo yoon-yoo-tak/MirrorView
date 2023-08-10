@@ -18,35 +18,36 @@ import ChatList from "pages/sidebar/ChatList";
 import PrivateChatRoom from "pages/sidebar/ChatRoom";
 import Search from "../../assets/searchicon.png";
 import { closeWebSocket, getClient } from "store/WebSocketStore";
+import { NotificationsNone } from "@material-ui/icons";
 
 const Header = () => {
-    const { user } = useSelector((state) => state.auth);
-    const dispatch = useDispatch();
-    const onClickLogout = (e) => {
-        alert("로그아웃 되었습니다!");
-        dispatch(logout());
-        if (getClient !== null) dispatch(closeWebSocket());
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const onClickLogout = (e) => {
+    alert("로그아웃 되었습니다!");
+    dispatch(logout());
+    if (getClient !== null) dispatch(closeWebSocket());
 
-        navigate("");
-    };
-    const navigate = useNavigate();
+    navigate("");
+  };
+  const navigate = useNavigate();
 
-    const movePage = (props) => {
-        navigate(`/${props}`);
-    };
+  const movePage = (props) => {
+    navigate(`/${props}`);
+  };
 
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-    const [clickFriends, setClickFriends] = useState(false);
-    const [clickChat, setClickChat] = useState(false);
-    const [clickSearch, setClickSearch] = useState(false);
+  const [clickFriends, setClickFriends] = useState(false);
+  const [clickChat, setClickChat] = useState(false);
+  const [clickSearch, setClickSearch] = useState(false);
 
   const handleFriendsSideBar = () => {
     setClickFriends((prevState) => !prevState);
@@ -75,135 +76,143 @@ const Header = () => {
     }
   };
 
-    const openSearch = () => {
-        // console.log("사람찾아요");
-    };
+  const handleAlarmSideBar = () => {
+    console.log("alarm")
+  }
 
-    const font = {
-        fontFamily: "HakgyoansimWoojuR",
-    };
+  const openSearch = () => {
+    // console.log("사람찾아요");
+  };
 
-    return (
-        <div>
-            <Nav>
-                <Link to="/">
-                    {" "}
-                    {/* 이 부분이 추가되었습니다 */}
-                    <Logo></Logo>
-                </Link>
-                <NavMenu>
-                    {/* <StyledLink to="/aboutus">About us</StyledLink> */}
-                    <NavItem onClick={() => movePage("aboutus")}>
-                        About us
-                    </NavItem>
-                    <NavItem onClick={() => movePage("notice")}>Notice</NavItem>
-                    <NavItem onClick={() => movePage("studylist")}>
-                        StudyList
-                    </NavItem>
-                    {/* <NavItem onClick={() => movePage("mypage/profile")}>
+  const font = {
+    fontFamily: "HakgyoansimWoojuR",
+  };
+
+  return (
+    <div>
+      <Nav>
+        <Link to="/">
+          {" "}
+          {/* 이 부분이 추가되었습니다 */}
+          <Logo></Logo>
+        </Link>
+        <NavMenu>
+          {/* <StyledLink to="/aboutus">About us</StyledLink> */}
+          <NavItem onClick={() => movePage("aboutus")}>
+            About us
+          </NavItem>
+          <NavItem onClick={() => movePage("notice")}>Notice</NavItem>
+          <NavItem onClick={() => movePage("studylist")}>
+            StudyList
+          </NavItem>
+          {/* <NavItem onClick={() => movePage("mypage/profile")}>
                     MyPage
                 </NavItem> */}
-                    <LoginNavItem>
-                        {!user ? (
-                            <NavItem onClick={() => movePage("login")}>
-                                로그인
-                            </NavItem>
-                        ) : (
-                            <IconArea>
-                                <MyIcon
-                                    onClick={handleClick}
-                                    aria-controls={
-                                        open ? "account-menu" : undefined
-                                    }
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? "true" : undefined}
-                                ></MyIcon>
-                                <Menu
-                                    anchorEl={anchorEl}
-                                    id="account-menu"
-                                    open={open}
-                                    onClose={handleClose}
-                                    onClick={handleClose}
-                                    PaperProps={{
-                                        elevation: 0,
-                                        sx: {
-                                            overflow: "visible",
-                                            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                                            mt: 1.5,
-                                            "& .MuiAvatar-root": {
-                                                width: 32,
-                                                height: 32,
-                                                ml: -0.5,
-                                                mr: 1,
-                                            },
-                                            "&:before": {
-                                                content: '""',
-                                                display: "block",
-                                                position: "absolute",
-                                                top: 0,
-                                                right: 14,
-                                                width: 10,
-                                                height: 10,
-                                                bgcolor: "background.paper",
-                                                transform:
-                                                    "translateY(-50%) rotate(45deg)",
-                                                zIndex: 0,
-                                            },
-                                        },
-                                    }}
-                                    transformOrigin={{
-                                        horizontal: "right",
-                                        vertical: "top",
-                                    }}
-                                    anchorOrigin={{
-                                        horizontal: "right",
-                                        vertical: "bottom",
-                                    }}
-                                >
-                                    <MenuItem style={font}>
-                                        {user.nickname}님
-                                        <br /> 반갑습니다!
-                                    </MenuItem>
+          <LoginNavItem>
+            {!user ? (
+              <NavItem onClick={() => movePage("login")}>
+                로그인
+              </NavItem>
+            ) : (
+              <IconArea>
+                <MyIcon
+                  onClick={handleClick}
+                  aria-controls={
+                    open ? "account-menu" : undefined
+                  }
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                ></MyIcon>
+                <Menu
+                  anchorEl={anchorEl}
+                  id="account-menu"
+                  open={open}
+                  onClose={handleClose}
+                  onClick={handleClose}
+                  PaperProps={{
+                    elevation: 0,
+                    sx: {
+                      overflow: "visible",
+                      filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                      mt: 1.5,
+                      "& .MuiAvatar-root": {
+                        width: 32,
+                        height: 32,
+                        ml: -0.5,
+                        mr: 1,
+                      },
+                      "&:before": {
+                        content: '""',
+                        display: "block",
+                        position: "absolute",
+                        top: 0,
+                        right: 14,
+                        width: 10,
+                        height: 10,
+                        bgcolor: "background.paper",
+                        transform:
+                          "translateY(-50%) rotate(45deg)",
+                        zIndex: 0,
+                      },
+                    },
+                  }}
+                  transformOrigin={{
+                    horizontal: "right",
+                    vertical: "top",
+                  }}
+                  anchorOrigin={{
+                    horizontal: "right",
+                    vertical: "bottom",
+                  }}
+                >
+                  <MenuItem style={font}>
+                    {user.nickname}님
+                    <br /> 반갑습니다!
+                  </MenuItem>
 
-                                    <Divider />
+                  <Divider />
 
-                                    <MenuItem
-                                        style={font}
-                                        onClick={() =>
-                                            movePage("mypage/profile")
-                                        }
-                                    >
-                                        마이페이지
-                                    </MenuItem>
-                                    <MenuItem
-                                        style={font}
-                                        onClick={onClickLogout}
-                                    >
-                                        로그아웃
-                                    </MenuItem>
-                                </Menu>
-                                <FriendsIcon onClick={handleFriendsSideBar} />
-                                <ChatIcon onClick={handleChatSidebar} />
-                                <SearchIcon onClick={handleSearchSidebar} />
-                            </IconArea>
-                        )}
-                    </LoginNavItem>
-                </NavMenu>
-            </Nav>
-            <SidebarFriends
-                setClickFriends={setClickFriends}
-                clickFriends={clickFriends}
-            ></SidebarFriends>
-            <SidebarChat clickChat={clickChat} setClickChat={setClickChat}>
-                <ChatList />
-                <PrivateChatRoom />
-            </SidebarChat>
-            <SidebarSearch
-                clickSearch={clickSearch}
-                setClickSearch={setClickSearch}
-            />
-        </div>
-    );
+                  <MenuItem
+                    style={font}
+                    onClick={() =>
+                      movePage("mypage/profile")
+                    }
+                  >
+                    마이페이지
+                  </MenuItem>
+                  <MenuItem
+                    style={font}
+                    onClick={onClickLogout}
+                  >
+                    로그아웃
+                  </MenuItem>
+                </Menu>
+
+                <FriendsIcon onClick={handleFriendsSideBar} />
+                <ChatIcon onClick={handleChatSidebar} />
+                <SearchIcon onClick={handleSearchSidebar} />
+                <AlarmIcon onClick={handleAlarmSideBar}>
+                  <NotificationsNone style={{ fontSize: 23 }} />
+                </AlarmIcon>
+              </IconArea>
+            )}
+          </LoginNavItem>
+        </NavMenu>
+      </Nav>
+      <SidebarFriends
+        setClickFriends={setClickFriends}
+        clickFriends={clickFriends}
+      ></SidebarFriends>
+      <SidebarChat clickChat={clickChat} setClickChat={setClickChat}>
+        <ChatList />
+        <PrivateChatRoom />
+      </SidebarChat>
+      <SidebarSearch
+        clickSearch={clickSearch}
+        setClickSearch={setClickSearch}
+      />
+    </div>
+  );
 };
 
 const Logo = styled.div`
@@ -262,7 +271,7 @@ const IconArea = styled.div`
     padding: 0 20px;
     display: flex;
     justify-content: space-between;
-    min-width: 120px;
+    min-width: 150px;
 `;
 
 const ChatIcon = styled.div`
@@ -296,6 +305,18 @@ const SearchIcon = styled.div`
     height: 20px;
     cursor: pointer;
     transition: transform 0.2s;
+    &:hover {
+        transform: scale(1.2);
+    }
+`;
+
+const AlarmIcon = styled.div`
+    background-size: cover;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    // margin-bottom: 6px;
     &:hover {
         transform: scale(1.2);
     }

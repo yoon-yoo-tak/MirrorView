@@ -13,6 +13,7 @@ import interviewReducer from "./InterviewStore";
 import interviewWebSocketStore from "store/InterviewWebSocketStore";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import globalReducer from "./GlobalStore";
 //import sessionStorage from "redux-persist/lib/storage/session";
 //import { composeWithDevTools } from "redux-devtools-extension";
 
@@ -39,11 +40,12 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    webSocket: WebSocketStoreReducer,
+    webSocket: WebSocketStoreReducer,   
     chatRoom: chatRoomReducer,
     chatView: chatViewReducer,
     interview: interviewReducer,
     interviewWebSocket: interviewWebSocketStore,
+    global: globalReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
