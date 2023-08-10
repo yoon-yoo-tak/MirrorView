@@ -1,16 +1,37 @@
 import { useDispatch, useSelector } from "react-redux";
 import * as S from "./StudyStyledComponents";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const StudyRoomThumbnail = (info) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {user} = useSelector((state)=>state.auth);
   const handleEnter = () => {
+    console.log(info);
     if(!user){
       alert("로그인 후 이용 가능합니다.");
       navigate("/login");
       return;
+    }
+    if(info.maxMemberCount === info.currentMemberCount){
+      alert("인원이 꽉 찼습니다.");
+      return;
+    }
+    if(info.havePassword){
+      let pass= window.prompt("비밀번호를 입력하세요");
+      axios.post("/api/interviews/join/check",{
+        roomId : info.roomId,
+        password : pass,
+      }).then(()=>{
+        navigate(`/studyroom/${info.roomId}`,{
+          state:{isHost:false}
+        });
+        return;
+      }).catch((error)=>{
+        console.log(error);
+        return;
+      });
     }
     if (
       window.confirm(
