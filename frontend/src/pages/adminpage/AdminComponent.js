@@ -33,14 +33,14 @@ export const Noticebox = styled.div`
 export const TableWrapper = styled.div`
     table {
         position: absolute;
-        top: 55px;
-        left: 175px;
+        top: 130px;
+        left: 185px;
         width: 1200px;
         height: flex; /* 최대 높이 지정 */
         border-collapse: collapse;
         margin-bottom: 10px;
         border-radius: 10px;
-        overflow: scroll; /* 스크롤을 내부 컨텐츠에 적용 */
+        /* overflow: scroll; */
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
         background-color: white;
 
@@ -64,12 +64,6 @@ export const TableWrapper = styled.div`
             background-color: rgba(255, 184, 208, 0.3);
         }
     }
-`;
-
-export const ScrollContent = styled.div`
-    max-height: 100%;
-    overflow: auto;
-    padding: 10px; /* 내용 주변 여백 조정 */
 `;
 
 export const PaginationContainer = styled.div`
