@@ -1,11 +1,10 @@
 package com.mirrorview.global.event;
 
-import java.security.Principal;
 import java.util.concurrent.ConcurrentMap;
 
+import com.mirrorview.global.alarm.service.GlobalWebSocketService;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
@@ -13,7 +12,6 @@ import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
 import com.mirrorview.domain.chatroom.service.SubscriptionService;
-import com.mirrorview.global.auth.security.CustomMemberDetails;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,28 +22,40 @@ import lombok.extern.slf4j.Slf4j;
 public class WebSocketEvents {
 
 	private final SubscriptionService subscriptionService;
+	private final GlobalWebSocketService globalWebSocketService;
 	
 	// 웹 소켓 연결 이벤트
 	@EventListener
 	public void handleWebSocketConnectListener(SessionConnectEvent event) {
+		log.info("login !!!!!! socket");
+		Authentication authentication = (Authentication) event.getUser();
+		String nickname = null;
+		try {
+			nickname = authentication.getName();
+		} catch (NullPointerException e) {
+			return;
+		}
+		globalWebSocketService.enter(nickname);
 	}
 
 	// 웹 소켓 종료 이벤트 - 사용자가 강제 종료 시 구독한 채널들을 취소
 	@EventListener
 	public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+		log.info("exit !!!!!!!!! socket");
 		Authentication authentication = (Authentication) event.getUser();
-		String userId = authentication.getName();
-		subscriptionService.handleInterviewRoomUnsubscribe(userId);
-		ConcurrentMap<String, String> userSubscriptions = subscriptionService.getUserIdToSubscriptionMap().get(userId);
+		String nickname = authentication.getName();
+		subscriptionService.handleInterviewRoomUnsubscribe(nickname);
+		ConcurrentMap<String, String> userSubscriptions = subscriptionService.getUserIdToSubscriptionMap().get(nickname);
 		if (userSubscriptions != null) {
 			for (String subscriptionId : userSubscriptions.keySet()) {
 				if (subscriptionId.equals("total")) {
-					subscriptionService.handleForceUnsubscribe(userId);
+					subscriptionService.handleForceUnsubscribe(nickname);
 					continue;
 				}
-				subscriptionService.handleUnsubscribe(userId, subscriptionId);
+				subscriptionService.handleUnsubscribe(nickname, subscriptionId);
 			}
 		}
+		globalWebSocketService.exit(nickname);
 	}
 	
 	// 구독 이벤트

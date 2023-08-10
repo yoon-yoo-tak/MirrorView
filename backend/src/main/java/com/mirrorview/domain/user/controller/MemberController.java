@@ -147,18 +147,19 @@ public class MemberController {
         return BaseResponse.okWithData(HttpStatus.OK, "평점 남기기 완료", currentScore);
     }
 
-    @GetMapping("/find/{userId}")
-    public ResponseEntity<?> getOtherMemberInfo(@PathVariable String userId,
+    @GetMapping("/find/{nickname}")
+    public ResponseEntity<?> getOtherMemberInfo(@PathVariable String nickname,
                                                 @AuthenticationPrincipal CustomMemberDetails member) {
-        String myUserId = member.getUsername();
-        if (myUserId.equals(userId)) {
+        String myNickname = member.getNickname();
+        if (myNickname.equals(nickname)) {
             return BaseResponse.fail("잘못된 정보", 400);
         }
-        Optional<Member> findMember = memberService.findByUserId(userId);
+        Optional<Member> findMember = memberService.findByNickname(nickname);
+        log.info("found = {}", findMember.get());
         if (findMember.isEmpty() || findMember.get().getDelete()) {
             return BaseResponse.fail("없는 정보입니다.", 400);
         }
-        String friendStatus = friendService.getFriendStatus(myUserId, userId);
+        String friendStatus = friendService.getFriendStatus(member.getUsername(), findMember.get().getUserId());
         MemberResDto responseDto = MemberResDto.build(friendStatus, findMember.get());
 
         return BaseResponse.okWithData(HttpStatus.OK, "상대 정보 열람", responseDto);
