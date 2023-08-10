@@ -3,6 +3,9 @@ import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 import data from "./Data";
 
+import Header from "../../components/common/HeaderComponent";
+import Footer from "../../components/common/FooterComponent";
+
 import * as S from "../../components/notice/NoticePageComponent";
 import { useSelector } from "react-redux";
 import useUpdateEffect from "lib/UseUpdateEffect";
@@ -41,62 +44,67 @@ const NoticePage = () => {
     // 총 페이지 수 계산
 
     return (
-        <S.Container>
-            <S.Image src="/bground.png" alt="main_bg" />
-            <S.Noticebox>{/* 공지사항 내용 */}</S.Noticebox>
-            <S.Title>공지사항</S.Title>
+        <div>
+            <Header />
 
-            <S.PaginationContainer>
-                <ReactPaginate
-                    previousLabel={"<"}
-                    nextLabel={">"}
-                    breakLabel={"..."}
-                    breakClassName={"break-me"}
-                    pageCount={totalPages} // 총 페이지 수 동적으로 설정
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={handlePageChange}
-                    containerClassName={"pagination"}
-                    activeClassName={"active"}
-                />
-            </S.PaginationContainer>
+            <S.Container>
+                <S.Image src="/bground.png" alt="main_bg" />
+                <S.Noticebox>{/* 공지사항 내용 */}</S.Noticebox>
+                <S.Title>공지사항</S.Title>
 
-            <S.TableWrapper>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>번호</th>
-                            <th>제목</th>
-                            <th>날짜</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {notice.map((data) => (
-                            <tr key={data.id}>
-                                <td>{data.id}</td>
-                                <td>
-                                    <Link to={`/noticedetail/${data.id}`}>
-                                        {data.title}
-                                    </Link>
-                                </td>
-                                <td>{data.createdTime.substring(0, 10)}</td>
+                <S.PaginationContainer>
+                    <ReactPaginate
+                        previousLabel={"<"}
+                        nextLabel={">"}
+                        breakLabel={"..."}
+                        breakClassName={"break-me"}
+                        pageCount={totalPages} // 총 페이지 수 동적으로 설정
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        onPageChange={handlePageChange}
+                        containerClassName={"pagination"}
+                        activeClassName={"active"}
+                    />
+                </S.PaginationContainer>
+
+                <S.TableWrapper>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>제목</th>
+                                <th>날짜</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-                {user && user.roles == "ADMIN" ? (
-                    <>
-                        <S.ButtonWrapper>
-                            <Link to="/NoticeWritePage">
-                                <S.Button>작 성</S.Button>
-                            </Link>
-                        </S.ButtonWrapper>
-                    </>
-                ) : (
-                    <></>
-                )}
-            </S.TableWrapper>
-        </S.Container>
+                        </thead>
+                        <tbody>
+                            {notice.map((data) => (
+                                <tr key={data.id}>
+                                    <td>{data.id}</td>
+                                    <td>
+                                        <Link to={`/noticedetail/${data.id}`}>
+                                            {data.title}
+                                        </Link>
+                                    </td>
+                                    <td>{data.createdTime.substring(0, 10)}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    {user && user.roles == "ADMIN" ? (
+                        <>
+                            <S.ButtonWrapper>
+                                <Link to="/NoticeWritePage">
+                                    <S.Button>작 성</S.Button>
+                                </Link>
+                            </S.ButtonWrapper>
+                        </>
+                    ) : (
+                        <></>
+                    )}
+                </S.TableWrapper>
+            </S.Container>
+            <Footer />
+        </div>
     );
 };
 

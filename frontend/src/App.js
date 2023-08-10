@@ -44,7 +44,7 @@ const App = () => {
                 <PrivateChatRoom />
             </Sidebar> */}
 
-        <Header></Header>
+        {/* <Header></Header> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
