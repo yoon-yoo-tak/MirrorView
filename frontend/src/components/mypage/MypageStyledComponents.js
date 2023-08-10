@@ -950,6 +950,11 @@ export const CheckBtn = styled.button`
     height: 35px;
 `;
 
+export const withdrawal = styled.div`
+    cursor: pointer;
+    margin-top: 300px;
+`;
+
 export const hr = styled.h2`
     position: relative;
     width: 750px;

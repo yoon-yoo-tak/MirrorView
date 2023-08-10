@@ -14,6 +14,7 @@ import axios from "axios";
 import defaultImage from "../../../assets/defaultimage.png";
 import ImageCrop from "components/mypage/ImageCropComponent";
 import { setPhoto } from "../../../store/AuthStore";
+import { AddAlertRounded } from "@material-ui/icons";
 // import getCroppedImg from "components/mypage/GetCrop";
 
 const Profile = () => {
@@ -170,6 +171,27 @@ const Profile = () => {
         }
     };
 
+    const goWithdrawal = () => {
+        if (window.confirm("탈퇴하시겠습니까?")) {
+            if (window.confirm("정말요?")) {
+                if (window.confirm("진짜로?ㅠㅠ")) {
+                    alert("안녕히가세여ㅠㅠㅠ");
+                    axios
+                        .delete(`api/users/${user.userId}`)
+                        .then(() => {
+                            // dispatch() 머해야대지??????!!!?
+                            alert("회원 탈퇴 완료");
+                            navigate("/");
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                            alert("회원탈퇴 실패 ㄷㄷ");
+                        });
+                }
+            }
+        }
+    };
+
     const imageStyle = {
         width: "160px",
         height: "160px",
@@ -299,6 +321,9 @@ const Profile = () => {
                                 <StarRating grade={user.averageRating} />
                             </S.gradeStar>
                         </S.gradeGroup>
+                        <S.withdrawal onClick={goWithdrawal}>
+                            회원탈퇴
+                        </S.withdrawal>
                     </S.profileBox>
                 </S.wrap>
             </S.page>

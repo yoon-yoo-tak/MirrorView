@@ -286,3 +286,59 @@ h2 {
 .reject:hover {
     color: white;
 }
+
+.search-section {
+    font-family: HakgyoansimWoojuR;
+}
+
+.search-input-wrap {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    height: 30px;
+}
+
+.search-input {
+    width: calc(100% - 35px);
+    font-family: HakgyoansimWoojuR;
+}
+
+.search-button {
+    object-fit: cover;
+    padding: 5px;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    transform: scale(1.1);
+}
+
+.result-section {
+    padding: 15px;
+}
+
+.result-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 6px 0;
+    padding: 8px;
+}
+
+.result-wrap:hover {
+    background-color: #ecf5ff;
+    border-radius: 10px;
+}
+
+.go-profile {
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.go-profile:hover {
+    transform: scale(1.1);
+}
