@@ -1,6 +1,7 @@
 package com.mirrorview.domain.interview.controller;
 
 import com.mirrorview.domain.interview.domain.InterviewRoom;
+import com.mirrorview.domain.interview.dto.CheckPasswordDto;
 import com.mirrorview.domain.interview.dto.MessageDto;
 import com.mirrorview.domain.interview.dto.RoomRequestDto;
 import com.mirrorview.domain.interview.dto.RoomResponseDto;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -59,14 +59,23 @@ public class InterviewController {
         return BaseResponse.ok(HttpStatus.OK, "나가기 완료");
     }
 
+    @PostMapping("join/check")
+    public ResponseEntity<?> checkRoomPassword(@RequestBody CheckPasswordDto checkPasswordDto) {
+        try {
+            interviewService.checkRoomPassword(checkPasswordDto.getRoomId(), checkPasswordDto.getPassword());
+        } catch (Exception e) {
+            return BaseResponse.fail(e.getMessage(), 400);
+        }
+        return BaseResponse.ok(HttpStatus.OK, "비밀번호가 일치합니다");
+    }
+
     @PostMapping("join/{roomId}")
     public ResponseEntity<?> joinRoom(@AuthenticationPrincipal CustomMemberDetails member,
-                                      @PathVariable String roomId, @RequestBody Map<String, String> passwordMap) {
+                                      @PathVariable String roomId) {
         log.info("db 가져오기");
         InterviewRoom interview;
-        String password = passwordMap.get("password");
         try {
-            interview = interviewService.joinRoom(member.getUser(), roomId, password);
+            interview = interviewService.joinRoom(member.getUser(), roomId);
         } catch (Exception e) {
             return BaseResponse.fail(e.getMessage(), 400);
         }
@@ -99,17 +108,17 @@ public class InterviewController {
     }
 
     @PostMapping("/started/{roomId}")
-    public ResponseEntity<?> setStartedState(@PathVariable String roomId){
-        if(interviewService.startedState(roomId)){
+    public ResponseEntity<?> setStartedState(@PathVariable String roomId) {
+        if (interviewService.startedState(roomId)) {
             // state 값 변경 pub
             Map<String, Object> data = new HashMap<>();
             data.put("isStarted", true);
 
             MessageDto messageDto = MessageDto.builder()
-                .type("ROOM_START")
-                .data(data)
-                .build();
-            simpMessagingTemplate.convertAndSend("/sub/interviewrooms/"+roomId, messageDto);
+                    .type("ROOM_START")
+                    .data(data)
+                    .build();
+            simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
         }
         return BaseResponse.ok(HttpStatus.OK, "방이 시작되었습니다.");
     }

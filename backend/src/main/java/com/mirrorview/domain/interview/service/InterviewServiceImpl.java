@@ -114,18 +114,11 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public InterviewRoom joinRoom(Member member, String roomId, String password) {
+    public InterviewRoom joinRoom(Member member, String roomId) {
         Optional<InterviewRoom> findRoom = findRoomById(roomId);
         if (findRoom.isPresent()) {
             InterviewRoom interviewRoom = findRoom.get();
             String roomPassword = interviewRoom.getPassword();
-            if (!roomPassword.isEmpty()) {
-                log.info("room pass = {}", roomPassword);
-                log.info("pass = {}", password);
-                if (!roomPassword.equals(password)) {
-                    throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-                }
-            }
             List<EssayListDto> essayList = new ArrayList<>();
             //List<EssayListDto> essayListDtos = getEssayListDtos(member.getUserId());
             interviewRoom.join(member, essayList);
@@ -230,13 +223,24 @@ public class InterviewServiceImpl implements InterviewService {
         simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, systemMessage);
     }
 
-    public boolean startedState(String roomId){
+    public boolean startedState(String roomId) {
         Optional<InterviewRoom> roomById = interviewRepository.findById(roomId);
-        if(roomById.isPresent()){
+        if (roomById.isPresent()) {
             roomById.get().startedState();
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void checkRoomPassword(String roomId, String password) {
+        log.info("input pass = {}", password);
+        InterviewRoom room = interviewRepository.findById(roomId).orElseThrow(() -> new IllegalArgumentException("Room not found"));
+        log.info("room pw = {}", room.getPassword());
+        if (!password.equals(room.getPassword())) {
+            throw new IllegalArgumentException("Password is not matched");
+        }
+
     }
 }
 
