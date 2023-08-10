@@ -58,6 +58,7 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
   useEffect(() => {
     if (clickChat) {
       setIsOpen(true);
+      
       dispatch(initializeWebSocket(accessToken)).then(() => {
         const client = getClient();
         dispatch(subscribeUserCount(client));
