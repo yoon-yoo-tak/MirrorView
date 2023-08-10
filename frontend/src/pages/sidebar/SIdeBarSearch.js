@@ -10,15 +10,12 @@ import searchIcon from "../../assets/searchicon.png";
 import ProfileModal from "components/ProfileModal";
 
 import { useDispatch } from "react-redux"; // <-- useDispatch 불러오기
-import { closeWebSocket } from "store/WebSocketStore"; // <-- WebSocket 액션 불러오기
 import axios from "axios";
 import "pages/sidebar/css/SideBar.css";
 
 const SidebarSearch = ({ setClickSearch, clickSearch }) => {
     const dispatch = useDispatch(); // <-- dispatch 함수 가져오기
-    const accessToken = useSelector((state) => state.auth.accessToken);
     const { user } = useSelector((state) => state.auth);
-    const userCount = useSelector((state) => state.webSocket.userCount);
     const [isOpen, setIsOpen] = useState(false);
 
     const [searchingId, setSearchingId] = useState("");

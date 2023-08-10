@@ -82,7 +82,12 @@ export const enterbtn = styled.div`
     // color: white;
     font-weight: bold;
 
-    background: #ffb1bb;
+    background: ${(props) =>
+        props.value === "accept"
+            ? "#71C69D"
+            : props.value === "request"
+            ? "#6BB5DE"
+            : "#ffb1bb"};
     box-shadow: 0px 0px 10px #bdbdbd;
     border-radius: 15px;
     cursor: pointer;

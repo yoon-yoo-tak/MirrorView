@@ -13,7 +13,7 @@ import myInfo from "../../assets/person-image.png";
 import Sidebar from "pages/sidebar/SideBar";
 import SidebarChat from "pages/sidebar/SidebarChat";
 import SidebarFriends from "pages/sidebar/SideBarFriends";
-import SidebarSearch from "pages/sidebar/SIdeBarSearch";
+import SidebarSearch from "pages/sidebar/SideBarSearch";
 import ChatList from "pages/sidebar/ChatList";
 import PrivateChatRoom from "pages/sidebar/ChatRoom";
 import Search from "../../assets/searchicon.png";
