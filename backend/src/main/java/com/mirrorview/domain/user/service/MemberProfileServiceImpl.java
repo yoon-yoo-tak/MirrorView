@@ -48,6 +48,7 @@ public class MemberProfileServiceImpl implements MemberProfileService {
         Member member = memberProfileRepository.findByUserId(userId);
         MemberProfileDto memberProfileDto = new MemberProfileDto();
         memberProfileDto.setUserId(member.getUserId());
+        memberProfileDto.setIsOauthUser(member.getIsOauthUser());
         memberProfileDto.setEmail(member.getEmail());
         memberProfileDto.setNickname(member.getNickname());
         memberProfileDto.setPhoto(member.getPhoto());
