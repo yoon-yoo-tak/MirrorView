@@ -35,7 +35,7 @@ const FindPassword = () => {
             <form onSubmit={handleSubmit}>
                 <S.page>
                     <S.wrap>
-                        <h2>개인회원 ID찾기</h2>
+                        <h2>비밀번호 찾기</h2>
                         <h3>가입시 입력한 이메일을 입력해주세요</h3>
                         <S.contentWrap>
                             <S.inputTitle>ID</S.inputTitle>

@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ReactPaginate from "react-paginate";
 import { Link } from "react-router-dom";
 import * as S from "../../pages/adminpage/AdminComponent";
 import { useSelector } from "react-redux";
 import { admindata } from "./admindata";
+import styled from "styled-components";
 
 const AdminManagePage = () => {
-    const perPage = 7; // 한 페이지에 보여줄 데이터 개수
+    const perPage = 7;
     const paginationPos = 30 + perPage;
     const [currentPage, setCurrentPage] = useState(0);
     const { user } = useSelector((state) => state.auth);
@@ -21,14 +22,14 @@ const AdminManagePage = () => {
         (currentPage + 1) * perPage
     );
 
-    const [selectedContent, setSelectedContent] = useState(null); // 선택된 내용 상태
+    const [selectedContent, setSelectedContent] = useState(null);
 
     const handleContentClick = (content) => {
-        setSelectedContent(content); // 클릭한 내용을 상태에 저장
+        setSelectedContent(content);
     };
 
     const handleModalClose = () => {
-        setSelectedContent(null); // 모달 닫을 때 상태 초기화
+        setSelectedContent(null);
     };
 
     const handleModalBackgroundClick = (event) => {
@@ -37,6 +38,28 @@ const AdminManagePage = () => {
         }
     };
 
+    const scrollContainerRef = useRef(null);
+
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        const modalContainer = document.querySelector(".modalContainer"); // 모달 컨테이너 선택
+
+        if (container && modalContainer) {
+            if (
+                selectedContent &&
+                container.scrollHeight >= modalContainer.clientHeight
+            ) {
+                console.log(
+                    container.scrollHeight,
+                    modalContainer.clientHeight
+                );
+                container.style.overflow = "auto";
+            } else {
+                container.style.overflow = "hidden";
+            }
+        }
+    }, [selectedContent]);
+
     return (
         <S.Container>
             <S.Image
@@ -44,7 +67,6 @@ const AdminManagePage = () => {
                 alt="main_bg"
                 onClick={handleModalBackgroundClick}
             />
-
             <S.TableWrapper>
                 <table>
                     <thead>
@@ -60,7 +82,6 @@ const AdminManagePage = () => {
                                 <td>{admindata1.userid}</td>
                                 <td>{admindata1.count}</td>
                                 <td style={{ width: "50%", cursor: "pointer" }}>
-                                    {/* content를 클릭했을 때 handleContentClick 함수 호출 */}
                                     <div
                                         onClick={() =>
                                             handleContentClick(
@@ -79,11 +100,9 @@ const AdminManagePage = () => {
                             </tr>
                         ))}
                     </tbody>
-
-                    {/* 모달을 선택된 내용으로 열도록 설정 */}
                     {selectedContent && (
-                        <S.modalContainer>
-                            <S.modalScrollContent>
+                        <S.modalContainer className="modalContainer">
+                            <S.modalScrollContent ref={scrollContainerRef}>
                                 <S.modalContent
                                     style={{
                                         top: "20px",
@@ -116,7 +135,6 @@ const AdminManagePage = () => {
                             </S.modalScrollContent>
                         </S.modalContainer>
                     )}
-
                     <S.PaginationContainer
                         style={{ top: "", left: paginationPos + "%" }}
                     >
