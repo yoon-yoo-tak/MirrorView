@@ -77,7 +77,7 @@ const AdminManagePage = () => {
                                 style={{ width: "50%", cursor: "pointer" }}
                                 key={admindata1.id}
                                 onClick={() =>
-                                    handleContentClick(admindata1.content)
+                                    handleContentClick(admindata1.id)
                                 }
                             >
                                 <td>{admindata1.userid}</td>
@@ -129,20 +129,20 @@ const AdminManagePage = () => {
                                     >
                                         정지
                                     </S.modalButton>
-                                    {Object.keys(selectedData).map(
-                                        (key, index) => {
-                                            if (key.startsWith("content")) {
-                                                return (
-                                                    <div key={index}>
-                                                        {selectedData[key]}{" "}
-                                                        <br />
-                                                        <br />
-                                                    </div>
-                                                );
+                                    {selectedData &&
+                                        Object.keys(selectedData).map(
+                                            (key, index) => {
+                                                if (key.startsWith("content")) {
+                                                    return (
+                                                        <div key={index}>
+                                                            {selectedData[key]}{" "}
+                                                            <br /> <br />
+                                                        </div>
+                                                    );
+                                                }
+                                                return null;
                                             }
-                                            return null;
-                                        }
-                                    )}
+                                        )}
                                 </S.modalContent>
                             </S.modalScrollContent>
                         </S.modalContainer>
