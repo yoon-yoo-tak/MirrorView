@@ -1,16 +1,12 @@
-import PrepareSection from "../../components/studyroom/studyroombefore/PrepareSectionComponent";
-import SelectInterviewee from "../../components/studyroom/studyroombefore/SelectIntervieweeComponent";
-import * as S from "../../components/studyroom/StudyRoomStyledComponents";
 import StudyRoomBefore from "../../components/studyroom/StudyRoomBeforeComponent";
 import StudyRoomInterviewer from "../../components/studyroom/StudyRoomInterviewerComponent";
 import StudyRoomInterviewee from "components/studyroom/StudyRoomIntervieweeComponent";
-
+import { useHistory } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router";
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   clearCurrentRoom,
   hostJoinInterviewRoom,

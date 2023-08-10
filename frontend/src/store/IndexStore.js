@@ -53,7 +53,9 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().prepend(
+    getDefaultMiddleware({
+      serializableCheck: false, // 직렬화 체크를 비활성화합니다.
+    }).prepend(
       thunk.withExtraArgument({
         wsclient: WebSocketContext, // 이곳에 context에서 가져온 WebSocket client를 전달합니다.
       })
