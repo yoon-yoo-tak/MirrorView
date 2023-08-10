@@ -5,16 +5,11 @@ import {
 } from "@reduxjs/toolkit";
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import {
-  createChatRoomAsync,
-  updateChatRooms,
-  addChatRoom,
-} from "store/ChatRoomStore";
+import { updateChatRooms, addChatRoom } from "store/ChatRoomStore";
 
 // state에 client 객체를 직렬화 문제 때문에 저장할 수가 없다.
 let client;
 
-// 웹소켓 연결 Thunk 정의
 export const initializeWebSocket = createAsyncThunk(
   "webSocket/initialize",
   async (accessToken, { dispatch }) => {

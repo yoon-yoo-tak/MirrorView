@@ -63,5 +63,6 @@ public class ChatWebSocketController {
 	public void createChatRoom(ChatRoom chatRoom) {
 		ChatRoom newChatRoom = chatService.createChatRoom(chatRoom.getId());
 		simpMessagingTemplate.convertAndSend("/sub/chatrooms.create", newChatRoom);
+		log.info("채팅방 만들기");
 	}
 }

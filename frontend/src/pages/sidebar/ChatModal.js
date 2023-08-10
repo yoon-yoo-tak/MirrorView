@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { WebSocketContext } from "WebSocketContext";
 import { useDispatch } from "react-redux"; // import useDispatch
+
 import { createChatRoomAsync } from "store/ChatRoomStore"; // import createChatRoomAsync action
 
 import "pages/sidebar/css/ChatModal.css";
 
 const ChatModal = ({ isOpen, onClose }) => {
+  const { client } = useContext(WebSocketContext);
   const [title, setTitle] = useState("");
   const dispatch = useDispatch();
 
@@ -13,7 +16,7 @@ const ChatModal = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = () => {
-    dispatch(createChatRoomAsync(title));
+    dispatch(createChatRoomAsync({ title, client }));
     setTitle(""); // reset the title
     onClose();
   };

@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getClient } from "store/WebSocketStore";
 
 const initialState = {
   chatRooms: [], // 내부 객체 방
@@ -9,8 +8,7 @@ const initialState = {
 // 비동기 thunk 생성
 export const createChatRoomAsync = createAsyncThunk(
   "chatRooms/createChatRoomAsync",
-  async (title, { dispatch, getState }) => {
-    const client = getClient();
+  async ({ title, client }, { dispatch, getState }) => {
     if (!client) {
       throw new Error("WebSocket is not connected");
     }
@@ -20,15 +18,14 @@ export const createChatRoomAsync = createAsyncThunk(
       messages: [],
       count: 0,
     };
+
     await client.send("/app/chatrooms.create", {}, JSON.stringify(roomOjb));
-    return roomOjb;
   }
 );
 
 export const subscribeRoomCountAsync = createAsyncThunk(
   "chatRooms/subscribeRoomCountAsync",
-  async (_, { dispatch, getState }) => {
-    const client = getClient();
+  async (client, { dispatch, getState }) => {
     if (!client) {
       throw new Error("WebSocket is not connected");
     }
@@ -52,8 +49,7 @@ export const subscribeRoomCountAsync = createAsyncThunk(
 
 export const loadChatRooms = createAsyncThunk(
   "chatRooms/loadChatRooms",
-  async (_, { dispatch, getState }) => {
-    const client = getClient();
+  async (client, { dispatch, getState }) => {
     if (!client) {
       throw new Error("WebSocket is not connected");
     }
@@ -70,7 +66,7 @@ const chatRoomSlice = createSlice({
       state.chatRooms = action.payload;
     },
     updateSelectedRoom: (state, action) => {
-      state.selectedRoom = action.payload;
+      state.selectedRoom = action.payload.title;
     },
     addChatRoom: (state, action) => {
       state.chatRooms.push(action.payload);
