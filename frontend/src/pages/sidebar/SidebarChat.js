@@ -59,10 +59,10 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
     if (clickChat) {
       setIsOpen(true);
 
-      dispatch(subscribeUserCount(client));
-      dispatch(subscribeUserChatRooms(client));
-      dispatch(subscribeChatRoomCreate(client));
-      dispatch(subscribeRoomCountAsync(client));
+      // dispatch(subscribeUserCount(client));
+      // dispatch(subscribeUserChatRooms(client));
+      // dispatch(subscribeChatRoomCreate(client));
+      // dispatch(subscribeRoomCountAsync(client));
 
       // 유저를 redis에 등록함
       const fetchUserData = async () => {

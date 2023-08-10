@@ -2,6 +2,13 @@ import React, { useState, useEffect, useCallback, createContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
+import { globalSubscribe } from "store/GlobalStore";
+import {
+  subscribeUserCount,
+  subscribeChatRoomCreate,
+  subscribeUserChatRooms,
+} from "store/WebSocketStore"; // <-- WebSocket 액션 불러오기
+import { loadChatRooms, subscribeRoomCountAsync } from "store/ChatRoomStore"; // loadRoom
 
 export const WebSocketProvider = ({ children }) => {
   const [client, setClient] = useState(null);
@@ -28,6 +35,13 @@ export const WebSocketProvider = ({ children }) => {
       (frame) => {
         setClient(stompClient);
         setReconnectAttempts(0); // 성공적인 연결이 이루어지면 재연결 시도 횟수를 초기화합니다.
+
+        dispatch(globalSubscribe());
+        // 채팅방 관련 sub
+        dispatch(subscribeUserCount(stompClient));
+        dispatch(subscribeUserChatRooms(stompClient));
+        dispatch(subscribeChatRoomCreate(stompClient));
+        dispatch(subscribeRoomCountAsync(stompClient));
 
         stompClient.subscribe("/sub/global", (message) => {
           console.log("Received global message: ", message.body);
