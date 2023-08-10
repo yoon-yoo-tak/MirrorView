@@ -151,14 +151,44 @@ export const selectChild = styled.div`
     height: 103px;
     background-color: white;
     // box-shadow: 0px 0px 10px #4e4e4e;
-    flex-direction: column;
+    flex-direction: row;
     display: flex;
 
     padding: 15px;
 `;
+export const selectWrap = styled.div`
+    flex: 1;
+`;
+export const selectReadyWrap = styled.div`
+    flex: 1;
+    background-color: #e9e9e9;
+    border-radius: 10px;
+`;
+export const selectSectionReadyTop = styled.div`
+    display: flex;
+    justify-content: end;
+`;
+
+export const alreadyBtn = styled.div`
+    margin: 2px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    // position: relative;
+    width: 54px;
+    height: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    // color: white;
+    border-radius: 14px;
+    background: white;
+`;
 
 export const nowText = styled.div`
-    margin: 5px;
+    margin: 2px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -166,9 +196,9 @@ export const nowText = styled.div`
     border: 0;
 
     position: relative;
-    width: 70px;
-    height: 30px;
-
+    width: 54px;
+    height: 20px;
+    font-size: 14px;
     color: white;
     border-radius: 19px;
     background: ${(props) =>
@@ -180,7 +210,7 @@ export const inputHidden = styled.input`
 `;
 
 export const changeButtonActive = styled.div`
-    margin: 5px;
+    margin: 2px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -188,9 +218,9 @@ export const changeButtonActive = styled.div`
     border: 0;
 
     position: relative;
-    width: 70px;
-    height: 30px;
-
+    width: 54px;
+    height: 20px;
+    font-size: 14px;
     color: white;
     border-radius: 19px;
     background: #7f6fe4;
@@ -199,8 +229,8 @@ export const changeButtonActive = styled.div`
     }
 `;
 
-export const changeButtonGray = styled.button`
-    margin: 5px;
+export const changeButtonGray = styled.div`
+    margin: 2px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -208,9 +238,9 @@ export const changeButtonGray = styled.button`
     border: 0;
 
     position: relative;
-    width: 70px;
-    height: 30px;
-
+    width: 54px;
+    height: 20px;
+    font-size: 14px;
     color: white;
     border-radius: 19px;
     background: #d4d4d4;
@@ -218,16 +248,17 @@ export const changeButtonGray = styled.button`
 
 export const selectSectionTop = styled.div`
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
 `;
 export const selectSectionList = styled.div`
-    padding: 5px;
+    padding: 2px;
     display: flex;
     flex-wrap: wrap;
 `;
 
 export const personList = styled.div`
-    padding: 5px;
+    padding: 2px;
+    font-size: 14px;
     font-weight: ${(props) => (props.checkname === "true" ? "bold" : "normal")};
 `;
 
@@ -420,11 +451,30 @@ export const questInputText = styled.div`
 export const profileDetail = styled.div`
     margin: 10px 30px;
     flex: 3;
+    width: 80px;
+    font-weight: bold;
+`;
+
+export const profileImageWrap = styled.div`
+    margin: 30px;
+    display: flex;
+    justify-content: space-between;
+`;
+export const goProfile = styled.div`
+    display: flex;
+    cursor: pointer;
+    &:hover {
+        font-weight: bold;
+    }
 `;
 
 export const profileContent = styled.div`
     font-size: 18px;
+
     padding: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 export const vLine = styled.div`
@@ -432,9 +482,24 @@ export const vLine = styled.div`
     height: 110px;
 `;
 
+export const vLineB = styled.div`
+    border-left: 0.12rem solid #979797;
+    height: 100px;
+`;
+
+export const essayNickname = styled.div`
+    padding: 10px 0 0 10px;
+`;
+
+export const essayTitle = styled.div`
+    padding: 10px 0 5px 10px;
+    font-size: 20px;
+    font-weight: bold;
+`;
+
 export const essayDetailWrap = styled.div`
     // margin: 10px;
-    height: 450px;
+    height: 365px;
     overflow-y: auto;
     &::-webkit-scrollbar {
         width: 7px;
@@ -454,13 +519,13 @@ export const essayDetailEach = styled.div`
 `;
 
 export const essayDetailQuest = styled.div`
-    font-size: 19px;
+    font-size: 18px;
     font-weight: bold;
     margin: 10px;
 `;
 
 export const essayDetailContent = styled.div`
-    font-size: 18px;
+    font-size: 16px;
     margin: 10px;
     padding: 0 10px;
 
@@ -475,6 +540,13 @@ export const essayAI = styled.div`
     text-align: end;
     margin: 0 10px;
     cursor: pointer;
+`;
+export const essaySectionWrap = styled.div`
+    height: 450px;
+`;
+
+export const hline = styled.hr`
+    border-top: 0.12rem solid white;
 `;
 
 // 스터디 방 우측 섹션 - 사전 질문지 작성
