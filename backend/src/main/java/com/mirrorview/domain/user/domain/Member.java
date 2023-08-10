@@ -34,6 +34,9 @@ public class Member {
 
     private String roles;
 
+    @Column(name = "is_oauth_user", nullable = false, columnDefinition = "TINYINT(1)")
+    private Boolean isOauthUser;
+
     private float averageRating;
 
     @Column(name = "delete_member", nullable = false, columnDefinition = "TINYINT(1)")

@@ -10,6 +10,7 @@ import lombok.*;
 public class MemberProfileDto {
     private String userId;
     private String nickname;
+    private Boolean isOauthUser;
     private String email;
     private String photo;
     private String roles;
