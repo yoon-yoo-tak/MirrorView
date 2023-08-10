@@ -66,8 +66,7 @@ const SidebarFriends = ({ setClickFriends, clickFriends }) => {
         setSelectedButton("friendList");
       }
       // setClickFriends(false);
-    }
-    else {
+    } else {
       setIsOpen(false); // 사이드바를 닫습니다.
     }
   }, [clickFriends]);

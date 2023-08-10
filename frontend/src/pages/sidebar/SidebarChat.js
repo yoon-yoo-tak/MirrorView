@@ -11,8 +11,6 @@ import axios from "axios"; // <-- axios 불러오기
 
 import { useDispatch } from "react-redux"; // <-- useDispatch 불러오기
 import {
-  initializeWebSocket,
-  closeWebSocket,
   subscribeUserCount,
   subscribeChatRoomCreate,
   subscribeUserChatRooms,
