@@ -4,6 +4,9 @@ import static com.mirrorview.domain.user.domain.QMember.*;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.mirrorview.domain.admin.domain.QReport;
@@ -23,15 +26,18 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom {
 	QReport qReport = QReport.report;
 
 	@Override
-	public List<ReportListDto> reportList() {
-		return queryFactory.select(Projections.constructor(ReportListDto.class,
-			member.nickname, qReport.count()))
+	public Page<ReportListDto> reportList(Pageable pageable) {
+
+		List<ReportListDto> list = queryFactory.select(Projections.constructor(ReportListDto.class,
+				member.nickname, qReport.count()))
 			.from(qReport)
 			.join(qReport.reported, member)
 			.where(member.delete.eq(Boolean.FALSE))
 			.groupBy(qReport.reported)
 			.orderBy(qReport.count().desc())
 			.fetch();
+
+		return new PageImpl<>(list, pageable, list.size());
 	}
 
 	@Override
