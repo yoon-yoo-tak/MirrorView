@@ -229,7 +229,7 @@ export const changeButtonActive = styled.div`
     }
 `;
 
-export const changeButtonGray = styled.div`
+export const changeButtonGray = styled.button`
     margin: 2px;
     display: flex;
     flex-direction: row;
@@ -238,9 +238,9 @@ export const changeButtonGray = styled.div`
     border: 0;
 
     position: relative;
-    width: 54px;
+    width: 60px;
     height: 20px;
-    font-size: 14px;
+    font-size: 12px;
     color: white;
     border-radius: 19px;
     background: #d4d4d4;
