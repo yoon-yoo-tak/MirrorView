@@ -7,7 +7,7 @@ import { addQuestion } from "store/InterviewWebSocketStore";
 
 // const [introduction, setIntroduction] = useState("");
 // const [job, setJob] = useState("");
-const StudyEssayDetail = ({ nickname, onAir }) => {
+const StudyEssayDetail = ({ nickname, onAir, before }) => {
     const feedbackList = useSelector((state) => state.interview.feedbackList);
     const { members, category } = useSelector(
         (state) => state.interviewWebSocket.currentRoom
@@ -147,22 +147,26 @@ const StudyEssayDetail = ({ nickname, onAir }) => {
                     </S.essayDetailEach>
                 ))}
             </S.essayDetailWrap>
-            <S.hline />
-            <S.questionWrap>
-                <S.questInputText>
-                    {nickname}님에게 사전 질문 등록하기
-                </S.questInputText>
-                <S.questSubmit>
-                    <S.questionInput
-                        value={newQuestion}
-                        onChange={handleQuestion}
-                        onKeyPress={handleOnKeyPress}
-                    />
-                    <S.questionButton onClick={submitQuestion}>
-                        질문등록
-                    </S.questionButton>
-                </S.questSubmit>
-            </S.questionWrap>
+            {before && (
+                <div>
+                    <S.hline />
+                    <S.questionWrap>
+                        <S.questInputText>
+                            {nickname}님에게 사전 질문 등록하기
+                        </S.questInputText>
+                        <S.questSubmit>
+                            <S.questionInput
+                                value={newQuestion}
+                                onChange={handleQuestion}
+                                onKeyPress={handleOnKeyPress}
+                            />
+                            <S.questionButton onClick={submitQuestion}>
+                                질문등록
+                            </S.questionButton>
+                        </S.questSubmit>
+                    </S.questionWrap>
+                </div>
+            )}
         </S.essaySectionWrap>
     );
 };

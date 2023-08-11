@@ -6,7 +6,16 @@ import React, { useContext } from "react";
 import { WebSocketContext } from "WebSocketContext";
 import { setNicknames } from "store/InterviewWebSocketStore";
 
-const StudyRoomInterviewee = ({ peopleList, subscribers, streamManager }) => {
+const StudyRoomInterviewee = (props) => {
+    const {
+        peopleList,
+        streamManager,
+        subscribers,
+        setIsVideoOn,
+        isVideoOn,
+        setIsAudioOn,
+        isAudioOn,
+    } = props;
     const { client } = useContext(WebSocketContext);
     const [selectSubscriber, setSelectSubscriber] = useState(null);
     const selectPerson = (e) => {
@@ -37,25 +46,37 @@ const StudyRoomInterviewee = ({ peopleList, subscribers, streamManager }) => {
             )
         );
     }, []);
+
+    const handleCamEnable = () => {
+        setIsVideoOn(!isVideoOn);
+    };
+
+    const handleMicEnable = () => {
+        setIsAudioOn(!isAudioOn);
+    };
+
     return (
         <S.page>
             <S.vieweeWrap>
                 <S.mainWrap>
-                    <S.mainBox>
-                        {selectSubscriber && (
-                            <>
-                                {
-                                    JSON.parse(
-                                        selectSubscriber.stream.connection.data
-                                    ).clientData
-                                }
-                                <SubscriberVideo
-                                    subscriber={selectSubscriber}
-                                ></SubscriberVideo>
-                            </>
-                        )}
-                    </S.mainBox>
-                    <S.roomTitle>면접방 제목</S.roomTitle>
+                    <div>
+                        <S.mainBox>
+                            {selectSubscriber && (
+                                <>
+                                    {
+                                        JSON.parse(
+                                            selectSubscriber.stream.connection
+                                                .data
+                                        ).clientData
+                                    }
+                                    <SubscriberVideo
+                                        subscriber={selectSubscriber}
+                                    ></SubscriberVideo>
+                                </>
+                            )}
+                        </S.mainBox>
+                        <S.roomTitle>면접방 제목</S.roomTitle>
+                    </div>
                     <S.exitRoom menu="viewee" onClick={handleExit}>
                         나가기
                     </S.exitRoom>
@@ -70,13 +91,38 @@ const StudyRoomInterviewee = ({ peopleList, subscribers, streamManager }) => {
                                         streamManager.stream.connection.data
                                     ).clientData
                                 }
-                                <SubscriberVideo
-                                    subscriber={streamManager}
-                                    key={
-                                        streamManager.stream.connection
-                                            .connectionId
-                                    }
-                                ></SubscriberVideo>
+                                <S.videoParent>
+                                    <SubscriberVideo
+                                        subscriber={streamManager}
+                                        key={
+                                            streamManager.stream.connection
+                                                .connectionId
+                                        }
+                                    ></SubscriberVideo>
+                                    {/* <S.StyledVideo /> */}
+                                    {isVideoOn && (
+                                        <S.videoControlon
+                                            onClick={handleCamEnable}
+                                            value="viewer"
+                                        />
+                                    )}
+                                    {!isVideoOn && (
+                                        <S.videoControloff
+                                            onClick={handleCamEnable}
+                                            value="viewer"
+                                        />
+                                    )}
+                                    {isAudioOn && (
+                                        <S.micControlon
+                                            onClick={handleMicEnable}
+                                        />
+                                    )}
+                                    {!isAudioOn && (
+                                        <S.micControloff
+                                            onClick={handleMicEnable}
+                                        />
+                                    )}
+                                </S.videoParent>
                             </>
                         )}
                     </S.boxes>
