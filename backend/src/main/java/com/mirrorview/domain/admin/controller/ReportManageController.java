@@ -30,7 +30,7 @@ public class ReportManageController {
 	private final ReportService reportService;
 
 	@GetMapping
-	public ResponseEntity<?> getReportList(@PageableDefault(size = 5)Pageable pageable){
+	public ResponseEntity<?> getReportList(Pageable pageable){
 		Page<ReportListDto> list = reportService.getList(pageable);
 		return BaseResponse.okWithData(HttpStatus.OK, "리폿 조회 성공", list);
 	}

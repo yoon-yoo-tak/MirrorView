@@ -11,16 +11,16 @@ import Footer from "../../components/common/FooterComponent";
 const AdminManagePage = () => {
     const perPage = 7;
     const paginationPos = 30 + perPage;
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
     const [reportUserList, setReportUserList] = useState([]);
     useEffect(() => {
         axios
-            .get(`api/admin`)
+            .get(`api/admin?size=${perPage}&page=${currentPage}`)
             .then(({ data }) => {
                 console.log(data);
-                setReportUserList(data.data);
-                // setTotalPages(data.data.totalPages);
+                setReportUserList(data.data.content);
+                setTotalPages(data.data.totalPages);
             })
             .catch((error) => {
                 console.log(error);
@@ -28,7 +28,8 @@ const AdminManagePage = () => {
     }, [currentPage]);
 
     const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber + 1);
+        console.log(pageNumber.selected);
+        setCurrentPage(pageNumber.selected);
     };
 
     const paginatedData = admindata.slice(

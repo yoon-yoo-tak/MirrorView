@@ -27,6 +27,12 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom {
 
 	@Override
 	public Page<ReportListDto> reportList(Pageable pageable) {
+		long total = queryFactory.select(qReport.count())
+			.from(qReport)
+			.join(qReport.reported, member)
+			.where(member.delete.eq(Boolean.FALSE))
+			.groupBy(qReport.reported)
+			.stream().count();
 
 		List<ReportListDto> list = queryFactory.select(Projections.constructor(ReportListDto.class,
 				member.nickname, qReport.count()))
@@ -35,9 +41,11 @@ public class ReportRepositoryCustomImpl implements ReportRepositoryCustom {
 			.where(member.delete.eq(Boolean.FALSE))
 			.groupBy(qReport.reported)
 			.orderBy(qReport.count().desc())
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
 			.fetch();
 
-		return new PageImpl<>(list, pageable, list.size());
+		return new PageImpl<>(list, pageable, total);
 	}
 
 	@Override
