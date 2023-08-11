@@ -1,5 +1,7 @@
 package com.mirrorview.global.alarm.service;
 
+import com.mirrorview.domain.user.domain.Member;
+import com.mirrorview.domain.user.repository.MemberRepository;
 import com.mirrorview.global.alarm.domain.RealTimeUser;
 import com.mirrorview.global.alarm.repository.RealTimeUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +13,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GlobalWebSocketService {
     private final RealTimeUserRepository realTimeUserRepository;
+    private final MemberRepository memberRepository;
 
     public List<RealTimeUser> searchRealTimeUsers() {
         return realTimeUserRepository.findAll();
     }
 
     public void enter(String nickname) {
-        realTimeUserRepository.save(new RealTimeUser(nickname));
+        Member member = memberRepository.findByNickname(nickname).orElseThrow(() -> new IllegalArgumentException());
+        realTimeUserRepository.save(new RealTimeUser(member.getUserId(), nickname));
     }
 
     public void exit(String nickname) {

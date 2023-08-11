@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class SearchedMemberDto {
+    private String userId;
     private String nickname;
     private boolean isOnline;
 
