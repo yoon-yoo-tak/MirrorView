@@ -99,7 +99,16 @@ const Header = () => {
         </Link>
         <NavMenu>
           {/* <StyledLink to="/aboutus">About us</StyledLink> */}
+<<<<<<< frontend/src/components/common/HeaderComponent.js
+          <NavItem onClick={() => movePage("aboutus")}>
+            About us
+          </NavItem>
+          <NavItem onClick={() => movePage("adminpage")}>
+            admin
+          </NavItem>
+=======
           <NavItem onClick={() => movePage("aboutus")}>About us</NavItem>
+>>>>>>> frontend/src/components/common/HeaderComponent.js
           <NavItem onClick={() => movePage("notice")}>Notice</NavItem>
           <NavItem onClick={() => movePage("studylist")}>StudyList</NavItem>
           {/* <NavItem onClick={() => movePage("mypage/profile")}>

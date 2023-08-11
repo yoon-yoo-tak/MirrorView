@@ -30,7 +30,7 @@ const MyEssay = () => {
     const[totalPages,setTotalPages] = useState(1);
 
     useEffect(()=>{
-        axios.get(`/api/mypage/essays?size=${user.userId}&page=${currentPage-1}`)
+        axios.get(`/api/mypage/essays?size=${perPage}&page=${currentPage-1}`)
         .then(({data})=>{
             setEssayList(data.data.content);
             setTotalPages(data.data.totalPages);
