@@ -1,5 +1,6 @@
 package com.mirrorview.domain.admin.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,10 @@ import com.mirrorview.domain.admin.repository.ReportRepository;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,8 +41,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<ReportListDto> getList() {
-        return reportRepository.reportList();
+    public Page<ReportListDto> getList(Pageable pageable) {
+        return reportRepository.reportList(pageable);
     }
 
     @Override
