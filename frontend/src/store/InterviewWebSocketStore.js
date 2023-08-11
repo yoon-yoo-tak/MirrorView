@@ -1,4 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import React, { useContext } from "react";
+import { WebSocketContext } from "WebSocketContext";
+
 import { getClient } from "./WebSocketStore";
 import axios from "axios";
 // send는 따로 처리
@@ -75,56 +78,56 @@ export const setStartedState = createAsyncThunk(
   }
 );
 
-
-
 // 하나의 채널 구독하고 case 로 처리
 export const interviewSubscribe = createAsyncThunk(
   "chat/initialize",
   async ({ client, interviewRoomId }, { dispatch, getState }) => {
-    client.subscribe("/sub/interviewrooms/" + interviewRoomId, (message) => {
-      const parsedMessage = JSON.parse(message.body);
-      console.log(parsedMessage);
-      switch (parsedMessage.type) {
-        case "SYSTEM":
-        case "CHAT":
-          dispatch(receiveMessage(parsedMessage));
-          break;
-        case "JOIN":
-          // 내정보는 무시, 상대 정보만 나에게 pub
-          const myNickname = getState().auth.user.nickname;
-          const authNickname = parsedMessage.data.nickname;
-          if (myNickname === authNickname) {
-            return;
-          }
+    const subscription = client.subscribe(
+      "/sub/interviewrooms/" + interviewRoomId,
+      (message) => {
+        const parsedMessage = JSON.parse(message.body);
+        console.log(parsedMessage);
+        switch (parsedMessage.type) {
+          case "SYSTEM":
+          case "CHAT":
+            dispatch(receiveMessage(parsedMessage));
+            break;
+          case "JOIN":
+            // 내정보는 무시, 상대 정보만 나에게 pub
+            const myNickname = getState().auth.user.nickname;
+            const authNickname = parsedMessage.data.nickname;
+            if (myNickname === authNickname) {
+              return;
+            }
 
-          dispatch(joinRoom(parsedMessage.data));
-          break;
-        case "EXIT":
-          dispatch(exitRoom(parsedMessage.data));
-          break;
-        case "READY_CHANGE":
-          dispatch(readyChange(parsedMessage.data));
-          break;
-        case "ROLE_CHANGE":
-          dispatch(roleChange(parsedMessage.data));
-          break;
-        case "MAIN_ESSAY":
-          dispatch(selectedEssay(parsedMessage.data));
-          break;
-        case "ROOM_START":
-          dispatch(roomStartState(parsedMessage.data));
-          break;
-        case "ROOM_START_CANCEL":
-          dispatch(roomStartCancelState(parsedMessage.data));
-          break;
-        default:
-          break;
+            dispatch(joinRoom(parsedMessage.data));
+            break;
+          case "EXIT":
+            dispatch(exitRoom(parsedMessage.data));
+            break;
+          case "READY_CHANGE":
+            dispatch(readyChange(parsedMessage.data));
+            break;
+          case "ROLE_CHANGE":
+            dispatch(roleChange(parsedMessage.data));
+            break;
+          case "MAIN_ESSAY":
+            dispatch(selectedEssay(parsedMessage.data));
+            break;
+          case "ROOM_START":
+            dispatch(roomStartState(parsedMessage.data));
+            break;
+          case "ROOM_START_CANCEL":
+            dispatch(roomStartCancelState(parsedMessage.data));
+            break;
+          default:
+            break;
+        }
       }
-    });
+    );
+    return subscription;
   }
 );
-
-
 
 export const interviewSlice = createSlice({
   name: "interviewWebSocket",
@@ -132,7 +135,7 @@ export const interviewSlice = createSlice({
   reducers: {
     // currentRoom update
     joinedInterviewRoomCurrentRoomUpdate: (state, action) => {
-      console.log(action.payload)
+      console.log(action.payload);
 
       state.currentRoom = { ...action.payload, messages: [] };
     },
@@ -146,8 +149,8 @@ export const interviewSlice = createSlice({
 
     // 유저가 들어 왔을 때 다른 유저들에게 해당 유저 send
     userJoinRoomPub: (state, action) => {
-      const client = getClient();
-      const { interviewRoomId, userJoinData } = action.payload;
+      ///////////
+      const { client, interviewRoomId, userJoinData } = action.payload;
       const sendUserData = {
         type: "JOIN",
         data: userJoinData,
@@ -171,8 +174,8 @@ export const interviewSlice = createSlice({
 
     // 메시지 보내기
     sendMessage: (state, action) => {
-      const client = getClient();
-      const { roomId, data } = action.payload;
+      //////////////////////////////
+      const { client, roomId, data } = action.payload;
       client.send(`/app/interviewrooms/${roomId}`, {}, JSON.stringify(data));
     },
 
@@ -186,8 +189,8 @@ export const interviewSlice = createSlice({
     },
 
     publishSelectedEssay: (state, action) => {
-      const client = getClient();
-      const { roomId, nickname, mainEssay } = action.payload;
+      /////////////////////////////
+      const { client, roomId, nickname, mainEssay } = action.payload;
       const sendData = {
         type: "MAIN_ESSAY",
         data: {
@@ -244,12 +247,20 @@ export const interviewSlice = createSlice({
       state.feedbackList.forEach((feedback) => {
         if (feedback.nickname === action.payload.nickname) {
           bool = true;
-          feedback.feedbacks.push({ question: action.payload.question, feedback: "", });
-
+          feedback.feedbacks.push({
+            question: action.payload.question,
+            feedback: "",
+          });
         }
       });
       if (!bool) {
-        state.feedbackList = [...state.feedbackList, { nickname: action.payload.nickname, feedbacks: [{ question: action.payload.question, feedback: "" }] }];
+        state.feedbackList = [
+          ...state.feedbackList,
+          {
+            nickname: action.payload.nickname,
+            feedbacks: [{ question: action.payload.question, feedback: "" }],
+          },
+        ];
       }
     },
     deleteQuestion: (state, action) => {
@@ -277,7 +288,6 @@ export const interviewSlice = createSlice({
     roomStartCancelState: (state, action) => {
       state.currentRoom.started = false;
     },
-
   },
 });
 
@@ -301,7 +311,6 @@ export const {
   selectedEssay,
   roomStartState,
   roomStartCancelState,
-
 } = interviewSlice.actions;
 export const selectMessages = (state) => state.chat.currentRoom.messages;
 export default interviewSlice.reducer;

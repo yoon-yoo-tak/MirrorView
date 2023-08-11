@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { useSelector } from "react-redux";
 import { FaPlus, FaChevronUp, FaChevronDown } from "react-icons/fa";
+import { WebSocketContext } from "WebSocketContext";
 
 import ChatList from "pages/sidebar/ChatList";
 import ChatRoom from "pages/sidebar/ChatRoom";
@@ -9,14 +10,6 @@ import ChatMyList from "pages/sidebar/ChatMyList";
 import axios from "axios"; // <-- axios 불러오기
 
 import { useDispatch } from "react-redux"; // <-- useDispatch 불러오기
-import {
-  initializeWebSocket,
-  closeWebSocket,
-  getClient,
-  subscribeUserCount,
-  subscribeChatRoomCreate,
-  subscribeUserChatRooms,
-} from "store/WebSocketStore"; // <-- WebSocket 액션 불러오기
 import { loadChatRooms, subscribeRoomCountAsync } from "store/ChatRoomStore"; // loadRoom
 import ChatModal from "pages/sidebar/ChatModal"; // <-- 추가
 import { switchView } from "store/ChatViewStore";
@@ -39,6 +32,8 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
 
   const [showCreateChatModal, setShowCreateChatModal] = useState(false);
 
+  const { client } = useContext(WebSocketContext);
+
   // 모달 기능
   const handleOpenCreateChatModal = () => {
     setShowCreateChatModal(true);
@@ -48,8 +43,8 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
     setShowCreateChatModal(false);
   };
 
+  // 만약 state.auth가 null이면, 사이드바를 닫는다.
   useEffect(() => {
-    // 만약 state.auth가 null이면, 사이드바를 닫는다.
     if (!user) {
       setIsOpen(false);
     }
@@ -58,14 +53,6 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
   useEffect(() => {
     if (clickChat) {
       setIsOpen(true);
-      
-      dispatch(initializeWebSocket(accessToken)).then(() => {
-        const client = getClient();
-        dispatch(subscribeUserCount(client));
-        dispatch(subscribeUserChatRooms(client));
-        dispatch(subscribeChatRoomCreate(client));
-        dispatch(subscribeRoomCountAsync());
-      });
 
       // 유저를 redis에 등록함
       const fetchUserData = async () => {
@@ -85,7 +72,6 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
       fetchUserData();
     } else {
       setIsOpen(false); // 사이드바를 닫습니다.
-      dispatch(closeWebSocket()); // WebSocket 연결을 종료합니다.
     }
   }, [clickChat]);
 
@@ -115,7 +101,7 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
     if (chatContent === "openChat") {
       dispatch(loadChatRooms());
     } else if (chatContent === "myChat") {
-      dispatch(loadChatRooms()); // 이부분을 나중에loadMyChatRooms로 변경해야 한다.
+      dispatch(loadChatRooms());
     }
   }, [chatContent]);
 

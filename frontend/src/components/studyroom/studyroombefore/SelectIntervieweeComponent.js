@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { interviewActions } from "store/InterviewStore";
 import * as S from "../StudyRoomStyledComponents";
-import { getClient } from "store/WebSocketStore";
+import React, { useContext } from "react";
+import { WebSocketContext } from "WebSocketContext";
 import { roleChange } from "store/InterviewWebSocketStore";
 
 const SelectInterviewee = (props) => {
+    const { client } = useContext(WebSocketContext);
     const [interviewee, setInterviewee] = useState(true);
     const dispatch = useDispatch();
     const members = useSelector(
@@ -18,6 +20,9 @@ const SelectInterviewee = (props) => {
     const { user } = useSelector((state) => state.auth);
     const nickname = useSelector((state) => state.auth.nickname);
     const { myRole } = useSelector((state) => state.interview);
+    useEffect(() => {
+        dispatch(interviewActions.setMyRoll("interviewee"));
+    }, []);
 
     useEffect(() => {
         if (members == null) return;
@@ -48,6 +53,9 @@ const SelectInterviewee = (props) => {
         });
         setIntervieweeList(interviewee);
         setInterviewerList(interviewer);
+        return () => {
+            // dispatch(interviewActions.setMyRoll("interviewee"));
+        };
     }, [members]);
 
     // 더미데이터
@@ -65,7 +73,6 @@ const SelectInterviewee = (props) => {
     ]);
 
     const changeRole = () => {
-        const client = getClient();
         const newRole =
             myRole === "interviewee" ? "interviewer" : "interviewee"; // 현재 상태를 기반으로 새 역할 결정
         dispatch(interviewActions.setMyRoll(newRole));
@@ -99,8 +106,7 @@ const SelectInterviewee = (props) => {
                             )}
                             {myRole === "interviewee" && (
                                 <S.changeButtonGray
-                                    disabled={myRole === "interviewee"}
-                                    onClick={changeRole}
+                                    disabled={myRole == "interviewee"}
                                 >
                                     전환하기
                                 </S.changeButtonGray>
@@ -158,8 +164,7 @@ const SelectInterviewee = (props) => {
                             )}
                             {myRole === "interviewer" && (
                                 <S.changeButtonGray
-                                    disabled={myRole === "interviewer"}
-                                    onClick={changeRole}
+                                    disabled={myRole == "interviewer"}
                                 >
                                     전환하기
                                 </S.changeButtonGray>

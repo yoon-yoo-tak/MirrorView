@@ -2,11 +2,11 @@ import useUpdateEffect from "lib/UseUpdateEffect";
 import PrepareSection from "./studyroombefore/PrepareSectionComponent";
 import SelectInterviewee from "./studyroombefore/SelectIntervieweeComponent";
 import * as S from "./StudyRoomStyledComponents";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 //import { interviewActions, } from "store/InterviewStore";
 import { readyChange, setStartedState } from "store/InterviewWebSocketStore";
-import { getClient } from "store/WebSocketStore";
+import { WebSocketContext } from "WebSocketContext";
 
 const StudyRoomBefore = (props) => {
   // 스터디룸 페이지에서 가져온 peopleList
@@ -19,7 +19,7 @@ const StudyRoomBefore = (props) => {
   } = props;
 
   const dispatch = useDispatch();
-
+  const { client } = useContext(WebSocketContext);
   const [ready, setReady] = useState(false);
   const [start, setStart] = useState(false);
   const currentRoom = useSelector(
@@ -29,13 +29,17 @@ const StudyRoomBefore = (props) => {
   const nickname = useSelector((state) => state.auth.user.nickname);
   const host = currentRoom?.host;
   const availableStart = () => {
-
-    return currentRoom.members.filter(member => member.ready).length === currentRoom.members.length - 1;
-  }
+    return (
+      currentRoom.members.filter((member) => member.ready).length ===
+      currentRoom.members.length - 1
+    );
+  };
 
   // 누르면 start로, state 변경, db도 변경
   const handleStart = () => {
-    const readyCount = currentRoom.members.filter(member => member.ready).length;
+    const readyCount = currentRoom.members.filter(
+      (member) => member.ready
+    ).length;
     if (availableStart()) {
       dispatch(setStartedState(currentRoom.id));
     } else {
@@ -43,9 +47,9 @@ const StudyRoomBefore = (props) => {
     }
   };
 
-  useEffect(()=>{
-    console.log(user)
-  },[])
+  useEffect(() => {
+    console.log(user);
+  }, []);
 
   const handleTest = () => {
     setStart(true);
@@ -63,7 +67,6 @@ const StudyRoomBefore = (props) => {
     }
   }, [currentRoom.members, host]);
   const handleReady = () => {
-    const client = getClient();
     setReady(!ready);
     const sendData = {
       type: "READY_CHANGE",
@@ -110,51 +113,46 @@ const StudyRoomBefore = (props) => {
                 user.nickname === host ? (
                   !ready ? (
                     <S.readyText>
-                      잠시만 기다려주세요<br />
+                      잠시만 기다려주세요
+                      <br />
                       참가자들이 준비중입니다
                     </S.readyText>
                   ) : (
                     <S.readyText>
-                      모든 참가자의 준비가 완료되었습니다<br />
+                      모든 참가자의 준비가 완료되었습니다
+                      <br />
                       면접을 시작해주세요!
                     </S.readyText>
                   )
+                ) : // 면접자인 경우
+                !ready ? (
+                  <S.readyText>
+                    지금은 준비시간 입니다. <br />
+                    준비가 완료되면 버튼을 눌러주세요
+                  </S.readyText>
                 ) : (
-                  // 면접자인 경우
-                  !ready ? (
-                    <S.readyText>
-                      지금은 준비시간 입니다. <br />
-                      준비가 완료되면 버튼을 눌러주세요
-                    </S.readyText>
-                  ) : (
-                    <S.readyText>
-                      준비가 완료되었습니다. <br />
-                      곧 면접이 시작됩니다!
-                    </S.readyText>
-                  )
+                  <S.readyText>
+                    준비가 완료되었습니다. <br />곧 면접이 시작됩니다!
+                  </S.readyText>
                 )
               }
             </S.readyText>
             <S.readyButtonDiv>
-              {
-                user.nickname === host ? (
-                  <S.startButton
-                    onClick={handleStart}
-                    disabled={ready}
-                    status={availableStart() ? "true" : ""}
-                  >
-                    면접시작
-                  </S.startButton>
-                ) : (
-                  <S.readyButton
-                    onClick={handleReady}
-                    status={!ready ? "true" : ""}
-                    disabled={ready}
-                  >
-                    준비완료
-                  </S.readyButton>
-                )
-              }
+              {user.nickname === host ? (
+                <S.startButton
+                  onClick={handleStart}
+                  disabled={ready}
+                  status={availableStart() ? "true" : ""}>
+                  면접시작
+                </S.startButton>
+              ) : (
+                <S.readyButton
+                  onClick={handleReady}
+                  status={!ready ? "true" : ""}
+                  disabled={ready}>
+                  준비완료
+                </S.readyButton>
+              )}
             </S.readyButtonDiv>
           </S.readySection>
           <S.myVideo>
