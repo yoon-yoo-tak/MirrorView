@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { FaRocketchat } from "react-icons/fa";
+import star from "../../assets/Star-full.png";
+import star_empty from "../../assets/Star-empty.png";
 
 import { loadChatRooms, updateSelectedRoom } from "store/ChatRoomStore";
 import { switchView } from "store/ChatViewStore";
@@ -9,60 +10,114 @@ import axios from "axios"; // 추가
 import "pages/sidebar/css/ChatList.css";
 
 function ChatList() {
-  const dispatch = useDispatch();
-  const chatRooms = useSelector((state) => state.chatRoom.chatRooms);
-  const { user } = useSelector((state) => state.auth);
-  const sortedChatRooms = [...chatRooms].sort((a, b) => b.count - a.count);
+    const dispatch = useDispatch();
+    const chatRooms = useSelector((state) => state.chatRoom.chatRooms);
+    const { user } = useSelector((state) => state.auth);
+    const [isFavorite, setIsFavorite] = useState({});
+    const sortedChatRooms = [...chatRooms].sort((a, b) => b.count - a.count);
 
-  useEffect(() => {
-    dispatch(loadChatRooms());
-  }, [dispatch]);
+    useEffect(() => {
+        dispatch(loadChatRooms());
+    }, [dispatch]);
 
-  const handleJoinChat = (title) => {
-    dispatch(updateSelectedRoom(title));
-    dispatch(switchView("ChatRoom")); // view를 ChatRoom으로 변경
-  };
-  const handleAddToFavorites = (roomId) => {
-    console.log(user.userId, " ", roomId);
-    axios
-      .post(`/api/chat/favorites/${roomId}`) // user id와 room id를 사용하여 요청
-      .then((response) => {
-        console.log(response.data);
-        // 여기서 필요한 추가적인 로직이 있다면 구현하세요. 예를 들면, 알림 메시지 표시 등
-      })
-      .catch((error) => {
-        console.error("즐겨찾기 추가 중 오류 발생:", error);
-      });
-  };
-  return (
-    <div className="chat-room-list">
-      {sortedChatRooms.map((chatRoom) => (
-        <div className="chat-room-item" key={chatRoom.id}>
-          {/*  */}
-          <div className="chatContent">
-            <div className="chatTitle">{chatRoom.id}</div>
-            <div className="chatCount">{chatRoom.count}명 참여 중</div>
-          </div>
+    const handleJoinChat = (title) => {
+        dispatch(updateSelectedRoom(title));
+        dispatch(switchView("ChatRoom")); // view를 ChatRoom으로 변경
+    };
+    const handleAddToFavorites = (roomId) => {
+        console.log(user.userId, " ", roomId);
+        if (window.confirm("즐겨찾기에 추가할까요?")) {
+            axios
+                .post(`/api/chat/favorites/${roomId}`) // user id와 room id를 사용하여 요청
+                .then((response) => {
+                    console.log(response.data);
+                    // 여기서 필요한 추가적인 로직이 있다면 구현하세요. 예를 들면, 알림 메시지 표시 등
+                })
+                .catch((error) => {
+                    console.error("즐겨찾기 추가 중 오류 발생:", error);
+                });
+        }
+    };
 
-          {/* 수정해줘 */}
-          <div
-            className="join-button"
-            onClick={() => {
-              handleAddToFavorites(chatRoom.id);
-            }}>
-            즐찾
-          </div>
-          <div
-            className="join-button"
-            onClick={() => {
-              handleJoinChat(chatRoom.id);
-            }}>
-            입장
-          </div>
+    const handleDeleteFavorites = (roomId) => {
+        if (window.confirm("즐겨찾기를 취소할까요?")) {
+            axios
+                .delete(`/api/chat/favorites/${roomId}`)
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+    };
+
+    useEffect(
+        () => {
+            const checkMyChatRooms = async () => {
+                try {
+                    const response = await axios.get(`/api/chat/favorites`);
+                    const fetchedRooms = response.data.data;
+
+                    const favoriteStatus = {};
+                    fetchedRooms.forEach((room) => {
+                        favoriteStatus[room.id.toString()] = true;
+                    });
+                    setIsFavorite(favoriteStatus);
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+
+            checkMyChatRooms();
+        },
+        [isFavorite],
+        [chatRooms]
+    );
+
+    return (
+        <div className="chat-room-list">
+            {sortedChatRooms.map((chatRoom) => (
+                <div className="chat-room-item" key={chatRoom.id}>
+                    {/*  */}
+                    <div className="chatContent">
+                        <div className="chatTitle">{chatRoom.id}</div>
+                        <div className="chatCount">
+                            {chatRoom.count}명 참여 중
+                        </div>
+                    </div>
+
+                    {isFavorite[chatRoom.id.toString()] ? (
+                        <img
+                            className="is-favorite"
+                            src={star}
+                            onClick={() => {
+                                handleDeleteFavorites(chatRoom.id);
+                            }}
+                            alt="full"
+                        />
+                    ) : (
+                        <img
+                            className="is-favorite"
+                            src={star_empty}
+                            onClick={() => {
+                                handleAddToFavorites(chatRoom.id);
+                            }}
+                            alt="empty"
+                        />
+                    )}
+                    <div
+                        className="join-button"
+                        onClick={() => {
+                            handleJoinChat(chatRoom.id);
+                        }}
+                    >
+                        입장
+                    </div>
+                </div>
+            ))}
         </div>
-      ))}
-    </div>
-  );
+    );
 }
 
 export default ChatList;
