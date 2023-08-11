@@ -1,7 +1,6 @@
 package com.mirrorview.global.auth.controller;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.dto.LoginDto;
 import com.mirrorview.domain.user.service.MemberService;
@@ -14,11 +13,17 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,20 +34,6 @@ public class AuthController {
     private final MemberService memberService;
     private final RedisTemplate<String, String> template;
     private final OidcUtil oidcUtil;
-
-    @GetMapping("/api/users/login/kakao/code")
-    public ResponseEntity<?> getOauthCode(@RequestParam String code) {
-        log.info("kakao code = {}", code);
-        Map<String, String> body = new HashMap<>();
-        body.put("code", code);
-        return BaseResponse.okWithData(HttpStatus.OK, "retrun code", body);
-    }
-
-    @GetMapping("test")
-    public ResponseEntity<?> test(@RequestParam String code) throws JsonProcessingException {
-        oidcUtil.decodeIdToken(code);
-        return BaseResponse.ok(HttpStatus.OK, "ok");
-    }
 
     @PostMapping("/api/users/login")
     public ResponseEntity<?> logIn(@RequestBody LoginDto loginDto) {

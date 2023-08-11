@@ -20,16 +20,16 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 
 @Import(RestDocsConfiguration.class)
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
-@AutoConfigureMockMvc
+//@AutoConfigureMockMvc
 public abstract class AbstractRestDocsTests {
     @Autowired
     protected RestDocumentationResultHandler restDocs;
 
     @Autowired
-    public MockMvc mockMvc;
+    protected MockMvc mockMvc;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    protected ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp(
