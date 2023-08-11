@@ -10,15 +10,18 @@ import Divider from "@mui/material/Divider";
 import friends from "../../assets/adduser-image.png";
 import chat from "../../assets/chatting.png";
 import myInfo from "../../assets/person-image.png";
+import bell from "../../assets/bell.png";
+import Sidebar from "pages/sidebar/SideBar";
 import SidebarChat from "pages/sidebar/SidebarChat";
 import SidebarFriends from "pages/sidebar/SideBarFriends";
 import SidebarSearch from "pages/sidebar/SIdeBarSearchUser";
 import ChatList from "pages/sidebar/ChatList";
 import PrivateChatRoom from "pages/sidebar/ChatRoom";
-import Search from "../../assets/searchicon.png";
+import Search from "../../assets/searching.png";
 import { closeWebSocket } from "store/WebSocketStore";
 import { WebSocketContext } from "WebSocketContext";
 import { NotificationsNone } from "@material-ui/icons";
+import Badge from "@mui/material/Badge";
 
 const Header = () => {
     const { client } = useContext(WebSocketContext);
@@ -196,9 +199,14 @@ const Header = () => {
                                 <ChatIcon onClick={handleChatSidebar} />
                                 <SearchIcon onClick={handleSearchSidebar} />
                                 <AlarmIcon onClick={handleAlarmSideBar}>
-                                    <NotificationsNone
-                                        style={{ fontSize: 23 }}
-                                    />
+                                    <Badge
+                                        badgeContent={14}
+                                        max={999}
+                                        color="error"
+                                        size="small"
+                                    >
+                                        <BellIcon />
+                                    </Badge>
                                 </AlarmIcon>
                             </IconArea>
                         )}
@@ -283,8 +291,8 @@ const IconArea = styled.div`
 const ChatIcon = styled.div`
     background-image: url(${chat});
     background-size: cover;
-    width: 20px;
-    height: 20px;
+    width: 23px;
+    height: 23px;
     cursor: pointer;
     transition: transform 0.2s;
     &:hover {
@@ -292,11 +300,23 @@ const ChatIcon = styled.div`
     }
 `;
 
+const BellIcon = styled.div`
+    background-image: url(${bell});
+    background-size: cover;
+    width: 23px;
+    height: 23px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    &:hover {
+        transform: scale(1.03);
+    }
+`;
+
 const FriendsIcon = styled.div`
     background-image: url(${friends});
     background-size: cover;
-    width: 20px;
-    height: 20px;
+    width: 23px;
+    height: 23px;
     cursor: pointer;
     transition: transform 0.2s;
     &:hover {
@@ -307,8 +327,8 @@ const FriendsIcon = styled.div`
 const SearchIcon = styled.div`
     background-image: url(${Search});
     background-size: cover;
-    width: 20px;
-    height: 20px;
+    width: 23px;
+    height: 23px;
     cursor: pointer;
     transition: transform 0.2s;
     &:hover {
@@ -331,8 +351,8 @@ const AlarmIcon = styled.div`
 const MyIcon = styled.div`
     background-image: url(${myInfo});
     background-size: cover;
-    width: 20px;
-    height: 20px;
+    width: 23px;
+    height: 23px;
     cursor: pointer;
     transition: transform 0.2s;
     &:hover {

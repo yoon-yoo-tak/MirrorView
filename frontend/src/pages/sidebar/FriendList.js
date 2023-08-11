@@ -34,7 +34,7 @@ function FriendList() {
                 <div>
                     <div className="nameWrap">
                         <div className="nameText" key={friend.id}>
-                            {friend.name}
+                            {friend.nickname}
                         </div>
                         <div className="delete">삭제</div>
                     </div>
