@@ -33,6 +33,9 @@ public class FriendRepositoryCustomImpl implements FriendRepositoryCustom {
                                 .when(isToMe).then(friend.from.id)
                                 .otherwise(friend.to.id),
                         new CaseBuilder()
+                                .when(isToMe).then(friend.from.userId)
+                                .otherwise(friend.to.userId),
+                        new CaseBuilder()
                                 .when(isToMe).then(friend.from.nickname)
                                 .otherwise(friend.to.nickname)))
                 .from(friend)
@@ -46,7 +49,7 @@ public class FriendRepositoryCustomImpl implements FriendRepositoryCustom {
     public List<FriendDto> findFriendRequestsByUserId(String userId) {
         List<FriendDto> friendRequests = jpaQueryFactory
                 .select(Projections.constructor(FriendDto.class,
-                        friend.from.id, friend.from.nickname))
+                        friend.from.id, friend.from.userId, friend.from.nickname))
                 .from(friend)
                 .join(friend.from)
                 .where(friend.to.userId.eq(userId)
@@ -60,7 +63,7 @@ public class FriendRepositoryCustomImpl implements FriendRepositoryCustom {
     public List<FriendDto> findSentFriendRequestsByUserId(String userId) {
         List<FriendDto> friendSentRequests = jpaQueryFactory
                 .select(Projections.constructor(FriendDto.class,
-                        friend.to.id, friend.to.nickname))
+                        friend.to.id, friend.to.userId, friend.to.nickname))
                 .from(friend)
                 .join(friend.to)
                 .where(friend.from.userId.eq(userId)
