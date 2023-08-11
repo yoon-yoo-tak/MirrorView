@@ -165,6 +165,8 @@ public class MemberController {
 
     @GetMapping("/findAll/{input}")
     public ResponseEntity<?> getMemberList(@PathVariable String input) {
+        Set<SearchedMemberDto> memberList = memberService.findMemberList(input);
+        System.out.println(memberList);
         return BaseResponse.okWithData(HttpStatus.OK, "유저 리스트", memberService.findMemberList(input));
     }
 

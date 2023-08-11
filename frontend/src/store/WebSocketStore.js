@@ -10,55 +10,7 @@ import { updateChatRooms, addChatRoom } from "store/ChatRoomStore";
 // 여기는 오픈 채팅 global sub/pub 로 사용
 
 // state에 client 객체를 직렬화 문제 때문에 저장할 수가 없다.
-let client;
-
-export const initializeWebSocket = createAsyncThunk(
-  "webSocket/initialize",
-  async (accessToken, { dispatch }) => {
-    const httpUrl = process.env.REACT_APP_WEBSOCKET_URL;
-    const urlWithToken = `${httpUrl}?token=${accessToken}`;
-    console.log(urlWithToken);
-    try {
-      client = Stomp.over(() => new SockJS(urlWithToken));
-    } catch (error) {
-      console.error(error);
-    }
-    // Promise를 반환합니다.
-    return new Promise((resolve, reject) => {
-      client.connect(
-        { Authorization: `Bearer ${accessToken}` },
-        (frame) => {
-          console.log("WebSocket 연결 성공");
-          resolve(true);
-        },
-        (error) => {
-          console.log("WebSocket 오류: ", error);
-          reject(Error(error)); // 연결에 실패하면 오류를 반환합니다.
-        }
-      );
-    });
-  }
-);
-
-// 웹소켓 연결 종료 Thunk 정의
-export const closeWebSocket = createAsyncThunk(
-  "webSocket/close",
-  (_, { getState }) => {
-    console.log("연결 종료 함수 호출");
-    if (client !== null) {
-      client.disconnect(
-        () => {
-          console.log("WebSocket 연결 종료");
-          client = null;
-        },
-        (error) => {
-          console.log("WebSocket 종료 오류: ", error);
-          throw Error(error);
-        }
-      );
-    }
-  }
-);
+//let client;
 
 // chat room 생성 구독 thunk
 export const subscribeChatRoomCreate = createAsyncThunk(
@@ -133,22 +85,6 @@ const webSocketSlice = createSlice({
         console.log(action.payload);
         state.userCount = action.payload;
       })
-      .addCase(initializeWebSocket.pending, (state) => {
-        state.isConnected = false;
-      })
-      .addCase(initializeWebSocket.fulfilled, (state) => {
-        state.isConnected = true;
-      })
-      .addCase(initializeWebSocket.rejected, (state, action) => {
-        state.isConnected = false;
-        state.error = action.error.message;
-      })
-      .addCase(closeWebSocket.pending, (state) => {
-        state.isConnected = false;
-      })
-      .addCase(closeWebSocket.rejected, (state, action) => {
-        state.error = action.error.message;
-      });
   },
 });
 

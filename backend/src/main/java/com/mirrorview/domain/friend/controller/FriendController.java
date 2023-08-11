@@ -25,6 +25,7 @@ public class FriendController {
     public ResponseEntity<?> getFriends(@AuthenticationPrincipal CustomMemberDetails member) {
         String userId = member.getUsername();
         List<FriendDto> friends = friendService.getFriends(userId);
+        System.out.println(friends);
         return BaseResponse.okWithData(HttpStatus.OK, "조회 완료", friends);
     }
 

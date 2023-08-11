@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, createContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
-import { globalSubscribe } from "store/GlobalStore";
+import { globalSubscribe, globalOneUserSubscribe } from "store/GlobalStore";
 import {
   subscribeUserCount,
   subscribeChatRoomCreate,
@@ -36,13 +36,15 @@ export const WebSocketProvider = ({ children }) => {
         setClient(stompClient);
         setReconnectAttempts(0); // 성공적인 연결이 이루어지면 재연결 시도 횟수를 초기화합니다.
 
-        // (알람) 친구요청 관련 sub
+        // 친구요청 관련 sub
         dispatch(globalSubscribe(stompClient));
+
         // 채팅방 관련 sub
         dispatch(subscribeUserCount(stompClient));
         dispatch(subscribeUserChatRooms(stompClient));
         dispatch(subscribeChatRoomCreate(stompClient));
         dispatch(subscribeRoomCountAsync(stompClient));
+        dispatch(globalOneUserSubscribe(stompClient));
       },
       (error) => {
         console.error("웹 소켓 에러 ", error);
