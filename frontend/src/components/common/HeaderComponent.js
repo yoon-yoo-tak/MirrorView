@@ -11,7 +11,7 @@ import friends from "../../assets/adduser-image.png";
 import chat from "../../assets/chatting.png";
 import myInfo from "../../assets/person-image.png";
 import bell from "../../assets/bell.png";
-import Sidebar from "pages/sidebar/SideBar";
+// import Sidebar from "pages/sidebar/SideBar";
 import SidebarChat from "pages/sidebar/SidebarChat";
 import SidebarFriends from "pages/sidebar/SideBarFriends";
 import SidebarSearch from "pages/sidebar/SIdeBarSearchUser";

@@ -1,5 +1,3 @@
-
-
 import star from "../../assets/Star-full.png";
 import star_empty from "../../assets/Star-empty.png";
 import React, { useEffect, useState, useContext } from "react";
@@ -22,11 +20,11 @@ function ChatList() {
     const sortedChatRooms = [...chatRooms].sort((a, b) => b.count - a.count);
 
     useEffect(() => {
-        dispatch(loadChatRooms());
+        dispatch(loadChatRooms(client));
     }, [dispatch]);
 
     const handleJoinChat = (title) => {
-        dispatch(updateSelectedRoom(title));
+        dispatch(updateSelectedRoom({ title }));
         dispatch(switchView("ChatRoom")); // view를 ChatRoom으로 변경
     };
     const handleAddToFavorites = (roomId) => {
