@@ -119,6 +119,7 @@ public class MemberServiceImpl implements MemberService {
                 .stream()
                 .filter(member -> !member.getDelete())
                 .map(member -> SearchedMemberDto.builder()
+                        .userId(member.getUserId())
                         .nickname(member.getNickname())
                         .build())
                 .forEach((member) -> result.add(member));

@@ -22,7 +22,9 @@ public class RealTimeUser {
 	@Id
 	private String nickname;
 
+	private String userId;
+
 	public SearchedMemberDto toSearchedMemberDtos() {
-		return new SearchedMemberDto(this.nickname, true);
+		return new SearchedMemberDto(this.nickname, this.userId, true);
 	}
 }

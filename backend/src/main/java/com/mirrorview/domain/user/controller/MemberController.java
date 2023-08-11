@@ -2,10 +2,7 @@ package com.mirrorview.domain.user.controller;
 
 import com.mirrorview.domain.friend.service.FriendService;
 import com.mirrorview.domain.user.domain.Member;
-import com.mirrorview.domain.user.dto.FindMemberRequestDto;
-import com.mirrorview.domain.user.dto.JoinDto;
-import com.mirrorview.domain.user.dto.MemberResDto;
-import com.mirrorview.domain.user.dto.RatingDto;
+import com.mirrorview.domain.user.dto.*;
 import com.mirrorview.domain.user.service.EmailService;
 import com.mirrorview.domain.user.service.MemberService;
 import com.mirrorview.global.auth.security.CustomMemberDetails;
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/users")
