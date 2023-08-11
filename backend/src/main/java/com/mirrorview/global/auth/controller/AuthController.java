@@ -33,7 +33,6 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final MemberService memberService;
     private final RedisTemplate<String, String> template;
-    private final OidcUtil oidcUtil;
 
     @PostMapping("/api/users/login")
     public ResponseEntity<?> logIn(@RequestBody LoginDto loginDto) {
