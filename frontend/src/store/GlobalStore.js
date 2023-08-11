@@ -16,8 +16,8 @@ export const globalSubscribe = createAsyncThunk(
       console.log(parsedMessage);
       switch (parsedMessage.type) {
         case "FRIEND_REQUEST":
-          console.log(parsedMessage.data);
-
+          const messageContent = `${parsedMessage.data.fromUser}님이 친구 신청을 했습니다.`;
+          dispatch(addGlobalMessage(messageContent));
           break;
         // case "CHAT":
         //   dispatch(receiveMessage(parsedMessage));
@@ -30,8 +30,18 @@ export const globalSubscribe = createAsyncThunk(
 export const globalSlice = createSlice({
   name: "global",
   initialState,
-  reducers: {},
+  reducers: {
+    addGlobalMessage: (state, action) => {
+      state.globalMessage.push(action.payload);
+      console.log(state.globalMessage);
+    },
+
+
+  },
 });
 
-export const {} = globalSlice.actions;
+export const {
+  addGlobalMessage,
+
+} = globalSlice.actions;
 export default globalSlice.reducer;
