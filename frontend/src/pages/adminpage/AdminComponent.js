@@ -103,8 +103,11 @@ export const PaginationContainer = styled.div`
     /* top: 10%;
     left: 50%;
     transform: translateX(-50%); */
+    bottom: 0%;
+    left: 42%;
     display: flex;
     justify-content: center;
+    align-items: center;
     z-index: 5;
 
     ul.pagination {
