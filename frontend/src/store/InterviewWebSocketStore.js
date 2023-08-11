@@ -12,6 +12,7 @@ const initialState = {
     questions: [],
     feedbackList: [],
     nicknames: null,
+    redirect: false,
 };
 
 // db 에 들어온 멤버를 넣고, 방을 가져오니까 이미 멤버가 들어온 상태임
@@ -305,6 +306,9 @@ export const interviewSlice = createSlice({
         roomStartCancelState: (state, action) => {
             state.currentRoom.started = false;
         },
+        setRedirect: (state, action) => {
+            state.redirect = action.payload;
+        },
     },
 });
 
@@ -328,6 +332,7 @@ export const {
     selectedEssay,
     roomStartState,
     roomStartCancelState,
+    setRedirect,
 } = interviewSlice.actions;
 export const selectMessages = (state) => state.chat.currentRoom.messages;
 export default interviewSlice.reducer;

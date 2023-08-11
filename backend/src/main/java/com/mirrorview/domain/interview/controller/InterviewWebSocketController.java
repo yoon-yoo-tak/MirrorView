@@ -75,8 +75,8 @@ public class InterviewWebSocketController {
 
 			case "EXIT": // unsub, unconnected
 				String host = interviewService.exitRoom(name, roomId);
-				log.info("{}",messageDto);
-				messageDto.getData().put("host",host);
+				log.info("{}", messageDto);
+				messageDto.getData().put("host", host);
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 				break;
 
