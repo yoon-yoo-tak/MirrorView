@@ -39,14 +39,35 @@ public class GlobalWebSocketController {
 
 				break;
 			case "FRIEND_REQUEST":
-				System.out.println(globalMessageDto.getData());
-				String fromUser = (String) globalMessageDto.getData().get("toUser");
+				String fromUser = nickname;
+				globalMessageDto.getData().put("fromUser", nickname);
 				String toUser = (String) globalMessageDto.getData().get("toUser");
 				simpMessagingTemplate.convertAndSendToUser(toUser, "/sub/global", globalMessageDto);
 				break;
 
+		}
+	}
 
+	@MessageMapping("/global.one")
+	public void sendToOne(@Payload GlobalMessageDto globalMessageDto, Principal principal){
+		log.info("alarm - {} 동작, {}", globalMessageDto.getType(), globalMessageDto.getData());
+
+		Authentication authentication = (Authentication) principal;
+		String nickname = authentication.getName(); // 닉네임임
+
+		switch (globalMessageDto.getType()) {
+			case "SEARCH_USER":
+
+				break;
+			case "FRIEND_REQUEST":
+				String fromUser = nickname;
+				globalMessageDto.getData().put("fromUser", nickname);
+				String toUser = (String) globalMessageDto.getData().get("toUser");
+				simpMessagingTemplate.convertAndSendToUser(toUser, "/sub/global.one", globalMessageDto);
+				break;
 
 		}
 	}
+
+
 }

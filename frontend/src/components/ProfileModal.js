@@ -5,7 +5,7 @@ import axios from "axios";
 import React, { useContext } from "react";
 import { WebSocketContext } from "WebSocketContext";
 
-const ProfileModal = ({ isOpen, onClose, id }) => {
+const ProfileModal = ({ isOpen, onClose, member }) => {
   const { client } = useContext(WebSocketContext);
   const accessToken = useSelector((state) => state.auth.accessToken);
   const { user } = useSelector((state) => state.auth);
@@ -20,7 +20,8 @@ const ProfileModal = ({ isOpen, onClose, id }) => {
   const [myProfile, setMyProfile] = useState(false);
 
   useEffect(() => {
-    if (id === user.userId) {
+    console.log(member);
+    if (member.userId === user.userId) {
       setNowProfile({
         nickname: `${user.nickname}`,
         score: `${user.averageRating}`,
@@ -30,11 +31,11 @@ const ProfileModal = ({ isOpen, onClose, id }) => {
       return;
     }
     axios
-      .get(`api/users/find/${id}`)
+      .get(`api/users/find/${member.nickname}`)
       .then(({ data }) => setNowProfile(data.data))
       .catch((error) => console.log(error));
     axios
-      .get(`api/friends/status/${id}`, {
+      .get(`api/friends/status/${member.userId}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((response) => {
@@ -52,7 +53,7 @@ const ProfileModal = ({ isOpen, onClose, id }) => {
     if (friendStatus === "wait") {
       if (window.confirm("친구 요청을 취소하시겠습니까?")) {
         axios
-          .delete(`api/friends/${id}`, {
+          .delete(`api/friends/${member.userId}`, {
             headers: { Authorization: `Bearer ${accessToken}` },
           })
           .then((response) => {
@@ -69,7 +70,7 @@ const ProfileModal = ({ isOpen, onClose, id }) => {
     } else if (friendStatus === "connect") {
       if (window.confirm("친구를 삭제하시겠습니까?")) {
         axios
-          .delete(`api/friends/${id}`, {
+          .delete(`api/friends/${member.userId}`, {
             headers: { Authorization: `Bearer ${accessToken}` },
           })
           .then((response) => {
@@ -89,7 +90,7 @@ const ProfileModal = ({ isOpen, onClose, id }) => {
   const requestFriend = () => {
     // 친구신청
     axios
-      .post(`api/friends/request/${id}`, {
+      .post(`api/friends/request/${member.userId}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((response) => {
@@ -103,20 +104,21 @@ const ProfileModal = ({ isOpen, onClose, id }) => {
       });
 
     // 친구 신청 알람
-    const friendRequestData = {
+    const globalMessageDto = {
       type: "FRIEND_REQUEST",
       data: {
-        fromuser: user.nickname,
+        fromUser: user.nickname,
         toUser: nowProfile.nickname,
       },
     };
-    client.send(`/app/global`, {}, JSON.stringify(friendRequestData));
+    console.log(globalMessageDto);
+    client.send(`/app/global.one`, {}, JSON.stringify(globalMessageDto));
   };
 
   const acceptFriend = () => {
     // 친구 수락
     axios
-      .patch(`api/friends/request/${id}`, {
+      .patch(`api/friends/request/${member.userId}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((response) => {

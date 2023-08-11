@@ -14,6 +14,7 @@ function FriendWait() {
             .then((response) => {
                 console.log(response.data.data);
                 setFriendRequests(response.data.data);
+                console.log(response.data.data)
             })
             .catch((error) => {
                 console.error("There was an error!", error);
@@ -23,7 +24,7 @@ function FriendWait() {
     const handleAccept = (userId) => {
         axios
             .delete(
-                `/${userId}`,
+                `/api/friends/${userId}`,
                 {},
                 { headers: { Authorization: `Bearer ${accessToken}` } }
             )
@@ -54,7 +55,7 @@ function FriendWait() {
                             <div className="nameText">{friend.nickname}</div>
                             <div
                                 className="cancel"
-                                onClick={() => handleAccept(friend.userId)}
+                                onClick={() => handleAccept(friend.id)}
                             >
                                 취소
                             </div>
