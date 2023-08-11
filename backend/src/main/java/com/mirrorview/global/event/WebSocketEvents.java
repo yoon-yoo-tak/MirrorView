@@ -73,7 +73,7 @@ public class WebSocketEvents {
 			String roomId = channel.split("/")[3];
 			subscriptionService.handleChatRoomSubscribe(userId, subscriptionId, roomId);
 		}
-		else if (channel.startsWith("/sub/interviewrooms/")) {
+		else if (channel.startsWith("/sub/interviewrooms")) {
 			String roomId = channel.split("/")[3];
 			subscriptionService.handleInterviewRoomSubscribe(userId, subscriptionId, roomId);
 		}

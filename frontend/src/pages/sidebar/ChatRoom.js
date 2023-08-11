@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { MdArrowBack } from "react-icons/md";
-import { getClient } from "store/WebSocketStore";
+import { WebSocketContext } from "WebSocketContext";
 import { subscribeRoomCountAsync } from "store/ChatRoomStore";
 import "pages/sidebar/css/ChatRoom.css";
 import sendIcon from "../../assets/send.png";
@@ -21,6 +21,7 @@ function getNicknameColor(userNickname) {
 }
 
 function ChatRoom() {
+  const { client } = useContext(WebSocketContext);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
@@ -45,7 +46,6 @@ function ChatRoom() {
 
   // 이전 채팅 가져오기
   const getPreviousChats = () => {
-    const client = getClient();
     if (client == null) return;
 
     client.send(`/app/chatrooms/${roomId}`);
@@ -58,9 +58,6 @@ function ChatRoom() {
       return;
     }
 
-    const client = getClient();
-    if (client == null) return;
-
     client.send(
       `/app/chatrooms.send/${roomId}`,
       {},
@@ -70,8 +67,10 @@ function ChatRoom() {
   };
 
   useEffect(() => {
-    const client = getClient();
-    if (client == null) return;
+    if (client == null) {
+      return;
+    }
+
     const historySubscription = client.subscribe(
       `/user/sub/chatrooms/${roomId}`, // 이전 채팅 기록을 가져오는 엔드포인트
       (message) => {
@@ -123,7 +122,9 @@ function ChatRoom() {
       </div>
       <div className="chat-container" ref={chatContainerRef}>
         {chatMessages.map((chatMessage, index) => (
-          <div>
+          <div key={index}>
+            {" "}
+            {/* Move the key prop here */}
             <div
               className="chat-user-id"
               style={{
@@ -131,7 +132,7 @@ function ChatRoom() {
               }}>
               {chatMessage.userNickname}
             </div>
-            <div className="chat-message-container" key={index}>
+            <div className="chat-message-container">
               <p className="chat-message">{chatMessage.message}</p>
               <span className="chat-time">
                 {new Date(chatMessage.timestamp).getHours()}:

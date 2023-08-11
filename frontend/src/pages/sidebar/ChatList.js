@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+
+
 import star from "../../assets/Star-full.png";
 import star_empty from "../../assets/Star-empty.png";
+import React, { useEffect, useState, useContext } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { FaRocketchat } from "react-icons/fa";
+import { WebSocketContext } from "WebSocketContext";
 
 import { loadChatRooms, updateSelectedRoom } from "store/ChatRoomStore";
 import { switchView } from "store/ChatViewStore";
@@ -11,6 +15,7 @@ import "pages/sidebar/css/ChatList.css";
 
 function ChatList() {
     const dispatch = useDispatch();
+    const { client } = useContext(WebSocketContext);
     const chatRooms = useSelector((state) => state.chatRoom.chatRooms);
     const { user } = useSelector((state) => state.auth);
     const [isFavorite, setIsFavorite] = useState({});
@@ -35,6 +40,7 @@ function ChatList() {
                 })
                 .catch((error) => {
                     console.error("즐겨찾기 추가 중 오류 발생:", error);
+                    alert("이미 등록한 방입니다.");
                 });
         }
     };

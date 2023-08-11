@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { updateStarted } from "store/InterviewStore";
 import { useNavigate } from "react-router-dom";
-import { getClient } from "store/WebSocketStore";
+import React, { useContext } from "react";
+import { WebSocketContext } from "WebSocketContext";
 const StudyRating = ({ peopleList, setModalStates, leaveSession }) => {
+  const { client } = useContext(WebSocketContext);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [ratingData, setRatingdata] = useState([]);
@@ -32,9 +34,9 @@ const StudyRating = ({ peopleList, setModalStates, leaveSession }) => {
       ]);
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     console.log(nicknames);
-  },[])
+  }, []);
 
   const handleSubmit = () => {
     console.log(ratingData);
@@ -61,7 +63,6 @@ const StudyRating = ({ peopleList, setModalStates, leaveSession }) => {
           });
       });
       setModalStates(false);
-      const client = getClient();
       const sendUserData = {
         type: "EXIT",
         data: {

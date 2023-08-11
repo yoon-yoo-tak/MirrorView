@@ -1,5 +1,6 @@
 package com.mirrorview.domain.admin.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,9 +11,14 @@ import com.mirrorview.domain.admin.dto.ReportDetailDto;
 import com.mirrorview.domain.admin.dto.ReportListDto;
 import com.mirrorview.domain.admin.dto.ReportRequestDto;
 import com.mirrorview.domain.admin.repository.ReportRepository;
+import com.mirrorview.domain.friend.repository.FriendRepository;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +28,7 @@ public class ReportServiceImpl implements ReportService {
 
     private final ReportRepository reportRepository;
     private final MemberRepository memberRepository;
+    private final FriendRepository friendRepository;
 
     @Override
     public void reportMember(String userId, ReportRequestDto requestDto) {
@@ -36,8 +43,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<ReportListDto> getList() {
-        return reportRepository.reportList();
+    public Page<ReportListDto> getList(Pageable pageable) {
+        return reportRepository.reportList(pageable);
     }
 
     @Override
@@ -49,6 +56,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void banMember(String nickname) {
         Member member = memberRepository.findByNickname(nickname).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자"));
+        friendRepository.deleteByFromOrTo(member, member);
         member.delete();
     }
 }

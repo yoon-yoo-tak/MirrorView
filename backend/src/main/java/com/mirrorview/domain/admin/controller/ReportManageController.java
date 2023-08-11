@@ -2,6 +2,9 @@ package com.mirrorview.domain.admin.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -27,8 +30,8 @@ public class ReportManageController {
 	private final ReportService reportService;
 
 	@GetMapping
-	public ResponseEntity<?> getReportList(){
-		List<ReportListDto> list = reportService.getList();
+	public ResponseEntity<?> getReportList(Pageable pageable){
+		Page<ReportListDto> list = reportService.getList(pageable);
 		return BaseResponse.okWithData(HttpStatus.OK, "리폿 조회 성공", list);
 	}
 

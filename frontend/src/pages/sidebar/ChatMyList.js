@@ -39,10 +39,12 @@ function ChatMyList() {
 
         fetchMyChatRooms();
     }, [realTimeChatRooms]);
+
     const handleJoinChat = (title) => {
-        dispatch(updateSelectedRoom(title));
+        dispatch(updateSelectedRoom({ title }));
         dispatch(switchView("ChatRoom"));
     };
+
 
     return (
         <div className="chat-room-list">

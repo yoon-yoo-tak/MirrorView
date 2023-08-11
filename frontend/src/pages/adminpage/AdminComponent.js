@@ -66,13 +66,48 @@ export const TableWrapper = styled.div`
     }
 `;
 
+export const ModalTableWrapper = styled.div`
+    table {
+        position: absolute;
+        top: 130px;
+        left: 185px;
+        width: 1200px;
+        height: flex; /* 최대 높이 지정 */
+        border-collapse: collapse;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        /* overflow: scroll; */
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+        background-color: white;
+
+        th {
+            padding: 20px;
+            text-align: center;
+            border-bottom: none;
+            font-weight: bold; /* 헤더 셀 글자를 굵게 표시 */
+            font-family: "DAE";
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 0.01rem solid gray;
+            font-family: "TheJamsil5Bold";
+            min-height: 2px;
+        }
+    }
+`;
+
 export const PaginationContainer = styled.div`
     position: absolute;
     /* top: 10%;
     left: 50%;
     transform: translateX(-50%); */
+    bottom: 0%;
+    left: 42%;
     display: flex;
     justify-content: center;
+    align-items: center;
     z-index: 5;
 
     ul.pagination {
@@ -116,8 +151,8 @@ export const modalContainer = styled.div`
     height: 600px;
     z-index: 999;
     position: absolute;
-    top: 200px;
-    left: 610px;
+    top: 400px;
+    left: 780px;
     transform: translate(-50%, -40%);
 
     /* 모달창 디자인 */

@@ -43,13 +43,12 @@ public class InterviewWebSocketController {
 	public void sendToAll(@DestinationVariable String roomId, @Payload MessageDto messageDto, Principal principal) {
 		log.info("interview - {} 동작, {}", messageDto.getType(), messageDto.getData());
 
-		Authentication authentication = (Authentication) principal;
+		Authentication authentication = (Authentication)principal;
 		String name = authentication.getName();
 
 		switch (messageDto.getType()) {
 
 			case "ROOM_START_CANCEL":
-			case "EXIT": // unsub, unconnected
 			case "CHAT":
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 				break;
@@ -58,7 +57,7 @@ public class InterviewWebSocketController {
 
 			case "JOIN": // sub 하면서 터뜨리기
 				Optional<Member> byUser = memberService.findByNickname(name);
-				if(byUser.isPresent()){
+				if (byUser.isPresent()) {
 					Member member = byUser.get();
 
 					Map<String, Object> data = new HashMap<>();
@@ -76,6 +75,17 @@ public class InterviewWebSocketController {
 				}
 				break;
 
+			case "EXIT": // unsub, unconnected
+				// Map<String, Object> data = new HashMap<>();
+				// data.put("nickname", name);
+				// MessageDto messageDto = MessageDto.builder()
+				// 	.type("EXIT")
+				// 	.data(data)
+				// 	.build();
+				interviewService.exitRoom(name, roomId);
+				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
+				break;
+
 			case "READY_CHANGE":
 				Map<String, Object> readyData = messageDto.getData();
 				String userNicknameReady = (String)readyData.get("nickname");
@@ -91,9 +101,9 @@ public class InterviewWebSocketController {
 				messageDto.setData(readyData);
 				System.out.println(readyData);
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
-				if(readyMember.isReady())
+				if (readyMember.isReady())
 					interviewService.systemMessage(principal.getName(), roomId, "님이 준비 완료했습니다.");
-				if(!readyMember.isReady())
+				if (!readyMember.isReady())
 					interviewService.systemMessage(principal.getName(), roomId, "님이 준비 상태를 해제했습니다.");
 				break;
 
@@ -112,9 +122,9 @@ public class InterviewWebSocketController {
 				System.out.println(data);
 				messageDto.setData(data);
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
-				if(roleMember.getRole().equals("interviewer"))
+				if (roleMember.getRole().equals("interviewer"))
 					interviewService.systemMessage(principal.getName(), roomId, "님이 면접관으로 역할을 변경했습니다.");
-				if(roleMember.getRole().equals("interviewee"))
+				if (roleMember.getRole().equals("interviewee"))
 					interviewService.systemMessage(principal.getName(), roomId, "님이 면접자로 역할을 변경했습니다.");
 				break;
 
