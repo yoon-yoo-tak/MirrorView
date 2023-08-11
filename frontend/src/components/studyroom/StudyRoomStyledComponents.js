@@ -1,5 +1,10 @@
 import { styled, keyframes } from "styled-components";
 
+import camOn from "../../assets/camOn.png";
+import camOff from "../../assets/camOff.png";
+import micOn from "../../assets/micOn.png";
+import micOff from "../../assets/micOff.png";
+
 // 스터디 방 입장
 // 입장 후 스터디 시작 전 준비 화면
 
@@ -123,7 +128,7 @@ export const myVideo = styled.div`
     box-shadow: 0px 0px 10px #4e4e4e;
     border-radius: 13px;
 
-    padding: 15px;
+    // padding: 15px;
 `;
 
 // 면접자&면접관 전환 공간
@@ -725,12 +730,9 @@ export const questText = styled.div`
 
 export const interviewerWrap = styled.div`
     display: flex;
-    // width: 80vw;
     justify-content: center;
     flex-direction: row;
     align-items: center;
-    // margin: 0 100px;
-    // padding: 0 200px;
     position: relative;
 `;
 
@@ -739,6 +741,7 @@ export const videoSection = styled.div`
     max-width: 700px;
     display: flex;
     flex-direction: column;
+    height: 570px;
 `;
 
 export const videoWrap = styled.div`
@@ -757,7 +760,7 @@ export const mainVideo = styled.div`
     background-color: white;
     border-radius: 13px;
     // width: 80%;
-    height: 400px;
+    height: 380px;
     // margin: 10px;
 `;
 
@@ -765,9 +768,6 @@ export const lastVideos = styled.div`
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
-    // width: 80%;
-    margin-top: 15px;
-    // justify-content: space-between;
     &::-webkit-scrollbar {
         height: 7px;
     }
@@ -783,15 +783,24 @@ export const lastVideos = styled.div`
 
 export const lastVideoEach = styled.div`
     background-color: white;
-    border-radius: 13px;
+    border-radius: 10px;
 
-    padding: 15px;
-    // margin: 0 15px;
-    width: 280px;
-    height: 140px;
+    width: 313px;
+    height: 170px;
 
     flex-shrink: 0;
+
+    margin-right: 10px;
 `;
+
+// -----------------
+export const StyledVideo = styled.video`
+    width: 313px;
+    height: 170px;
+    border-radius: 10px;
+`;
+
+// -----------------
 
 export const secondSection = styled.div`
     flex: 1;
@@ -841,7 +850,7 @@ export const tapsInterviewer = styled.div`
 `;
 
 export const interviewerSectionWrap = styled.div`
-    width: 80%;
+    width: 30vw;
     min-width: 400px;
     display: flex;
 `;
@@ -931,8 +940,11 @@ export const ratingBackDrop = styled.div`
 export const mainWrap = styled.div`
     position: relative;
     width: 100%;
-    // height: 350px;
+    height: 600px;
     // max-height: 80vh;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
     overflow: auto;
     &::-webkit-scrollbar {
         width: 9px;
@@ -957,44 +969,39 @@ export const vieweeWrap = styled.div`
     display: flex;
     // height: 20rem;
     justify-content: center;
-    // align-items: center;
+    align-items: center;
 
     margin: 50px 100px;
-    position: relative;
+    // position: relative;
     align-content: center;
 
     height: 100vh;
     max-height: 80%;
-    position: relative;
 `;
 
 export const boxes = styled.div`
-    margin: 20px;
-    width: 250px;
-    height: 150px;
+    margin: 10px;
+    width: 313px;
+    height: 170px;
     background-color: white;
     box-shadow: 0px 0px 10px #4e4e4e;
     border-radius: 13px;
-
-    padding: 15px;
 `;
 
 export const mainBox = styled.div`
-    margin: 20px;
-    width: 600px;
+    margin: 10px;
+    width: 700px;
     height: 380px;
     background-color: white;
     box-shadow: 0px 0px 10px #4e4e4e;
     border-radius: 13px;
 
-    padding: 15px;
+    // padding: 15px;
 `;
 
 export const leftBox = styled.div`
     flex-shrink: 0;
-    max-height: 100%;
-
-    flex-direction: column;
+    height: 600px;
     overflow-y: auto;
     &::-webkit-scrollbar {
         width: 9px;
@@ -1057,4 +1064,63 @@ export const feedbackButton = styled.button`
 export const feedbackInputWrap = styled.div`
     display: flex;
     justify-content: center;
+`;
+
+export const videoMain = styled.video`
+    width: 365px;
+    height: 222px;
+    border-radius: 10px;
+`;
+export const buttonsMain = styled.div`
+    justify-content: center;
+    // height: 41px;
+`;
+
+export const videoParent = styled.div`
+    position: relative;
+`;
+
+export const videoControlon = styled.div`
+    position: absolute;
+    bottom: 8%;
+    right: 5%;
+    width: ${(props) => (props.value === "viewer" ? "25px" : "35px")};
+    height: ${(props) => (props.value === "viewer" ? "25px" : "35px")};
+
+    background-size: cover;
+    background-image: url(${camOn});
+    cursor: pointer;
+`;
+
+export const videoControloff = styled.div`
+    position: absolute;
+    bottom: 8%;
+    right: 5%;
+    width: ${(props) => (props.value === "viewer" ? "25px" : "35px")};
+    height: ${(props) => (props.value === "viewer" ? "25px" : "35px")};
+    background-size: cover;
+    background-image: url(${camOff});
+    cursor: pointer;
+`;
+
+export const micControloff = styled.div`
+    position: absolute;
+    bottom: 8%;
+    right: 15%;
+    width: 25px;
+    height: 25px;
+    background-size: cover;
+    background-image: url(${micOff});
+    cursor: pointer;
+`;
+
+export const micControlon = styled.div`
+    position: absolute;
+    bottom: 8%;
+    right: 15%;
+    width: 25px;
+    height: 25px;
+    background-size: cover;
+    background-image: url(${micOn});
+    cursor: pointer;
 `;
