@@ -46,7 +46,6 @@ export const globalOneUserSubscribe = createAsyncThunk(
       const parsedMessage = JSON.parse(message.body);
       switch (parsedMessage.type) {
         case "FRIEND_REQUEST":
-          console.log(parsedMessage.data.message);
           dispatch(addNotification(parsedMessage.data.notification));
           break;
       }
