@@ -21,10 +21,14 @@ import Search from "../../assets/searching.png";
 import { WebSocketContext } from "WebSocketContext";
 import { NotificationsNone } from "@material-ui/icons";
 import Badge from "@mui/material/Badge";
+import SideBarAlarm from "pages/sidebar/SideBarAlarm";
+import axios from "axios";
+import { setNotifications } from "store/GlobalStore";
 
 const Header = () => {
   const { client } = useContext(WebSocketContext);
   const { user } = useSelector((state) => state.auth);
+  const accessToken = useSelector((state) => state.auth.accessToken);
   const globalMessages = useSelector((state) => state.global.globalMessage);
   const [badgeCount, setBadgeCount] = useState(0);
   const dispatch = useDispatch();
@@ -51,36 +55,46 @@ const Header = () => {
   const [clickFriends, setClickFriends] = useState(false);
   const [clickChat, setClickChat] = useState(false);
   const [clickSearch, setClickSearch] = useState(false);
+  const [clickAlarm, setClickAlarm] = useState(false);
 
   const handleFriendsSideBar = () => {
     setClickFriends((prevState) => !prevState);
 
-    if (clickChat || clickSearch) {
+    if (clickChat || clickSearch || clickAlarm) {
       setClickChat(false);
       setClickSearch(false);
+      setClickAlarm(false);
     }
   };
 
   const handleChatSidebar = () => {
     setClickChat((prevState) => !prevState);
 
-    if (clickFriends || clickSearch) {
+    if (clickFriends || clickSearch || clickAlarm) {
       setClickFriends(false);
       setClickSearch(false);
+      setClickAlarm(false);
     }
   };
 
   const handleSearchSidebar = () => {
     setClickSearch((prevState) => !prevState);
 
-    if (clickFriends || clickChat) {
+    if (clickFriends || clickChat || clickAlarm) {
       setClickFriends(false);
       setClickChat(false);
+      setClickAlarm(false);
     }
   };
 
   const handleAlarmSideBar = () => {
-    console.log("alarm");
+    setClickAlarm((prevState) => !prevState);
+
+    if (clickFriends || clickChat || clickSearch) {
+      setClickFriends(false);
+      setClickChat(false);
+      setClickSearch(false);
+    }
   };
 
   const openSearch = () => {
@@ -90,6 +104,31 @@ const Header = () => {
   const font = {
     fontFamily: "HakgyoansimWoojuR",
   };
+
+  useEffect(() => {
+    if (user) {
+      const fetchUnreadNotifications = async () => {
+        try {
+          const response = await axios.get(`/api/alarms/unread`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+
+          if (response.status === 200) {
+            console.log(response.data.data);
+            dispatch(setNotifications(response.data.data)); // 알림 목록 업데이트
+          } else {
+            console.error("알림을 가져오지 못했습니다.");
+          }
+        } catch (error) {
+          console.error("API 요청 중 오류가 발생했습니다.", error);
+        }
+      };
+
+      fetchUnreadNotifications();
+    }
+  }, [user]);
 
   // 알람 개수 useEffect
   useEffect(() => {
@@ -212,6 +251,7 @@ const Header = () => {
         clickSearch={clickSearch}
         setClickSearch={setClickSearch}
       />
+      <SideBarAlarm clickAlarm={clickAlarm} setClickAlarm={setClickAlarm} />
     </div>
   );
 };
