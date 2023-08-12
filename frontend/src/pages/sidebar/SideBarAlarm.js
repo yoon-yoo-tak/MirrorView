@@ -62,6 +62,8 @@ const SideBarAlarm = ({ setClickAlarm, clickAlarm }) => {
     }
   }, [clickAlarm]);
 
+  // ... (이전 코드)
+
   return (
     <div>
       <div id="mySidebar" className={`sidebar ${isOpen ? "open" : ""}`}>
@@ -69,22 +71,26 @@ const SideBarAlarm = ({ setClickAlarm, clickAlarm }) => {
           <div className="section-title">
             <h2>알림</h2>
           </div>
-          <div className="alarm-list">
-            {alarms.map((alarm) => (
-              <div key={alarm.id} className="alarm-item">
-                <div className="alarm-item">
-                  <div className="alarm-text">{alarm.message}</div>
-                  <div className="alarm-text">
-                    {formatDateTime(alarm.timestamp)}
+          <div className="chat-room-list">
+            {alarms.length > 0 ? (
+              alarms.map((alarm) => (
+                <div key={alarm.id} className="chat-room-item">
+                  <div className="chatContent">
+                    <div className="chatTitle">{alarm.message}</div>
+                    <div className="chatCount">
+                      {formatDateTime(alarm.timestamp)}
+                    </div>
                   </div>
                   <button
-                    className="read-button"
+                    className="join-button"
                     onClick={() => readAlarm(alarm.id)}>
                     읽음
                   </button>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div className="no-alarm">수신받은 알림이 없습니다.</div>
+            )}
           </div>
         </div>
       </div>
