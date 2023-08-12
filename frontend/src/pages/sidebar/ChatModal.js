@@ -16,6 +16,11 @@ const ChatModal = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = () => {
+    if (title.length > 24) {
+      alert("방 제목은 24자 이하로 설정해주세요.");
+      return; // 12자 이상일 때 함수종료
+    }
+
     dispatch(createChatRoomAsync({ title, client }));
     setTitle(""); // reset the title
     onClose();

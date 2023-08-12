@@ -5,44 +5,57 @@ import { useSelector } from "react-redux";
 import "pages/sidebar/css/SideBar.css";
 
 function FriendList() {
-    const [friends, setFriends] = useState([]);
-    const accessToken = useSelector((state) => state.auth.accessToken);
+  const [friends, setFriends] = useState([]);
+  const accessToken = useSelector((state) => state.auth.accessToken);
 
-    useEffect(() => {
-        axios
-            .get("/api/friends", {
-                headers: { Authorization: `Bearer ${accessToken}` },
-            })
-            .then((response) => {
-                console.log(response.data.data);
-                setFriends(response.data.data);
-            })
-            .catch((error) => {
-                console.error("There was an error!", error);
-            });
-    }, []);
+  useEffect(() => {
+    axios
+      .get("/api/friends", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+      .then((response) => {
+        console.log(response.data.data);
+        setFriends(response.data.data);
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
+  }, []);
 
-    // const friends = [
-    //     { name: "바보", id: "1234" },
-    //     { name: "메롱", id: "5678" },
-    // ];
+  const deleteFriend = (userId) => {
+    axios
+      .delete(`/api/friends/${userId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          // Successfully deleted the friend. Now, remove from the list.
+          setFriends((prevFriends) =>
+            prevFriends.filter((friend) => friend.userId !== userId)
+          );
+          console.log("너랑 친구 안함", response);
+        }
+      })
+      .catch((error) => {
+        console.error("친구삭제 실패:", error);
+      });
+  };
 
-    return (
-        <div className="wrap">
-            {/* <p>친구</p> */}
-            {friends.map((friend) => (
-                <div>
-                    <div className="nameWrap">
-                        <div className="nameText" key={friend.id}>
-                            {friend.nickname}
-                        </div>
-                        <div className="delete">삭제</div>
-                    </div>
-                    <div className="underline" />
-                </div>
-            ))}
+  return (
+    <div className="wrap">
+      {friends.map((friend) => (
+        <div key={friend.userId}>
+          <div className="nameWrap">
+            <div className="nameText">{friend.nickname}</div>
+            <div className="delete" onClick={() => deleteFriend(friend.userId)}>
+              친구삭제
+            </div>
+          </div>
+          <div className="underline" />
         </div>
-    );
+      ))}
+    </div>
+  );
 }
 
 export default FriendList;
