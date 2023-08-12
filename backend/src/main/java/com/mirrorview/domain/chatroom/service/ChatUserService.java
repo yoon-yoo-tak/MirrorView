@@ -31,9 +31,11 @@ public class ChatUserService {
 	}
 
 	public Set<ChatRoom> findFavoriteRoomsByUserId(String userId) {
-		ChatUser user = chatUserRepository.findById(userId)
-			.orElseThrow(() -> new RuntimeException("User not found"));
+		Optional<ChatUser> optionalChatUser = chatUserRepository.findById(userId);
+		if(!optionalChatUser.isPresent())
+			return Collections.emptySet();
 
+		ChatUser user = optionalChatUser.get();
 		Set<ChatRoom> favoriteRooms = user.getFavoriteChatRoomIds()
 			.stream()
 			.map(chatRepository::findById)

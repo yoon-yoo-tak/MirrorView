@@ -2,6 +2,7 @@ package com.mirrorview.global.alarm.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.index.Indexed;
 
 import com.mirrorview.domain.user.dto.SearchedMemberDto;
 
@@ -21,7 +22,7 @@ public class RealTimeUser {
 
 	@Id
 	private String nickname;
-
+	@Indexed
 	private String userId;
 
 	public SearchedMemberDto toSearchedMemberDtos() {

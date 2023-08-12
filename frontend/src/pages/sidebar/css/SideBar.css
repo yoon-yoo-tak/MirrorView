@@ -1,358 +1,416 @@
 .sidebar {
-    position: fixed;
-    height: calc(100% - 60px);
-    width: 0;
-    z-index: 10;
-    top: 60px;
-    right: 0;
-    background-color: #fff;
-    overflow-x: hidden;
-    transition: 0.5s;
-    /* padding-top: 10px; */
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
+  position: fixed;
+  height: calc(100% - 60px);
+  width: 0;
+  z-index: 10;
+  top: 60px;
+  right: 0;
+  background-color: #fff;
+  overflow-x: hidden;
+  transition: 0.5s;
+  /* padding-top: 10px; */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
 .sidebar::-webkit-scrollbar {
-    width: 7px;
+  width: 7px;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-    background: #a6b6ce;
+  border-radius: 3px;
+  background: #a6b6ce;
 }
 
 .sidebar::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 3px;
+  background: transparent;
+  border-radius: 3px;
 }
 
 h2 {
-    min-width: 100px;
+  min-width: 100px;
 }
 
 .count {
-    min-width: 120px;
-    text-align: end;
+  min-width: 120px;
+  text-align: end;
 }
 
 .sidebar > * {
-    flex: 0 0 auto;
+  flex: 0 0 auto;
 }
 
 .sidebar.open {
-    /* width: 21.66%; */
-    width: 300px;
+  /* width: 21.66%; */
+  width: 300px;
 }
 
 .openbtn.open {
-    right: 21.66%;
+  right: 21.66%;
 }
 
 .sidebar a {
-    padding: 8px 8px 8px 8px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
-    font-family: HakgyoansimWoojuR;
+  padding: 8px 8px 8px 8px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+  font-family: HakgyoansimWoojuR;
 }
 
 .openbtn {
-    font-size: 20px;
-    cursor: pointer;
-    background-color: #fff;
-    color: #111;
-    padding: 10px 15px;
-    border: none;
-    position: fixed;
-    top: 60px;
-    right: 0;
-    transition: 0.5s;
-    border-top-left-radius: 30px;
-    border-bottom-left-radius: 30px;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #111;
+  padding: 10px 15px;
+  border: none;
+  position: fixed;
+  top: 60px;
+  right: 0;
+  transition: 0.5s;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
 }
 
 .openbtn:hover {
-    background-color: #ddd;
+  background-color: #ddd;
 }
 
 .sidebar-section {
-    padding: 1px 15px 1px 15px;
-    transition: height 0.5s ease-out;
-    overflow: hidden;
+  padding: 1px 15px 1px 15px;
+  transition: height 0.5s ease-out;
+  overflow: hidden;
 }
 
 .section-title {
-    height: 1.5rem;
-    padding: 1px 0px 5px 0px;
-    font-weight: bold;
-    color: #3d67ff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: HakgyoansimWoojuR;
+  height: 1.5rem;
+  padding: 1px 0px 5px 0px;
+  font-weight: bold;
+  color: #3d67ff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: HakgyoansimWoojuR;
 }
 
 .section-title img {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    text-overflow: clip;
-    margin-right: 10px;
-    transition: transform 0.2s;
-    &:hover {
-        transform: scale(1.1);
-    }
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  text-overflow: clip;
+  margin-right: 10px;
+  transition: transform 0.2s;
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .section-title button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
 .underline {
-    border-bottom: 1px solid lightgray;
-    padding-bottom: 1px;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 1px;
 }
 
 .section-content {
-    /* max-height: 350px !important; 원하는 최대 높이로 변경하세요 */
-    overflow-y: auto; /* 내용이 넘치면 스크롤바 보이게 설정 */
+  /* max-height: 350px !important; 원하는 최대 높이로 변경하세요 */
+  overflow-y: auto; /* 내용이 넘치면 스크롤바 보이게 설정 */
 }
 
 .chatbtn {
-    font-family: "HakgyoansimWoojuR";
-    width: auto;
-    height: auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    position: static;
-    right: 0;
-    bottom: 20px;
-    padding: 10px;
-    background-color: #ffffff;
-    border: none;
-    text-align: right; /* 텍스트를 오른쪽으로 정렬 */
-    cursor: pointer;
-    font-size: 17px;
-    float: right; /* 버튼 자체를 오른쪽으로 정렬 */
+  font-family: "HakgyoansimWoojuR";
+  width: auto;
+  height: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: static;
+  right: 0;
+  bottom: 20px;
+  padding: 10px;
+  background-color: #ffffff;
+  border: none;
+  text-align: right; /* 텍스트를 오른쪽으로 정렬 */
+  cursor: pointer;
+  font-size: 17px;
+  float: right; /* 버튼 자체를 오른쪽으로 정렬 */
 }
 
 .chatbtn:hover {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .icon {
-    vertical-align: middle;
-    margin-bottom: 4px;
-    transition: all 0.1s ease;
+  vertical-align: middle;
+  margin-bottom: 4px;
+  transition: all 0.1s ease;
 }
 
 .nav-btn {
-    display: flex;
-    justify-content: center;
-    height: 3rem;
+  display: flex;
+  justify-content: center;
+  height: 3rem;
 }
 
 .nav-btn button {
-    padding: 0.2rem;
-    border: none; /* 테두리를 없애기 위해 */
-    background-color: white; /* 배경색을 하얀색으로 설정 */
-    cursor: pointer; /* 마우스 포인터를 버튼 형태로 변경 */
-    transition: all 0.3s ease; /* hover 효과를 부드럽게 전환 */
-    font-size: 1.2rem;
-    padding: 15px 10px 10px 10px;
-    font-family: HakgyoansimWoojuR;
-    border-bottom: 0.1rem solid white;
-    min-width: 6rem;
+  padding: 0.2rem;
+  border: none; /* 테두리를 없애기 위해 */
+  background-color: white; /* 배경색을 하얀색으로 설정 */
+  cursor: pointer; /* 마우스 포인터를 버튼 형태로 변경 */
+  transition: all 0.3s ease; /* hover 효과를 부드럽게 전환 */
+  font-size: 1.2rem;
+  padding: 15px 10px 10px 10px;
+  font-family: HakgyoansimWoojuR;
+  border-bottom: 0.1rem solid white;
+  min-width: 6rem;
 }
 
 .nav-btn button:hover {
-    background-color: #f5f8ff; /* 버튼에 마우스를 올렸을 때 배경색을 하늘색으로 변경 */
-    border-bottom: 0.1rem solid lightgray;
-    font-size: 1.2rem;
-    font-weight: bold;
-    /* text-overflow: ellipsis; */
-    /* white-space: nowrap; */
-    /* overflow: hidden; */
+  background-color: #f5f8ff; /* 버튼에 마우스를 올렸을 때 배경색을 하늘색으로 변경 */
+  border-bottom: 0.1rem solid lightgray;
+  font-size: 1.2rem;
+  font-weight: bold;
+  /* text-overflow: ellipsis; */
+  /* white-space: nowrap; */
+  /* overflow: hidden; */
 }
 
 .nav-btn button.selected {
-    border-bottom: 0.1rem solid lightgray;
-    font-weight: bold;
+  border-bottom: 0.1rem solid lightgray;
+  font-weight: bold;
 }
 
 .item-enter {
-    opacity: 0;
-    transform: translateY(100%);
+  opacity: 0;
+  transform: translateY(100%);
 }
 
 .item-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 1000ms, transform 1000ms;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 1000ms, transform 1000ms;
 }
 
 .wrap {
-    padding: 10px;
+  padding: 10px;
 }
 
 .nameWrap {
-    display: flex;
-    justify-content: space-between;
-    font-family: HakgyoansimWoojuR;
-    font-size: 20px;
-    margin: 10px 0 7px 0;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  font-family: HakgyoansimWoojuR;
+  font-size: 20px;
+  margin: 10px 0 7px 0;
+  align-items: center;
 }
 
 .delete {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 4px 7px;
-    width: 33px;
-    height: 18px;
-    border-radius: 19px;
-    text-align: center;
-    font-size: 14px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 7px;
+  width: 33px;
+  height: 18px;
+  border-radius: 19px;
+  text-align: center;
+  font-size: 14px;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 .delete:hover {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .nameText {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .buttonWrap {
-    display: flex;
+  display: flex;
 }
 
 .accept {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 4px 7px;
-    width: 33px;
-    height: 18px;
-    background: #a1b6ff;
-    box-shadow: 0px 0px 15px #bdbdbd;
-    border-radius: 19px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 7px;
+  width: 33px;
+  height: 18px;
+  background: #a1b6ff;
+  box-shadow: 0px 0px 15px #bdbdbd;
+  border-radius: 19px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .accept:hover {
-    color: white;
+  color: white;
 }
 
 .cancel {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 4px 7px;
-    width: 33px;
-    height: 18px;
-    background: #ffd5c8;
-    box-shadow: 0px 0px 15px #bdbdbd;
-    border-radius: 19px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 7px;
+  width: 33px;
+  height: 18px;
+  background: #ffd5c8;
+  box-shadow: 0px 0px 15px #bdbdbd;
+  border-radius: 19px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .cancel:hover {
-    color: white;
+  color: white;
 }
 
 .reject {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    padding: 4px 7px;
-    width: 33px;
-    height: 18px;
-    background: #ffa1a1;
-    box-shadow: 0px 0px 15px #bdbdbd;
-    border-radius: 19px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-left: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 7px;
+  width: 33px;
+  height: 18px;
+  background: #ffa1a1;
+  box-shadow: 0px 0px 15px #bdbdbd;
+  border-radius: 19px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 10px;
 }
 
 .reject:hover {
-    color: white;
+  color: white;
 }
 
 .search-section {
-    font-family: HakgyoansimWoojuR;
+  font-family: HakgyoansimWoojuR;
 }
 
 .search-input-wrap {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    height: 30px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  height: 30px;
 }
 
 .search-input {
-    width: calc(100% - 35px);
-    font-family: HakgyoansimWoojuR;
+  width: calc(100% - 35px);
+  font-family: HakgyoansimWoojuR;
 }
 
 .search-button {
-    object-fit: cover;
-    padding: 5px;
-    transition: transform 0.2s;
-    cursor: pointer;
+  object-fit: cover;
+  padding: 5px;
+  transition: transform 0.2s;
+  cursor: pointer;
 }
 
 .search-button:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .result-section {
-    padding: 15px;
+  padding: 15px;
 }
 
 .result-wrap {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-    font-size: 20px;
-    margin: 6px 0;
-    padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 20px;
+  margin: 6px 0;
+  padding: 8px;
 }
 
 .result-wrap:hover {
-    background-color: #ecf5ff;
-    border-radius: 10px;
+  background-color: #ecf5ff;
+  border-radius: 10px;
 }
 
 .go-profile {
-    font-size: 16px;
-    cursor: pointer;
-    transition: transform 0.2s;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
 .go-profile:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+.alarm-list {
+  padding: 10px 0;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+  overflow-y: auto; /* 내용이 넘치면 스크롤바 보이게 설정 */
+}
+
+.alarm-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem;
+  padding: 2px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  background-color: #d3dff5;
+  border-radius: 10px;
+  flex-direction: column; /* 메시지와 시간을 다른 라인에 위치 */
+}
+
+.alarm-item-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* 전체 너비를 차지하도록 설정 */
+  flex-wrap: wrap; /* 요소들이 너비를 초과하면 다음 라인으로 이동하게 설정 */
+}
+
+.alarm-text,
+.alarm-timestamp {
+  flex: 1; /* 가능한 모든 공간을 차지하도록 설정 */
+  min-width: calc(66% - 10px); /* 너비의 66%를 차지하되, 약간의 간격을 고려 */
+  margin-right: 10px; /* 요소 사이의 간격을 제공 */
+}
+
+.read-button {
+  width: calc(33% - 10px);
+  margin-left: auto; /* 알림 항목의 오른쪽 끝에 버튼 위치 */
+  border: none;
+  border-radius: 5px;
+  background-color: white;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  width: 33%;
+  transition: background-color 0.3s;
+  align-self: center; /* 버튼을 중간에 위치시키기 위해 */
+}
+
+.read-button:hover {
+  background-color: #d2c8f0;
+}
+
+.alarm-item:hover {
+  background-color: #f5f8ff;
 }

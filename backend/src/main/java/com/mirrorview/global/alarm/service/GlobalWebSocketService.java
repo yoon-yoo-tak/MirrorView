@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,4 +30,16 @@ public class GlobalWebSocketService {
         realTimeUserRepository.delete(realTimeUser);
     }
 
+    public boolean isUserOnline(String nickname){
+        // redis online 에 userId랑 nickname이랑 반대로 되있음
+        Optional<RealTimeUser> byUserId = realTimeUserRepository.findByUserId(nickname);
+        System.out.println(byUserId.isPresent());
+        System.out.println(byUserId.get());
+
+        if(byUserId.isPresent()){
+            return true;
+        }
+        return false;
+    }
 }
+

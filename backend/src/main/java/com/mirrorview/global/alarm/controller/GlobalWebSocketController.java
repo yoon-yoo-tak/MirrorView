@@ -8,7 +8,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mirrorview.global.alarm.domain.Notification;
 import com.mirrorview.global.alarm.dto.GlobalMessageDto;
+import com.mirrorview.global.alarm.service.GlobalWebSocketService;
+import com.mirrorview.global.alarm.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalWebSocketController {
 
 	private final SimpMessagingTemplate simpMessagingTemplate;
+	private final NotificationService notificationService;
+	private final GlobalWebSocketService globalWebSocketService;
 
 	@MessageMapping("/global")
 	public void sendToAll(@Payload GlobalMessageDto globalMessageDto, Principal principal){
@@ -38,12 +43,7 @@ public class GlobalWebSocketController {
 			case "SEARCH_USER":
 
 				break;
-			case "FRIEND_REQUEST":
-				String fromUser = nickname;
-				globalMessageDto.getData().put("fromUser", nickname);
-				String toUser = (String) globalMessageDto.getData().get("toUser");
-				simpMessagingTemplate.convertAndSendToUser(toUser, "/sub/global", globalMessageDto);
-				break;
+
 
 		}
 	}
@@ -63,7 +63,14 @@ public class GlobalWebSocketController {
 				String fromUser = nickname;
 				globalMessageDto.getData().put("fromUser", nickname);
 				String toUser = (String) globalMessageDto.getData().get("toUser");
-				simpMessagingTemplate.convertAndSendToUser(toUser, "/sub/global.one", globalMessageDto);
+
+				String message = fromUser+"님이 친구 요청을 보냈습니다.";
+
+				Notification notification = notificationService.createAndSaveNotification(toUser, message);
+				globalMessageDto.getData().put("notification", notification);
+
+				if(globalWebSocketService.isUserOnline(toUser))
+					simpMessagingTemplate.convertAndSendToUser(toUser, "/sub/global.one", globalMessageDto);
 				break;
 
 		}
