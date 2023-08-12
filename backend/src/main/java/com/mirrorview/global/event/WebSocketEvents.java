@@ -55,7 +55,11 @@ public class WebSocketEvents {
 				subscriptionService.handleUnsubscribe(nickname, subscriptionId);
 			}
 		}
-		globalWebSocketService.exit(nickname);
+		try {
+			globalWebSocketService.exit(nickname);
+		} catch (IllegalStateException e) {
+			log.info("이미 접속을 종료함. 강제종료가 불필요. " + e.getMessage());
+		}
 	}
 	
 	// 구독 이벤트

@@ -1,26 +1,26 @@
 .chat-room-list {
-    width: 100%;
+  width: 100%;
 }
 
 .chat-room-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 5px;
-    margin: 10px 0;
-    padding: 5px 10px;
-    transition: background-color 0.3s ease;
-    background-color: #f3f8ff;
-    box-shadow: 0px 0px 5px #ebebeb;
-    font-family: "HakgyoansimWoojuR";
-    height: 50px;
-    border: solid 2px #c6ddff;
-    position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 5px 10px;
+  transition: background-color 0.3s ease;
+  background-color: #f3f8ff;
+  box-shadow: 0px 0px 5px #ebebeb;
+  font-family: "HakgyoansimWoojuR";
+  height: 50px;
+  border: solid 2px #c6ddff;
+  position: relative;
 }
 
 .chat-room-item:hover {
-    background-color: #bad6ff;
-    color: white;
+  background-color: #bad6ff;
+  color: white;
 }
 
 /* .chat-room-title {
@@ -32,66 +32,67 @@
 } */
 
 .chat-room-title .icon {
-    margin-right: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  margin-right: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .chatContent {
-    display: flex;
-    flex-direction: column;
-    /* white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  /* white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; */
-    max-width: 160px;
+  max-width: 160px;
 }
 
 .chatTitle {
-    font-size: 18px;
-    font-weight: bold;
-    padding: 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 5px;
+  /* white-space: nowrap;
+    overflow: hidden; */
+  text-overflow: ellipsis;
 }
 
 .chatCount {
-    font-size: 14px;
-    padding: 5px;
+  font-size: 14px;
+  padding: 5px;
 }
 
 .join-button {
-    margin: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    border: 0;
-    padding: 5px 10px;
+  font-size: 13px;
+  margin: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: 0;
+  padding: 2px;
 
-    width: 30px;
-    height: 18px;
-    font-weight: bold;
-    color: white;
+  width: 30px;
+  height: 18px;
+  font-weight: bold;
+  color: white;
 
-    background: #9bc3ff;
-    box-shadow: 0px 0px 10px #bdbdbd;
-    border-radius: 13px;
-    cursor: pointer;
+  background: #9bc3ff;
+  box-shadow: 0px 0px 10px #bdbdbd;
+  border-radius: 13px;
+  cursor: pointer;
 }
 
 .join-button:hover {
-    background-color: #f3f8ff;
-    color: gray;
+  background-color: #f3f8ff;
+  color: gray;
 }
 
 .is-favorite {
-    position: absolute;
-    bottom: 12%;
-    right: 28%;
-    width: 22px;
-    height: 22px;
-    cursor: pointer;
-    filter: drop-shadow(0px 2px 5px rgba(0, 0, 0, 0.12));
+  position: absolute;
+  bottom: 12%;
+  right: 28%;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  filter: drop-shadow(0px 2px 5px rgba(0, 0, 0, 0.12));
 }
