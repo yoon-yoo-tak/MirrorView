@@ -1,13 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendMessage } from "store/InterviewWebSocketStore"; // 경로 수정 필요
 import {
-  ChatContainer,
-  ChatWindow,
-  ChatInputContainer,
-  MessageInput,
-  SendButton,
+  InterviewChatContainer,
+  InterviewChatWindow,
+  InterviewChatInputContainer,
+  InterviewMessageInput,
+  InterviewSendButton,
 } from "cha/StudyRoomChatStyleComponent";
+import { WebSocketContext } from "WebSocketContext";
+
+// !! 면접 시작 이후 채팅 comp
 
 const USER_COLORS = [
   "#0F4C81", // Classic Blue
@@ -37,6 +40,7 @@ const getUserColor = (userId) => {
 };
 
 const ChattingSection = () => {
+  const { client } = useContext(WebSocketContext);
   const chatWindowRef = useRef(null);
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
@@ -69,7 +73,13 @@ const ChattingSection = () => {
       },
     };
 
-    dispatch(sendMessage({ roomId: interviewRoomId, data: messageToSend }));
+    dispatch(
+      sendMessage({
+        client: client,
+        roomId: interviewRoomId,
+        data: messageToSend,
+      })
+    );
     setMessage("");
   };
 
@@ -80,8 +90,8 @@ const ChattingSection = () => {
   return (
     <div>
       <div>채팅</div>
-      <ChatContainer>
-        <ChatWindow ref={chatWindowRef}>
+      <InterviewChatContainer>
+        <InterviewChatWindow ref={chatWindowRef}>
           {messages &&
             messages.map((msg, index) => (
               <div key={index}>
@@ -96,17 +106,19 @@ const ChattingSection = () => {
                 )}
               </div>
             ))}
-        </ChatWindow>
-        <ChatInputContainer>
-          <MessageInput
+        </InterviewChatWindow>
+        <InterviewChatInputContainer>
+          <InterviewMessageInput
             type="text"
             value={message}
             onChange={handleInputChange}
             onKeyDown={handleKeyPress}
           />
-          <SendButton onClick={handleSendClick}>보내기</SendButton>
-        </ChatInputContainer>
-      </ChatContainer>
+          <InterviewSendButton onClick={handleSendClick}>
+            보내기
+          </InterviewSendButton>
+        </InterviewChatInputContainer>
+      </InterviewChatContainer>
     </div>
   );
 };

@@ -43,3 +43,48 @@ export const SendButton = styled.button`
     color: white;
   }
 `;
+
+export const InterviewChatContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 95%;
+  margin: 1rem;
+  border-radius: 0.625rem;
+  border: 0.0625rem solid #ccc;
+`;
+
+export const InterviewChatWindow = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.625rem;
+  border-radius: 0.625rem 0.625rem 0 0;
+  max-height: 430px; // <-- 원하는 높이로 설정하세요 (예: 300px)
+`;
+
+export const InterviewChatInputContainer = styled.div`
+  display: flex;
+  padding: 0.625rem;
+  border-top: 0.0625rem solid #ccc;
+  border-radius: 0 0 0.625rem 0.625rem;
+`;
+
+export const InterviewMessageInput = styled.input`
+  flex: 1;
+  margin-right: 0.625rem;
+  border-radius: 0.3125rem;
+  padding: 0.3125rem;
+  border: 0.0625rem solid lightgrey;
+`;
+
+export const InterviewSendButton = styled.button`
+  border-radius: 0.3125rem;
+  padding: 0.3125rem 0.625rem;
+  background-color: #ff95b9;
+  color: black;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    background-color: #ff6f97;
+    color: white;
+  }
+`;
