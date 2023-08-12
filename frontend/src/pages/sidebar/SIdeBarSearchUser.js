@@ -38,19 +38,14 @@ const SidebarSearch = ({ setClickSearch, clickSearch }) => {
   }, [user]);
 
   useEffect(() => {
-    if (clickSearch) {
-      if (user === null) {
-        // alert("로그인 필요");
-        // return;
-      }
+    if (clickSearch && user !== null) {
       setIsOpen(true);
-      const currentIsOpen = isOpen;
-      setIsOpen(!currentIsOpen);
     } else {
       setIsOpen(false);
     }
     setSearchedList([]);
-  }, [clickSearch]);
+  }, [clickSearch, user]);
+
   // ---------------------------------------------------
   const handleSearch = (e) => {
     setSearchingId(e.target.value);
