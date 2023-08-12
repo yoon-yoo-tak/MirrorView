@@ -1,22 +1,52 @@
 import styled from "styled-components";
+import etc from "../assets/dots.png";
 
 export const modal = styled.div`
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 420px;
-    height: 240px;
+    width: ${(props) => (props.value === "report" ? "350px" : "420px")};
+    height: ${(props) => (props.value === "report" ? "170px" : "240")};
     padding: 20px;
-    background-color: #fff;
+    background-color: ${(props) =>
+        props.value === "report" ? "#FFF3F3" : "#FFFFFF"};
     border-radius: 19px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 
     font-size: 20px;
 
     font-family: "HakgyoansimWoojuR";
+`;
+export const reportTitle = styled.div`
+    font-size: 15px;
+`;
+
+export const reportTitleText = styled.div`
+    font-size: 18px;
+    font-weight: bold;
+`;
+
+export const reportInput = styled.textarea`
+    max-height: 70%;
+    max-width: 100%;
+    margin: 10px 0;
+`;
+
+export const reportBtnTap = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+export const reportBtn = styled.div`
+    font-size: 16px;
+    cursor: pointer;
+    &:hover {
+        font-weight: bold;
+    }
 `;
 
 export const head = styled.div`
@@ -98,5 +128,24 @@ export const enterbtn = styled.div`
 
 export const closeBtn = styled.div`
     cursor: pointer;
-    font-weight: bold;
+    font-size: 16px;
+    &:hover {
+        font-weight: bold;
+    }
+`;
+
+export const etcBtn = styled.div`
+    background-image: url(${etc});
+    background-size: cover;
+    width: 23px;
+    height: 23px;
+    cursor: pointer;
+    // transition: transform 0.2s;
+    // &:hover {
+    //   transform: scale(1.2);
+    // }
+`;
+
+export const etcMenus = styled.div`
+    padding: 10px;
 `;
