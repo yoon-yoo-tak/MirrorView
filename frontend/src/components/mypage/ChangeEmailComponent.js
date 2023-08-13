@@ -7,59 +7,70 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 // import { useState } from "react";
+import AWN from "awesome-notifications";
+import "awesome-notifications/dist/style.css";
 
 const ChangeEmailComponent = () => {
-    const { user,refreshToken } = useSelector((state) => state.auth);
+    const { user, refreshToken } = useSelector((state) => state.auth);
     const [email, setEmail] = useState("");
-    const [emailValid,setEmailValid] = useState(false);
-    const [key,setKey] = useState("");
-    const [keyValid,setKeyValid] = useState(null);
-    const [completeSend,setCompleteSend] = useState(false);
+    const [emailValid, setEmailValid] = useState(false);
+    const [key, setKey] = useState("");
+    const [keyValid, setKeyValid] = useState(null);
+    const [completeSend, setCompleteSend] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     // const [confirmEmail, setConfirmEmail] = useState("");
     axios.defaults.headers.common["Authorization"] = `Bearer ${refreshToken}`;
     const handleEmail = (e) => {
         const value = e.target.value;
-        const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+        const regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
         setEmail(value);
         setEmailValid(regex.test(value));
     };
+    const notifier = new AWN();
 
     const onClickSendKey = async (e) => {
-        await axios.get(`/api/users/${email}`)
-        .then(()=>{
-            alert("이메일 전송 완료");
-            setCompleteSend(true);
-        }).catch((error)=>{
-            console.log(error);
-        })
-    }
+        await axios
+            .get(`/api/users/${email}`)
+            .then(() => {
+                // alert("이메일 전송 완료");
+                notifier.success("이메일 전송 완료", {
+                    durations: { success: 3000 },
+                });
+                setCompleteSend(true);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
     const onCheckKey = async (e) => {
-        await axios.post(`/api/users/${email}`,{key:key})
-        .then(()=>{
-            alert("인증 확인 완료");
-            setKeyValid(true);
-        }).catch((error)=>{
-            console.log(error);
-            setKeyValid(false);
-        })
-    }
-    const handleKey = (e) =>{
+        await axios
+            .post(`/api/users/${email}`, { key: key })
+            .then(() => {
+                alert("인증 확인 완료");
+                setKeyValid(true);
+            })
+            .catch((error) => {
+                console.log(error);
+                setKeyValid(false);
+            });
+    };
+    const handleKey = (e) => {
         const value = e.target.value;
         setKey(value);
-    }
+    };
 
     const handleConfirm = async (e) => {
-        
-        await axios.patch(`/api/mypage/email?email=${email}`,{
-        }).then((response)=>{
-            console.log(response);
-            dispatch(setUserEmail(email));
-            navigate("/mypage/profile");
-        }).catch((error)=>{
-            console.log(error);
-        })
+        await axios
+            .patch(`/api/mypage/email?email=${email}`, {})
+            .then((response) => {
+                console.log(response);
+                dispatch(setUserEmail(email));
+                navigate("/mypage/profile");
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
     const correctStyle = {
@@ -87,22 +98,24 @@ const ChangeEmailComponent = () => {
                         </S.newEmailForm>
                         <S.changeInput type="email" onChange={handleEmail} />
                         <S.errorMessageWrap>
-                            {!emailValid && email.length > 0 && !completeSend && (
-                                <div style={failStyle}>
-                                    이메일 양식이 아닙니다!
-                                </div>
-                            )}
-                            {emailValid && email.length > 0 && !completeSend && (
-                                <div style={correctStyle}>
-                                    이메일 양식에 적합합니다!
-                                </div>
-                            )}
+                            {!emailValid &&
+                                email.length > 0 &&
+                                !completeSend && (
+                                    <div style={failStyle}>
+                                        이메일 양식이 아닙니다!
+                                    </div>
+                                )}
+                            {emailValid &&
+                                email.length > 0 &&
+                                !completeSend && (
+                                    <div style={correctStyle}>
+                                        이메일 양식에 적합합니다!
+                                    </div>
+                                )}
                             {completeSend && (
-                                <div style={correctStyle}>
-                                    전송 완료
-                                </div>
+                                <div style={correctStyle}>전송 완료</div>
                             )}
-                            {email.length === 0 && !completeSend &&(
+                            {email.length === 0 && !completeSend && (
                                 <div style={hiddenStyle}>숨김</div>
                             )}
                         </S.errorMessageWrap>
@@ -117,28 +130,21 @@ const ChangeEmailComponent = () => {
                         <S.changeInput type="text" onChange={handleKey} />
                         <S.errorMessageWrap>
                             {keyValid && (
-                            <div style={correctStyle}>
-                                인증이 완료되었습니다!
-                            </div>
-                            )}
-                            {!keyValid && keyValid !=null && (
-                                <div style={failStyle}>
-                                    다시 입력해주세요
+                                <div style={correctStyle}>
+                                    인증이 완료되었습니다!
                                 </div>
                             )}
-                            {keyValid==null && (
+                            {!keyValid && keyValid != null && (
+                                <div style={failStyle}>다시 입력해주세요</div>
+                            )}
+                            {keyValid == null && (
                                 <div style={hiddenStyle}>숨김</div>
                             )}
                         </S.errorMessageWrap>
                     </S.changePwFormEach>
                 </S.changeFormExBtn>
                 <div>
-                    <S.changeBtn
-                    disabled={
-                        !keyValid
-                    }
-                    onClick={handleConfirm}
-                    >
+                    <S.changeBtn disabled={!keyValid} onClick={handleConfirm}>
                         변경하기
                     </S.changeBtn>
                 </div>

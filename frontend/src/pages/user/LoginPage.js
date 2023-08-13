@@ -11,84 +11,100 @@ import { useCallback, useState, useEffect, useContext } from "react";
 import { globalSubscribe } from "store/GlobalStore";
 import { WebSocketContext } from "WebSocketContext";
 
+import AWN from "awesome-notifications";
+import "awesome-notifications/dist/style.css";
+
 const Login = () => {
-  const { client } = useContext(WebSocketContext);
-  const [inputId, setInputId] = useState("");
-  const [inputPassword, setInputPassword] = useState("");
-  const { id, password, user, accessToken } = useSelector(
-    (state) => state.auth
-  );
+    const { client } = useContext(WebSocketContext);
+    const [inputId, setInputId] = useState("");
+    const [inputPassword, setInputPassword] = useState("");
+    const { id, password, user, accessToken } = useSelector(
+        (state) => state.auth
+    );
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+    const notifier = new AWN();
 
-  useEffect(() => {
-    console.log(user);
-    if (user) {
-      navigate("/");
-    }
-  }, [user]);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-  const handleSubmit = useCallback(
-    (e) => {
-      console.log("들어옴");
-      e.preventDefault();
-      dispatch(
-        login({
-          userId: inputId,
-          password: inputPassword,
-        })
-      )
-        .unwrap()
-        .then(async ({ data }) => {
-          console.log(data);
-          dispatch(getUserInfo(data["access-token"]));
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("회원 정보가 존재하지 않습니다."); //todo 이쁜 거로 바꾸기 sweetalert (?)
-        });
-    },
-    [inputId, inputPassword]
-  );
+    useEffect(() => {
+        console.log(user);
+        if (user) {
+            navigate("/");
+        }
+    }, [user]);
 
-  const handleId = useCallback((e) => {
-    setInputId(e.target.value);
-  }, []);
+    const handleSubmit = useCallback(
+        (e) => {
+            console.log("들어옴");
+            e.preventDefault();
+            dispatch(
+                login({
+                    userId: inputId,
+                    password: inputPassword,
+                })
+            )
+                .unwrap()
+                .then(async ({ data }) => {
+                    console.log(data);
+                    dispatch(getUserInfo(data["access-token"]));
+                    notifier.success(
+                        `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">로그인 성공!</div>`,
+                        {
+                            durations: { success: 2000 },
+                        }
+                    );
+                })
+                .catch((error) => {
+                    console.log(error);
+                    notifier.alert(
+                        `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">로그인 정보를 확인하세요</div>`,
+                        {
+                            durations: { success: 2000 },
+                        }
+                    ); //todo 이쁜 거로 바꾸기 sweetalert (?)
+                });
+        },
+        [inputId, inputPassword]
+    );
 
-  const handlePassword = useCallback((e) => {
-    setInputPassword(e.target.value);
-  }, []);
+    const handleId = useCallback((e) => {
+        setInputId(e.target.value);
+    }, []);
 
-  const notAllow = !id || !password;
+    const handlePassword = useCallback((e) => {
+        setInputPassword(e.target.value);
+    }, []);
 
-  // const onClickLogin = useCallback(
-  //     (e) => {
-  //         dispatch(
-  //             login({
-  //                 userId: inputId,
-  //                 password: inputPassword,
-  //             })
-  //         );
-  //     },
-  //     [inputId, inputPassword]
-  // );
+    const notAllow = !id || !password;
 
-  const goSignUpPage = () => {
-    navigate("/signup");
-  };
+    // const onClickLogin = useCallback(
+    //     (e) => {
+    //         dispatch(
+    //             login({
+    //                 userId: inputId,
+    //                 password: inputPassword,
+    //             })
+    //         );
+    //     },
+    //     [inputId, inputPassword]
+    // );
 
-  const goFindIDPage = () => {
-    navigate("/findid");
-  };
+    const goSignUpPage = () => {
+        navigate("/signup");
+    };
 
-  const goFindPasswordPage = () => {
-    navigate("/findpassword");
-  };
+    const goFindIDPage = () => {
+        navigate("/findid");
+    };
 
-  const onClickKakaoLogin = (e) => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`;
-  };
+    const goFindPasswordPage = () => {
+        navigate("/findpassword");
+    };
+
+    const onClickKakaoLogin = (e) => {
+        window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`;
+    };
 
     return (
         <div>
@@ -109,37 +125,39 @@ const Login = () => {
                                     />
                                 </S.inputWrap>
 
-                            <S.inputTitle>PASSWORD</S.inputTitle>
-                            <S.inputWrap>
-                                <S.inputContent
-                                    type="password"
-                                    className="input"
-                                    onChange={handlePassword}
-                                    placeholder="비밀번호를 입력해주세요"
-                                />
-                            </S.inputWrap>
-                            <S.textWrap>
-                                <S.findWrap>
-                                    <S.findInfo onClick={goFindIDPage}>
-                                        아이디 찾기
-                                    </S.findInfo>
-                                    &nbsp; | &nbsp;
-                                    <S.findInfo onClick={goFindPasswordPage}>
-                                        비밀번호 찾기
-                                    </S.findInfo>
-                                </S.findWrap>
-                                <S.goSignUp onClick={goSignUpPage}>
-                                    계정이 없으신가요?
-                                </S.goSignUp>
-                            </S.textWrap>
-                            <S.goLoginWrap>
-                                <S.submitButton
-                                    // disabled={notAllow}
-                                    // className="bottomButton"
-                                    onClick={handleSubmit}
-                                >
-                                    로그인
-                                </S.submitButton>
+                                <S.inputTitle>PASSWORD</S.inputTitle>
+                                <S.inputWrap>
+                                    <S.inputContent
+                                        type="password"
+                                        className="input"
+                                        onChange={handlePassword}
+                                        placeholder="비밀번호를 입력해주세요"
+                                    />
+                                </S.inputWrap>
+                                <S.textWrap>
+                                    <S.findWrap>
+                                        <S.findInfo onClick={goFindIDPage}>
+                                            아이디 찾기
+                                        </S.findInfo>
+                                        &nbsp; | &nbsp;
+                                        <S.findInfo
+                                            onClick={goFindPasswordPage}
+                                        >
+                                            비밀번호 찾기
+                                        </S.findInfo>
+                                    </S.findWrap>
+                                    <S.goSignUp onClick={goSignUpPage}>
+                                        계정이 없으신가요?
+                                    </S.goSignUp>
+                                </S.textWrap>
+                                <S.goLoginWrap>
+                                    <S.submitButton
+                                        // disabled={notAllow}
+                                        // className="bottomButton"
+                                        onClick={handleSubmit}
+                                    >
+                                        로그인
+                                    </S.submitButton>
 
                                     <S.kakaoLogin
                                         src={

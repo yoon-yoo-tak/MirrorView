@@ -13,6 +13,9 @@ import {
 import axios from "axios";
 import Header from "../../components/common/HeaderComponent";
 import Footer from "../../components/common/FooterComponent";
+import Swal from "sweetalert2";
+import AWN from "awesome-notifications";
+import "awesome-notifications/dist/style.css";
 
 const Signup = () => {
     //   const {
@@ -38,6 +41,7 @@ const Signup = () => {
         nickname: "",
         username: "",
     });
+    const notifier = new AWN();
 
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordMatchError, setPasswordMatchError] = useState(null); // 새로운 상태 추가
@@ -75,11 +79,23 @@ const Signup = () => {
                 method: "GET",
             })
                 .then((res) => {
-                    alert(res.data.msg);
+                    // alert(res.data.msg);
+                    notifier.success(
+                        `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">${res.data.msg}</div>`,
+                        {
+                            durations: { success: 2000 },
+                        }
+                    );
                     setUserIdCheck(true);
                 })
                 .catch((err) => {
-                    alert("이미 잇는 아이디");
+                    // alert("이미 존재하는 아이디입니다.");
+                    notifier.alert(
+                        `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">중복되는 아이디입니다.</div>`,
+                        {
+                            durations: { success: 2000 },
+                        }
+                    );
                     setUserIdCheck(false);
                 });
         }
@@ -94,11 +110,23 @@ const Signup = () => {
                 method: "GET",
             })
                 .then((res) => {
-                    alert(res.data.msg);
+                    // alert(res.data.msg);
+                    notifier.success(
+                        `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">${res.data.msg}</div>`,
+                        {
+                            durations: { success: 2000 },
+                        }
+                    );
                     setUserNickNameCheck(true);
                 })
                 .catch((err) => {
-                    alert("이미 잇는 닉네임");
+                    // alert("중복된 닉네임입니다.");
+                    notifier.alert(
+                        `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">중복되는 닉네임입니다.</div>`,
+                        {
+                            durations: { success: 2000 },
+                        }
+                    );
                     setUserNickNameCheck(false);
                 });
         }
@@ -143,7 +171,7 @@ const Signup = () => {
                     alert(res.data.msg);
                 })
                 .catch((err) => {
-                    alert("뭔가 잘못됨");
+                    alert("이메일 인증을 다시 시도해 주세요.");
                 });
         }
     };
