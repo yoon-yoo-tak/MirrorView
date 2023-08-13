@@ -8,6 +8,9 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import ReportModalComponent from "./ReportModalComponent";
+import Swal from "sweetalert2";
+import AWN from "awesome-notifications";
+import "awesome-notifications/dist/style.css";
 
 const ProfileModal = ({ isOpen, setIsOpen, onClose, member }) => {
     const { client } = useContext(WebSocketContext);
@@ -22,6 +25,7 @@ const ProfileModal = ({ isOpen, setIsOpen, onClose, member }) => {
     });
     const [friendStatus, setFriendStatus] = useState("");
     const [myProfile, setMyProfile] = useState(false);
+    const notifier = new AWN();
 
     useEffect(() => {
         console.log(member);
@@ -55,68 +59,154 @@ const ProfileModal = ({ isOpen, setIsOpen, onClose, member }) => {
     const deleteFriend = () => {
         // 친구삭제
         if (friendStatus === "wait") {
-            if (window.confirm("친구 요청을 취소하시겠습니까?")) {
-                axios
-                    .delete(`api/friends/${member.userId}`, {
-                        headers: { Authorization: `Bearer ${accessToken}` },
-                    })
-                    .then((response) => {
-                        console.log(response.data.msg);
-                        alert("친구요청이 취소되었습니다");
+            // if (window.confirm("친구 요청을 취소하시겠습니까?")) {
+            //     axios
+            //         .delete(`api/friends/${member.userId}`, {
+            //             headers: { Authorization: `Bearer ${accessToken}` },
+            //         })
+            //         .then((response) => {
+            //             console.log(response.data.msg);
+            //             alert("친구요청이 취소되었습니다");
 
-                        setFriendStatus("none");
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                        console.log("취소 실패");
-                    });
-            }
+            //             setFriendStatus("none");
+            //         })
+            //         .catch((error) => {
+            //             console.error(error);
+            //             console.log("취소 실패");
+            //         });
+            // }
+            Swal.fire({
+                title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">친구 요청을 취소하시겠습니까?<div>',
+                icon: "question",
+                width: 400,
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#D4D4D4",
+                cancelButtonText: "취소",
+                confirmButtonText: "넹",
+                // buttons: true,
+                // dangerMode: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .delete(`api/friends/${member.userId}`, {
+                            headers: { Authorization: `Bearer ${accessToken}` },
+                        })
+                        .then((response) => {
+                            console.log(response.data.msg);
+                            // alert("친구요청이 취소되었습니다");
+                            notifier.success("친구요청이 취소되었습니다", {
+                                durations: { success: 3000 },
+                            });
+
+                            setFriendStatus("none");
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            console.log("취소 실패");
+                        });
+                } else if (result.isDenied) {
+                }
+            });
         } else if (friendStatus === "connect") {
-            if (window.confirm("친구를 삭제하시겠습니까?")) {
-                axios
-                    .delete(`api/friends/${member.userId}`, {
-                        headers: { Authorization: `Bearer ${accessToken}` },
-                    })
-                    .then((response) => {
-                        console.log(response.data.msg);
-                        alert("친구가 삭제되었습니다");
+            Swal.fire({
+                title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">친구 요청을 취소하시겠습니까?<div>',
+                icon: "question",
+                width: 400,
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#D4D4D4",
+                cancelButtonText: "취소",
+                confirmButtonText: "넹",
+                // buttons: true,
+                // dangerMode: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .delete(`api/friends/${member.userId}`, {
+                            headers: { Authorization: `Bearer ${accessToken}` },
+                        })
+                        .then((response) => {
+                            console.log(response.data.msg);
+                            // alert("친구가 삭제되었습니다");
+                            notifier.success("친구가 삭제되었습니다", {
+                                durations: { success: 3000 },
+                            });
 
-                        setFriendStatus("none");
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                        console.log("취소 실패");
-                    });
-            }
+                            setFriendStatus("none");
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            console.log("취소 실패");
+                        });
+                } else if (result.isDenied) {
+                }
+            });
         }
     };
 
     const requestFriend = () => {
         // 친구신청
-        axios
-            .post(`api/friends/request/${member.userId}`, {
-                headers: { Authorization: `Bearer ${accessToken}` },
-            })
-            .then((response) => {
-                console.log(response.data.msg);
-                alert(`${nowProfile.nickname}님에게 친구를 신청했습니다!`);
-                setFriendStatus("wait");
-            })
-            .catch((error) => {
-                console.error(error);
-                console.log("요청 실패");
-            });
+        Swal.fire({
+            title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">친구를 신청할까요? <div>',
+            icon: "question",
+            width: 400,
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#D4D4D4",
+            cancelButtonText: "취소",
+            confirmButtonText: "넹",
+            // buttons: true,
+            // dangerMode: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios
+                    .post(`api/friends/request/${member.userId}`, {
+                        headers: { Authorization: `Bearer ${accessToken}` },
+                    })
+                    .then((response) => {
+                        console.log(response.data.msg);
+                        // alert(`${nowProfile.nickname}님에게 친구를 신청했습니다!`);
+                        notifier.success(
+                            `${nowProfile.nickname}님에게 친구를 신청했습니다!`,
+                            {
+                                durations: { success: 3000 },
+                            }
+                        );
+                        setFriendStatus("wait");
+                        // 친구 신청 알람
+                        const globalMessageDto = {
+                            type: "FRIEND_REQUEST",
+                            data: {
+                                fromUser: user.nickname,
+                                toUser: nowProfile.nickname,
+                            },
+                        };
+                        console.log(globalMessageDto);
+                        client.send(
+                            `/app/global.one`,
+                            {},
+                            JSON.stringify(globalMessageDto)
+                        );
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        console.log("요청 실패");
+                    });
+            } else if (result.isDenied) {
+            }
+        });
 
-        // 친구 신청 알람
-        const globalMessageDto = {
-            type: "FRIEND_REQUEST",
-            data: {
-                fromUser: user.nickname,
-                toUser: nowProfile.nickname,
-            },
-        };
-        console.log(globalMessageDto);
-        client.send(`/app/global.one`, {}, JSON.stringify(globalMessageDto));
+        // // 친구 신청 알람
+        // const globalMessageDto = {
+        //     type: "FRIEND_REQUEST",
+        //     data: {
+        //         fromUser: user.nickname,
+        //         toUser: nowProfile.nickname,
+        //     },
+        // };
+        // console.log(globalMessageDto);
+        // client.send(`/app/global.one`, {}, JSON.stringify(globalMessageDto));
     };
 
     const acceptFriend = () => {
@@ -127,7 +217,13 @@ const ProfileModal = ({ isOpen, setIsOpen, onClose, member }) => {
             })
             .then((response) => {
                 console.log(response.data.msg);
-                alert(`${nowProfile.nickname}님과 친구가 되었습니다!`);
+                // alert(`${nowProfile.nickname}님과 친구가 되었습니다!`);
+                notifier.success(
+                    `${nowProfile.nickname}님과 친구가 되었습니다!`,
+                    {
+                        durations: { success: 3000 },
+                    }
+                );
                 setFriendStatus("connect");
             })
             .catch((error) => {
@@ -155,25 +251,25 @@ const ProfileModal = ({ isOpen, setIsOpen, onClose, member }) => {
     const modalRef = useRef(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
-    useEffect(() => {
-        const handler = (e) => {
-            if (
-                modalRef.current &&
-                !modalRef.current.contains(e.target) &&
-                anchorEl === null &&
-                !menuOpen
-            ) {
-                if (window.confirm("프로필을 닫으겠습니까?")) {
-                    onClose();
-                }
-            }
-        };
+    // useEffect(() => {
+    //     const handler = (e) => {
+    //         if (
+    //             modalRef.current &&
+    //             !modalRef.current.contains(e.target) &&
+    //             anchorEl === null &&
+    //             !menuOpen
+    //         ) {
+    //             if (window.confirm("프로필을 닫으겠습니까?")) {
+    //                 onClose();
+    //             }
+    //         }
+    //     };
 
-        document.addEventListener("mousedown", handler);
-        return () => {
-            document.removeEventListener("mousedown", handler);
-        };
-    }, [setIsOpen, menuOpen]);
+    //     document.addEventListener("mousedown", handler);
+    //     return () => {
+    //         document.removeEventListener("mousedown", handler);
+    //     };
+    // }, [setIsOpen, menuOpen]);
 
     const handleInsideClick = (event) => {
         event.stopPropagation();

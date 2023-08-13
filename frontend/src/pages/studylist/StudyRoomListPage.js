@@ -11,6 +11,10 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/common/HeaderComponent";
 import Footer from "../../components/common/FooterComponent";
 
+import Swal from "sweetalert2";
+import AWN from "awesome-notifications";
+import "awesome-notifications/dist/style.css";
+
 const StudyRoomList = () => {
     // 데이터
     const dispatch = useDispatch();
@@ -56,8 +60,19 @@ const StudyRoomList = () => {
 
     const handleModal = () => {
         if (!user) {
-            alert("로그인 후 이용 가능합니다.");
-            navigate("/login");
+            Swal.fire({
+                // title: "방 생성을 취소하시겠습니까?",
+                title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">로그인 후 이용 가능합니다.<div>',
+                icon: "error",
+                width: 330,
+                confirmButtonColor: "#55A8F5",
+                confirmButtonText:
+                    '<div style="font-size:15px; font-family: HakgyoansimWoojuR;">확인<div>',
+                // buttons: true,
+                // dangerMode: true,
+            }).then((result) => {
+                navigate("/login");
+            });
             return;
         }
         setModalStates(true);

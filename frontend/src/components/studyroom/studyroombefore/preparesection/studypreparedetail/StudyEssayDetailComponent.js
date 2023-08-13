@@ -4,6 +4,10 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { interviewActions } from "store/InterviewStore";
 import { addQuestion } from "store/InterviewWebSocketStore";
+import Swal from "sweetalert2";
+
+import AWN from "awesome-notifications";
+import "awesome-notifications/dist/style.css";
 
 // const [introduction, setIntroduction] = useState("");
 // const [job, setJob] = useState("");
@@ -12,7 +16,7 @@ const StudyEssayDetail = ({ nickname, onAir, before }) => {
     const { members, category } = useSelector(
         (state) => state.interviewWebSocket.currentRoom
     );
-
+    const notifier = new AWN();
     const dispatch = useDispatch();
 
     // nickname을 사용하여 해당 멤버를 찾습니다.
@@ -23,29 +27,99 @@ const StudyEssayDetail = ({ nickname, onAir, before }) => {
         console.log(category);
         // 자소서 기반 질문 자동 생성 api 호출
         // 생셩되면 store에 저장하기
-        if (window.confirm("이 항목에 대한 질문을 자동으로 생성할까요?")) {
-            try {
-                console.log(index);
-                console.log(question);
-                console.log(answer);
-                const response = await axios.post("/api/createQuestions", {
-                    instroduction: `${question}\n${answer}`,
-                    job: category,
-                });
-                const questionList = response.data.split("\n");
-                questionList.forEach((element) => {
-                    dispatch(
-                        addQuestion({
-                            nickname: member.nickname,
-                            question: element,
-                        })
-                    );
-                });
-                alert("생성완료");
-            } catch (error) {
-                console.error("Error:", error);
+        // if (window.confirm("이 항목에 대한 질문을 자동으로 생성할까요?")) {
+        //     try {
+        //         console.log(index);
+        //         console.log(question);
+        //         console.log(answer);
+        //         const response = await axios.post("/api/createQuestions", {
+        //             instroduction: `${question}\n${answer}`,
+        //             job: category,
+        //         });
+        //         const questionList = response.data.split("\n");
+        //         questionList.forEach((element) => {
+        //             dispatch(
+        //                 addQuestion({
+        //                     nickname: member.nickname,
+        //                     question: element,
+        //                 })
+        //             );
+        //         });
+        //         alert("생성완료");
+        //     } catch (error) {
+        //         console.error("Error:", error);
+        //     }
+        // }
+
+        // if (window.confirm("이 항목에 대한 질문을 자동으로 생성할까요?")) {
+        //     notifier.asyncBlock(
+        //         axios.post("/api/createQuestions", {
+        //             instroduction: `${question}\n${answer}`,
+        //             job: category,
+        //         }),
+        //         async (resp) => {
+        //             try {
+        //                 console.log(resp);
+        //                 const questionList = resp.data.split("\n");
+        //                 questionList.forEach((element) => {
+        //                     dispatch(
+        //                         addQuestion({
+        //                             nickname: member.nickname,
+        //                             question: element,
+        //                         })
+        //                     );
+        //                 });
+
+        //                 notifier.success("생성이 완료되었습니다.");
+        //             } catch (error) {
+        //                 console.error("Error:", error);
+        //                 notifier.alert("다시 시도해주세요.");
+        //             }
+        //         }
+        //     );
+        // }
+        Swal.fire({
+            title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">자동으로 질문을 생성하시겠습니까?<div>',
+            icon: "question",
+            width: 400,
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#D4D4D4",
+            cancelButtonText: "취소",
+            confirmButtonText: "넹",
+        }).then((keep) => {
+            if (keep) {
+                notifier.asyncBlock(
+                    axios.post("/api/createQuestions", {
+                        instroduction: `${question}\n${answer}`,
+                        job: category,
+                    }),
+                    async (resp) => {
+                        try {
+                            console.log(resp);
+                            const questionList = resp.data.split("\n");
+                            questionList.forEach((element) => {
+                                dispatch(
+                                    addQuestion({
+                                        nickname: member.nickname,
+                                        question: element,
+                                    })
+                                );
+                            });
+
+                            notifier.success(
+                                `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">생성이 완료되었습니다!</div>`
+                            );
+                        } catch (error) {
+                            console.error("Error:", error);
+                            notifier.alert("다시 시도해주세요.");
+                        }
+                    },
+                    undefined,
+                    `<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">AI질문을 생성중입니다! 잠시만 기다려주세요 </div>`
+                );
             }
-        }
+        });
     };
     const [newQuestion, setNewQuestion] = useState("");
     const handleQuestion = (e) => {
