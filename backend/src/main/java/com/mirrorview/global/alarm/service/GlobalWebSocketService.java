@@ -22,7 +22,7 @@ public class GlobalWebSocketService {
 
     public void enter(String nickname) {
         Member member = memberRepository.findByNickname(nickname).orElseThrow(() -> new IllegalArgumentException());
-        realTimeUserRepository.save(new RealTimeUser(member.getUserId(), nickname));
+        realTimeUserRepository.save(new RealTimeUser(nickname, member.getUserId()));
     }
 
     public void exit(String nickname) {

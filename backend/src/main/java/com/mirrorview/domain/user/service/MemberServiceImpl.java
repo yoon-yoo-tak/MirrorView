@@ -115,6 +115,11 @@ public class MemberServiceImpl implements MemberService {
             .filter(member -> member.getNickname().contains(input))
             .map(RealTimeUser::toSearchedMemberDtos)
             .forEach((member) -> result.add(member));
+        log.info("first logic");
+        for (SearchedMemberDto dtos : result) {
+            log.info("dto = {}", dtos);
+        }
+
         memberRepository.findByNicknameContaining(input)
                 .stream()
                 .filter(member -> !member.getDelete())
@@ -123,6 +128,10 @@ public class MemberServiceImpl implements MemberService {
                         .nickname(member.getNickname())
                         .build())
                 .forEach((member) -> result.add(member));
+        log.info("second logic");
+        for (SearchedMemberDto dtos : result) {
+            log.info("dtos = {}", dtos);
+        }
         return result;
     }
 
