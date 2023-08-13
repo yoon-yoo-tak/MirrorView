@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
+import onlineIcon from "assets/online.png";
+import offlineIcon from "assets/offline.png";
+
 import "pages/sidebar/css/SideBar.css";
 
 function FriendList() {
@@ -48,19 +51,28 @@ function FriendList() {
 
   return (
     <div className="wrap">
-      {friends.map((friend) => (
-        <div key={friend.userId}>
-          <div className="nameWrap">
-            <div className="nameText">
-              {friend.nickname} {friend.online ? "(온라인)" : "(오프라인)"}
-            </div>
-            <div className="delete" onClick={() => deleteFriend(friend.userId)}>
-              친구삭제
-            </div>
-          </div>
-          <div className="underline" />
+      <div className="search-section">
+        <div className="result-section">
+          {friends.map((friend) => {
+            const icon = friend.online ? onlineIcon : offlineIcon;
+            const altText = friend.online ? "online" : "offline";
+
+            return (
+              <div key={friend.userId} className="result-wrap">
+                <div>
+                  <img className="online" src={icon} alt={altText} />
+                  <span className="friendName">{friend.nickname}</span>
+                </div>
+                <div
+                  className="go-profile"
+                  onClick={() => deleteFriend(friend.userId)}>
+                  친구삭제
+                </div>
+              </div>
+            );
+          })}
         </div>
-      ))}
+      </div>
     </div>
   );
 }
