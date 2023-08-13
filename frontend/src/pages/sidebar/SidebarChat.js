@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { useSelector } from "react-redux";
-import { FaPlus, FaChevronUp, FaChevronDown } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { WebSocketContext } from "WebSocketContext";
 
 import ChatList from "pages/sidebar/ChatList";
@@ -26,7 +26,7 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [isChatsContentVisible, setChatsContentVisible] = useState(true);
-  const [chatContent, setChatContent] = useState("myChat");
+  const [chatContent, setChatContent] = useState("openChat");
   const chatsContentRef = useRef(null);
   const [chatsContentHeight, setChatsContentHeight] = useState("auto");
 
