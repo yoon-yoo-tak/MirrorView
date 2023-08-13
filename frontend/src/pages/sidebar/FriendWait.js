@@ -50,9 +50,9 @@ function FriendWait() {
         <div className="nameText">요청이 없습니다.</div>
       )}
       {friendRequests.map((friend, index) => (
-        <div>
+        <div key={friend.userId}>
           <div>
-            <div className="nameWrap" key={index}>
+            <div className="nameWrap" key={friend.userId}>
               <div className="nameText">{friend.nickname}</div>
               <div
                 className="cancel"

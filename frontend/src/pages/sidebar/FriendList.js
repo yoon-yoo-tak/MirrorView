@@ -14,8 +14,13 @@ function FriendList() {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((response) => {
-        console.log(response.data.data);
-        setFriends(response.data.data);
+        // 온라인 유저가 먼저오도록 정렬
+        const sortedFriends = response.data.data.sort((a, b) => {
+          if (a.online === b.online) return 0;
+          if (a.online && !b.online) return -1;
+          return 1;
+        });
+        setFriends(sortedFriends);
       })
       .catch((error) => {
         console.error("There was an error!", error);
@@ -46,7 +51,9 @@ function FriendList() {
       {friends.map((friend) => (
         <div key={friend.userId}>
           <div className="nameWrap">
-            <div className="nameText">{friend.nickname}</div>
+            <div className="nameText">
+              {friend.nickname} {friend.online ? "(온라인)" : "(오프라인)"}
+            </div>
             <div className="delete" onClick={() => deleteFriend(friend.userId)}>
               친구삭제
             </div>

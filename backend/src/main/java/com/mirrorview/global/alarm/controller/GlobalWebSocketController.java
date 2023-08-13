@@ -72,6 +72,19 @@ public class GlobalWebSocketController {
 				if(globalWebSocketService.isUserOnline(toUser))
 					simpMessagingTemplate.convertAndSendToUser(toUser, "/sub/global.one", globalMessageDto);
 				break;
+			case "FRIEND_ACCEPTED":
+				String friendFromUser = nickname;
+				String messageFriend = friendFromUser+"님이 친구 요청을 수락했습니다.";
+
+				globalMessageDto.getData().put("fromUser", nickname);
+				String friendToUser = (String) globalMessageDto.getData().get("toUser");
+
+				Notification acceptedNotification = notificationService.createAndSaveNotification(friendToUser, messageFriend);
+				globalMessageDto.getData().put("notification", acceptedNotification);
+
+				if(globalWebSocketService.isUserOnline(friendToUser))
+					simpMessagingTemplate.convertAndSendToUser(friendToUser, "/sub/global.one", globalMessageDto);
+				break;
 
 		}
 	}

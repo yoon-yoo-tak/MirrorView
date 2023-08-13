@@ -48,6 +48,9 @@ export const globalOneUserSubscribe = createAsyncThunk(
         case "FRIEND_REQUEST":
           dispatch(addNotification(parsedMessage.data.notification));
           break;
+        case "FRIEND_ACCEPTED":
+          dispatch(addNotification(parsedMessage.data.notification));
+          break;
       }
     });
   }

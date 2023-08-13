@@ -6,6 +6,7 @@ import { WebSocketContext } from "WebSocketContext";
 import ChatList from "pages/sidebar/ChatList";
 import ChatRoom from "pages/sidebar/ChatRoom";
 import ChatMyList from "pages/sidebar/ChatMyList";
+import ChatPrivate from "pages/sidebar/ChatPrivate";
 
 import axios from "axios"; // <-- axios 불러오기
 
@@ -75,13 +76,15 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
     }
   }, [clickChat]);
 
-  // 채팅 기능
+  // 내부 컴포넌트
   function renderChatContent() {
     switch (chatContent) {
       case "openChat":
         return <ChatList />;
       case "myChat":
         return <ChatMyList />;
+      case "privateChat": // <-- 여기 추가
+        return <ChatPrivate />;
       default:
         return null;
     }
@@ -89,7 +92,11 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
 
   const handleChatContentChange = (content) => {
     setChatContent(content);
-    if (content === "myChat" || content === "openChat") {
+    if (
+      content === "myChat" ||
+      content === "openChat" ||
+      content === "privateChat"
+    ) {
       dispatch(switchView("ChatList"));
     } else {
       dispatch(switchView("ChatRoom"));
@@ -129,15 +136,16 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
               <button onClick={() => handleChatContentChange("openChat")}>
                 오픈 채팅
               </button>
+              <button onClick={() => handleChatContentChange("privateChat")}>
+                개인 채팅
+              </button>
             </div>
-
             <div>
               {view === "ChatList" && renderChatContent()}
               {view === "ChatRoom" && <ChatRoom />}
             </div>
-
             <div className="chatbtn" onClick={handleOpenCreateChatModal}>
-              채팅방 개설하기 <FaPlus className="icon" />
+              오픈 채팅방 개설하기 <FaPlus className="icon" />
             </div>
             {showCreateChatModal && ( // <-- 추가
               <ChatModal

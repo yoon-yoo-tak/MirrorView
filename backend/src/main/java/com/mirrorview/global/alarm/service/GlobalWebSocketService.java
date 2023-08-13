@@ -22,6 +22,8 @@ public class GlobalWebSocketService {
 
     public void enter(String nickname) {
         Member member = memberRepository.findByNickname(nickname).orElseThrow(() -> new IllegalArgumentException());
+        System.out.println(member);
+        System.out.println(nickname);
         realTimeUserRepository.save(new RealTimeUser(nickname, member.getUserId()));
     }
 
@@ -31,12 +33,8 @@ public class GlobalWebSocketService {
     }
 
     public boolean isUserOnline(String nickname){
-        // redis online 에 userId랑 nickname이랑 반대로 되있음
-        Optional<RealTimeUser> byUserId = realTimeUserRepository.findByUserId(nickname);
-        System.out.println(byUserId.isPresent());
-        System.out.println(byUserId.get());
-
-        if(byUserId.isPresent()){
+        Optional<RealTimeUser> byUserNickname = realTimeUserRepository.findById(nickname);
+        if(byUserNickname.isPresent()){
             return true;
         }
         return false;
