@@ -20,8 +20,8 @@ export const subscribeChatRoomCreate = createAsyncThunk(
   (client, { dispatch }) => {
     if (client) {
       client.subscribe("/sub/chatrooms.room", (message) => {
-        console.log(message);
         const parsedMessage = JSON.parse(message.body);
+        console.log(parsedMessage);
         switch (parsedMessage.type) {
           case "create":
             const chatRoom = parsedMessage.data.room;

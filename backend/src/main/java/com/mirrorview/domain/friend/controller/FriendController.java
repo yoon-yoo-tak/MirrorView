@@ -1,6 +1,7 @@
 package com.mirrorview.domain.friend.controller;
 
 import com.mirrorview.domain.friend.dto.FriendDto;
+import com.mirrorview.domain.friend.dto.FriendOnlineDto;
 import com.mirrorview.domain.friend.service.FriendService;
 import com.mirrorview.global.auth.security.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
@@ -24,7 +25,7 @@ public class FriendController {
     @GetMapping
     public ResponseEntity<?> getFriends(@AuthenticationPrincipal CustomMemberDetails member) {
         String userId = member.getUsername();
-        List<FriendDto> friends = friendService.getFriends(userId);
+        List<FriendOnlineDto> friends = friendService.getFriends(userId);
         System.out.println(friends);
         return BaseResponse.okWithData(HttpStatus.OK, "조회 완료", friends);
     }

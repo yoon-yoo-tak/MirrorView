@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { MdArrowBack } from "react-icons/md";
 import { WebSocketContext } from "WebSocketContext";
-import { subscribeRoomCountAsync } from "store/ChatRoomStore";
-import "pages/sidebar/css/ChatRoom.css";
-import sendIcon from "../../assets/send.png";
 
-import Box from "@mui/material/Box";
+import sendIcon from "../../assets/send.png";
 import TextField from "@mui/material/TextField";
+
+import "pages/sidebar/css/ChatRoom.css";
+import { switchView } from "store/ChatViewStore";
 
 // 닉네임에 색주기
 function getNicknameColor(userNickname) {
@@ -111,7 +111,9 @@ function ChatRoom() {
     <div className="chat-room-container">
       <div className="header">
         <div className="back-button-container">
-          <button className="back-button">
+          <button
+            className="back-button"
+            onClick={() => dispatch(switchView("ChatList"))}>
             <MdArrowBack size={24} />
           </button>
         </div>

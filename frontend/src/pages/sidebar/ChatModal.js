@@ -9,6 +9,7 @@ import "pages/sidebar/css/ChatModal.css";
 const ChatModal = ({ isOpen, onClose }) => {
   const { client } = useContext(WebSocketContext);
   const [title, setTitle] = useState("");
+  
   const dispatch = useDispatch();
 
   const handleTitleChange = (event) => {

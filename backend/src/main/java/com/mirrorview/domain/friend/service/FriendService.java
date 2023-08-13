@@ -1,6 +1,7 @@
 package com.mirrorview.domain.friend.service;
 
 import com.mirrorview.domain.friend.dto.FriendDto;
+import com.mirrorview.domain.friend.dto.FriendOnlineDto;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface FriendService {
 
     void acceptRequest(String myUserId, String otherUerId);
 
-    List<FriendDto> getFriends(String userId);
+    List<FriendOnlineDto> getFriends(String userId);
 
     List<FriendDto> getFriendRequests(String userId);
 

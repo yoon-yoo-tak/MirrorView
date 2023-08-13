@@ -2,10 +2,14 @@ package com.mirrorview.domain.friend.service;
 
 import com.mirrorview.domain.friend.domain.Friend;
 import com.mirrorview.domain.friend.dto.FriendDto;
+import com.mirrorview.domain.friend.dto.FriendOnlineDto;
 import com.mirrorview.domain.friend.dto.FriendRequestDto;
 import com.mirrorview.domain.friend.repository.FriendRepository;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.repository.MemberRepository;
+import com.mirrorview.global.alarm.domain.RealTimeUser;
+import com.mirrorview.global.alarm.repository.RealTimeUserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -24,6 +29,7 @@ public class FriendServiceImpl implements FriendService {
 
     private final FriendRepository friendRepository;
     private final MemberRepository memberRepository;
+    private final RealTimeUserRepository realTimeUserRepository;
     private final EntityManager em;
 
     @Override
@@ -74,9 +80,20 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public List<FriendDto> getFriends(String userId) {
-        return friendRepository.findFriendsByUserId(userId);
+    public List<FriendOnlineDto> getFriends(String userId) {
+        List<FriendDto> friends = friendRepository.findFriendsByUserId(userId);
+        List<RealTimeUser> onlineUsers = realTimeUserRepository.findAll();
+
+        List<FriendOnlineDto> friendsOnlineInfo = friends.stream()
+            .map(friend -> {
+                boolean isOnline = onlineUsers.stream().anyMatch(onlineUser -> onlineUser.getNickname().equals(friend.getNickname()));
+                return new FriendOnlineDto(friend.getId(), friend.getUserId(), friend.getNickname(), isOnline);
+            })
+            .collect(Collectors.toList());
+
+        return friendsOnlineInfo;
     }
+
 
     @Override
     public List<FriendDto> getFriendRequests(String userId) {

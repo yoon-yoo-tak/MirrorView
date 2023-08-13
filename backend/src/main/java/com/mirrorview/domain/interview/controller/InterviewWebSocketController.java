@@ -84,6 +84,7 @@ public class InterviewWebSocketController {
 				// 	.build();
 				interviewService.exitRoom(name, roomId);
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
+				interviewService.systemMessage(principal.getName(), roomId, "님이 퇴장하셨습니다.");
 				break;
 
 			case "READY_CHANGE":

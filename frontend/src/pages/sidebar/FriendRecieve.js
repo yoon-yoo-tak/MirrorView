@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { WebSocketContext } from "WebSocketContext";
 
 function FriendRecieve() {
   const [friendRequests, setFriendRequests] = useState([]);
   const accessToken = useSelector((state) => state.auth.accessToken);
+  const { user } = useSelector((state) => state.auth);
+  const { client } = useContext(WebSocketContext);
 
   useEffect(() => {
     axios
@@ -22,7 +25,7 @@ function FriendRecieve() {
       });
   }, []);
 
-  const acceptFriendRequest = (userId) => {
+  const acceptFriendRequest = ({ userId, nickname }) => {
     axios
       .patch(
         `/api/friends/request/${userId}`,
@@ -34,7 +37,16 @@ function FriendRecieve() {
           setFriendRequests((prevRequests) =>
             prevRequests.filter((request) => request.userId !== userId)
           );
-          console.log("Friend request accepted:", response);
+          console.log("친구가 수락됨", response);
+          const message = {
+            type: "FRIEND_ACCEPTED",
+            data: {
+              fromUser: user.nickname,
+              toUser: nickname,
+            },
+          };
+
+          client.send("/app/global.one", {}, JSON.stringify(message));
         }
       })
       .catch((error) => {
@@ -70,7 +82,12 @@ function FriendRecieve() {
             <div className="buttonWrap">
               <div
                 className="accept"
-                onClick={() => acceptFriendRequest(request.userId)}>
+                onClick={() =>
+                  acceptFriendRequest({
+                    userId: request.userId,
+                    nickname: request.nickname,
+                  })
+                }>
                 승인
               </div>
               <div
