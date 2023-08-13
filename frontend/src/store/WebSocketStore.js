@@ -3,9 +3,11 @@ import {
   createAsyncThunk,
   configureStore,
 } from "@reduxjs/toolkit";
-import { Stomp } from "@stomp/stompjs";
-import SockJS from "sockjs-client";
-import { updateChatRooms, addChatRoom } from "store/ChatRoomStore";
+import {
+  updateChatRooms,
+  addChatRoom,
+  deleteChatRoom,
+} from "store/ChatRoomStore";
 
 // 여기는 오픈 채팅 global sub/pub 로 사용
 
@@ -17,9 +19,23 @@ export const subscribeChatRoomCreate = createAsyncThunk(
   "webSocket/subscribeChatRoomCreate",
   (client, { dispatch }) => {
     if (client) {
-      client.subscribe("/sub/chatrooms.create", (message) => {
-        const chatRoom = JSON.parse(message.body);
-        dispatch(addChatRoom(chatRoom));
+      client.subscribe("/sub/chatrooms.room", (message) => {
+        console.log(message);
+        const parsedMessage = JSON.parse(message.body);
+        switch (parsedMessage.type) {
+          case "create":
+            const chatRoom = parsedMessage.data.room;
+            dispatch(addChatRoom(chatRoom));
+            break;
+          case "delete":
+            const chatRoomIdDelete = parsedMessage.data.roomId;
+            dispatch(deleteChatRoom(chatRoomIdDelete)); // Assuming you have a deleteChatRoom action
+            break;
+          // Add more cases as needed
+          default:
+            // Handle unknown message types or other cases
+            break;
+        }
       });
     }
   }
@@ -80,11 +96,10 @@ const webSocketSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase("webSocket/updateUserCount", (state, action) => {
-        console.log(action.payload);
-        state.userCount = action.payload;
-      })
+    builder.addCase("webSocket/updateUserCount", (state, action) => {
+      console.log(action.payload);
+      state.userCount = action.payload;
+    });
   },
 });
 

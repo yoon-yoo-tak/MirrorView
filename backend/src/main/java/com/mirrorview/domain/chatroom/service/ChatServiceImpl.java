@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.mirrorview.domain.chatroom.domain.ChatMessage;
 import com.mirrorview.domain.chatroom.domain.ChatRoom;
 import com.mirrorview.domain.chatroom.repository.ChatRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import lombok.Getter;
 
@@ -24,19 +26,23 @@ import lombok.Getter;
 @RequiredArgsConstructor
 @Slf4j
 @Getter
-public class ChatServiceImpl implements ChatService{
+public class ChatServiceImpl implements ChatService {
 
 	private final SimpMessagingTemplate template;
 	private final ChatRepository chatRepository;
 
-	public List<ChatRoom> allRoom(){
-		return (List<ChatRoom>)chatRepository.findAll();
+	@Override
+	public List<ChatRoom> allRoom() {
+		List<ChatRoom> chatRooms = (List<ChatRoom>)chatRepository.findAll();
+		return chatRooms.stream()
+			.filter(room -> room != null)
+			.collect(Collectors.toList());
 	}
 
 	@Override
 	public ChatRoom createChatRoom(String roomId) {
 		Optional<ChatRoom> byId = chatRepository.findById(roomId);
-		if(byId.isPresent()){
+		if (byId.isPresent()) {
 			throw new RuntimeException("같은 이름의 방이 존재합니다.");
 		}
 		ChatRoom chatRoom = ChatRoom.builder()
@@ -46,6 +52,8 @@ public class ChatServiceImpl implements ChatService{
 			.count(0)
 			.build();
 
+		chatRoom.setExpiration(60L * 1);
+
 		chatRepository.save(chatRoom);
 		return chatRoom;
 	}
@@ -53,22 +61,22 @@ public class ChatServiceImpl implements ChatService{
 	@Override
 	public ChatRoom addChatMessageToChatRoom(String roomId, ChatMessage chatMessage) {
 		Optional<ChatRoom> chatRoomOptional = chatRepository.findById(roomId);
-		if(chatRoomOptional.isPresent()){
+		if (chatRoomOptional.isPresent()) {
 			ChatRoom chatRoom = chatRoomOptional.get();
 			chatRoom.getMessages().add(chatMessage);
 			return chatRepository.save(chatRoom);
-		}else{
+		} else {
 			throw new RuntimeException("방이 존재하지 않습니다.");
 		}
 	}
 
 	@Override
-	public List<ChatMessage> getChat(String roomId){
+	public List<ChatMessage> getChat(String roomId) {
 		Optional<ChatRoom> chatRoom = chatRepository.findById(roomId);
-		if(chatRoom.isPresent()){
+		if (chatRoom.isPresent()) {
 			List<ChatMessage> chatMessages = chatRoom.get().getMessages();
 			return chatMessages;
-		}else
+		} else
 			throw new RuntimeException("방이 존재하지 않습니다.");
 	}
 }

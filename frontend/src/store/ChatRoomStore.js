@@ -12,14 +12,16 @@ export const createChatRoomAsync = createAsyncThunk(
     if (!client) {
       throw new Error("WebSocket is not connected");
     }
+
     let roomOjb = {
-      id: title,
-      users: [],
-      messages: [],
-      count: 0,
+      roomId: title,
     };
 
-    await client.send("/app/chatrooms.create", {}, JSON.stringify(roomOjb));
+    const message = {
+      type: "create",
+      data: roomOjb,
+    };
+    await client.send("/app/chatrooms.room", {}, JSON.stringify(message));
   }
 );
 
@@ -69,7 +71,13 @@ const chatRoomSlice = createSlice({
       state.selectedRoom = action.payload.title;
     },
     addChatRoom: (state, action) => {
-      state.chatRooms.push(action.payload);
+      state.chatRooms = [...state.chatRooms, action.payload];
+    },
+    deleteChatRoom: (state, action) => {
+      const roomIdToDelete = action.payload;
+      state.chatRooms = state.chatRooms.filter(
+        (room) => room.id !== roomIdToDelete
+      );
     },
     updateRoomCount: (state, action) => {
       const index = state.chatRooms.findIndex(
@@ -96,6 +104,7 @@ export const {
   updateSelectedRoom,
   addChatRoom,
   updateRoomCount,
+  deleteChatRoom,
 } = chatRoomSlice.actions;
 
 export default chatRoomSlice.reducer;

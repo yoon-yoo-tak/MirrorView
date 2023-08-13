@@ -17,6 +17,9 @@ function ChatList() {
   const chatRooms = useSelector((state) => state.chatRoom.chatRooms);
   const { user } = useSelector((state) => state.auth);
   const [isFavorite, setIsFavorite] = useState({});
+  const validChatRooms = chatRooms.filter(
+    (room) => room && typeof room.count === "number"
+  );
   const sortedChatRooms = [...chatRooms].sort((a, b) => b.count - a.count);
 
   useEffect(() => {

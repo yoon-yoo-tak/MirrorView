@@ -32,4 +32,10 @@ public class Notification implements Serializable {
 	@Indexed
 	private boolean read;
 
+	@Indexed
+	private String sender;
+
+	@Indexed
+	private String receiver;
+
 }

@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -16,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mirrorview.domain.chatroom.domain.ChatMessage;
+import com.mirrorview.domain.chatroom.listener.RedisKeyExpirationListener;
 import com.mirrorview.domain.interview.domain.InterviewRoom;
 
 @Configuration
@@ -93,6 +97,19 @@ public class RedisConfig {
 		redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 
 		return redisTemplate;
+	}
+
+	@Bean
+	public RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory, RedisKeyExpirationListener listenerAdapter) {
+		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+		container.setConnectionFactory(connectionFactory);
+		container.addMessageListener(listenerAdapter, new PatternTopic("__keyevent@*:expired"));
+		return container;
+	}
+
+	@Bean
+	public RedisKeyExpirationListener listenerAdapter(RedisKeyExpirationListener listener) {
+		return listener;
 	}
 
 }

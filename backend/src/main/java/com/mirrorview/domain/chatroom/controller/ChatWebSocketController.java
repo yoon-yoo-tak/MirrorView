@@ -3,6 +3,7 @@ package com.mirrorview.domain.chatroom.controller;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mirrorview.domain.chatroom.domain.ChatMessage;
 import com.mirrorview.domain.chatroom.domain.ChatRoom;
 import com.mirrorview.domain.chatroom.service.ChatService;
+import com.mirrorview.domain.interview.dto.MessageDto;
 import com.mirrorview.global.auth.security.CustomMemberDetails;
 
 import lombok.RequiredArgsConstructor;
@@ -37,7 +39,7 @@ public class ChatWebSocketController {
 		String userNickname = principal.getName();
 		List<ChatRoom> chatRooms = chatService.allRoom();
 		simpMessagingTemplate.convertAndSendToUser(userNickname, "/sub/chatrooms", chatRooms);
-		log.info("{}에게 전체 방 가져오기", userNickname);
+		log.info("{}에게 전체 방 가져오기 {}" , userNickname, chatRooms);
 	}
 	
 	// 채팅 방 채팅기록
@@ -59,10 +61,15 @@ public class ChatWebSocketController {
 	}
 
 	// 방만들기
-	@MessageMapping("/chatrooms.create")
-	public void createChatRoom(ChatRoom chatRoom) {
-		ChatRoom newChatRoom = chatService.createChatRoom(chatRoom.getId());
-		simpMessagingTemplate.convertAndSend("/sub/chatrooms.create", newChatRoom);
-		log.info("채팅방 만들기");
+	@MessageMapping("/chatrooms.room")
+	public void createChatRoom(MessageDto messageDto) {
+		switch (messageDto.getType()) {
+			case "create":
+				ChatRoom newChatRoom = chatService.createChatRoom((String)messageDto.getData().get("roomId"));
+				messageDto.setData(Map.of("room",(Object)newChatRoom));
+				simpMessagingTemplate.convertAndSend("/sub/chatrooms.room", messageDto);
+				log.info("채팅방 만들기");
+				break;
+		}
 	}
 }

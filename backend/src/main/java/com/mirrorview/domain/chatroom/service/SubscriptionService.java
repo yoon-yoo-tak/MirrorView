@@ -1,5 +1,6 @@
 package com.mirrorview.domain.chatroom.service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -116,6 +117,11 @@ public class SubscriptionService {
 		Optional<ChatRoom> chatRoomOptional = chatRepository.findById(roomId);
 		chatRoomOptional.ifPresentOrElse(chatRoom -> {
 			chatRoom.setCount(chatRoom.getCount() + 1);
+
+			if (chatRoom.getCount() >= 1) {
+				chatRoom.setExpiration(null); // 만료 시간 제거
+			}
+
 			chatRepository.save(chatRoom);
 			sendRoomUserCount(roomId, chatRoom.getCount());
 		}, () -> {
@@ -128,6 +134,12 @@ public class SubscriptionService {
 		Optional<ChatRoom> chatRoomOptional = chatRepository.findById(roomId);
 		chatRoomOptional.ifPresentOrElse(chatRoom -> {
 			chatRoom.setCount(chatRoom.getCount() - 1);
+
+			// 오픈채팅방 만료시간 설정
+			if (chatRoom.getCount() == 0) {
+				chatRoom.setExpiration(60L * 1); // 1분
+			}
+
 			chatRepository.save(chatRoom);
 			sendRoomUserCount(roomId, chatRoom.getCount());
 		}, () -> {
