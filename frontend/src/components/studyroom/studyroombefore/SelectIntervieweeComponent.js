@@ -21,6 +21,7 @@ const SelectInterviewee = (props) => {
     const nickname = useSelector((state) => state.auth.nickname);
     const { myRole } = useSelector((state) => state.interview);
     useEffect(() => {
+      if(myRole==null)
         dispatch(interviewActions.setMyRoll("interviewee"));
     }, []);
 

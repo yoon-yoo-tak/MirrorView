@@ -15,7 +15,7 @@ import { WebSocketContext } from "WebSocketContext";
 import Swal from "sweetalert2";
 import AWN from "awesome-notifications";
 import "awesome-notifications/dist/style.css";
-
+import { interviewActions } from "store/InterviewStore";
 const PrepareSection = (props) => {
     const { client } = useContext(WebSocketContext);
     const [section, setSection] = useState("info");
@@ -101,6 +101,7 @@ const PrepareSection = (props) => {
                             durations: { success: 2000 },
                         }
                     );
+                    dispatch(interviewActions.setMyRoll(null));
                     navigate("/");
                 } else {
                     setModalStates(true);

@@ -18,6 +18,7 @@ const ProfileModal = ({
     onClose,
     nickname,
     isInterview,
+    member,
 }) => {
     const { client } = useContext(WebSocketContext);
     const accessToken = useSelector((state) => state.auth.accessToken);
@@ -279,21 +280,20 @@ const ProfileModal = ({
         setAnchorEl(null);
     };
 
-  const openChat = () => {
-    if (window.confirm(`${member.nickname}님과 1대1 채팅을 시작할까요?`)) {
-      console.log("넹");
+    const openChat = () => {
+        if (window.confirm(`${member.nickname}님과 1대1 채팅을 시작할까요?`)) {
+            console.log("넹");
 
-      const message = {
-        type: 'GET_PRIVATE_ROOM',
-        data: {
-          toUser: member.nickname
+            const message = {
+                type: "GET_PRIVATE_ROOM",
+                data: {
+                    toUser: member.nickname,
+                },
+            };
+
+            client.send("/app/global.one", {}, JSON.stringify(message));
         }
-      };
-
-
-      client.send('/app/global.one', {}, JSON.stringify(message));
-    }
-  };
+    };
 
     const font = {
         fontFamily: "HakgyoansimWoojuR",

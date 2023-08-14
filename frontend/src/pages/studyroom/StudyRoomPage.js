@@ -500,6 +500,7 @@ const StudyRoom = () => {
         let subscription;
         if (redirect) {
             dispatch(setRedirect(false));
+            dispatch(interviewActions.setMyRoll(null));
             dispatch(clearCurrentRoom());
             if (subscription) {
                 subscription.unsubscribe();
