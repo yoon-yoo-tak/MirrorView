@@ -104,6 +104,8 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
     // 모달창 관련
     const [openAlert, setOpenAlert] = useState(false);
 
+    const notifier = new AWN();
+
     const closeModal = () => {
         // if (window.confirm("방 생성을 취소하시겠습니까?")) {
         //   setModalStates(false);
@@ -111,7 +113,7 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
         setOpenAlert(true);
         Swal.fire({
             // title: "방 생성을 취소하시겠습니까?",
-            title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">취소하꺼야?<div>',
+            title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">방 생성을 취소할까요?<div>',
             icon: "question",
             width: 330,
             showCancelButton: true,
@@ -225,14 +227,26 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
                 password === ""
             ) {
                 // 하나라도 값이 없다면
-                alert("입력 항목을 확인해주세요");
+                // alert("입력 항목을 확인해주세요");
+                notifier.alert(
+                    `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">입력 항목을 확인하세요</div>`,
+                    {
+                        durations: { success: 2000 },
+                    }
+                );
             } else {
                 handleSubmit();
             }
         } else {
             if (title === "" || max === 0 || firstValue === "선택하세요") {
                 // 하나라도 값이 없다면
-                alert("입력 항목을 확인해주세요");
+                // alert("입력 항목을 확인해주세요");
+                notifier.alert(
+                    `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">입력 항목을 확인하세요</div>`,
+                    {
+                        durations: { success: 2000 },
+                    }
+                );
             } else {
                 handleSubmit();
             }
@@ -250,30 +264,66 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
             selectCategory = firstValue;
         }
 
-        if (window.confirm("면접방을 생성하시겠습니까?")) {
-            await axios
-                .post("/api/interviews/create", {
+        // if (window.confirm("면접방을 생성하시겠습니까?")) {
+        //     await axios
+        //         .post("/api/interviews/create", {
+        //             title: title,
+        //             password: password,
+        //             category: selectCategory,
+        //             maxMemberCount: max,
+        //         })
+        //         .then((response) => {
+        //             console.log("방만들기 성공");
+        //             setModalStates(false);
+        //             return response;
+        //         })
+        //         .then((response) => {
+        //             console.log("이동 ");
+        //             navigate(`/studyroom/${response.data.data.id}`, {
+        //                 state: { isHost: true },
+        //             });
+        //         })
+        //         .catch((error) => {
+        //             console.error(error);
+        //         });
+        // }
+        // -----------
+        const result = await Swal.fire({
+            title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">면접방을 생성하시겠습니까?<div>',
+            icon: "question",
+            width: 400,
+            showCancelButton: true,
+            confirmButtonColor: "#55A8F5",
+            cancelButtonColor: "#D4D4D4",
+            cancelButtonText:
+                '<div style="font-size:17px; font-family: HakgyoansimWoojuR;font-weight:bold;">아니요<div>',
+            confirmButtonText:
+                '<div style="font-size:17px; font-family: HakgyoansimWoojuR;font-weight:bold;">네<div>',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const response = await axios.post("/api/interviews/create", {
                     title: title,
                     password: password,
                     category: selectCategory,
                     maxMemberCount: max,
-                })
-                .then((response) => {
-                    console.log("방만들기 성공");
-                    setModalStates(false);
-                    return response;
-                })
-                .then((response) => {
-                    console.log("이동 ");
-                    navigate(`/studyroom/${response.data.data.id}`, {
-                        state: { isHost: true },
-                    });
-                })
-                .catch((error) => {
-                    console.error(error);
                 });
+
+                console.log("방만들기 성공");
+                setModalStates(false);
+
+                console.log("이동 ");
+                navigate(`/studyroom/${response.data.data.id}`, {
+                    state: { isHost: true },
+                });
+            } catch (error) {
+                console.error(error);
+            }
         }
+        // -----------
     };
+
     const style = {
         visibility: "hidden",
     };

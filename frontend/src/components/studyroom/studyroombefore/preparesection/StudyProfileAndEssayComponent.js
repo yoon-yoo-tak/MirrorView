@@ -43,7 +43,7 @@ const StudyProfileAndEssay = (props) => {
             questionList.find((person) => person.name === target.name)
         );
         setTargetObject(questionList.find((list) => list.name === target.name));
-        setTap("profile");
+        // setTap("profile");
     };
 
     // const addQuestionToProfile = (question) => {

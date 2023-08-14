@@ -200,6 +200,8 @@ const Profile = () => {
         borderRadius: "50%",
     };
 
+    const rate = user.averageRating.toFixed(2);
+
     return (
         <div>
             <S.page>
@@ -316,7 +318,8 @@ const Profile = () => {
                         <h2>{user.nickname}님의 현재 평점</h2>
                         <hr />
                         <S.gradeGroup>
-                            <S.grade>{user.averageRating}</S.grade>
+                            {/* <S.grade>{user.averageRating}</S.grade> */}
+                            <S.grade>{rate}</S.grade>
                             <S.gradeStar>
                                 <StarRating grade={user.averageRating} />
                             </S.gradeStar>

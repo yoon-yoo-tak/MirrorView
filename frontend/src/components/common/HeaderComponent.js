@@ -154,7 +154,7 @@ const Header = () => {
         if (globalMessages.length > length) {
             console.log("찍엉");
             notifier.info(
-                `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">새로운 친구 신청이 왔어요</div>`,
+                `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">새로운 알림이 도착했어요</div>`,
                 {
                     durations: { success: 2000 },
                 }
@@ -176,9 +176,11 @@ const Header = () => {
                     <NavItem onClick={() => movePage("aboutus")}>
                         About us
                     </NavItem>
-                    <NavItem onClick={() => movePage("adminpage")}>
-                        admin
-                    </NavItem>
+                    {user && user.roles === "ADMIN" && (
+                        <NavItem onClick={() => movePage("adminpage")}>
+                            admin
+                        </NavItem>
+                    )}
                     <NavItem onClick={() => movePage("notice")}>Notice</NavItem>
                     <NavItem onClick={() => movePage("studylist")}>
                         StudyList

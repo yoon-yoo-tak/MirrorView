@@ -87,8 +87,8 @@ const StudyEssayDetail = ({ nickname, onAir, before }) => {
             cancelButtonColor: "#D4D4D4",
             cancelButtonText: "취소",
             confirmButtonText: "넹",
-        }).then((keep) => {
-            if (keep) {
+        }).then((result) => {
+            if (result.isConfirmed) {
                 notifier.asyncBlock(
                     axios.post("/api/createQuestions", {
                         instroduction: `${question}\n${answer}`,
