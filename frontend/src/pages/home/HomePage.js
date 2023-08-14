@@ -8,64 +8,80 @@ const Home = () => {
         <div>
             <Header />
             <S.Container>
-                <S.Image src="/bground2.png" alt="main_bg" />
-                {/* <S.page /> */}
+                <S.Image src="/bground2.png" alt="HomePageBG" />
+
                 <S.Content>
-                    <S.Title>"청춘" 들의 면접 플랫폼</S.Title>
-                    <S.Title2> 밀어 : 뷰 </S.Title2>
-                    <S.ImageWrapper>
+                    <S.FirstTitle style={{ top: "1180px", left: "30px" }}>
+                        {'"청춘"들의 면접 플랫폼'}
+                    </S.FirstTitle>
+
+                    <S.SecondTitle style={{ top: "1150px", left: "30px" }}>
+                        {"밀어 : 뷰 "}
+                    </S.SecondTitle>
+
+                    <S.ImageWrapper style={{ top: "450px", right: "-900px" }}>
                         <img
                             src={process.env.PUBLIC_URL + "/mirlogo4.png"}
-                            alt="main_bg2"
+                            alt="HomePageLg1"
                         />
                     </S.ImageWrapper>
-                    <S.ImageWrappe4>
-                        <img
-                            src={process.env.PUBLIC_URL + "/hi.png"}
-                            alt="main_bg2"
-                        />
-                    </S.ImageWrappe4>
-                    <S.ImageWrappe5>
-                        <img
-                            src={process.env.PUBLIC_URL + "/hi.png"}
-                            alt="main_bg2"
-                        />
-                    </S.ImageWrappe5>
-                    <S.ImageWrappe6>
-                        <img
-                            src={process.env.PUBLIC_URL + "/hi.png"}
-                            alt="main_bg2"
-                        />
-                    </S.ImageWrappe6>
-                </S.Content>
-                <S.Content2>
-                    <S.Title3>밀어뷰'S BENEFIT</S.Title3>
-                    <S.ImageWrapper2>
-                        <img
-                            src={process.env.PUBLIC_URL + "/one.png"}
-                            alt="star"
-                        />
-                    </S.ImageWrapper2>
-                </S.Content2>
-                <S.Content3>
-                    <S.ImageWrapper3>
+
+                    <S.Title3 style={{ top: "500px", right: "-400px" }}>
+                        {"밀어뷰'S 베네핏!"}
+
+                        <S.ImageWrapper2
+                            style={{ top: "-290px", right: "-190px" }}
+                        >
+                            <img
+                                src={process.env.PUBLIC_URL + "/one.png"}
+                                alt="RedCircle"
+                            />
+                        </S.ImageWrapper2>
+                    </S.Title3>
+
+                    <S.ImageWrapper3 style={{ top: "30px", right: "-910px" }}>
                         <img
                             src={process.env.PUBLIC_URL + "/dongle3.png"}
-                            alt="dongle"
+                            alt="MeetingLG"
                         />
                     </S.ImageWrapper3>
-                    <S.Title4>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 몇번의 Click만으로
-                        진행되는 온라인 면스 !<br></br>
-                        <br></br>
-                        <br></br>
-                        시간 제약 없이 가능한 온라인 면스 ! <br></br>
-                        <br></br>
-                        <br></br>
-                        &nbsp; &nbsp; &nbsp; &nbsp; 나만의 피드백 아카이브로
-                        성장 가능성 Up ↗
-                    </S.Title4>
-                </S.Content3>
+
+                    <S.Benefit style={{ top: "-400px", right: "-40px" }}>
+                        몇번의 Click만으로 진행되는 온라인 면스 !
+                        <S.BenefitWrapper
+                            style={{ top: "-40px", right: "10px" }}
+                        >
+                            <img
+                                src={process.env.PUBLIC_URL + "/hi.png"}
+                                alt="highlight"
+                            />
+                        </S.BenefitWrapper>
+                    </S.Benefit>
+
+                    <S.Benefit2 style={{ top: "-400px", right: "-130px" }}>
+                        시간 제약 없이 가능한 온라인 면스 !
+                        <S.BenefitWrapper2
+                            style={{ top: "0px", right: "70px" }}
+                        >
+                            <img
+                                src={process.env.PUBLIC_URL + "/hi.png"}
+                                alt="highlight"
+                            />
+                        </S.BenefitWrapper2>
+                    </S.Benefit2>
+
+                    <S.Benefit3 style={{ top: "-350px", right: "-260px" }}>
+                        나만의 피드백 아카이브로 성장 가능성 Up
+                        <S.BenefitWrapper3
+                            style={{ top: "0px", right: "70px" }}
+                        >
+                            <img
+                                src={process.env.PUBLIC_URL + "/hi.png"}
+                                alt="highlight"
+                            />
+                        </S.BenefitWrapper3>
+                    </S.Benefit3>
+                </S.Content>
             </S.Container>
             <Footer />
         </div>
