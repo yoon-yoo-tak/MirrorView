@@ -62,18 +62,18 @@ public class InterviewRoom {
         return !password.isEmpty();
     }
 
-    public boolean exit(String nickname) {
+    public String exit(String nickname) {
         List<RoomMemberInfo> memberInfoList = members.stream()
                 .filter(roomMemberInfo -> !roomMemberInfo.sameNickname(nickname))
                 .collect(Collectors.toList());
         if (memberInfoList.size() == members.size()) {
-            return false;
+            return "error";
         }
         members = new ArrayList<>(memberInfoList);
         if (nickname.equals(host)) {
             changeHost(members.get(0).getNickname());
         }
-        return true;
+        return host;
     }
 
     private void changeHost(String nickname) {

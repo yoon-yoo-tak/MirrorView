@@ -16,14 +16,12 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mirrorview.domain.essay.service.EssayService;
 import com.mirrorview.domain.interview.domain.InterviewRoom;
 import com.mirrorview.domain.interview.domain.RoomMemberInfo;
 import com.mirrorview.domain.interview.dto.MessageDto;
 import com.mirrorview.domain.interview.service.InterviewService;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.service.MemberService;
-import com.mirrorview.global.auth.security.CustomMemberDetails;
 import com.mirrorview.global.response.BaseResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -76,13 +74,9 @@ public class InterviewWebSocketController {
 				break;
 
 			case "EXIT": // unsub, unconnected
-				// Map<String, Object> data = new HashMap<>();
-				// data.put("nickname", name);
-				// MessageDto messageDto = MessageDto.builder()
-				// 	.type("EXIT")
-				// 	.data(data)
-				// 	.build();
-				interviewService.exitRoom(name, roomId);
+				String host = interviewService.exitRoom(name, roomId);
+				log.info("{}", messageDto);
+				messageDto.getData().put("host", host);
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 				interviewService.systemMessage(principal.getName(), roomId, "님이 퇴장하셨습니다.");
 				break;

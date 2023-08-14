@@ -223,7 +223,7 @@ export const changeButtonActive = styled.div`
     border: 0;
 
     position: relative;
-    width: 54px;
+    width: 60px;
     height: 20px;
     font-size: 14px;
     color: white;

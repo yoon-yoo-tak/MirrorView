@@ -1,5 +1,17 @@
 package com.mirrorview.domain.interview.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
+
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
+
 import com.mirrorview.domain.category.entity.Category;
 import com.mirrorview.domain.category.repository.CategoryRepository;
 import com.mirrorview.domain.essay.dto.EssayDetailDto;
@@ -14,18 +26,9 @@ import com.mirrorview.domain.interview.dto.RoomRequestDto;
 import com.mirrorview.domain.interview.dto.RoomResponseDto;
 import com.mirrorview.domain.interview.repository.InterviewRepository;
 import com.mirrorview.domain.user.domain.Member;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,20 +64,20 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     @Transactional
-    public void exitRoom(String nickname, String roomId) {
+    public String exitRoom(String nickname, String roomId) {
         Optional<InterviewRoom> findRoom = findRoomById(roomId);
         if (findRoom.isPresent()) {
             InterviewRoom interviewRoom = findRoom.get();
             if (interviewRoom.getCurrentCount() == 1) {
                 interviewRepository.delete(interviewRoom);
-                return;
+                return "";
             }
-            boolean exit = interviewRoom.exit(nickname);
-            if (!exit) {
+            String host = interviewRoom.exit(nickname);
+            if (host.equals("error")) {
                 throw new IllegalArgumentException("사용자가 존재하지 않습니다.");
             }
             interviewRepository.save(interviewRoom);
-            return;
+            return host;
         }
         throw new IllegalArgumentException("잘못된 정보입니다.");
     }

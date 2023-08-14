@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -188,11 +187,11 @@ public class SubscriptionService {
 			// roomId가 "interviewRoom"으로 시작하지 않으면 메서드를 종료
 			return;
 		}
-		interviewService.exitRoom(userId, roomId);
+		String host = interviewService.exitRoom(userId, roomId);
 
 		Map<String, Object> data = new HashMap<>();
 		data.put("nickname", userId);
-
+		data.put("host",host);
 		MessageDto messageDto = MessageDto.builder()
 			.type("EXIT")
 			.data(data)

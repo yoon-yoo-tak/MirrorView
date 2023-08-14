@@ -3,7 +3,7 @@ import StudyRoomInterviewer from "../../components/studyroom/StudyRoomInterviewe
 import StudyRoomInterviewee from "components/studyroom/StudyRoomIntervieweeComponent";
 import { useHistory } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { OpenVidu } from "openvidu-browser";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
@@ -12,13 +12,13 @@ import {
     hostJoinInterviewRoom,
     interviewSubscribe,
     joinInterviewRoom,
+    setRedirect,
     userJoinRoom,
     userJoinRoomPub,
 } from "store/InterviewWebSocketStore";
 import { WebSocketContext } from "WebSocketContext";
 
 import { interviewActions } from "../../store/InterviewStore";
-
 const StudyRoom = () => {
     const { client } = useContext(WebSocketContext);
     const [initialized, setInitialized] = useState(false);
@@ -31,11 +31,14 @@ const StudyRoom = () => {
     const { user } = useSelector((state) => state.auth);
     const role = useSelector((state) => state.interview.myRole);
     const currentRoom = useSelector((state) => state.currentRoom);
-
+    const { redirect } = useSelector((state) => state.interviewWebSocket);
     const isHost = location.state?.isHost;
     // 방장을 다시 찾아줘야함
 
     useEffect(() => {
+        if (redirect) {
+            return;
+        }
         // dispatch(interviewActions.updateStarted(false));s
         console.log(isStarted);
         return () => {};
@@ -122,7 +125,11 @@ const StudyRoom = () => {
     const [openScreenModal, setOpenScreenModal] = useState(false);
     const [isHideCam, setIsHideCam] = useState(false);
 
+    const navigate = useNavigate();
     useEffect(() => {
+        if (redirect) {
+            return;
+        }
         const storedList = localStorage.getItem("questionList");
         if (storedList) {
             setQuestionList(JSON.parse(storedList));
@@ -131,11 +138,36 @@ const StudyRoom = () => {
     const { pathname } = useLocation();
 
     useEffect(() => {
+        if (redirect) {
+            return;
+        }
         setMySession(pathname.substring(11));
         joinSession();
     }, []);
 
+    const preventClose = (e) => {
+        e.preventDefault();
+        dispatch(setRedirect(true));
+        // e.returnValue = ""; // chrome에서는 설정이 필요해서 넣은 코드
+    };
+
+    // 브라우저에 렌더링 시 한 번만 실행하는 코드
     useEffect(() => {
+        if (redirect) {
+            return;
+        }
+        (() => {
+            window.addEventListener("beforeunload", preventClose);
+        })();
+
+        return () => {
+            window.removeEventListener("beforeunload", preventClose);
+        };
+    }, []);
+    useEffect(() => {
+        if (redirect) {
+            return;
+        }
         window.addEventListener("beforeunload", leaveSession);
         return () => {
             leaveSession();
@@ -144,6 +176,9 @@ const StudyRoom = () => {
     }, [session]);
 
     useEffect(() => {
+        if (redirect) {
+            return;
+        }
         window.addEventListener("beforeunload", leaveSessionForScreenSharing);
         return () => {
             leaveSessionForScreenSharing();
@@ -155,6 +190,9 @@ const StudyRoom = () => {
     }, [sessionForScreenSharing]);
 
     useEffect(() => {
+        if (redirect) {
+            return;
+        }
         // 더미데이터대로 일단 추가
         const updatedFeedbackList = [
             {
@@ -235,7 +273,7 @@ const StudyRoom = () => {
                             .getUserMedia({
                                 audioSource: false,
                                 videoSource: undefined,
-                                resolution: "1280x720",
+                                resolution: "330x180",
                                 frameRate: 10,
                             })
                             .then((mediaStream) => {
@@ -271,18 +309,27 @@ const StudyRoom = () => {
     };
 
     useEffect(() => {
+        if (redirect) {
+            return;
+        }
         if (doStartScreenSharing) {
             startScreenShare();
         }
     }, [doStartScreenSharing]);
 
     useEffect(() => {
+        if (redirect) {
+            return;
+        }
         if (doStartScreenSharing && choiceScreen) {
             startScreenShare();
         }
     }, [choiceScreen]);
 
     useEffect(() => {
+        if (redirect) {
+            return;
+        }
         if (doStopScreenSharing) {
             stopScreenShare();
             setIsHideCam(false);
@@ -290,6 +337,9 @@ const StudyRoom = () => {
     }, [doStopScreenSharing]);
 
     useEffect(() => {
+        if (redirect) {
+            return;
+        }
         if (doPauseScreenSharing) {
             if (
                 doScreenSharing &&
@@ -303,6 +353,9 @@ const StudyRoom = () => {
     }, [doPauseScreenSharing]);
 
     useEffect(() => {
+        if (redirect) {
+            return;
+        }
         if (checkMyScreen) {
             if (
                 destroyedStream?.stream.connection.connectionId ===
@@ -408,6 +461,9 @@ const StudyRoom = () => {
     };
 
     useEffect(() => {
+        if (redirect) {
+            return;
+        }
         localStorage.setItem("questionList", JSON.stringify(questionList));
     }, [questionList]);
 
@@ -442,6 +498,15 @@ const StudyRoom = () => {
     useEffect(() => {
         const interviewRoomId = location.pathname.replace("/studyroom/", "");
         let subscription;
+        if (redirect) {
+            dispatch(setRedirect(false));
+            dispatch(clearCurrentRoom());
+            if (subscription) {
+                subscription.unsubscribe();
+            }
+            navigate("/studylist");
+            return;
+        }
 
         async function initialize() {
             const resultAction = await dispatch(
@@ -479,10 +544,13 @@ const StudyRoom = () => {
         }
 
         initialize();
+
         return () => {
             // dispatch(closeWebSocket());
             dispatch(clearCurrentRoom());
-            subscription.unsubscribe();
+            if (subscription) {
+                subscription.unsubscribe();
+            }
         };
     }, [currentRoom]);
 
