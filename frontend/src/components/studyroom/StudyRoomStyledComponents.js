@@ -223,7 +223,7 @@ export const changeButtonActive = styled.div`
     border: 0;
 
     position: relative;
-    width: 54px;
+    width: 60px;
     height: 20px;
     font-size: 14px;
     color: white;
@@ -757,40 +757,59 @@ export const mainContainer = styled.div`
 `;
 
 export const mainVideo = styled.div`
-    background-color: white;
+    background-color: black;
     border-radius: 13px;
     // width: 80%;
-    height: 380px;
+    height: 410px;
     // margin: 10px;
+
+    // margin: 10px;
+    // width: 700px;
+    // height: 410px;
+    background-color: black;
+    // box-shadow: 0px 0px 10px #4e4e4e;
+    justify-content: center;
+    display: flex;
+    border-radius: 10px;
+
+    // padding: 15px;
 `;
 
 export const lastVideos = styled.div`
     display: flex;
     flex-wrap: nowrap;
-    overflow-x: auto;
-    &::-webkit-scrollbar {
-        height: 7px;
-    }
-    &::-webkit-scrollbar-thumb {
-        border-radius: 3px;
-        background: #a6b6ce;
-    }
-    &::-webkit-scrollbar-track {
-        background: #ededed;
-        border-radius: 3px;
-    }
+    margin-top: 5px;
+    overflow-x: scroll;
+    // &::-webkit-scrollbar {
+    //     height: 7px;
+    // }
+    // &::-webkit-scrollbar-thumb {
+    //     border-radius: 3px;
+    //     background: #a6b6ce;
+    // }
+    // &::-webkit-scrollbar-track {
+    //     background: #ededed;
+    //     border-radius: 3px;
+    // }
 `;
 
 export const lastVideoEach = styled.div`
     background-color: white;
     border-radius: 10px;
 
-    width: 313px;
-    height: 170px;
-
     flex-shrink: 0;
 
     margin-right: 10px;
+
+    margin-top: 10px;
+    width: 220px;
+    height: 155px;
+    background-color: black;
+    // box-shadow: 0px 0px 10px #4e4e4e;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 `;
 
 // -----------------
@@ -941,6 +960,7 @@ export const mainWrap = styled.div`
     position: relative;
     width: 100%;
     height: 600px;
+    // background-color: white;
     // max-height: 80vh;
     justify-content: space-between;
     display: flex;
@@ -982,19 +1002,24 @@ export const vieweeWrap = styled.div`
 export const boxes = styled.div`
     margin: 10px;
     width: 313px;
-    height: 170px;
-    background-color: white;
-    box-shadow: 0px 0px 10px #4e4e4e;
-    border-radius: 13px;
+    height: 220px;
+    background-color: black;
+    // box-shadow: 0px 0px 10px #4e4e4e;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 `;
 
 export const mainBox = styled.div`
     margin: 10px;
     width: 700px;
-    height: 380px;
-    background-color: white;
-    box-shadow: 0px 0px 10px #4e4e4e;
-    border-radius: 13px;
+    height: 410px;
+    background-color: black;
+    // box-shadow: 0px 0px 10px #4e4e4e;
+    justify-content: center;
+    display: flex;
+    border-radius: 10px;
 
     // padding: 15px;
 `;
@@ -1123,4 +1148,69 @@ export const micControlon = styled.div`
     background-size: cover;
     background-image: url(${micOn});
     cursor: pointer;
+`;
+
+export const controlbtns = styled.div`
+    position: absolute;
+    bottom: 3%;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 9px;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    width: 80px;
+`;
+
+export const videoOn = styled.div`
+    width: 32px;
+    height: 32px;
+    background-size: cover;
+    background-image: url(${camOn});
+    cursor: pointer;
+`;
+
+export const videoff = styled.div`
+    width: 32px;
+    height: 32px;
+    background-size: cover;
+    background-image: url(${camOff});
+    cursor: pointer;
+`;
+
+export const micCOff = styled.div`
+    width: 32px;
+    height: 32px;
+    background-size: cover;
+    background-image: url(${micOff});
+    cursor: pointer;
+`;
+
+export const micCOn = styled.div`
+    width: 32px;
+    height: 32px;
+    background-size: cover;
+    background-image: url(${micOn});
+    cursor: pointer;
+`;
+
+export const nameTextSelected = styled.div`
+    font-weight: bold;
+    font-size: 20px;
+    padding: 5px;
+    margin: 0 0 10px 10px;
+    color: gray;
+    background-color: #d4d4d4;
+    display: inline-block;
+    border-radius: 10px;
+`;
+
+export const nameText = styled.div`
+    font-weight: bold;
+    font-size: ${(props) => (props.value === "viewer" ? "15px" : "20px")};
+    padding: 5px;
+    margin: 0 0 0 10px;
+    color: white;
+    // background-color: #d4d4d4;
+    display: inline-block;
+    border-radius: 10px;
 `;

@@ -8,6 +8,7 @@ import { setNicknames } from "store/InterviewWebSocketStore";
 import Swal from "sweetalert2";
 import AWN from "awesome-notifications";
 import "awesome-notifications/dist/style.css";
+import { styled } from "styled-components";
 
 const StudyRoomInterviewee = (props) => {
     const {
@@ -102,26 +103,53 @@ const StudyRoomInterviewee = (props) => {
         }
     };
 
+    const style = {
+        height: "100%",
+    };
+
     return (
         <S.page>
             <S.vieweeWrap>
                 <S.mainWrap>
                     <div>
-                        <S.mainBox>
-                            {selectSubscriber && (
-                                <>
+                        {selectSubscriber && (
+                            <>
+                                <S.mainBox>
+                                    <SubscriberVideo
+                                        main={true}
+                                        subscriber={selectSubscriber}
+                                    ></SubscriberVideo>
+                                </S.mainBox>
+                                <S.nameTextSelected>
                                     {
                                         JSON.parse(
                                             selectSubscriber.stream.connection
                                                 .data
                                         ).clientData
                                     }
-                                    <SubscriberVideo
+                                    님의 화면
+                                </S.nameTextSelected>
+                            </>
+                        )}
+                        {!selectSubscriber && (
+                            <>
+                                <S.mainBox>
+                                    {/* <SubscriberVideo
                                         subscriber={selectSubscriber}
-                                    ></SubscriberVideo>
-                                </>
-                            )}
-                        </S.mainBox>
+                                    ></SubscriberVideo> */}
+                                </S.mainBox>
+                                <S.nameTextSelected>
+                                    {/* {
+                                        JSON.parse(
+                                            selectSubscriber.stream.connection
+                                                .data
+                                        ).clientData
+                                    }
+                                    님의 화면 */}
+                                    화면을 선택해주세요.
+                                </S.nameTextSelected>
+                            </>
+                        )}
                         <S.roomTitle>면접방 제목</S.roomTitle>
                     </div>
                     <S.exitRoom menu="viewee" onClick={handleExit}>
@@ -133,56 +161,55 @@ const StudyRoomInterviewee = (props) => {
                     <S.boxes onClick={() => selectPerson(streamManager)}>
                         {streamManager && (
                             <>
-                                {
-                                    JSON.parse(
-                                        streamManager.stream.connection.data
-                                    ).clientData
-                                }
-                                <S.videoParent>
-                                    <SubscriberVideo
-                                        subscriber={streamManager}
-                                        key={
-                                            streamManager.stream.connection
-                                                .connectionId
-                                        }
-                                    ></SubscriberVideo>
-                                    {/* <S.StyledVideo /> */}
-                                    {isVideoOn && (
-                                        <S.videoControlon
-                                            onClick={handleCamEnable}
-                                            value="viewer"
-                                        />
-                                    )}
-                                    {!isVideoOn && (
-                                        <S.videoControloff
-                                            onClick={handleCamEnable}
-                                            value="viewer"
-                                        />
-                                    )}
-                                    {isAudioOn && (
-                                        <S.micControlon
-                                            onClick={handleMicEnable}
-                                        />
-                                    )}
-                                    {!isAudioOn && (
-                                        <S.micControloff
-                                            onClick={handleMicEnable}
-                                        />
-                                    )}
-                                </S.videoParent>
+                                {/* <S.videoParent> */}
+                                <SubscriberVideo
+                                    main={false}
+                                    subscriber={streamManager}
+                                    key={
+                                        streamManager.stream.connection
+                                            .connectionId
+                                    }
+                                ></SubscriberVideo>
+                                <S.nameText>
+                                    {/* {
+                                        JSON.parse(
+                                            streamManager.stream.connection.data
+                                        ).clientData
+                                    } */}
+                                    나
+                                </S.nameText>
+
+                                {/* </S.videoParent> */}
                             </>
                         )}
                     </S.boxes>
                     {subscribers.map((sub) => (
-                        <S.boxes onClick={() => selectPerson(sub)}>
-                            {JSON.parse(sub.stream.connection.data).clientData}
-                            <SubscriberVideo
-                                subscriber={sub}
-                                key={sub.stream.connection.connectionId}
-                            ></SubscriberVideo>
-                        </S.boxes>
+                        <>
+                            <S.boxes onClick={() => selectPerson(sub)}>
+                                <SubscriberVideo
+                                    subscriber={sub}
+                                    key={sub.stream.connection.connectionId}
+                                ></SubscriberVideo>
+                                <S.nameText>
+                                    {
+                                        JSON.parse(sub.stream.connection.data)
+                                            .clientData
+                                    }
+                                </S.nameText>
+                            </S.boxes>
+                        </>
                     ))}
                 </S.leftBox>
+                <S.controlbtns>
+                    {isVideoOn && (
+                        <S.videoOn onClick={handleCamEnable} value="viewer" />
+                    )}
+                    {!isVideoOn && (
+                        <S.videoff onClick={handleCamEnable} value="viewer" />
+                    )}
+                    {isAudioOn && <S.micCOn onClick={handleMicEnable} />}
+                    {!isAudioOn && <S.micCOff onClick={handleMicEnable} />}
+                </S.controlbtns>
             </S.vieweeWrap>
         </S.page>
     );
