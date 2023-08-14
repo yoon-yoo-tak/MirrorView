@@ -17,11 +17,13 @@ public class MemberResDto {
     private float score;
     private String email;
     private String photo;
+    private String userId;
 
     public static MemberResDto build(String friendStatus, Member findMember) {
         return MemberResDto.builder()
                 .photo(findMember.getPhoto())
                 .friendStatus(friendStatus)
+                .userId(findMember.getUserId())
                 .nickname(findMember.getNickname())
                 .score(findMember.getAverageRating())
                 .email(findMember.getEmail())
