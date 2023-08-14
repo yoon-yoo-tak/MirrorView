@@ -57,7 +57,13 @@ const SidebarSearch = ({ setClickSearch, clickSearch }) => {
     await axios
       .get(`api/users/findAll/${searchingId}`)
       .then(({ data }) => {
-        setSearchedList(data.data);
+        const sortedList = data.data.sort((a, b) => {
+          if (a.online && !b.online) return -1;
+          if (!a.online && b.online) return 1;
+          return 0;
+        });
+
+        setSearchedList(sortedList);
         console.log(data);
       })
       .catch((error) => {
