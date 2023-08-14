@@ -10,25 +10,13 @@ export const Container = styled.div`
 `;
 
 export const Image = styled.img`
-  width: 100%;
-  height: 210vh;
-  object-fit: cover;
-  margin: 0;
-  padding: 0;
-  display: flex;
+    width: 100%;
+    height: 250vh;
+    object-fit: cover;
+    margin: 0;
+    padding: 0;
+    display: flex;
 `;
-
-// const BackgroundImage = process.env.PUBLIC_URL + "/background2.png";
-
-// export const Page = styled.div`
-//   background-image: url(${BackgroundImage});
-//   background-size: cover;
-//   width: auto;
-//   height: 855px;
-//   justify-content: center;
-//   display: flex;
-// `;
-
 
 export const Content = styled.div`
     position: absolute;
@@ -59,100 +47,81 @@ export const Content3 = styled.div`
     white-space: nowrap;
 `;
 
-export const Title = styled.h2`
+export const FirstTitle = styled.h2`
+    position: relative;
     color: #033495;
     font-size: 64px;
+    letter-spacing: 10px;
     font-family: "DAE";
 `;
 
-export const Title2 = styled.h2`
+export const SecondTitle = styled.h2`
+    position: relative;
     color: #6a9cfd;
     font-size: 64px;
-    // font-size: 5rem;
     font-family: "DAE";
 `;
 
 export const Title3 = styled.h2`
-    color: #6a9cfd;
-    font-size: 64px;
-    font-family: DAE;
+    position: relative;
+    /* color: rgba(106, 207, 44, 1.9); */
+    color: rgba(12, 1, 144, 1.9);
+    font-size: 82px;
+    letter-spacing: 25px;
+    font-family: establishRoomNo703OTF;
 `;
-
-export const Title4 = styled.h2`
-    color: #2F2F2F;
-    font-size: 40px;
-    font-family: DAE;
-`;
-
-// export const ImageWrapper = styled.div`
-//     position: absolute;
-//     top: 50%;
-//     right: 70%;
-//     transform: translate(700%, -130%);
-//     z-index: 1;
-//     width: 100px;
-//     height: 300px;
-// `;
-
 
 export const ImageWrapper = styled.div`
-    position: absolute;
-    top: -30%;
-    right: 93%;
-    transform: translate(700%, -130%);
+    position: relative;
     z-index: 1;
-    width: 100px;
-    height: 300px;
 `;
 
-
-
 export const ImageWrapper2 = styled.div`
-    position: absolute;
-    top: 150%;  
-    right: 189%;
-    transform: translate(700%, -130%);
+    position: relative;
     z-index: 1;
-    width: 100px;
-    height: 300px;
 `;
 
 export const ImageWrapper3 = styled.div`
-    position: absolute;
-    top: 95%;
-    right: 67%;
-    transform: translate(700%, -130%);
+    position: relative;
     z-index: 1;
-    width: 100px;
-    height: 300px;
 `;
 
-export const ImageWrappe4 = styled.div`
-    position: absolute;
-    top: 448%;
-    right: 194%;
-    transform: translate(700%, -130%);
-    z-index: 1;
-    width: 100px;
-    height: 300px;
+//Benefit
+export const Benefit = styled.h2`
+    position: relative;
+    color: #2f2f2f;
+    font-size: 40px;
+    font-family: DAE;
+    z-index: 99;
 `;
 
-export const ImageWrappe5 = styled.div`
-    position: absolute;
-    top: 405%;
-    right: 182%;
-    transform: translate(700%, -130%);
-    z-index: 1;
-    width: 100px;
-    height: 300px;
+export const Benefit2 = styled.h2`
+    position: relative;
+    color: #2f2f2f;
+    font-size: 40px;
+    font-family: DAE;
+    z-index: 99;
 `;
 
-export const ImageWrappe6 = styled.div`
+export const Benefit3 = styled.h2`
+    position: relative;
+    color: #2f2f2f;
+    font-size: 40px;
+    font-family: DAE;
+    z-index: 99;
+`;
+
+export const BenefitWrapper = styled.div`
+    position: relative;
+    z-index: -1;
+`;
+
+export const BenefitWrapper2 = styled.div`
     position: absolute;
-    top: 490%;
-    right: 178%;
-    transform: translate(700%, -130%);
-    z-index: 1;
-    width: 100px;
-    height: 300px;
+    z-index: -1;
+`;
+
+export const BenefitWrapper3 = styled.div`
+    position: absolute;
+    z-index: -1;
 `;
