@@ -42,13 +42,13 @@ class AuthControllerTest extends AbstractRestDocsTests {
     @Test
     @DisplayName("로그인")
     void logIn() throws Exception {
-        LoginDto loginDto = new LoginDto("tester", "1234");
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        LoginDto loginDto = new LoginDto("test2", "1234");
+        passwordEncoder = new BCryptPasswordEncoder();
         Member member = Member.builder()
-                .userId("tester")
-                .username("kim")
-                .nickname("kim")
-                .email("sd@sd.sd")
+                .userId("test2")
+                .username("Ji")
+                .nickname("Ji")
+                .email("as@sd.com")
                 .delete(false)
                 .password(passwordEncoder.encode("1234"))
                 .build();
@@ -59,6 +59,7 @@ class AuthControllerTest extends AbstractRestDocsTests {
         try {
             jsonString = objectMapper.writeValueAsString(loginDto);
             System.out.println(jsonString);
+            System.out.println(passwordEncoder.encode("1234"));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
