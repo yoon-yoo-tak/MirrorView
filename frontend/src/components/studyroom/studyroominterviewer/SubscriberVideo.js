@@ -3,13 +3,13 @@ import { styled } from "styled-components";
 
 export const StyledVideo = styled.video`
     width: 100%;
-    height: 100%;
+    height: ${(props) => (props.main ? "100%" : "80%")};
     // width: 313px;
     // height: 170px;
-    border-radius: 10px;
+    // border-radius: 10px;
 `;
 
-const SubscriberVideo = ({ subscriber }) => {
+const SubscriberVideo = ({ subscriber, main }) => {
     const subscriberVideoRef = React.createRef();
     const [visiableLabel, setVisiableLabel] = useState(false);
 
@@ -35,6 +35,7 @@ const SubscriberVideo = ({ subscriber }) => {
             <StyledVideo
                 ref={subscriberVideoRef}
                 autoPlay={true}
+                main={main}
                 // className={JSON.parse(subscriber.stream.connection.data).clientData}
             ></StyledVideo>
             {visiableLabel && (

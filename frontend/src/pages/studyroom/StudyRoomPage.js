@@ -273,7 +273,7 @@ const StudyRoom = () => {
                             .getUserMedia({
                                 audioSource: false,
                                 videoSource: undefined,
-                                resolution: "330x180",
+                                resolution: "1280x720",
                                 frameRate: 10,
                             })
                             .then((mediaStream) => {
