@@ -6,6 +6,9 @@ import axios from "axios";
 
 const initialState = {
   globalMessage: [],
+  privateRooms: [],
+  currentPrivateRoom: null,
+  currentPrivateChat: [],
 };
 
 export const globalSubscribe = createAsyncThunk(
@@ -13,14 +16,10 @@ export const globalSubscribe = createAsyncThunk(
   async (client, { dispatch, getState }) => {
     await client.subscribe("/sub/global", (message) => {
       const parsedMessage = JSON.parse(message.body);
-      console.log(parsedMessage);
-      switch (
-        parsedMessage.type
-        // case "FRIEND_REQUEST":
-        //   const messageContent = `${parsedMessage.data.fromUser}님이 친구 신청을 했습니다.`;
-        //   //dispatch(addGlobalMessage(messageContent));
-        //   break;
-      ) {
+      switch (parsedMessage.type) {
+        case "GLOBAL_MESSAGE":
+          dispatch(addNotification(parsedMessage.data.notification));
+          break;
       }
     });
   }
@@ -51,6 +50,23 @@ export const globalOneUserSubscribe = createAsyncThunk(
         case "FRIEND_ACCEPTED":
           dispatch(addNotification(parsedMessage.data.notification));
           break;
+        case "GET_PRIVATE_ROOMS":
+          // 사용자의 모든 채팅방 정보
+          dispatch(setPrivateRooms(parsedMessage.data.rooms));
+          break;
+        case "GET_PRIVATE_ROOM":
+          // 특정 사용자와의 채팅방 정보
+          dispatch(addNotification(parsedMessage.data.notification));
+          dispatch(setPrivateRoom(parsedMessage.data));
+          break;
+        case "GET_PRIVATE_ROOM_CHAT":
+          // 특정 채팅방의 채팅 내역
+          dispatch(setPrivateChat(parsedMessage.data.chatList));
+          break;
+        case "SEND_PRIVATE_ROOM":
+          // 메시지를 전송한
+          dispatch(addPrivateChatMessage(parsedMessage.data.message));
+          break;
       }
     });
   }
@@ -64,16 +80,37 @@ export const globalSlice = createSlice({
       state.globalMessage = action.payload;
     },
     addNotification: (state, action) => {
-      state.globalMessage.push(action.payload);
+      state.globalMessage = [...state.globalMessage, action.payload];
     },
     removeNotification: (state, action) => {
       state.globalMessage = state.globalMessage.filter(
         (notif) => notif.id !== action.payload
       );
     },
+    setPrivateRooms: (state, action) => {
+      state.privateRooms = action.payload;
+    },
+    setPrivateRoom: (state, action) => {
+      state.currentPrivateRoom = action.payload;
+    },
+    setPrivateChat: (state, action) => {
+      console.log(action.payload);
+      state.currentPrivateChat = action.payload;
+    },
+    addPrivateChatMessage: (state, action) => {
+      console.log(action.payload);
+      state.currentPrivateChat.push(action.payload);
+    },
   },
 });
 
-export const { addNotification, removeNotification, setNotifications } =
-  globalSlice.actions;
+export const {
+  addNotification,
+  removeNotification,
+  setNotifications,
+  setPrivateRooms,
+  setPrivateRoom,
+  setPrivateChat,
+  addPrivateChatMessage,
+} = globalSlice.actions;
 export default globalSlice.reducer;

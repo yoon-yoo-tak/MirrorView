@@ -71,6 +71,7 @@ const SideBarAlarm = ({ setClickAlarm, clickAlarm }) => {
           <div className="section-title">
             <h2>알림</h2>
           </div>
+          <div className="underline"></div>
           <div className="chat-room-list">
             {alarms.length > 0 ? (
               alarms.map((alarm) => (

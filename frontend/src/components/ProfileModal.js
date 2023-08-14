@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import React, { useContext } from "react";
-import { WebSocketContext } from "WebSocketContext";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
@@ -11,6 +10,7 @@ import ReportModalComponent from "./ReportModalComponent";
 import Swal from "sweetalert2";
 import AWN from "awesome-notifications";
 import "awesome-notifications/dist/style.css";
+import { WebSocketContext } from "WebSocketContext";
 
 const ProfileModal = ({ isOpen, setIsOpen, onClose, member }) => {
   const { client } = useContext(WebSocketContext);
@@ -271,6 +271,16 @@ const ProfileModal = ({ isOpen, setIsOpen, onClose, member }) => {
   const openChat = () => {
     if (window.confirm(`${member.nickname}님과 1대1 채팅을 시작할까요?`)) {
       console.log("넹");
+
+      const message = {
+        type: 'GET_PRIVATE_ROOM',
+        data: {
+          toUser: member.nickname 
+        }
+      };
+  
+      
+      client.send('/app/global.one', {}, JSON.stringify(message));
     }
   };
 

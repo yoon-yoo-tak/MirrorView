@@ -7,14 +7,13 @@ import ChatList from "pages/sidebar/ChatList";
 import ChatRoom from "pages/sidebar/ChatRoom";
 import ChatMyList from "pages/sidebar/ChatMyList";
 import ChatPrivate from "pages/sidebar/ChatPrivate";
-
+import ChatPrivateRoom from "pages/sidebar/ChatPrivateRoom";
 import axios from "axios"; // <-- axios 불러오기
 
 import { useDispatch } from "react-redux"; // <-- useDispatch 불러오기
 import { loadChatRooms, subscribeRoomCountAsync } from "store/ChatRoomStore"; // loadRoom
 import ChatModal from "pages/sidebar/ChatModal"; // <-- 추가
 import { switchView } from "store/ChatViewStore";
-
 import "pages/sidebar/css/SideBar.css";
 
 const SidebarChat = ({ setClickChat, clickChat }) => {
@@ -143,6 +142,7 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
             <div>
               {view === "ChatList" && renderChatContent()}
               {view === "ChatRoom" && <ChatRoom />}
+              {view === "ChatPrivateRoom" && <ChatPrivateRoom />}
             </div>
             <div className="chatbtn" onClick={handleOpenCreateChatModal}>
               오픈 채팅방 개설하기 <FaPlus className="icon" />
