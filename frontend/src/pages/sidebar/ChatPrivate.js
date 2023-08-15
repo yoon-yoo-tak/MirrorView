@@ -58,31 +58,38 @@ function ChatPrivate() {
               {user.nickname === room.sender && (
                 <div className="chatTitle">{room.receiver}님과의 채팅</div>
               )}
-              {/* Add more room details if you have them */}
             </div>
-            <div
-              className="join-button"
-              onClick={() =>
-                deleteRoom({
-                  roomId: room.id,
-                  toUser:
-                    user.nickname !== room.sender ? room.sender : room.receiver,
-                  fromUser:
-                    user.nickname !== room.sender ? room.receiver : room.sender,
-                })
-              }>
-              삭제
-            </div>
-            <div
-              className="join-button"
-              onClick={() =>
-                handleJoinPrivateChat({
-                  roomId: room.id,
-                  toUser:
-                    user.nickname !== room.sender ? room.sender : room.receiver,
-                })
-              }>
-              입장
+            <div className="button-group">
+              <div
+                className="join-button"
+                onClick={() =>
+                  deleteRoom({
+                    roomId: room.id,
+                    toUser:
+                      user.nickname !== room.sender
+                        ? room.sender
+                        : room.receiver,
+                    fromUser:
+                      user.nickname !== room.sender
+                        ? room.receiver
+                        : room.sender,
+                  })
+                }>
+                삭제
+              </div>
+              <div
+                className="join-button"
+                onClick={() =>
+                  handleJoinPrivateChat({
+                    roomId: room.id,
+                    toUser:
+                      user.nickname !== room.sender
+                        ? room.sender
+                        : room.receiver,
+                  })
+                }>
+                입장
+              </div>
             </div>
           </div>
         ))
