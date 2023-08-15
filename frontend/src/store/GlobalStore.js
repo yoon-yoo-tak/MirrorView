@@ -59,8 +59,7 @@ export const globalOneUserSubscribe = createAsyncThunk(
           // 특정 사용자와의 채팅방 정보
           console.log(parsedMessage);
           dispatch(addNotification(parsedMessage.data.notification));
-          if (parsedMessage.data.make == "now")
-            dispatch(setPrivateRoom(parsedMessage.data));
+          dispatch(addOnePrivateRoom(parsedMessage.data.roomData));
           break;
         case "GET_PRIVATE_ROOM_CHAT":
           // 특정 채팅방의 채팅 내역
@@ -97,6 +96,14 @@ export const globalSlice = createSlice({
     setPrivateRooms: (state, action) => {
       state.privateRooms = action.payload;
     },
+    addOnePrivateRoom: (state, action) => {
+      const roomExists = state.privateRooms.some(
+        (room) => room.id === action.payload.id
+      );
+      if (!roomExists) {
+        state.privateRooms = [...state.privateRooms, action.payload];
+      }
+    },
     setPrivateRoom: (state, action) => {
       state.currentPrivateRoom = action.payload;
     },
@@ -125,5 +132,6 @@ export const {
   setPrivateChat,
   addPrivateChatMessage,
   deletePrivateRooms,
+  addOnePrivateRoom,
 } = globalSlice.actions;
 export default globalSlice.reducer;

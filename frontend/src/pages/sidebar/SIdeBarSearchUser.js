@@ -48,34 +48,34 @@ const SidebarSearch = ({ setClickSearch, clickSearch, setClickChat }) => {
     setSearchedList([]);
   }, [clickSearch, user]);
 
-    // ---------------------------------------------------
-    const handleSearch = (e) => {
-        setSearchingId(e.target.value);
-    };
+  // ---------------------------------------------------
+  const handleSearch = (e) => {
+    setSearchingId(e.target.value);
+  };
 
-    const handleKeyDown = (e) => {
-        if (e.key === "Enter") {
-            clickSearchUser();
-        }
-    };
-    const clickSearchUser = async () => {
-        // searchingId를 검색하러 보내!!
-        await axios
-            .get(`api/users/findAll/${searchingId}`)
-            .then(({ data }) => {
-                const sortedList = data.data.sort((a, b) => {
-                    if (a.online && !b.online) return -1;
-                    if (!a.online && b.online) return 1;
-                    return 0;
-                });
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      clickSearchUser();
+    }
+  };
+  const clickSearchUser = async () => {
+    // searchingId를 검색하러 보내!!
+    await axios
+      .get(`api/users/findAll/${searchingId}`)
+      .then(({ data }) => {
+        const sortedList = data.data.sort((a, b) => {
+          if (a.online && !b.online) return -1;
+          if (!a.online && b.online) return 1;
+          return 0;
+        });
 
-                setSearchedList(sortedList);
-                console.log(data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
+        setSearchedList(sortedList);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div>
@@ -104,25 +104,30 @@ const SidebarSearch = ({ setClickSearch, clickSearch, setClickChat }) => {
               />
             </div>
             <div className="result-section">
-              {searchedList.map((selectMember, index) => (
-                <div className="result-wrap" key={index}>
-                  <div>
-                    {selectMember.online ? (
-                      <img className="online" src={onlineIcon} alt="online" />
-                    ) : (
-                      <img className="online" src={offlineIcon} alt="offline" />
-                    )}{" "}
-                    {selectMember.nickname}
-                  </div>
-                  {selectMember.nickname !== user.nickname && (
-                    <div
-                      className="go-profile"
-                      onClick={() => goUserProfile(selectMember.nickname)}>
-                      프로필
+              {user &&
+                searchedList.map((selectMember, index) => (
+                  <div className="result-wrap" key={index}>
+                    <div>
+                      {selectMember.online ? (
+                        <img className="online" src={onlineIcon} alt="online" />
+                      ) : (
+                        <img
+                          className="online"
+                          src={offlineIcon}
+                          alt="offline"
+                        />
+                      )}{" "}
+                      {selectMember.nickname}
                     </div>
-                  )}
-                </div>
-              ))}
+                    {selectMember.nickname !== user.nickname && (
+                      <div
+                        className="go-profile"
+                        onClick={() => goUserProfile(selectMember.nickname)}>
+                        프로필
+                      </div>
+                    )}
+                  </div>
+                ))}
             </div>
           </div>
           {openProfileModal && ( // <-- 추가
