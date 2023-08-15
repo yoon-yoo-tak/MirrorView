@@ -94,7 +94,11 @@ const StudyRoomInterviewer = (props) => {
                         )}
                         {!selectSubscriber && (
                             <>
-                                <S.mainVideo></S.mainVideo>
+                                <S.mainVideo>
+                                    <S.textViewer>
+                                        화면을 선택해주세요
+                                    </S.textViewer>
+                                </S.mainVideo>
                                 {/* <S.nameTextSelected>
                                    
                                     화면을 선택해주세요.
