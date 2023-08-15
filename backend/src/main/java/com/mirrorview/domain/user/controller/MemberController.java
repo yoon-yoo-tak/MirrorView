@@ -48,6 +48,17 @@ public class MemberController {
         return BaseResponse.ok(HttpStatus.OK, "사용가능한 아이디입니다.");
     }
 
+    @GetMapping("/{email}/check-email")
+    public ResponseEntity<?> checkEmail(@PathVariable String email) {
+        try {
+            memberService.findByEmail(email);
+        } catch (IllegalArgumentException e) {
+            //이메일이 없으면 회원가입 가능
+            return BaseResponse.ok(HttpStatus.OK, "사용 가능한 이메일입니다.");
+        }
+        return BaseResponse.fail("이미 사용중인 이메일입니다.", 400);
+    }
+
     @PostMapping("/{email}")
     public ResponseEntity<?> checkEmailKey(@PathVariable String email, @RequestBody Map<String, String> map) {
         String key = map.getOrDefault("key", "empty");
