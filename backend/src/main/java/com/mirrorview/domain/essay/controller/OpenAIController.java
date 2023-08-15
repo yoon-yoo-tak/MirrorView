@@ -41,7 +41,7 @@ public class OpenAIController {
             String job = body.get("job");
 
             StringBuilder prompt = new StringBuilder();
-            prompt.append("지원 직무 : ").append(job).append("\b")
+            prompt.append("지원 직무 : ").append(job).append("\n")
                     .append("- 자기소개서 시작").append("\n")
                     .append(introduction).append("\n")
                     .append("- 자기소개서 끝").append("\n")
@@ -49,7 +49,14 @@ public class OpenAIController {
 
             Map<String, String> gptMessage = new LinkedHashMap<>();
             gptMessage.put("role", "system");
-            gptMessage.put("content", "너는 유명한 기업의 면접관이야 전달받은 자기소개서를 기반으로 질문을 4개 만들어주고 직무 관련된 질문을 1개 만들어서 총 5개의 질문을 생성해줘");
+            gptMessage.put("content", "너는 유명한 기업의 면접관이야 전달받은 자기소개서를 기반으로 질문을 4개 만들어주고"
+                + " 직무 관련된 질문을 1개 만들어서 총 5개의 질문을 생성해줘"
+                + " 항상 아래와 같은 형식을 맞추어서 대답해줘 "
+                + "1. (질문1)\n"
+                + "2. (질문2)\n"
+                + "3. (질문3)\n"
+                + "4. (질문4)\n"
+                + "5. (질문5)");
 
             Map<String, String> userMessage = new LinkedHashMap<>();
             userMessage.put("role", "user");
@@ -83,5 +90,4 @@ public class OpenAIController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 }
