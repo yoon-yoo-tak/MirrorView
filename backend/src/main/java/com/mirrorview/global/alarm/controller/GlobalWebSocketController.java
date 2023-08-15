@@ -112,7 +112,7 @@ public class GlobalWebSocketController {
 				globalMessageDto.setData(roomData);
 				
 				// 한명의 유저가 채팅방에 입장하면, 상대방에게 알림을 줌
-				String messagePrivate = privateFromUser+"님이 대화를 시도했습니다.";
+				String messagePrivate = privateFromUser+"님이 개인 채팅을 신청했습니다.";
 				Notification privateChatNotification = notificationService.createAndSaveNotification(privateToUser, messagePrivate);
 				globalMessageDto.getData().put("notification", privateChatNotification);
 				if(globalWebSocketService.isUserOnline(privateToUser)) {
@@ -144,6 +144,19 @@ public class GlobalWebSocketController {
 				chatPrivateService.addChatMessageToPrivateRoom(roomIdSend, messageDto);
 				simpMessagingTemplate.convertAndSendToUser(nickname, "/sub/global.one", globalMessageDto);
 				simpMessagingTemplate.convertAndSendToUser(toUserSend, "/sub/global.one", globalMessageDto);
+				break;
+			case "DELETE_PRIVATE_ROOM":
+				String roomIdToDelete = (String) globalMessageDto.getData().get("roomId");
+				String toUserDelete = (String) globalMessageDto.getData().get("toUser");
+				String toFromUserDelete = (String) globalMessageDto.getData().get("fromUser");
+
+				// 채팅방 삭제 로직 실행
+				chatPrivateService.deletePrivateChatRoom(roomIdToDelete);
+
+				if(globalWebSocketService.isUserOnline(toUserDelete)) {
+					simpMessagingTemplate.convertAndSendToUser(toUserDelete, "/sub/global.one", globalMessageDto);
+					simpMessagingTemplate.convertAndSendToUser(toFromUserDelete, "/sub/global.one", globalMessageDto);
+				}
 				break;
 
 		}

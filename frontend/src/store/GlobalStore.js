@@ -43,6 +43,7 @@ export const globalOneUserSubscribe = createAsyncThunk(
   async (client, { dispatch, getState }) => {
     await client.subscribe("/user/sub/global.one", (message) => {
       const parsedMessage = JSON.parse(message.body);
+      console.log(parsedMessage);
       switch (parsedMessage.type) {
         case "FRIEND_REQUEST":
           dispatch(addNotification(parsedMessage.data.notification));
@@ -66,6 +67,10 @@ export const globalOneUserSubscribe = createAsyncThunk(
         case "SEND_PRIVATE_ROOM":
           // 메시지를 전송한
           dispatch(addPrivateChatMessage(parsedMessage.data.message));
+          break;
+        case "DELETE_PRIVATE_ROOM":
+          // 메시지를 전송한
+          dispatch(deletePrivateRooms(parsedMessage.data));
           break;
       }
     });
@@ -101,6 +106,11 @@ export const globalSlice = createSlice({
       console.log(action.payload);
       state.currentPrivateChat.push(action.payload);
     },
+    deletePrivateRooms: (state, action) => {
+      state.privateRooms = state.privateRooms.filter(
+        (room) => room.id !== action.payload.roomId
+      );
+    },
   },
 });
 
@@ -112,5 +122,6 @@ export const {
   setPrivateRoom,
   setPrivateChat,
   addPrivateChatMessage,
+  deletePrivateRooms,
 } = globalSlice.actions;
 export default globalSlice.reducer;
