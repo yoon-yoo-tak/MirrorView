@@ -147,14 +147,14 @@ const Profile = () => {
             formData.append("multipartFile", blob, "profile.jpg"); // 파일 이름은 필요에 따라 변경할 수 있습니다.
 
             try {
-                const serverResponse = await axios.post(
-                    "/api/s3/image",
-                    formData,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
+                const serverResponse = await axios.get(
+                    "/api/s3/defaultimage",
+                    // formData,
+                    // {
+                    //     headers: {
+                    //         "Content-Type": "multipart/form-data",
+                    //     },
+                    // }
                 );
                 dispatch(setPhoto(defaultImage));
 
