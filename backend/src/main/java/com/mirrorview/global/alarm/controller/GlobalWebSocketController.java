@@ -106,14 +106,17 @@ public class GlobalWebSocketController {
 				// 채팅방을 가져옴, 없으면 만든다. (두 사용자 사이에)
 				ChatPrivateRoom existingRoom = chatPrivateService.getPrivateChatRoom(privateFromUser, privateToUser);
 
-				Map<String, Object> roomData = new HashMap<>();
-				roomData.put("roomId", existingRoom.getId());
-				roomData.put("fromUser", privateFromUser);
-				roomData.put("make", (String) globalMessageDto.getData().get("make"));
-				globalMessageDto.setData(roomData);
+				if(existingRoom.getSender().equals(nickname)){
+					existingRoom.setReceiver(nickname);
+					existingRoom.setSender(privateToUser);
+					globalMessageDto.getData().put("roomData", existingRoom);
+				}else{
+					globalMessageDto.getData().put("roomData", existingRoom);
+				}
 
 				// 방을 만들때는 알림을 안보냄
-				if(roomData.get("make").equals("now"))
+				String roomDataNow = (String) globalMessageDto.getData().get("make");
+				if(roomDataNow.equals("now"))
 					return;
 
 				// 한명의 유저가 채팅방에 입장하면, 상대방에게 알림을 줌
