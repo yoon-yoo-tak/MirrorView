@@ -8,80 +8,89 @@ const Home = () => {
         <div>
             <Header />
             <S.Container>
-                <S.Image src="/bground2.png" alt="HomePageBG" />
+                {/* <S.Image src="/bground2.png" alt="HomePageBG" /> */}
 
-                <S.Content>
-                    <S.FirstTitle style={{ top: "1180px", left: "30px" }}>
-                        {'"청춘"들의 면접 플랫폼'}
-                    </S.FirstTitle>
+                <S.firstPage>
+                    <S.titleWrap>
+                        <S.FirstTitle>
+                            청춘, 앞으로 나아가는 우리 모두를 위한 면접 플랫폼
+                        </S.FirstTitle>
 
-                    <S.SecondTitle style={{ top: "1150px", left: "30px" }}>
-                        {"밀어 : 뷰 "}
-                    </S.SecondTitle>
+                        <S.SecondTitle>밀어 : 뷰 </S.SecondTitle>
+                    </S.titleWrap>
 
-                    <S.ImageWrapper style={{ top: "450px", right: "-900px" }}>
-                        <img
+                    <S.ImageWrapper />
+
+                    {/* <img
                             src={process.env.PUBLIC_URL + "/mirlogo4.png"}
                             alt="HomePageLg1"
+                        /> */}
+                    {/* </S.ImageWrapper> */}
+                </S.firstPage>
+                <S.secondPage>
+                    <S.pointTitleWrap>
+                        {/* <S.sparkles></S.sparkles> */}
+
+                        <S.pointTitle>
+                            밀어뷰'S 베네핏!<S.sparkles></S.sparkles>
+                        </S.pointTitle>
+                    </S.pointTitleWrap>
+
+                    {/* <S.ImageWrapper2>
+                        <img
+                            src={process.env.PUBLIC_URL + "/one.png"}
+                            alt="RedCircle"
                         />
-                    </S.ImageWrapper>
+                    </S.ImageWrapper2> */}
 
-                    <S.Title3 style={{ top: "500px", right: "-400px" }}>
-                        {"밀어뷰'S 베네핏!"}
-
-                        <S.ImageWrapper2
-                            style={{ top: "-290px", right: "-190px" }}
-                        >
-                            <img
-                                src={process.env.PUBLIC_URL + "/one.png"}
-                                alt="RedCircle"
-                            />
-                        </S.ImageWrapper2>
-                    </S.Title3>
-
-                    <S.ImageWrapper3 style={{ top: "30px", right: "-910px" }}>
+                    {/* <S.ImageWrapper3>
                         <img
                             src={process.env.PUBLIC_URL + "/dongle3.png"}
                             alt="MeetingLG"
                         />
-                    </S.ImageWrapper3>
+                    </S.ImageWrapper3> */}
 
-                    <S.Benefit style={{ top: "-400px", right: "-40px" }}>
-                        몇번의 Click만으로 진행되는 온라인 면스 !
-                        <S.BenefitWrapper
-                            style={{ top: "-40px", right: "10px" }}
-                        >
-                            <img
-                                src={process.env.PUBLIC_URL + "/hi.png"}
-                                alt="highlight"
-                            />
-                        </S.BenefitWrapper>
-                    </S.Benefit>
+                    <S.pointTextWrap>
+                        <S.benefitTap value="first">
+                            <S.pointText>
+                                몇번의 Click만으로 진행되는 온라인 면스 !
+                                {/* <S.BenefitWrapper>
+                                <img
+                                    src={process.env.PUBLIC_URL + "/hi.png"}
+                                    alt="highlight"
+                                />
+                            </S.BenefitWrapper> */}
+                            </S.pointText>
+                            <div>그동안 귀찮았던 모든 과정을 한번에!</div>
+                        </S.benefitTap>
 
-                    <S.Benefit2 style={{ top: "-400px", right: "-130px" }}>
-                        시간 제약 없이 가능한 온라인 면스 !
-                        <S.BenefitWrapper2
-                            style={{ top: "0px", right: "70px" }}
-                        >
-                            <img
-                                src={process.env.PUBLIC_URL + "/hi.png"}
-                                alt="highlight"
-                            />
-                        </S.BenefitWrapper2>
-                    </S.Benefit2>
+                        <S.benefitTap value="second">
+                            <S.pointText>
+                                시간 제약 없이 가능한 온라인 면스 !
+                                {/* <S.BenefitWrapper2>
+                                <img
+                                    src={process.env.PUBLIC_URL + "/hi.png"}
+                                    alt="highlight"
+                                />
+                            </S.BenefitWrapper2> */}
+                            </S.pointText>
+                            <div>나를 기다리고 있는 실시간 스터디들</div>
+                        </S.benefitTap>
 
-                    <S.Benefit3 style={{ top: "-350px", right: "-260px" }}>
-                        나만의 피드백 아카이브로 성장 가능성 Up
-                        <S.BenefitWrapper3
-                            style={{ top: "0px", right: "70px" }}
-                        >
-                            <img
-                                src={process.env.PUBLIC_URL + "/hi.png"}
-                                alt="highlight"
-                            />
-                        </S.BenefitWrapper3>
-                    </S.Benefit3>
-                </S.Content>
+                        <S.benefitTap value="third">
+                            <S.pointText>
+                                나만의 피드백 아카이브로 성장 가능성 Up
+                                {/* <S.BenefitWrapper3>
+                                <img
+                                    src={process.env.PUBLIC_URL + "/hi.png"}
+                                    alt="highlight"
+                                />
+                            </S.BenefitWrapper3> */}
+                            </S.pointText>
+                            <div>스터디를 진행하며 주고받는 피드백들</div>
+                        </S.benefitTap>
+                    </S.pointTextWrap>
+                </S.secondPage>
             </S.Container>
             <Footer />
         </div>

@@ -344,8 +344,8 @@ h2 {
 }
 
 .result-wrap:hover {
-    background-color: #ecf5ff;
-    border-radius: 10px;
+    /* background-color: #ecf5ff;
+    border-radius: 10px; */
 }
 
 .go-profile {
@@ -425,6 +425,14 @@ h2 {
     height: 10px;
 }
 
-.friendName {
+.nameText {
     cursor: pointer;
+    border-radius: 10px;
+}
+
+.nameText:hover {
+    background-color: #e8eff8;
+}
+.nameTextSearch:hover {
+    background-color: #e8eff8;
 }
