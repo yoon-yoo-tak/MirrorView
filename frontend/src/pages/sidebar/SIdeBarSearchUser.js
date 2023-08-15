@@ -117,8 +117,11 @@ const SidebarSearch = ({ setClickSearch, clickSearch, setClickChat }) => {
                           alt="offline"
                         />
                       )}{" "}
-                      {selectMember.nickname}
-                    </div>
+                      <div className="nameTextSearch">
+                                                {" "}
+                                                {selectMember.nickname}
+                                            </div>
+                                        </div>
                     {selectMember.nickname !== user.nickname && (
                       <div
                         className="go-profile"
@@ -146,3 +149,4 @@ const SidebarSearch = ({ setClickSearch, clickSearch, setClickChat }) => {
 };
 
 export default SidebarSearch;
+
