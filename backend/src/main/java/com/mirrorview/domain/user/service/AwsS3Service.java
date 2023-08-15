@@ -47,9 +47,20 @@ public class AwsS3Service {
 		if (currentFileName != null) {
 			log.info(currentFileName);
 			log.info(currentFileName.substring(52));
-			deleteImage(currentFileName.substring(52));
+			if (!(currentFileName.substring(52).equals("defaultimage.png"))) { // 기본이미지 아닐때만
+				deleteImage(currentFileName.substring(52));
+			}
 		}
 		return prefix + newFileName;
+	}
+
+	public void setDefaultImage(String userId) {
+		Member member = memberRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("없는 사용자"));
+		String currentFileName = member.getPhoto().substring(52); // member에 저장되어있는 이미지주소
+		if (!currentFileName.equals("defaultimage.png")) { // 이미 기본이미지인데 기본이미지로 바꾸는건 무시됨
+			deleteImage(currentFileName);
+			member.updatePhoto("https://mirror-view.s3.ap-northeast-2.amazonaws.com/defaultimage.png");
+		}
 	}
 
 	public String uploadImage(MultipartFile multipartFile) {

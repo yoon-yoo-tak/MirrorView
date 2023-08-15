@@ -130,19 +130,26 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
             ref={chatsContentRef}>
             <div className="nav-btn">
               <button onClick={() => handleChatContentChange("myChat")}>
-                내 채팅
+                즐겨 찾기
               </button>
               <button onClick={() => handleChatContentChange("openChat")}>
                 오픈 채팅
               </button>
-              <button onClick={() => handleChatContentChange("privateChat")}>
+              <button
+                onClick={() => {
+                  handleChatContentChange("privateChat");
+
+                  //dispatch(switchView("privateRoom"));
+
+                }}>
                 개인 채팅
               </button>
             </div>
             <div>
               {view === "ChatList" && renderChatContent()}
               {view === "ChatRoom" && <ChatRoom />}
-              {view === "ChatPrivateRoom" && <ChatPrivateRoom />}
+              {view === "privateList" && <ChatPrivate />}
+              {view === "privateRoom" && <ChatPrivateRoom />}
             </div>
             <div className="chatbtn" onClick={handleOpenCreateChatModal}>
               오픈 채팅방 개설하기 <FaPlus className="icon" />

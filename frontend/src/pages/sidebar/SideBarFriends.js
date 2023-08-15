@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux"; // <-- useDispatch 불러오기
 
 import "pages/sidebar/css/SideBar.css";
 
-const SidebarFriends = ({ setClickFriends, clickFriends }) => {
+const SidebarFriends = ({ setClickFriends, clickFriends, setClickChat }) => {
   const dispatch = useDispatch(); // <-- dispatch 함수 가져오기
   const webSocketState = useSelector((state) => state.webSocket);
   const accessToken = useSelector((state) => state.auth.accessToken);
@@ -63,7 +63,13 @@ const SidebarFriends = ({ setClickFriends, clickFriends }) => {
   function renderFriendContent() {
     switch (friendContent) {
       case "friendList":
-        return <FriendList />;
+        return (
+          <FriendList
+            setClickFriends={setClickFriends}
+            clickFriends={clickFriends}
+            setClickChat={setClickChat}
+          />
+        );
       case "friendRecieve":
         return <FriendRecieve />;
       case "friendWait":

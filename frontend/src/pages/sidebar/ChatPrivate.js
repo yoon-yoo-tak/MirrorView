@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { MdArrowBack } from "react-icons/md";
 import { WebSocketContext } from "WebSocketContext";
+import { useNavigate } from "react-router-dom";
 import sendIcon from "../../assets/send.png";
 import TextField from "@mui/material/TextField";
 
@@ -14,6 +15,16 @@ function ChatPrivate() {
   const { user } = useSelector((state) => state.auth);
   const rooms = useSelector((state) => state.global.privateRooms);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   // if (!user) {
+  //   //   navigate("/");
+  //   // }
+  //   // if (!client) {
+  //   //   navigate("/");
+  //   // }
+  // }, [user, navigate, client]); // useEffect 의존성 배열에 user와 navigate를 추가
 
   const deleteRoom = ({ roomId, toUser, fromUser }) => {
     const messageData = {
@@ -29,13 +40,14 @@ function ChatPrivate() {
   };
 
   useEffect(() => {
-    const message = {
-      type: "GET_PRIVATE_ROOMS",
-      data: {},
-    };
-
-    client.send("/app/global.one", {}, JSON.stringify(message));
-  }, []);
+    if (client && client.connected) {
+      const message = {
+        type: "GET_PRIVATE_ROOMS",
+        data: {},
+      };
+      client.send("/app/global.one", {}, JSON.stringify(message));
+    }
+  }, [client]);
 
   useEffect(() => {
     console.log(rooms);
@@ -43,12 +55,12 @@ function ChatPrivate() {
 
   const handleJoinPrivateChat = (roomInfo) => {
     dispatch(setPrivateRoom(roomInfo));
-    dispatch(switchView("ChatPrivateRoom"));
+    dispatch(switchView("privateRoom"));
   };
 
   return (
     <div className="chat-room-list">
-      {rooms && rooms.length > 0 ? (
+      {user && rooms && rooms.length > 0 ? (
         rooms.map((room) => (
           <div className="chat-room-item" key={room.id}>
             <div className="chatContent">
@@ -58,31 +70,38 @@ function ChatPrivate() {
               {user.nickname === room.sender && (
                 <div className="chatTitle">{room.receiver}님과의 채팅</div>
               )}
-              {/* Add more room details if you have them */}
             </div>
-            <div
-              className="join-button"
-              onClick={() =>
-                deleteRoom({
-                  roomId: room.id,
-                  toUser:
-                    user.nickname !== room.sender ? room.sender : room.receiver,
-                  fromUser:
-                    user.nickname !== room.sender ? room.receiver : room.sender,
-                })
-              }>
-              삭제
-            </div>
-            <div
-              className="join-button"
-              onClick={() =>
-                handleJoinPrivateChat({
-                  roomId: room.id,
-                  toUser:
-                    user.nickname !== room.sender ? room.sender : room.receiver,
-                })
-              }>
-              입장
+            <div className="button-group">
+              <div
+                className="join-button"
+                onClick={() =>
+                  deleteRoom({
+                    roomId: room.id,
+                    toUser:
+                      user.nickname !== room.sender
+                        ? room.sender
+                        : room.receiver,
+                    fromUser:
+                      user.nickname !== room.sender
+                        ? room.receiver
+                        : room.sender,
+                  })
+                }>
+                삭제
+              </div>
+              <div
+                className="join-button"
+                onClick={() =>
+                  handleJoinPrivateChat({
+                    roomId: room.id,
+                    toUser:
+                      user.nickname !== room.sender
+                        ? room.sender
+                        : room.receiver,
+                  })
+                }>
+                입장
+              </div>
             </div>
           </div>
         ))

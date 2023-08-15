@@ -30,6 +30,7 @@ import useDisMount from "hooks/useDisMount";
 import Swal from "sweetalert2";
 import AWN from "awesome-notifications";
 import "awesome-notifications/dist/style.css";
+import { switchView } from "store/ChatViewStore";
 
 const Header = () => {
   const { client } = useContext(WebSocketContext);
@@ -150,41 +151,35 @@ const Header = () => {
       setBadgeCount(0); // 혹은 원하는 초기값 설정
     }
 
-        if (globalMessages.length > length) {
-            console.log("찍엉");
-            notifier.info(
-                `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">새로운 알림이 도착했어요</div>`,
-                {
-                    durations: { success: 2000 },
-                }
-            );
-            setLength(globalMessages.length);
+    if (globalMessages.length > length) {
+      console.log("찍엉");
+      notifier.info(
+        `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">새로운 알림이 도착했어요</div>`,
+        {
+          durations: { success: 2000 },
         }
-    }, [globalMessages]);
+      );
+      setLength(globalMessages.length);
+    }
+  }, [globalMessages]);
 
-    return (
-        <div>
-            <Nav>
-                <Link to="/">
-                    {" "}
-                    {/* 이 부분이 추가되었습니다 */}
-                    <Logo></Logo>
-                </Link>
-                <NavMenu>
-                    {/* <StyledLink to="/aboutus">About us</StyledLink> */}
-                    <NavItem onClick={() => movePage("aboutus")}>
-                        About us
-                    </NavItem>
-                    {user && user.roles === "ADMIN" && (
-                        <NavItem onClick={() => movePage("adminpage")}>
-                            admin
-                        </NavItem>
-                    )}
-                    <NavItem onClick={() => movePage("notice")}>Notice</NavItem>
-                    <NavItem onClick={() => movePage("studylist")}>
-                        StudyList
-                    </NavItem>
-                    {/* <NavItem onClick={() => movePage("mypage/profile")}>
+  return (
+    <div>
+      <Nav>
+        <Link to="/">
+          {" "}
+          {/* 이 부분이 추가되었습니다 */}
+          <Logo></Logo>
+        </Link>
+        <NavMenu>
+          {/* <StyledLink to="/aboutus">About us</StyledLink> */}
+          <NavItem onClick={() => movePage("aboutus")}>About us</NavItem>
+          {user && user.roles === "ADMIN" && (
+            <NavItem onClick={() => movePage("adminpage")}>admin</NavItem>
+          )}
+          <NavItem onClick={() => movePage("notice")}>Notice</NavItem>
+          <NavItem onClick={() => movePage("studylist")}>StudyList</NavItem>
+          {/* <NavItem onClick={() => movePage("mypage/profile")}>
                     MyPage
                 </NavItem> */}
           <LoginNavItem>
@@ -273,7 +268,9 @@ const Header = () => {
       </Nav>
       <SidebarFriends
         setClickFriends={setClickFriends}
-        clickFriends={clickFriends}></SidebarFriends>
+        clickFriends={clickFriends}
+        clickSearch={clickSearch}
+        setClickChat={setClickChat}></SidebarFriends>
       <SidebarChat clickChat={clickChat} setClickChat={setClickChat}>
         <ChatList />
         <PrivateChatRoom />
@@ -281,6 +278,7 @@ const Header = () => {
       <SidebarSearch
         clickSearch={clickSearch}
         setClickSearch={setClickSearch}
+        setClickChat={setClickChat}
       />
       <SideBarAlarm clickAlarm={clickAlarm} setClickAlarm={setClickAlarm} />
     </div>
