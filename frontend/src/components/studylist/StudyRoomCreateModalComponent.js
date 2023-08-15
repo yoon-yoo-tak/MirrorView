@@ -222,7 +222,8 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
             // 비밀번호까지 확인해야함
             if (
                 title === "" ||
-                max === 0 ||
+                max < 1 ||
+                max > 6 ||
                 firstValue === "선택하세요" ||
                 password === ""
             ) {
@@ -238,7 +239,12 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
                 handleSubmit();
             }
         } else {
-            if (title === "" || max === 0 || firstValue === "선택하세요") {
+            if (
+                title === "" ||
+                max < 1 ||
+                max > 6 ||
+                firstValue === "선택하세요"
+            ) {
                 // 하나라도 값이 없다면
                 // alert("입력 항목을 확인해주세요");
                 notifier.alert(
@@ -347,12 +353,14 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
                                     ></S.modalInputText>
                                 </div>
                                 <div>
-                                    <div>스터디 정원</div>
+                                    <div>스터디 정원 (최대 6명)</div>
                                     <S.modalInputText
                                         type="number"
                                         placeholder="최대 인원 수를 입력하세요"
                                         value={max}
                                         onChange={handleMax}
+                                        min="1"
+                                        max="6"
                                     ></S.modalInputText>
                                 </div>
                             </S.modalInputList>

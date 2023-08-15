@@ -1,90 +1,95 @@
 import styled from "styled-components";
 
 export const ChatContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 95%;
-  margin: 1rem;
-  border-radius: 0.625rem;
-  border: 0.0625rem solid #ccc;
+    display: flex;
+    flex-direction: column;
+    height: 95%;
+    margin: 1rem;
+    border-radius: 0.625rem;
+    border: 0.0625rem solid #ccc;
 `;
 
 export const ChatWindow = styled.div`
-  flex: 1;
-  overflow-y: auto;
-  padding: 0.625rem;
-  border-radius: 0.625rem 0.625rem 0 0;
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.625rem;
+    border-radius: 0.625rem 0.625rem 0 0;
 `;
 
 export const ChatInputContainer = styled.div`
-  display: flex;
-  padding: 0.625rem;
-  border-top: 0.0625rem solid #ccc;
-  border-radius: 0 0 0.625rem 0.625rem;
+    display: flex;
+    padding: 0.625rem;
+    border-top: 0.0625rem solid #ccc;
+    border-radius: 0 0 0.625rem 0.625rem;
 `;
 
 export const MessageInput = styled.input`
-  flex: 1;
-  margin-right: 0.625rem;
-  border-radius: 0.3125rem;
-  padding: 0.3125rem;
-  border: 0.0625rem solid lightgrey; // 연한 회색 테두리 추가
+    flex: 1;
+    margin-right: 0.625rem;
+    border-radius: 0.3125rem;
+    padding: 0.3125rem;
+    border: 0.0625rem solid lightgrey; // 연한 회색 테두리 추가
 `;
 
 export const SendButton = styled.button`
-  border-radius: 0.3125rem;
-  padding: 0.3125rem 0.625rem;
-  background-color: #ff95b9; // 버튼 배경 색상
-  color: black; // 텍스트 색상 변경
-  border: none; // 테두리 제거
-  cursor: pointer; // 마우스 포인터 변경
-  &:hover {
-    background-color: #ff6f97; // 마우스 오버시 색상 변경
-    color: white;
-  }
+    border-radius: 0.3125rem;
+    padding: 0.3125rem 0.625rem;
+    background-color: #ff95b9; // 버튼 배경 색상
+    color: black; // 텍스트 색상 변경
+    border: none; // 테두리 제거
+    cursor: pointer; // 마우스 포인터 변경
+    &:hover {
+        background-color: #ff6f97; // 마우스 오버시 색상 변경
+        color: white;
+    }
 `;
 
 export const InterviewChatContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 95%;
-  margin: 1rem;
-  border-radius: 0.625rem;
-  border: 0.0625rem solid #ccc;
+    display: flex;
+    flex-direction: column;
+    height: 95%;
+    margin: 1rem;
+    border-radius: 0.625rem;
+    border: 0.0625rem solid #ccc;
 `;
 
 export const InterviewChatWindow = styled.div`
-  flex: 1;
-  overflow-y: auto;
-  padding: 0.625rem;
-  border-radius: 0.625rem 0.625rem 0 0;
-  max-height: 430px; // <-- 원하는 높이로 설정하세요 (예: 300px)
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.625rem;
+    border-radius: 0.625rem 0.625rem 0 0;
+    max-height: 430px; // <-- 원하는 높이로 설정하세요 (예: 300px)
+    min-height: 430px;
 `;
 
 export const InterviewChatInputContainer = styled.div`
-  display: flex;
-  padding: 0.625rem;
-  border-top: 0.0625rem solid #ccc;
-  border-radius: 0 0 0.625rem 0.625rem;
+    display: flex;
+    padding: 0.625rem;
+    border-top: 0.0625rem solid #ccc;
+    border-radius: 0 0 0.625rem 0.625rem;
 `;
 
 export const InterviewMessageInput = styled.input`
-  flex: 1;
-  margin-right: 0.625rem;
-  border-radius: 0.3125rem;
-  padding: 0.3125rem;
-  border: 0.0625rem solid lightgrey;
+    flex: 1;
+    margin-right: 0.625rem;
+    border-radius: 0.3125rem;
+    padding: 0.3125rem;
+    border: 0.0625rem solid lightgrey;
 `;
 
 export const InterviewSendButton = styled.button`
-  border-radius: 0.3125rem;
-  padding: 0.3125rem 0.625rem;
-  background-color: #ff95b9;
-  color: black;
-  border: none;
-  cursor: pointer;
-  &:hover {
-    background-color: #ff6f97;
-    color: white;
-  }
+    border-radius: 0.3125rem;
+    padding: 0.3125rem 0.625rem;
+    background-color: #ff95b9;
+    color: black;
+    border: none;
+    cursor: pointer;
+    &:hover {
+        background-color: #ff6f97;
+        color: white;
+    }
+`;
+
+export const Hidden = styled.div`
+    visibility: hidden;
 `;

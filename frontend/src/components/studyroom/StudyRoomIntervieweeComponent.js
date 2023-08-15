@@ -150,7 +150,7 @@ const StudyRoomInterviewee = (props) => {
                                 </S.nameTextSelected>
                             </>
                         )}
-                        <S.roomTitle>면접방 제목</S.roomTitle>
+                        <S.roomTitle>현재 면접자로 참여중입니다</S.roomTitle>
                     </div>
                     <S.exitRoom menu="viewee" onClick={handleExit}>
                         나가기

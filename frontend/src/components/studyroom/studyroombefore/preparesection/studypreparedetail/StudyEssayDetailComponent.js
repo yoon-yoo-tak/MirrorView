@@ -144,9 +144,26 @@ const StudyEssayDetail = ({ nickname, onAir, before }) => {
 
         // const handleUpdateArray = (newQuestion) => {
         // const updatedMatchingObject = updateMatchingObject(newQuestion);
-        dispatch(addQuestion({ nickname: nickname, question: newQuestion }));
-        setNewQuestion("");
-        console.log(feedbackList);
+        Swal.fire({
+            title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">해당 질문을 추가할까요?<div>',
+            icon: "question",
+            width: 400,
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#D4D4D4",
+            cancelButtonText: "취소",
+            confirmButtonText: "넹",
+            // buttons: true,
+            // dangerMode: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                dispatch(
+                    addQuestion({ nickname: nickname, question: newQuestion })
+                );
+                setNewQuestion("");
+                console.log(feedbackList);
+            }
+        });
     };
 
     // const updateMatchingObject = (value) => {

@@ -164,15 +164,36 @@ const Signup = () => {
             alert("이메일 형식을 맞춰주세요.");
         } else {
             axios({
-                url: `/api/users/${formData.email}`,
+                url: `api/users/${formData.email}/check-email`,
                 method: "GET",
             })
                 .then((res) => {
-                    alert(res.data.msg);
+                    alert("사용 가능한 이메일입니다. 인증 메일을 전송합니다.");
+                    axios({
+                        url: `/api/users/${formData.email}`,
+                        method: "GET",
+                    })
+                        .then((res) => {
+                            alert(res.data.msg);
+                        })
+                        .catch((err) => {
+                            alert("이메일 인증을 다시 시도해 주세요.");
+                        });
                 })
-                .catch((err) => {
-                    alert("이메일 인증을 다시 시도해 주세요.");
+                .catch((error) => {
+                    alert(error.response.data.msg);
                 });
+
+            // axios({
+            //     url: `/api/users/${formData.email}`,
+            //     method: "GET",
+            // })
+            //     .then((res) => {
+            //         alert(res.data.msg);
+            //     })
+            //     .catch((err) => {
+            //         alert("이메일 인증을 다시 시도해 주세요.");
+            //     });
         }
     };
 

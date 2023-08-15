@@ -759,20 +759,20 @@ export const mainContainer = styled.div`
 export const mainVideo = styled.div`
     background-color: black;
     border-radius: 13px;
-    // width: 80%;
+    width: 700px;
     height: 410px;
-    // margin: 10px;
-
-    // margin: 10px;
-    // width: 700px;
-    // height: 410px;
     background-color: black;
     // box-shadow: 0px 0px 10px #4e4e4e;
     justify-content: center;
     display: flex;
     border-radius: 10px;
+    color: white;
 
     // padding: 15px;
+`;
+
+export const textViewer = styled.div`
+    padding: 30px;
 `;
 
 export const lastVideos = styled.div`
@@ -869,8 +869,8 @@ export const tapsInterviewer = styled.div`
 `;
 
 export const interviewerSectionWrap = styled.div`
-    width: 30vw;
-    min-width: 400px;
+    // width: 30vw;
+    width: 400px;
     display: flex;
 `;
 
@@ -979,10 +979,25 @@ export const mainWrap = styled.div`
     }
 `;
 
+const animate = keyframes` 
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+`;
 export const roomTitle = styled.div`
     font-size: 22px;
-    margin: 20px;
+    margin-left: 10px;
     color: white;
+    opacity: 1;
+    color: white;
+    animation: ${animate} 3s infinite;
 `;
 
 export const vieweeWrap = styled.div`
