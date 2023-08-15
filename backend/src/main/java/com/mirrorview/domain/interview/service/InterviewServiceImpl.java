@@ -230,6 +230,7 @@ public class InterviewServiceImpl implements InterviewService {
         Optional<InterviewRoom> roomById = interviewRepository.findById(roomId);
         if (roomById.isPresent()) {
             roomById.get().startedState();
+            interviewRepository.save((roomById.get()));
             return true;
         }
         return false;
@@ -244,6 +245,15 @@ public class InterviewServiceImpl implements InterviewService {
             throw new IllegalArgumentException("Password is not matched");
         }
 
+    }
+
+    @Override
+    public void startCancelState(String roomId) {
+        Optional<InterviewRoom> roomById = interviewRepository.findById(roomId);
+        if (roomById.isPresent()) {
+            roomById.get().startCancelState();
+            interviewRepository.save((roomById.get()));
+        }
     }
 }
 
