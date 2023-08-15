@@ -11,11 +11,12 @@ import saveIcon from "../../assets/diskette.png";
 import minusIcon from "../../assets/minut.png";
 import plusIcon from "../../assets/plusicon.png";
 import starrr from "../../assets/Twink.svg";
+import cloudy from "../../assets/clouddddd.svg";
 // 사이드바
 
 export const sidebarWrap = styled.div`
     // background-image: url(${process.env.PUBLIC_URL}/sidebar-background.png);
-    background-image: url(${starrr});
+    background-image: url(${cloudy});
     width: 280px;
     height: 855px;
     flex: 1;
