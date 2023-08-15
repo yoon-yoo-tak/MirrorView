@@ -43,7 +43,7 @@ function ChatPrivate() {
 
   const handleJoinPrivateChat = (roomInfo) => {
     dispatch(setPrivateRoom(roomInfo));
-    dispatch(switchView("ChatPrivateRoom"));
+    dispatch(switchView("privateRoom"));
   };
 
   return (
