@@ -6,11 +6,16 @@ import fbImage from "../../assets/sidebar/🦆 icon _book open outline_.png";
 import essayImage from "../../assets/sidebar/🦆 icon _file text outline_.png";
 import defaultImage from "../../assets/defaultimage.png";
 import updateIcon from "../../assets/pencil.png";
-
+import writeIcon from "../../assets/writing.png";
+import saveIcon from "../../assets/diskette.png";
+import minusIcon from "../../assets/minut.png";
+import plusIcon from "../../assets/plusicon.png";
+import starrr from "../../assets/Twink.svg";
 // 사이드바
 
 export const sidebarWrap = styled.div`
-    background-image: url(${process.env.PUBLIC_URL}/sidebar-background.png);
+    // background-image: url(${process.env.PUBLIC_URL}/sidebar-background.png);
+    background-image: url(${starrr});
     width: 280px;
     height: 855px;
     flex: 1;
@@ -280,8 +285,9 @@ export const fbThumbnail = styled.div`
     margin: 20px;
     padding: 20px;
 
-    background: rgba(246, 252, 255, 0.55);
-    border: 2px solid #000000;
+    background-color: #f4faff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+    // border-radius: 15px;
     border-radius: 30px;
 `;
 
@@ -427,6 +433,103 @@ export const essayThumbnail = styled.div`
     border-radius: 37px;
 `;
 
+export const writeBtn = styled.div`
+    background-size: 50% auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url(${writeIcon});
+    cursor: pointer;
+    background-color: #a5b7f8;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 15px #bdbdbd;
+    margin: 10px 40px 10px 10px;
+    &:hover {
+        background-color: #ced9ff;
+    }
+`;
+export const saveBtn = styled.div`
+    background-size: 50% auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url(${saveIcon});
+    cursor: pointer;
+    background-color: #a5b7f8;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 15px #bdbdbd;
+    margin: 10px 40px 10px 10px;
+    &:hover {
+        background-color: #ced9ff;
+    }
+`;
+
+export const addBtn = styled.div`
+    background-size: 50% auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url(${plusIcon});
+    cursor: pointer;
+    background-color: #a5b7f8;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 15px #bdbdbd;
+    margin: 10px;
+    &:hover {
+        background-color: #ced9ff;
+    }
+`;
+export const minusBtn = styled.div`
+    background-size: 50% auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url(${minusIcon});
+    cursor: pointer;
+    background-color: #a5b7f8;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 15px #bdbdbd;
+    margin: 10px;
+    &:hover {
+        background-color: #ced9ff;
+    }
+`;
+
+export const btnContainer = styled.div`
+    display: flex;
+    flex-direction: row-reverse;
+    margin-right: 20px;
+`;
+
+export const createContainer = styled.div`
+    display: flex;
+    // flex-direction: row-reverse;
+    margin-right: 20px;
+    justify-content: space-between;
+`;
+
+export const essayFooter = styled.div`
+    display: flex;
+    justify-content: space-between;
+    // padding: 10px;
+    align-items: center;
+`;
+
+export const currentPageInfo = styled.div`
+    padding: 7px;
+    margin-left: 10px;
+    font-size: 17px;
+    font-weight: bold;
+    background-color: #8894ff;
+    border-radius: 20px;
+    display: inline-block;
+    color: white;
+`;
+
 export const btn = styled.button`
     margin: 10px;
     display: flex;
@@ -459,7 +562,7 @@ export const btn = styled.button`
 `;
 
 export const hidden = styled.div`
-    visibilit: hidden;
+    margin-bottom: 20px;
 `;
 
 // 버튼
@@ -555,16 +658,16 @@ export const comment = styled.div`
 
 // CreateEssay
 export const essayCreateBox = styled.div`
-    position: relative;
-    top: 5px;
-    left: 0px;
+    // position: relative;
+    // top: 5px;
+    // left: 0px;
     margin: 0px;
     padding: 15px;
     margin: 10px;
     border-radius: 10px;
-    background-color: #e3f1f8;
+    background-color: #e8f4ff;
     width: 1100px;
-    height: 600px;
+    // height: 530px;
 `;
 
 export const esaayCategory = styled.div`
@@ -591,10 +694,11 @@ export const RoundedTextareaQues = styled.textarea`
     padding: 15px;
     border-radius: 8px; // 모서리 둥글게
     border: 1px solid #ccc; // 테두리 추가
-    width: 1040px; // 가로 크기 지정
+    // width: 1040px; // 가로 크기 지정
     height: 15px;
     resize: none; // 사용자가 크기를 조절하지 못하도록 함
     font-family: HakgyoansimWoojuR;
+    width: ${(props) => (props.type === "title" ? "700px" : "1040px")};
 `;
 
 export const RoundedTextareaAns = styled.textarea`
@@ -622,10 +726,12 @@ export const EssayFormContainer = styled.div`
 export const PaginationContainer = styled.div`
     display: flex;
     // justify-content: center;
-    margin-top: 20px;
-    position: relative;
-    bottom: 20px; /* 하늘색 박스 위로 위치 조정 */
-    right: -10px;
+    // margin-top: 20px;
+    // position: relative;
+    // bottom: 20px; /* 하늘색 박스 위로 위치 조정 */
+    // right: -10px;
+    max-width: 510px;
+    overflow: hidden;
 `;
 
 export const PaginationButton = styled.button`
@@ -673,12 +779,12 @@ export const essayListBox = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    // background-color: rgba(161, 182, 255, 0.15);
+    background-color: #f4faff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
     border-radius: 15px;
     padding: 35px 30px;
     width: 400px;
-    height: 80px;
+    height: 70px;
     max-width: 2000px;
     top: -50px;
     left: 80px;
@@ -689,7 +795,8 @@ export const essayListBox = styled.div`
         top: 20px;
         left: 30px;
         font-family: HakgyoansimWoojuR;
-        font-size: 32px;
+        font-size: 28px;
+        font-weight: bold;
     }
 
     .time {
