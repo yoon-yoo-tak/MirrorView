@@ -107,3 +107,13 @@
   margin: 0 10px;
   cursor: pointer;
 }
+.chat-room-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* To vertically align the content and the button group */
+}
+
+.button-group {
+  display: flex;
+  gap: 10px; /* Add some space between buttons */
+}
