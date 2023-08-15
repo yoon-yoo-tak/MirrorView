@@ -11,7 +11,7 @@ import { switchView } from "store/ChatViewStore";
 // 닉네임에 색주기
 function getNicknameColor(userNickname) {
   let hash = 0;
-  if(!userNickname){
+  if (!userNickname) {
     return;
   }
   for (let i = 0; i < userNickname.length; i++) {
@@ -27,14 +27,10 @@ function ChatPrivateRoom() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
-  const {roomId,toUser} = useSelector((state) => state.global.currentPrivateRoom);
+  const { roomId, toUser } = useSelector(
+    (state) => state.global.currentPrivateRoom
+  );
   const messages = useSelector((state) => state.global.currentPrivateChat);
-  const selectedRoomCount = useSelector((state) => {
-    const selectedRoom = state.global.privateRooms.find(
-      (room) => room.id === roomId
-    );
-    return selectedRoom ? selectedRoom.count : null;
-  });
 
   const chatContainerRef = useRef(null);
   const [message, setMessage] = useState("");
@@ -50,13 +46,29 @@ function ChatPrivateRoom() {
   const getPreviousChats = () => {
     if (client == null) return;
 
-    const messageData ={
-        type: "GET_PRIVATE_ROOM_CHAT",
-        data: 
-        {
-            roomId:roomId,
-        }
-    }
+    const messageData = {
+      type: "GET_PRIVATE_ROOM_CHAT",
+      data: {
+        roomId: roomId,
+        toUser: toUser,
+      },
+    };
+
+    client.send(`/app/global.one`, {}, JSON.stringify(messageData));
+  };
+
+  // 상대에게 알림 주기
+  const getRoom = () => {
+    if (client == null) return;
+
+    const messageData = {
+      type: "GET_PRIVATE_ROOM",
+      data: {
+        roomId: roomId,
+        toUser: toUser,
+        make: "previous",
+      },
+    };
 
     client.send(`/app/global.one`, {}, JSON.stringify(messageData));
   };
@@ -68,28 +80,23 @@ function ChatPrivateRoom() {
       return;
     }
 
-    const messageData ={
-        type: "SEND_PRIVATE_ROOM",
-        data: 
-        {
-            roomId:roomId,
-            message: message,
-            toUser: toUser,
-        }
-    }
+    const messageData = {
+      type: "SEND_PRIVATE_ROOM",
+      data: {
+        roomId: roomId,
+        message: message,
+        toUser: toUser,
+      },
+    };
 
-    client.send(
-      `/app/global.one`,
-      {},
-      JSON.stringify(messageData)
-    );
+    client.send(`/app/global.one`, {}, JSON.stringify(messageData));
     setMessage("");
   };
 
-  useEffect(()=>{
-    getPreviousChats()
-  },[roomId])
-
+  useEffect(() => {
+    getPreviousChats();
+    getRoom();
+  }, [roomId]);
 
   // 채팅방 화면 가장 아래로
   useEffect(() => {
@@ -107,9 +114,7 @@ function ChatPrivateRoom() {
             <MdArrowBack size={24} />
           </button>
         </div>
-        <div className="chat-title">
-          {toUser}님과의 채팅
-        </div>
+        <div className="chat-title">{toUser}님과의 채팅</div>
         <div className="back-button-container" />
       </div>
       <div className="chat-container" ref={chatContainerRef}>

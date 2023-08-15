@@ -59,4 +59,15 @@ public class ChatPrivateService {
 			throw new RuntimeException("방이 존재하지 않습니다.");
 		}
 	}
+
+	public void deletePrivateChatRoom(String roomIdToDelete) {
+		Optional<ChatPrivateRoom> chatRoomOptional = chatPrivateRepository.findById(roomIdToDelete);
+
+		if (chatRoomOptional.isPresent()) {
+			ChatPrivateRoom chatRoom = chatRoomOptional.get();
+			chatPrivateRepository.delete(chatRoom);
+		} else {
+			throw new RuntimeException("방이 존재하지 않습니다.");
+		}
+	}
 }

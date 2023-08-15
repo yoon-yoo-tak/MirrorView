@@ -91,4 +91,8 @@ public class InterviewRoom {
     public void startedState(){
         isStarted = true;
     }
+
+    public void startCancelState(){
+        isStarted = false;
+    }
 }
