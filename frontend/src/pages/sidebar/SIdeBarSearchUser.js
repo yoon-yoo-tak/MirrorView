@@ -48,28 +48,34 @@ const SidebarSearch = ({ setClickSearch, clickSearch, setClickChat }) => {
     setSearchedList([]);
   }, [clickSearch, user]);
 
-  // ---------------------------------------------------
-  const handleSearch = (e) => {
-    setSearchingId(e.target.value);
-  };
-  const clickSearchUser = async (e) => {
-    // searchingId를 검색하러 보내!!
-    await axios
-      .get(`api/users/findAll/${searchingId}`)
-      .then(({ data }) => {
-        const sortedList = data.data.sort((a, b) => {
-          if (a.online && !b.online) return -1;
-          if (!a.online && b.online) return 1;
-          return 0;
-        });
+    // ---------------------------------------------------
+    const handleSearch = (e) => {
+        setSearchingId(e.target.value);
+    };
 
-        setSearchedList(sortedList);
-        console.log(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            clickSearchUser();
+        }
+    };
+    const clickSearchUser = async () => {
+        // searchingId를 검색하러 보내!!
+        await axios
+            .get(`api/users/findAll/${searchingId}`)
+            .then(({ data }) => {
+                const sortedList = data.data.sort((a, b) => {
+                    if (a.online && !b.online) return -1;
+                    if (!a.online && b.online) return 1;
+                    return 0;
+                });
+
+                setSearchedList(sortedList);
+                console.log(data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
   return (
     <div>
@@ -87,7 +93,8 @@ const SidebarSearch = ({ setClickSearch, clickSearch, setClickChat }) => {
                 onChange={handleSearch}
                 id="standard-basic"
                 variant="standard"
-                placeholder="아이디로 검색하세요"
+                placeholder="닉네임으로 검색하세요"
+                onKeyUp={handleKeyDown}
               />
               <img
                 src={searchIcon}
