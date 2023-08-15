@@ -138,7 +138,9 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
               <button
                 onClick={() => {
                   handleChatContentChange("privateChat");
-                  dispatch(switchView("privateRoom"));
+
+                  //dispatch(switchView("privateRoom"));
+
                 }}>
                 개인 채팅
               </button>
