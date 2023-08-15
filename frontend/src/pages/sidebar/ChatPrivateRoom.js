@@ -66,6 +66,7 @@ function ChatPrivateRoom() {
       data: {
         roomId: roomId,
         toUser: toUser,
+        make: "previous",
       },
     };
 
