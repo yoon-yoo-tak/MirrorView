@@ -99,10 +99,11 @@ const StudyEssayDetail = ({ nickname, onAir, before }) => {
                             console.log(resp);
                             const questionList = resp.data.split("\n");
                             questionList.forEach((element) => {
+                                // console.log(element.substring(3));
                                 dispatch(
                                     addQuestion({
                                         nickname: member.nickname,
-                                        question: element,
+                                        question: element.substring(3),
                                     })
                                 );
                             });
