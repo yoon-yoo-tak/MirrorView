@@ -109,8 +109,13 @@ public class GlobalWebSocketController {
 				Map<String, Object> roomData = new HashMap<>();
 				roomData.put("roomId", existingRoom.getId());
 				roomData.put("fromUser", privateFromUser);
+				roomData.put("make", (String) globalMessageDto.getData().get("make"));
 				globalMessageDto.setData(roomData);
-				
+
+				// 방을 만들때는 알림을 안보냄
+				if(roomData.get("make").equals("now"))
+					return;
+
 				// 한명의 유저가 채팅방에 입장하면, 상대방에게 알림을 줌
 				String messagePrivate = privateFromUser+"님이 개인 채팅을 신청했습니다.";
 				Notification privateChatNotification = notificationService.createAndSaveNotification(privateToUser, messagePrivate);
@@ -153,9 +158,9 @@ public class GlobalWebSocketController {
 				// 채팅방 삭제 로직 실행
 				chatPrivateService.deletePrivateChatRoom(roomIdToDelete);
 
+				simpMessagingTemplate.convertAndSendToUser(toFromUserDelete, "/sub/global.one", globalMessageDto);
 				if(globalWebSocketService.isUserOnline(toUserDelete)) {
 					simpMessagingTemplate.convertAndSendToUser(toUserDelete, "/sub/global.one", globalMessageDto);
-					simpMessagingTemplate.convertAndSendToUser(toFromUserDelete, "/sub/global.one", globalMessageDto);
 				}
 				break;
 
