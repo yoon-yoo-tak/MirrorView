@@ -1,6 +1,5 @@
 import * as S from "./otherStyledComponents";
 import { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
 import axios from "axios";
 import React, { useContext } from "react";
 import Menu from "@mui/material/Menu";
@@ -11,6 +10,8 @@ import Swal from "sweetalert2";
 import AWN from "awesome-notifications";
 import "awesome-notifications/dist/style.css";
 import { WebSocketContext } from "WebSocketContext";
+import { switchView } from "store/ChatViewStore";
+import { useSelector, useDispatch } from "react-redux";
 
 const ProfileModal = ({
   isOpen,
@@ -18,7 +19,10 @@ const ProfileModal = ({
   onClose,
   nickname,
   isInterview,
+  setClickSearch,
+  setClickChat,
 }) => {
+  const dispatch = useDispatch();
   const { client } = useContext(WebSocketContext);
   const accessToken = useSelector((state) => state.auth.accessToken);
   const { user } = useSelector((state) => state.auth);
@@ -34,6 +38,10 @@ const ProfileModal = ({
   const [myProfile, setMyProfile] = useState(false);
   const notifier = new AWN();
   const [friendChatComponent, setFriendChatComponent] = useState(false);
+
+  const goToPrivateChat = () => {
+    dispatch(switchView("PrivateChat"));
+  };
 
   useEffect(() => {
     if (nickname === user.nickname) {
@@ -53,39 +61,10 @@ const ProfileModal = ({
         setFriendStatus(data.data.friendStatus);
       })
       .catch((error) => console.log(error));
-    // axios
-    //     .get(`api/friends/status/${nowProfile.userId}`, {
-    //         headers: { Authorization: `Bearer ${accessToken}` },
-    //     })
-    //     .then((response) => {
-    //         console.log(response.data.data);
-    //         console.log("친구상태 확인완");
-    //         setFriendStatus(response.data.data);
-    //     })
-    //     .catch((error) => {
-    //         console.error(error);
-    //     });
   }, []);
 
   const deleteFriend = () => {
-    // 친구삭제
     if (friendStatus === "wait") {
-      // if (window.confirm("친구 요청을 취소하시겠습니까?")) {
-      //     axios
-      //         .delete(`api/friends/${member.userId}`, {
-      //             headers: { Authorization: `Bearer ${accessToken}` },
-      //         })
-      //         .then((response) => {
-      //             console.log(response.data.msg);
-      //             alert("친구요청이 취소되었습니다");
-
-      //             setFriendStatus("none");
-      //         })
-      //         .catch((error) => {
-      //             console.error(error);
-      //             console.log("취소 실패");
-      //         });
-      // }
       Swal.fire({
         title:
           '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">친구 요청을 취소하시겠습니까?<div>',
@@ -290,6 +269,12 @@ const ProfileModal = ({
         },
       };
       client.send("/app/global.one", {}, JSON.stringify(message));
+
+      // SearchSidebar를 닫는다.
+      setClickSearch(false);
+      dispatch(switchView("privateList"));
+      // setClickChat을 연다.
+      setClickChat(true);
     }
   };
 
