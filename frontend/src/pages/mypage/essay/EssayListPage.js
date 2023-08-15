@@ -18,31 +18,31 @@ const MyEssay = () => {
     };
 
     const handleEssayDetail = (essay) => {
-        navigate(`/mypage/essaydetail/${essay.id}`,{state:essay.title});
+        navigate(`/mypage/essaydetail/${essay.id}`, { state: essay.title });
     };
-
-    
 
     const perPage = 6; // 페이지당 피드백 개수를 지정합니다.
     const [currentPage, setCurrentPage] = useState(1);
-    const {user} = useSelector((state)=>state.auth);
+    const { user } = useSelector((state) => state.auth);
     const [essayList, setEssayList] = useState([]);
-    const[totalPages,setTotalPages] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
-    useEffect(()=>{
-        axios.get(`/api/mypage/essays?size=${perPage}&page=${currentPage-1}`)
-        .then(({data})=>{
-            setEssayList(data.data.content);
-            setTotalPages(data.data.totalPages);
-        }).catch((error)=>{
-            console.error(error);
-        });
-    },[currentPage])
+    useEffect(() => {
+        axios
+            .get(`/api/mypage/essays?size=${perPage}&page=${currentPage - 1}`)
+            .then(({ data }) => {
+                setEssayList(data.data.content);
+                setTotalPages(data.data.totalPages);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, [currentPage]);
 
     // 페이지를 변경하는 함수를 정의합니다.
     const handlePageChange = (pageNumber) => {
         // console.log(pageNumber);
-        setCurrentPage(pageNumber+1);
+        setCurrentPage(pageNumber + 1);
     };
 
     // 이전 페이지로 이동하는 함수를 정의합니다.
@@ -67,7 +67,7 @@ const MyEssay = () => {
                     <h2>자기소개서 관리</h2>
                     <hr />
                     <div>
-                        <S.btn
+                        {/* <S.btn
                             theme="create"
                             onClick={essayCreate}
                             style={{
@@ -79,12 +79,15 @@ const MyEssay = () => {
                         >
                             {" "}
                             작성하기{" "}
-                        </S.btn>
+                        </S.btn> */}
+                        <S.btnContainer>
+                            <S.writeBtn onClick={essayCreate} />
+                        </S.btnContainer>
                         <EssayComponent />
                         <div className="essayBox">
                             <div className="essayList">
                                 <S.essayListContainer>
-                                    {essayList.map((essay,index) => (
+                                    {essayList.map((essay, index) => (
                                         <S.essayListBox
                                             key={index}
                                             onClick={() =>
@@ -98,7 +101,11 @@ const MyEssay = () => {
                                             </tr>
                                             <tr>
                                                 <td className="time">
-                                                    작성일시 : {essay.createdTime.substring(0,10)}
+                                                    작성일시 :{" "}
+                                                    {essay.createdTime.substring(
+                                                        0,
+                                                        10
+                                                    )}
                                                 </td>
                                             </tr>
                                         </S.essayListBox>
@@ -128,9 +135,7 @@ const MyEssay = () => {
                                                             : ""
                                                     }
                                                     onClick={() =>
-                                                        handlePageChange(
-                                                            index
-                                                        )
+                                                        handlePageChange(index)
                                                     }
                                                 >
                                                     {index + 1}

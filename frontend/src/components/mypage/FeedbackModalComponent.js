@@ -59,33 +59,24 @@ const FeedbackModal = ({ item, setModalStates }) => {
                     <S.modalButton onClick={closeModal}>닫기</S.modalButton>
                     <S.modalScrollContent>
                         <S.modalContent
-                            style={{
-                                top: "-25px",
-                                left: "-25px",
-                                fontSize: "20px",
-                                color: "black",
-                                fontFamily: "Imcre",
-                                whiteSpace: "pre-line",
-                                lineHeight: "2",
-                            }}
+                        // style={{
+                        //     top: "-25px",
+                        //     left: "-25px",
+                        //     fontSize: "20px",
+                        //     color: "black",
+                        //     fontFamily: "Imcre",
+                        //     whiteSpace: "pre-line",
+                        //     lineHeight: "2",
+                        // }}
                         >
-                            작성자 : {item.senderNickname}
-                            {"\n"}날짜 : {item.createdTime.substring(0, 10)}
+                            <div>작성자 : {item.senderNickname}</div>
+                            <div>
+                                날짜 : {item.createdTime.substring(0, 10)}
+                            </div>
+                            {/* </S.modalContent> */}
+                            <hr />
+                            <div id="content"></div>
                         </S.modalContent>
-                        <S.hr style={{ top: "-75px" }}></S.hr>
-                        <div
-                            id="content"
-                            style={{
-                                position: "relative",
-                                padding: "50px",
-                                top: "-110px",
-                                left: "-15px",
-                                fontSize: "14px",
-                                color: "black",
-                                fontFamily: "KimjungchulGothic",
-                                lineHeight: "1.5",
-                            }}
-                        ></div>
                     </S.modalScrollContent>
                 </S.modalContainer>
             </S.modalBackDrop>
