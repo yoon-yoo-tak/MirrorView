@@ -17,15 +17,14 @@ function ChatPrivate() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/");
-    }
-
-    if (!client) {
-      navigate("/");
-    }
-  }, [user, navigate, client]); // useEffect 의존성 배열에 user와 navigate를 추가
+  // useEffect(() => {
+  //   // if (!user) {
+  //   //   navigate("/");
+  //   // }
+  //   // if (!client) {
+  //   //   navigate("/");
+  //   // }
+  // }, [user, navigate, client]); // useEffect 의존성 배열에 user와 navigate를 추가
 
   const deleteRoom = ({ roomId, toUser, fromUser }) => {
     const messageData = {
@@ -41,13 +40,14 @@ function ChatPrivate() {
   };
 
   useEffect(() => {
-    const message = {
-      type: "GET_PRIVATE_ROOMS",
-      data: {},
-    };
-
-    client.send("/app/global.one", {}, JSON.stringify(message));
-  }, []);
+    if (client && client.connected) {
+      const message = {
+        type: "GET_PRIVATE_ROOMS",
+        data: {},
+      };
+      client.send("/app/global.one", {}, JSON.stringify(message));
+    }
+  }, [client]);
 
   useEffect(() => {
     console.log(rooms);
@@ -60,7 +60,7 @@ function ChatPrivate() {
 
   return (
     <div className="chat-room-list">
-      {rooms && rooms.length > 0 ? (
+      {user && rooms && rooms.length > 0 ? (
         rooms.map((room) => (
           <div className="chat-room-item" key={room.id}>
             <div className="chatContent">

@@ -62,22 +62,24 @@ function ChatList() {
 
   useEffect(() => {
     const checkMyChatRooms = async () => {
-      try {
-        const response = await axios.get(`/api/chat/favorites`);
-        const fetchedRooms = response.data.data;
+      if (user) {
+        try {
+          const response = await axios.get(`/api/chat/favorites`);
+          const fetchedRooms = response.data.data;
 
-        const favoriteStatus = {};
-        fetchedRooms.forEach((room) => {
-          favoriteStatus[room.id.toString()] = true;
-        });
-        setIsFavorite(favoriteStatus);
-      } catch (error) {
-        console.error(error);
+          const favoriteStatus = {};
+          fetchedRooms.forEach((room) => {
+            favoriteStatus[room.id.toString()] = true;
+          });
+          setIsFavorite(favoriteStatus);
+        } catch (error) {
+          console.error(error);
+        }
       }
     };
 
     checkMyChatRooms();
-  }, [chatRooms]);
+  }, [chatRooms, user]);
 
   return (
     <div className="chat-room-list">

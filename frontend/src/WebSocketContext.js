@@ -51,6 +51,7 @@ export const WebSocketProvider = ({ children }) => {
         if (reconnectAttempts < maxReconnectAttempts) {
           const delay = initialDelay * (reconnectAttempts + 1);
           setTimeout(() => {
+            initializeWebSocket();
             setReconnectAttempts((prev) => prev + 1);
           }, delay);
         } else {
