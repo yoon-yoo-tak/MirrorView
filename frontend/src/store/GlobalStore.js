@@ -57,8 +57,10 @@ export const globalOneUserSubscribe = createAsyncThunk(
           break;
         case "GET_PRIVATE_ROOM":
           // 특정 사용자와의 채팅방 정보
+          console.log(parsedMessage);
           dispatch(addNotification(parsedMessage.data.notification));
-          dispatch(setPrivateRoom(parsedMessage.data));
+          if (parsedMessage.data.make == "now")
+            dispatch(setPrivateRoom(parsedMessage.data));
           break;
         case "GET_PRIVATE_ROOM_CHAT":
           // 특정 채팅방의 채팅 내역
