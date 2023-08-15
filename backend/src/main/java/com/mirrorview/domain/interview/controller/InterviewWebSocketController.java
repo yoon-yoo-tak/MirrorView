@@ -47,6 +47,7 @@ public class InterviewWebSocketController {
 		switch (messageDto.getType()) {
 
 			case "ROOM_START_CANCEL":
+				interviewService.startCancelState(roomId);
 			case "CHAT":
 				simpMessagingTemplate.convertAndSend("/sub/interviewrooms/" + roomId, messageDto);
 				break;

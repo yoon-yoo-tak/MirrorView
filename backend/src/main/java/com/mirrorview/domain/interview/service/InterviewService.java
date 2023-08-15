@@ -38,5 +38,7 @@ public interface InterviewService {
     boolean startedState(String roomId);
 
     void checkRoomPassword(String roomId, String password);
+
+    void startCancelState(String roomId);
 }
 

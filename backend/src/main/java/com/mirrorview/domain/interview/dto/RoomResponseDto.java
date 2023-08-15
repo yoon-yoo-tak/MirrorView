@@ -19,6 +19,7 @@ public class RoomResponseDto {
     private Integer currentMemberCount;
     private Boolean havePassword;
     private String host;
+    private boolean isStarted;
 
     public static RoomResponseDto build(InterviewRoom room) {
         return RoomResponseDto
@@ -30,6 +31,7 @@ public class RoomResponseDto {
                 .maxMemberCount(room.getMaxMemberCount())
                 .currentMemberCount(room.getCurrentCount())
                 .havePassword(room.havePassword())
+                .isStarted(room.isStarted())
                 .build();
     }
 }
