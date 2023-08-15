@@ -268,7 +268,9 @@ const Header = () => {
       </Nav>
       <SidebarFriends
         setClickFriends={setClickFriends}
-        clickFriends={clickFriends}></SidebarFriends>
+        clickFriends={clickFriends}
+        clickSearch={clickSearch}
+        setClickChat={setClickChat}></SidebarFriends>
       <SidebarChat clickChat={clickChat} setClickChat={setClickChat}>
         <ChatList />
         <PrivateChatRoom />

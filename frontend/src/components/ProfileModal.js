@@ -21,6 +21,7 @@ const ProfileModal = ({
   isInterview,
   setClickSearch,
   setClickChat,
+  setClickFriends,
 }) => {
   const dispatch = useDispatch();
   const { client } = useContext(WebSocketContext);
@@ -271,10 +272,18 @@ const ProfileModal = ({
       client.send("/app/global.one", {}, JSON.stringify(message));
 
       // SearchSidebar를 닫는다.
-      setClickSearch(false);
+      if (typeof setClickSearch === "function") {
+        setClickSearch(false);
+      }
+      if (typeof setClickFriends === "function") {
+        setClickFriends(false);
+      }
       dispatch(switchView("privateList"));
       // setClickChat을 연다.
-      setClickChat(true);
+
+      if (typeof setClickChat === "function") {
+        setClickChat(true);
+      }
     }
   };
 

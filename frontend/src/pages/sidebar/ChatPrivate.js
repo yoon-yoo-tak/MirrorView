@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { MdArrowBack } from "react-icons/md";
 import { WebSocketContext } from "WebSocketContext";
+import { useNavigate } from "react-router-dom";
 import sendIcon from "../../assets/send.png";
 import TextField from "@mui/material/TextField";
 
@@ -14,6 +15,17 @@ function ChatPrivate() {
   const { user } = useSelector((state) => state.auth);
   const rooms = useSelector((state) => state.global.privateRooms);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+
+    if (!client) {
+      navigate("/");
+    }
+  }, [user, navigate, client]); // useEffect 의존성 배열에 user와 navigate를 추가
 
   const deleteRoom = ({ roomId, toUser, fromUser }) => {
     const messageData = {
