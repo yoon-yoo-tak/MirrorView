@@ -14,24 +14,36 @@ function ChatPrivate() {
   const { user } = useSelector((state) => state.auth);
   const rooms = useSelector((state) => state.global.privateRooms);
   const dispatch = useDispatch();
+
+  const deleteRoom = ({ roomId, toUser, fromUser }) => {
+    const messageData = {
+      type: "DELETE_PRIVATE_ROOM",
+      data: {
+        roomId: roomId,
+        toUser: toUser,
+        fromUser: fromUser,
+      },
+    };
+
+    client.send(`/app/global.one`, {}, JSON.stringify(messageData));
+  };
+
   useEffect(() => {
     const message = {
-      type: 'GET_PRIVATE_ROOMS',
+      type: "GET_PRIVATE_ROOMS",
       data: {},
     };
 
-    client.send('/app/global.one', {}, JSON.stringify(message));
-
-  }, []); 
+    client.send("/app/global.one", {}, JSON.stringify(message));
+  }, []);
 
   useEffect(() => {
     console.log(rooms);
-  }, [rooms]); 
+  }, [rooms]);
 
   const handleJoinPrivateChat = (roomInfo) => {
-    dispatch(setPrivateRoom( roomInfo ));
-    dispatch(switchView("ChatPrivateRoom")); 
-
+    dispatch(setPrivateRoom(roomInfo));
+    dispatch(switchView("ChatPrivateRoom"));
   };
 
   return (
@@ -40,21 +52,42 @@ function ChatPrivate() {
         rooms.map((room) => (
           <div className="chat-room-item" key={room.id}>
             <div className="chatContent">
-              {user.nickname !== room.sender &&<div className="chatTitle">{room.sender}님과의 채팅</div>}
-              {user.nickname === room.sender &&<div className="chatTitle">{room.receiver}님과의 채팅</div>}
+              {user.nickname !== room.sender && (
+                <div className="chatTitle">{room.sender}님과의 채팅</div>
+              )}
+              {user.nickname === room.sender && (
+                <div className="chatTitle">{room.receiver}님과의 채팅</div>
+              )}
               {/* Add more room details if you have them */}
             </div>
-
             <div
               className="join-button"
-              onClick={() => handleJoinPrivateChat({roomId : room.id, toUser:user.nickname!==room.sender?room.sender:room.receiver})}
-            >
+              onClick={() =>
+                deleteRoom({
+                  roomId: room.id,
+                  toUser:
+                    user.nickname !== room.sender ? room.sender : room.receiver,
+                  fromUser:
+                    user.nickname !== room.sender ? room.receiver : room.sender,
+                })
+              }>
+              삭제
+            </div>
+            <div
+              className="join-button"
+              onClick={() =>
+                handleJoinPrivateChat({
+                  roomId: room.id,
+                  toUser:
+                    user.nickname !== room.sender ? room.sender : room.receiver,
+                })
+              }>
               입장
             </div>
           </div>
         ))
       ) : (
-        <p>No private rooms available.</p>
+        <p>개인 채팅이 없습니다.</p>
       )}
     </div>
   );
