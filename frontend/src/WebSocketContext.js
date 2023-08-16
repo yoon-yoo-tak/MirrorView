@@ -21,7 +21,7 @@ export const WebSocketProvider = ({ children }) => {
 
   const initializeWebSocket = useCallback(() => {
     if (!accessToken) {
-      // console.log("로그인 이후 웹소켓이 동작함");
+
       return;
     }
 
@@ -29,6 +29,15 @@ export const WebSocketProvider = ({ children }) => {
     const urlWithToken = `${httpUrl}?token=${accessToken}`;
     const socket = new SockJS(urlWithToken);
     const stompClient = Stomp.over(socket);
+    
+    stompClient.debug = () => {
+      // 여기서 로깅 레벨을 조절할 수 있습니다. 
+      // 예: 'ERROR'로 시작하는 메시지만 출력하기
+      // if (str.startsWith('ERROR')) {
+      //   console.log(str);
+      // }
+    };
+    
 
     stompClient.connect(
       {},
