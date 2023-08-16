@@ -21,7 +21,7 @@ export const subscribeChatRoomCreate = createAsyncThunk(
     if (client) {
       client.subscribe("/sub/chatrooms.room", (message) => {
         const parsedMessage = JSON.parse(message.body);
-        //console.log(parsedMessage);
+
         switch (parsedMessage.type) {
           case "create":
             const chatRoom = parsedMessage.data.room;
@@ -97,7 +97,6 @@ const webSocketSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase("webSocket/updateUserCount", (state, action) => {
-      //console.log(action.payload);
       state.userCount = action.payload;
     });
   },
