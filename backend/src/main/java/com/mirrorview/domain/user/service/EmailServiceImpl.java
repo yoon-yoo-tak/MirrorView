@@ -6,6 +6,9 @@ import com.mirrorview.domain.user.repository.EmailKeyRepository;
 import com.mirrorview.domain.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,12 +23,16 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@PropertySource(value = "classpath:email.properties")
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender emailSender;
     private final EmailKeyRepository emailKeyRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+
+    @Value("${spring.mail.username}")
+    private String hostMail;
 
     @Override
     public boolean sendEmail(String email) {
@@ -150,7 +157,7 @@ public class EmailServiceImpl implements EmailService {
         message.addRecipients(Message.RecipientType.TO, email);
         message.setSubject(subject);
         message.setText(msg, "utf-8", "html");
-        message.setFrom(new InternetAddress("ssafy_mirrorview@naver.com", "mirrorView"));
+        message.setFrom(new InternetAddress(hostMail+"@naver.com", "mirrorView"));
 
         return message;
     }
@@ -174,7 +181,7 @@ public class EmailServiceImpl implements EmailService {
         message.addRecipients(Message.RecipientType.TO, email);
         message.setSubject(subject);
         message.setText(msg, "utf-8", "html");
-        message.setFrom(new InternetAddress("ssafy_mirrorview@naver.com", "mirrorView"));
+        message.setFrom(new InternetAddress(hostMail+"@naver.com", "mirrorView"));
 
         return message;
     }
