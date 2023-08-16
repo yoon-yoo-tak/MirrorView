@@ -102,6 +102,12 @@ const Signup = () => {
     };
     const onClickCheckNickName = (e) => {
         e.preventDefault();
+        if (formData.nickname > 15) {
+            Swal.fire({ icon: "error",
+            title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">14자 이하의 닉네임만 가능합니다.<div>'});
+            return;
+        }
+
         if (formData.nickname === "") {
             alert("닉네임을 입력해 주세요.");
         } else {
