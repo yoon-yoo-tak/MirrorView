@@ -1,4 +1,4 @@
-# Mirror View
+![](frontend/public/mirlogo.png)
 
 <p align="center">
   <br>
@@ -13,7 +13,7 @@
 4. [**기술 스택**](#4)
 5. [**시스템 아키텍처**](#5)
 
-div id="1"></div>
+<div id="1"></div>
 
 ## 💡 서비스 소개
 <hr>
@@ -77,6 +77,7 @@ div id="1"></div>
 
 ## 🗂️ 시스템 아키텍처
 
+<img src="img/architecture.png">
 
 <br />
 
@@ -86,42 +87,51 @@ div id="1"></div>
 
 ### 메인 & About Us
 - 밀어뷰가 어떤 목적으로 제작되었는지 이야기합니다.
+
 ![1](img/gif/main.gif)
 
 ### 회원 기능
 - 회원 가입, 로그인 등
+
 ![2](img/gif/login.gif)
 
 ### 친구 기능
 - 사용자끼리 정보 및 친구 기능
+
 ![3](img/gif/friend.gif)
 
 ### 공지 게시판
 - admin 계정만 작성할 수 있는 공지 보드 기능
+
 ![4](img/gif/notice.gif)
 
 ### 자기 소개서
 - 면접 스터디에 사용할 자기소개서를 작성하고 관리하는 기능
+
 ![5](img/gif/introduce.gif)
 
 ### 채팅 기능
 - 오픈채팅 & 개인채팅 & 알림 등
+
 ![6](img/gif/openchat.gif)
 
 ### 면접방 리스트
 - 면접방 생성 & 조회 기능
+
 ![7](img/gif/roomin.gif)
 
 ### 면접 준비방
 - 면접 스터디를 시작하기 전 사전 준비 기능
+
 ![8](img/gif/ready.gif)
 
 ### 면접 진행
 - 실제 면접을 진행하는 기능
+
 ![9](img/gif/interview.gif)
 
 
-:rocket: [구현 기능 Notion Link](https://elated-tortoise-2aa.notion.site/7487d4f8729d48aa9fffc8e1114378ab?v=58376fb817294207bbf22ad896f56f34&pvs=4)
-<br>
+### 🚀 [공유 문서 Notion Link](https://elated-tortoise-2aa.notion.site/7487d4f8729d48aa9fffc8e1114378ab?v=58376fb817294207bbf22ad896f56f34&pvs=4)
+**마지막으로 팀 공유문서 입니다!**
 
 <br>
