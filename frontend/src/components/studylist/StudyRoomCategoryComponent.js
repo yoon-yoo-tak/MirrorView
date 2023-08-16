@@ -33,7 +33,7 @@ const StudyRoomCategory = () => {
                 setFirstCategory([...defaultValue, ...data.data]);
             })
             .catch((error) => {
-                console.error(error);
+                // console.error(error);
             });
         return () => {
             setFirstCategory([...defaultValue]);
@@ -51,7 +51,7 @@ const StudyRoomCategory = () => {
                         setSecondCategory([...defaultValue, ...data.data]);
                     })
                     .catch((error) => {
-                        console.log(error);
+                        // console.log(error);
                     });
             }
         }
@@ -70,7 +70,7 @@ const StudyRoomCategory = () => {
                         setThirdCategory([...defaultValue, ...data.data]);
                     })
                     .catch((error) => {
-                        console.log(error);
+                        // console.log(error);
                     });
             }
         }
@@ -92,7 +92,7 @@ const StudyRoomCategory = () => {
     };
 
     const handleSubmit = () => {
-        console.log(firstValue);
+        // console.log(firstValue);
         if (thirdValue != "선택하세요") {
             dispatch(
                 getInterviewRoomByCategory({ depth: 3, category: thirdValue })
@@ -104,7 +104,7 @@ const StudyRoomCategory = () => {
         } else if (firstValue == "선택하세요") {
             alert("카테고리를 선택하세요");
         } else {
-            console.log("good start");
+            // console.log("good start");
             dispatch(
                 getInterviewRoomByCategory({ depth: 1, category: firstValue })
             );

@@ -50,7 +50,7 @@ function ChatPrivate() {
   }, [client]);
 
   useEffect(() => {
-    console.log(rooms);
+    //console.log(rooms);
   }, [rooms]);
 
   const handleJoinPrivateChat = (roomInfo) => {

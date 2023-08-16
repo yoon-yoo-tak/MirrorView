@@ -34,7 +34,7 @@ const ImageCrop = ({
             // setCroppedImage(cropped);
             // handleSendCropped();
         } catch (e) {
-            console.error(e);
+            // console.error(e);
         }
     }, [imageSrc, croppedAreaPixels]);
 

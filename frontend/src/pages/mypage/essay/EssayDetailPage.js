@@ -20,7 +20,7 @@ const EssayDetail = () => {
         axios
             .get(`/api/mypage/essays/${id}`)
             .then(({ data }) => {
-                console.log(data);
+                //console.log(data);
                 setEssayList({
                     id,
                     title: state,
@@ -28,7 +28,7 @@ const EssayDetail = () => {
                 });
             })
             .catch((error) => {
-                console.error(error);
+                //console.error(error);
             });
         setCurrentPage(0);
     }, []);
@@ -73,16 +73,16 @@ const EssayDetail = () => {
     };
 
     const onclickSave = async () => {
-        console.log(essayList);
+        //console.log(essayList);
         await axios
             .put(`/api/mypage/essays`, essayList)
             .then((response) => {
-                console.log(response);
+                //console.log(response);
                 alert("자기소개서 수정 완료");
                 //   navigate("/mypage/myessay");
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
             });
         // navigate("/mypage/myessay")
     };

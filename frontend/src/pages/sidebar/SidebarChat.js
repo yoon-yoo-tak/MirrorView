@@ -63,10 +63,10 @@ const SidebarChat = ({ setClickChat, clickChat }) => {
             },
           });
           if (response.data.status === "ok") {
-            console.log("유저를 redis에 등록함");
+            //console.log("유저를 redis에 등록함");
           }
         } catch (error) {
-          console.error("유저 데이터 가져오기 실패:", error);
+          //console.error("유저 데이터 가져오기 실패:", error);
         }
       };
       fetchUserData();

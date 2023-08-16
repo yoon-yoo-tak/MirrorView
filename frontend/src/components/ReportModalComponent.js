@@ -27,12 +27,12 @@ const ReportModalComponent = ({ member, openReport, closeReport }) => {
                 })
                 .then((res) => {
                     alert("신고가 접수되었습니다.");
-                    console.log(res);
-                    console.log(reportContent);
+                    // console.log(res);
+                    // console.log(reportContent);
                     closeReport();
                 })
                 .catch((error) => {
-                    console.log(error);
+                    // console.log(error);
                 });
         }
     };

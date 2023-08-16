@@ -22,7 +22,7 @@ function ChatMyList() {
         const fetchedRooms = response.data.data;
         updateWithRealTimeData(fetchedRooms);
       } catch (error) {
-        console.error("Failed to fetch chat rooms:", error);
+        //console.error("Failed to fetch chat rooms:", error);
       }
     };
 

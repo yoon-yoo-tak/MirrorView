@@ -19,7 +19,7 @@ const StudyRating = ({ peopleList, setModalStates, leaveSession }) => {
   const { user } = useSelector((state) => state.auth);
 
   const handleRatingChange = (name) => (newValue) => {
-    console.log(name, newValue);
+    // console.log(name, newValue);
     const target = ratingData.find((person) => person.nickname === name);
     if (target) {
       setRatingdata((prevData) =>
@@ -35,11 +35,11 @@ const StudyRating = ({ peopleList, setModalStates, leaveSession }) => {
     }
   };
   useEffect(() => {
-    console.log(nicknames);
+    // console.log(nicknames);
   }, []);
 
   const handleSubmit = () => {
-    console.log(ratingData);
+    // console.log(ratingData);
     let checkNull = true;
     ratingData.forEach((rating) => {
       if (!rating.rate) {
@@ -47,7 +47,7 @@ const StudyRating = ({ peopleList, setModalStates, leaveSession }) => {
         return;
       }
     });
-    console.log(checkNull);
+    // console.log(checkNull);
     if (ratingData.length === nicknames.length && checkNull) {
       ratingData.forEach((item) => {
         axios
@@ -56,10 +56,10 @@ const StudyRating = ({ peopleList, setModalStates, leaveSession }) => {
             score: item.rate,
           })
           .then((response) => {
-            console.log(response);
+            // console.log(response);
           })
           .catch((error) => {
-            console.log(error);
+            // console.log(error);
           });
       });
       setModalStates(false);
@@ -69,7 +69,7 @@ const StudyRating = ({ peopleList, setModalStates, leaveSession }) => {
           nickname: user.nickname,
         },
       };
-      console.log(currentRoom);
+      // console.log(currentRoom);
       client.send(
         `/app/interviewrooms/${currentRoom.id}`,
         {},

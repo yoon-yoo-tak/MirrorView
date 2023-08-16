@@ -24,7 +24,7 @@ const StudyEssayDetail = ({ nickname, onAir, before }) => {
     const essay = member ? member.mainEssay : null;
 
     const createAI = async (index, question, answer) => {
-        console.log(category);
+        // console.log(category);
         // 자소서 기반 질문 자동 생성 api 호출
         // 생셩되면 store에 저장하기
         // if (window.confirm("이 항목에 대한 질문을 자동으로 생성할까요?")) {
@@ -96,7 +96,7 @@ const StudyEssayDetail = ({ nickname, onAir, before }) => {
                     }),
                     async (resp) => {
                         try {
-                            console.log(resp);
+                            // console.log(resp);
                             const questionList = resp.data.split("\n");
                             questionList.forEach((element) => {
                                 // console.log(element.substring(3));
@@ -112,7 +112,7 @@ const StudyEssayDetail = ({ nickname, onAir, before }) => {
                                 `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">생성이 완료되었습니다!</div>`
                             );
                         } catch (error) {
-                            console.error("Error:", error);
+                            // console.error("Error:", error);
                             notifier.alert("다시 시도해주세요.");
                         }
                     },
@@ -161,7 +161,7 @@ const StudyEssayDetail = ({ nickname, onAir, before }) => {
                     addQuestion({ nickname: nickname, question: newQuestion })
                 );
                 setNewQuestion("");
-                console.log(feedbackList);
+                // console.log(feedbackList);
             }
         });
     };

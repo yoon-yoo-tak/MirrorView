@@ -66,7 +66,7 @@ const Signup = () => {
     };
 
     useEffect(() => {
-        console.log(formData);
+        //console.log(formData);
     }, [formData]);
 
     const onClickCheckId = (e) => {
@@ -265,11 +265,11 @@ const Signup = () => {
             alert("비밀번호가 일치하지않습니다.");
             return;
         }
-        console.log(formData);
+        //console.log(formData);
         try {
             const response = await axios.post("/api/users", formData);
             // 회원가입이 성공하면 사용자 정보를 스토어에 저장
-            console.log(response.data);
+            //console.log(response.data);
             navigate("/login"); // 회원가입 후 리다이렉션할 페이지 설정
         } catch (error) {
             // 회원가입 실패 시 에러 처리
@@ -308,7 +308,7 @@ const Signup = () => {
     const handleDuplicateCheck = (field) => {
         // TODO: 중복 확인 로직을 구현하세요
         // field 매개변수를 통해 어떤 필드에 대한 중복 확인을 할 지 결정할 수 있습니다.
-        console.log(`Checking duplicate for ${field}...`);
+        //console.log(`Checking duplicate for ${field}...`);
     };
 
     return (

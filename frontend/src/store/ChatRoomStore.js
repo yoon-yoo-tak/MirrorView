@@ -33,11 +33,11 @@ export const subscribeRoomCountAsync = createAsyncThunk(
     }
     await client.subscribe("/sub/chatrooms.count", function (message) {
       const payload = JSON.parse(message.body);
-      console.log(payload);
+      //console.log(payload);
       const count = payload.count;
       const roomId = payload.roomId; // 서버에서 보낸 roomId를 읽습니다.
 
-      console.log("count sub에 대한 message 도착");
+      //console.log("count sub에 대한 message 도착");
 
       dispatch(
         updateRoomCount({
@@ -93,7 +93,7 @@ const chatRoomSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase("/user/sub/chatrooms", (state, action) => {
-      console.log(action.payload);
+      //console.log(action.payload);
       state.chatRooms = action.payload;
     });
   },

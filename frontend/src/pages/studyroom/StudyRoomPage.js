@@ -40,7 +40,7 @@ const StudyRoom = () => {
             return;
         }
         // dispatch(interviewActions.updateStarted(false));s
-        console.log(isStarted);
+        //console.log(isStarted);
         return () => {};
     }, [isStarted]);
     // 참가자 더미데이터 (자신 제외)
@@ -262,7 +262,7 @@ const StudyRoom = () => {
             // });
 
             newSession.on("exception", (exception) => {
-                console.warn(exception);
+                //console.warn(exception);
             });
 
             getToken().then((token) => {
@@ -300,7 +300,7 @@ const StudyRoom = () => {
                                 });
                             })
                             .catch((error) => {
-                                console.log(error);
+                                //console.log(error);
                             });
                     });
             });
@@ -451,11 +451,11 @@ const StudyRoom = () => {
                         });
                 })
                 .catch((error) => {
-                    console.warn(
-                        "There was an error connecting to the session:",
-                        error.code,
-                        error.message
-                    );
+                    //console.warn(
+                    //     "There was an error connecting to the session:",
+                    //     error.code,
+                    //     error.message
+                    // );
                 });
         });
     };
@@ -527,18 +527,18 @@ const StudyRoom = () => {
                         userJoinData: user,
                     })
                 );
-                console.log("일반 유저가 pub ", interviewRoomId, user);
+                //console.log("일반 유저가 pub ", interviewRoomId, user);
             }
 
             // 조인 이후, DB에서 방 데이터 가져와서 curretRoom에 넣기.
             if (!isHost) {
                 dispatch(joinInterviewRoom(interviewRoomId));
-                console.log(
-                    "일반 유저 입장 (입장 로직까지 진행) - DB 데이터 가져오기"
-                );
+                //console.log(
+                //     "일반 유저 입장 (입장 로직까지 진행) - DB 데이터 가져오기"
+                // );
             } else {
                 dispatch(hostJoinInterviewRoom(interviewRoomId));
-                console.log("방장 입장 - 단순 DB 데이터 가져오기");
+                //console.log("방장 입장 - 단순 DB 데이터 가져오기");
             }
 
             setInitialized(true);

@@ -42,12 +42,12 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
         axios
             .get("/api/category")
             .then(({ data }) => {
-                console.log(data);
+                // console.log(data);
                 setFirstCategory([...defaultValue, ...data.data]);
-                console.log(firstCategory);
+                // console.log(firstCategory);
             })
             .catch((error) => {
-                console.error(error);
+                // console.error(error);
             });
     }, []);
 
@@ -63,7 +63,7 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
                         setSecondCategory([...defaultValue, ...data.data]);
                     })
                     .catch((error) => {
-                        console.log(error);
+                        // console.log(error);
                     });
             }
         }
@@ -81,7 +81,7 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
                         setThirdCategory([...defaultValue, ...data.data]);
                     })
                     .catch((error) => {
-                        console.log(error);
+                        // console.log(error);
                     });
             }
         }
@@ -212,10 +212,10 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
 
     // 생성 클릭 시 모든 값들이 입력되었는지 확인
     const checkSubmit = () => {
-        console.log(title);
-        console.log(max);
-        console.log(secondValue);
-        console.log(open);
+        // console.log(title);
+        // console.log(max);
+        // console.log(secondValue);
+        // console.log(open);
 
         if (!open) {
             // 비공개 상태
@@ -316,15 +316,15 @@ const StudyRoomCreateModal = ({ setModalStates }) => {
                     maxMemberCount: max,
                 });
 
-                console.log("방만들기 성공");
+                // console.log("방만들기 성공");
                 setModalStates(false);
 
-                console.log("이동 ");
+                // console.log("이동 ");
                 navigate(`/studyroom/${response.data.data.id}`, {
                     state: { isHost: true },
                 });
             } catch (error) {
-                console.error(error);
+                // console.error(error);
             }
         }
         // -----------

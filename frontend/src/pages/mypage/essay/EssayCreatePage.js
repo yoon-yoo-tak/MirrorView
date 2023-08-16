@@ -19,7 +19,7 @@ const EssayCreatePage = () => {
     }, []);
 
     const goToPage = (page) => {
-        console.log(essayList.essayDetails[page]);
+        //console.log(essayList.essayDetails[page]);
         if (page >= 0 && page < essayList.essayDetails.length) {
             setCurrentPage(page);
         }
@@ -56,12 +56,12 @@ const EssayCreatePage = () => {
         await axios
             .post(`/api/mypage/essays`, essayList)
             .then((response) => {
-                console.log(response);
+                //console.log(response);
                 alert("자기소개서 저장 완료");
                 navigate("/mypage/myessay");
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
             });
     };
 
@@ -80,7 +80,7 @@ const EssayCreatePage = () => {
     };
 
     const deleteEssay = () => {
-        // console.log(currentPage);
+        // //console.log(currentPage);
         const updatedEssayDetails = essayList.essayDetails.filter(
             (_, index) => index !== currentPage
         );

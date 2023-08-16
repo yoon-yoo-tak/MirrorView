@@ -13,7 +13,7 @@ const StudyRoomThumbnail = (info) => {
     const { user } = useSelector((state) => state.auth);
     const notifier = new AWN();
     const handleEnter = async () => {
-        console.log(info);
+        // console.log(info);
         if (!user) {
             // alert("로그인 후 이용 가능합니다.");
 
@@ -95,7 +95,7 @@ const StudyRoomThumbnail = (info) => {
                         // buttons: true,
                         // dangerMode: true,
                     })
-                    console.log(error);
+                    // console.log(error);
                 });
             return;
         }

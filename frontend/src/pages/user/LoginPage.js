@@ -28,7 +28,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(user);
+        //console.log(user);
         if (user) {
             navigate("/");
         }
@@ -36,7 +36,7 @@ const Login = () => {
 
     const handleSubmit = useCallback(
         (e) => {
-            console.log("들어옴");
+            //console.log("들어옴");
             e.preventDefault();
             dispatch(
                 login({
@@ -46,7 +46,7 @@ const Login = () => {
             )
                 .unwrap()
                 .then(async ({ data }) => {
-                    console.log(data);
+                    //console.log(data);
                     dispatch(getUserInfo(data["access-token"]));
                     notifier.success(
                         `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">로그인 성공!</div>`,
@@ -56,7 +56,7 @@ const Login = () => {
                     );
                 })
                 .catch((error) => {
-                    console.log(error);
+                    //console.log(error);
                     notifier.alert(
                         `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">로그인 정보를 확인하세요</div>`,
                         {

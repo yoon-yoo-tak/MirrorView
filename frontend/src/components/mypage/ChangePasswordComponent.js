@@ -63,7 +63,7 @@ const ChangePwComponent = () => {
                 newPass: newPassword,
                 checkNewPass: confirmPassword,
             });
-            console.log(response);
+            // console.log(response);
             if (response.data.success) {
                 navigate("/mypage/profile");
             }

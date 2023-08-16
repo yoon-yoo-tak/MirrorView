@@ -31,7 +31,7 @@ const NoticeWritePage = () => {
                 navigate("/notice");
             })
             .catch((error) => {
-                console.error(error);
+                //console.error(error);
             });
     };
     return (

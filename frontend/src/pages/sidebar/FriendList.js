@@ -31,7 +31,7 @@ function FriendList({ setClickFriends, clickFriends, setClickChat }) {
                 setFriends(sortedFriends);
             })
             .catch((error) => {
-                console.error("There was an error!", error);
+                //console.error("There was an error!", error);
             });
     }, []);
 
@@ -64,11 +64,11 @@ function FriendList({ setClickFriends, clickFriends, setClickChat }) {
                                     (friend) => friend.userId !== userId
                                 )
                             );
-                            console.log("너랑 친구 안함", response);
+                            //console.log("너랑 친구 안함", response);
                         }
                     })
                     .catch((error) => {
-                        console.error("친구삭제 실패:", error);
+                        //console.error("친구삭제 실패:", error);
                     });
             }
         });

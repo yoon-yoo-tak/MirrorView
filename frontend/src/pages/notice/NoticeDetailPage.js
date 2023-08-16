@@ -10,7 +10,7 @@ const NoticeDetail = () => {
     const { id } = useParams();
     useEffect(() => {
         axios.get(`/api/board/${id}`).then(({ data }) => {
-            console.log(data);
+            //console.log(data);
             setPost(data.data);
         });
     }, []);

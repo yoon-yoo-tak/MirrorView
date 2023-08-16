@@ -40,7 +40,7 @@ const ChangeEmailComponent = () => {
                 setCompleteSend(true);
             })
             .catch((error) => {
-                console.log(error);
+                // console.log(error);
             });
     };
     const onCheckKey = async (e) => {
@@ -51,7 +51,7 @@ const ChangeEmailComponent = () => {
                 setKeyValid(true);
             })
             .catch((error) => {
-                console.log(error);
+                // console.log(error);
                 setKeyValid(false);
             });
     };
@@ -64,12 +64,12 @@ const ChangeEmailComponent = () => {
         await axios
             .patch(`/api/mypage/email?email=${email}`, {})
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 dispatch(setUserEmail(email));
                 navigate("/mypage/profile");
             })
             .catch((error) => {
-                console.log(error);
+                // console.log(error);
             });
     };
 

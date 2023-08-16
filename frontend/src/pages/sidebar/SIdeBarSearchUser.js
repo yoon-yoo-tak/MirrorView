@@ -70,10 +70,10 @@ const SidebarSearch = ({ setClickSearch, clickSearch, setClickChat }) => {
         });
 
         setSearchedList(sortedList);
-        console.log(data);
+        //console.log(data);
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
       });
   };
 

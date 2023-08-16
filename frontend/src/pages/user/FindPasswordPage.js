@@ -21,13 +21,13 @@ const FindPassword = () => {
                 },
             })
             .then((response) => {
-                console.log(response.data.msg);
+                //console.log(response.data.msg);
                 setMessage(response.data.msg);
                 alert("Status : " + response.data.msg);
                 setError(null);
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 setError("이메일 전송 실패!");
             });
     };

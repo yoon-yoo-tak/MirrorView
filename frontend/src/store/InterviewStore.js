@@ -29,7 +29,7 @@ export const getInterviewRoom = createAsyncThunk(
 
       return res.data;
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       return rejectWithValue(error.response.data);
     }
   }
@@ -39,18 +39,18 @@ export const getInterviewRoomByCategory = createAsyncThunk(
   "getInterviewRoomByCategory",
   async ({ depth, category }, { rejectWithValue }) => {
     try {
-      console.log(depth);
-      console.log(category);
+      //console.log(depth);
+      //console.log(category);
       const res = await axios.get(
         `/api/interviews/rooms/category?depth=${depth}&category=${category}`,
         {
           withCredentials: true,
         }
       );
-      console.log(res);
+      //console.log(res);
       return res.data;
     } catch (error) {
-      console.error(error);
+      //console.error(error);
       return rejectWithValue(error.response.data);
     }
   }
@@ -76,7 +76,7 @@ const interviewSlice = createSlice({
   extraReducers: {
     [getInterviewRoom.fulfilled]: (state, { payload }) => {
       state.room = payload.data;
-      console.log(state);
+      //console.log(state);
     },
     [getInterviewRoomByCategory.fulfilled]: (state, { payload }) => {
       state.room = payload.data;
