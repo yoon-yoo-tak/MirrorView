@@ -4,13 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import * as S from "./MypageStyledComponents";
 
 const FeedbackModal = ({ item, setModalStates }) => {
-
     const closeModal = () => {
         setModalStates(false);
     };
-
+    const [content, setContent] = useState("");
     const modalRef = useRef(null);
 
+    useEffect(() => {
+        document.getElementById("content").innerHTML = item.content.replaceAll(
+            "\n",
+            "<br/>"
+        );
+    }, []);
     useEffect(() => {
         const handler = (e) => {
             if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -30,7 +35,7 @@ const FeedbackModal = ({ item, setModalStates }) => {
                 const modalHeight = modalRef.current.offsetHeight;
                 const windowHeight = window.innerHeight;
                 const top = windowHeight / 2 - modalHeight / 2;
-                console.log(modalHeight + " " + windowHeight + " " + top);
+                // console.log(modalHeight + " " + windowHeight + " " + top);
                 modalRef.current.style.marginTop = `0px`;
             }
         };
@@ -52,14 +57,27 @@ const FeedbackModal = ({ item, setModalStates }) => {
             <S.modalBackDrop>
                 <S.modalContainer ref={modalRef} onClick={handleInsideClick}>
                     <S.modalButton onClick={closeModal}>닫기</S.modalButton>
-                    <S.modalContent>작성자 : {item.nickname}</S.modalContent>
-                    tiem : {item.createdTime.substring(0,10)}
-                    <br/>
-                    answer : {item.answer}
-                    <br/>
-                    question : {item.question}
-                    <br/>
-                    content : {item.content}
+                    <S.modalScrollContent>
+                        <S.modalContent
+                        // style={{
+                        //     top: "-25px",
+                        //     left: "-25px",
+                        //     fontSize: "20px",
+                        //     color: "black",
+                        //     fontFamily: "Imcre",
+                        //     whiteSpace: "pre-line",
+                        //     lineHeight: "2",
+                        // }}
+                        >
+                            <div>작성자 : {item.senderNickname}</div>
+                            <div>
+                                날짜 : {item.createdTime.substring(0, 10)}
+                            </div>
+                            {/* </S.modalContent> */}
+                            <hr />
+                            <div id="content"></div>
+                        </S.modalContent>
+                    </S.modalScrollContent>
                 </S.modalContainer>
             </S.modalBackDrop>
         </div>

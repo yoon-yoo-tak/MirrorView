@@ -35,6 +35,9 @@
 // slice, 기존 reducer를 따로 만들지 않고 이렇게 생성
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+// -----------------------------------------------------------
+// import defaultImage from "../assets/defaultimage.png";
+// -----------------------------------------------------------
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
@@ -42,13 +45,14 @@ axios.defaults.withCredentials = true;
 const initialState = {
     id: "",
     password: "",
+    name: "",
     loginLoading: false,
     loginDone: false,
     loginError: null,
     nickname: "",
     email: "",
     accessToken: "",
-    refreshToken:"",
+    refreshToken: "",
     idValid: false,
     passwordValid: false,
     passwordCheckValid: false,
@@ -56,53 +60,79 @@ const initialState = {
     emailValid: false,
     notAllow: true,
     user: null,
+    provider: "",
+    // ---------------
+    photo: "",
+    // ---------------
 };
 // initialState를 통해 state의 처음 상태를 정의한다.
 
 export const login = createAsyncThunk(
     "login",
-    async(data,{rejectWithValue}) => {
+    async (data, { rejectWithValue }) => {
         try {
-            console.log(axios.defaults.baseURL);
-            const res = await axios.post("/api/users/login",data,{
+            const res = await axios.post("/api/users/login", data, {
                 withCredentials: true,
             });
 
-            console.log(res);
-            
+            //console.log(res);
+
             return res.data;
         } catch (error) {
-            console.error(error);
+            //console.error(error);
             return rejectWithValue(error.response.data);
         }
     }
-)
+);
 
 export const getUserInfo = createAsyncThunk(
     "getUserInfo",
-    async(accessToken,{rejectWithValue})=> {
-        console.log(accessToken);
+    async (accessToken, { rejectWithValue }) => {
+        //console.log(accessToken);
         try {
-
-            axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-            const res = await axios.get("/api/mypage",{
+            axios.defaults.headers.common[
+                "Authorization"
+            ] = `Bearer ${accessToken}`;
+            const res = await axios.get("/api/mypage", {
                 withCredentials: true,
             });
 
-            console.log(res);
+            //console.log(res);
 
             return res.data;
         } catch (error) {
-            console.error(error);
+            //console.error(error);
             return rejectWithValue(error.response.data);
         }
     }
-)
+);
+export const kakaoLogin = createAsyncThunk(
+    "kakaoLogin",
+    async (accessToken, { rejectWithValue }) => {
+        axios.defaults.headers.common[
+            "Authorization"
+        ] = `Bearer ${accessToken}`;
+        try {
+            const res = await axios.post("/api/users/login/kakao", {
+                withCredentials: true,
+            });
+            //console.log(res);
+
+            return res.data;
+        } catch (error) {
+            //console.error(error);
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
 
 const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
+        setFullName: (state, action) => {
+            state.fullName = action.payload;
+        },
         setId: (state, action) => {
             state.id = action.payload;
         },
@@ -143,6 +173,11 @@ const authSlice = createSlice({
         setNickname: (state, action) => {
             state.user.nickname = action.payload;
         },
+        // --------------------------------------------
+        setPhoto: (state, action) => {
+            state.user.photo = action.payload;
+        },
+        // --------------------------------------------
         setNotAllow: (state, action) => {
             state.notAllow = action.payload;
         },
@@ -153,12 +188,12 @@ const authSlice = createSlice({
         loginFailure: (state, action) => {
             state.user = null;
         },
-        logout:(state, action) =>{
+        logout: (state, action) => {
             state.user = null;
             state.accessToken = null;
             state.refreshToken = null;
             state.loginDone = false;
-        }
+        },
     },
     extraReducers: {
         [login.pending]: (state, action) => {
@@ -166,10 +201,10 @@ const authSlice = createSlice({
             state.loginDone = false;
             state.loginError = null;
         },
-        [login.fulfilled]: (state, {payload}) => {
+        [login.fulfilled]: (state, { payload }) => {
             state.loginLoading = false;
             state.loginDone = true;
-            state.loginError = null;            
+            state.loginError = null;
             state.accessToken = payload.data["access-token"];
             state.refreshToken = payload.data["refresh-token"];
         },
@@ -178,11 +213,28 @@ const authSlice = createSlice({
             state.loginDone = false;
             state.loginError = action.error;
         },
-        [getUserInfo.fulfilled]: (state,{payload}) => {
+        [getUserInfo.fulfilled]: (state, { payload }) => {
             state.user = payload.data;
-        }
-
-    }
+        },
+        [kakaoLogin.pending]: (state, action) => {
+            state.loginLoading = true;
+            state.loginDone = false;
+            state.loginError = null;
+        },
+        [kakaoLogin.fulfilled]: (state, { payload }) => {
+            state.loginLoading = false;
+            state.loginDone = true;
+            state.loginError = null;
+            state.provider = "kakao";
+            state.accessToken = payload.data["access-token"];
+            state.refreshToken = payload.data["refresh-token"];
+        },
+        [kakaoLogin.rejected]: (state, action) => {
+            state.loginLoading = false;
+            state.loginDone = false;
+            state.loginError = action.error;
+        },
+    },
 });
 // reducers에서 action을 정의한다!
 
@@ -198,6 +250,9 @@ export const {
     loginSuccess,
     loginFailure,
     setNickname,
+    setPhoto,
+    logout,
+    setFullName,
 } = authSlice.actions;
 
 export const authActions = authSlice.actions;

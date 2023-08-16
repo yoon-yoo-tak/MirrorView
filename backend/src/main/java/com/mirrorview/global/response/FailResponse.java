@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FailResponse {
-	private boolean success;
-	private String msg;
-	private int status;
+    private boolean success;
+    private String msg;
+    private int status;
 }

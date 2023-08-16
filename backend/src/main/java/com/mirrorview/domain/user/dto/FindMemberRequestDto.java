@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FindMemberRequestDto {
 
-	private String email;
-	private String userId;
-	private String password;
+    private String email;
+    private String userId;
+    private String password;
 
-	public boolean isBlankEmail() {
-		return this.email == null || this.email.isBlank();
-	}
+    public boolean isBlankEmail() {
+        return this.email == null || this.email.isBlank();
+    }
 
-	public boolean isBlankEmailAndUserId() {
-		return this.isBlankEmail() || this.userId == null || this.userId.isBlank();
-	}
+    public boolean isBlankEmailAndUserId() {
+        return this.isBlankEmail() || this.userId == null || this.userId.isBlank();
+    }
 }

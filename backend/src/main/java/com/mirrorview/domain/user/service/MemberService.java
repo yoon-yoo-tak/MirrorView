@@ -1,13 +1,14 @@
 package com.mirrorview.domain.user.service;
 
-import java.util.List;
-
-import java.util.Optional;
-
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.dto.FindMemberRequestDto;
 import com.mirrorview.domain.user.dto.JoinDto;
 import com.mirrorview.domain.user.dto.RatingDto;
+import com.mirrorview.domain.user.dto.SearchedMemberDto;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public interface MemberService {
 	boolean duplicatedUserId(String userid);
@@ -20,9 +21,13 @@ public interface MemberService {
 
 	String findByEmail(String email);
 
+	Optional<Member> findByNickname(String userNickname);
+
 	Member findPassword(FindMemberRequestDto requestDto);
 
 	float saveScore(String userId, RatingDto ratingDto);
 
-	List<String> findMemberList(String userId);
+	Set<SearchedMemberDto> findMemberList(String input);
+
+	void deleteMember(String userId);
 }

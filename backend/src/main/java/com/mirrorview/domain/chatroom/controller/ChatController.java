@@ -1,77 +1,62 @@
 package com.mirrorview.domain.chatroom.controller;
 
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
-import org.apache.catalina.UserDatabase;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mirrorview.domain.chatroom.domain.ChatMessage;
 import com.mirrorview.domain.chatroom.domain.ChatRoom;
-import com.mirrorview.domain.chatroom.service.ChatService;
+import com.mirrorview.domain.chatroom.service.ChatUserService;
+import com.mirrorview.global.auth.security.CustomMemberDetails;
+import com.mirrorview.global.response.BaseResponse;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-/**
-	웹 소켓 api
- */
-
 @RestController
+@RequestMapping("/api/chat")
 @RequiredArgsConstructor
 @Slf4j
 public class ChatController {
 
-	private final SimpMessagingTemplate simpMessagingTemplate;
-	private final ChatService chatService;
+	private final ChatUserService chatUserService;
 
-	// 전체 방 가져오기
-	@MessageMapping("/chatrooms.get")
-	public void getChatRooms(Principal principal) {
-		log.info("전체 방 가져오기");
-		List<ChatRoom> chatRooms = chatService.allRoom();
-		System.out.println(chatRooms);
-		simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/sub/chatrooms", chatRooms);
-	}
-	
-	// 채팅 방 채팅기록
-	@MessageMapping("/chatrooms/{roomId}")
-	public void getChat(@DestinationVariable String roomId, Principal principal){
-		log.info("각 채팅방 채팅 기록");
-		List<ChatMessage> chatMessages = chatService.getChat(roomId);
-		simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/sub/chatrooms/"+roomId, chatMessages);
+	@GetMapping("/find")
+	public ResponseEntity<?> findUserInRedis(@AuthenticationPrincipal CustomMemberDetails customMemberDetails){
+		chatUserService.findUserInRedis(customMemberDetails.getUsername(), customMemberDetails.getNickname());
+		return  BaseResponse.ok(HttpStatus.OK, "유저를 redis에 등록함");
 	}
 
-	// 채팅 보내기
-	@MessageMapping("/chatrooms.send/{roomId}")
-	public void sendChat(@DestinationVariable String roomId, ChatMessage chatMessage, Principal principal){
-		log.info("채팅 보내기" );
-		chatMessage.setTimestamp(LocalDateTime.now());
-		String userId = principal.getName();
-		chatService.addChatMessageToChatRoom(roomId, chatMessage);
-		simpMessagingTemplate.convertAndSend("/sub/chatrooms/"+roomId, chatMessage);
+	@GetMapping("/favorites")
+	public ResponseEntity<?> getFavoritesByUserId( @AuthenticationPrincipal
+		CustomMemberDetails customMemberDetails) {
+		String userId = customMemberDetails.getUsername();
+		Set<ChatRoom> favoriteRooms = chatUserService.findFavoriteRoomsByUserId(userId);
+		return BaseResponse.okWithData(HttpStatus.OK, "유저 즐겨찾기 방 리스트 가져오기", favoriteRooms);
 	}
 
-	// 방만들기
-	@MessageMapping("/chatrooms.create")
-	public void createChatRoom(ChatRoom chatRoom) {
-		log.info("방만들기");
-		ChatRoom newChatRoom = chatService.createChatRoom(chatRoom.getId());
-		simpMessagingTemplate.convertAndSend("/sub/chatrooms.create", newChatRoom);
+	@PostMapping("/favorites/{roomId}")
+	public ResponseEntity<?> addChatRoomToFavorites(@PathVariable String roomId,
+	@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+		String userId = customMemberDetails.getUsername();
+		chatUserService.addChatRoomToFavorites(userId, roomId);
+		Set<ChatRoom> favoriteRooms = chatUserService.findFavoriteRoomsByUserId(userId);
+		return BaseResponse.okWithData(HttpStatus.OK, "유저 즐겨찾기 등록 완료", favoriteRooms);
 	}
 
-
+	@DeleteMapping("/favorites/{roomId}")
+	public ResponseEntity<?> removeChatRoomFromFavorites(@PathVariable String roomId,
+		@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+		String userId = customMemberDetails.getUsername();
+		chatUserService.removeChatRoomFromFavorites(userId, roomId);
+		Set<ChatRoom> favoriteRooms = chatUserService.findFavoriteRoomsByUserId(userId);
+		return BaseResponse.okWithData(HttpStatus.OK, "유저 즐겨찾기 삭제 완료", favoriteRooms);
+	}
 }

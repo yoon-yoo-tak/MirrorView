@@ -1,17 +1,15 @@
 package com.mirrorview.domain.feedback.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class FeedbackSaveDto {
 	private String content;
-	private Long roomId;
-	private Long essayDetailId;
-	private Long userId;
+	private String roomId;
+	private String roomTitle;
+	private String receiver;
 }

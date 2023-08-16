@@ -1,113 +1,169 @@
 package com.mirrorview.domain.user.service;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.mirrorview.domain.friend.repository.FriendRepository;
 import com.mirrorview.domain.user.domain.Member;
 import com.mirrorview.domain.user.domain.Rating;
 import com.mirrorview.domain.user.dto.FindMemberRequestDto;
 import com.mirrorview.domain.user.dto.JoinDto;
 import com.mirrorview.domain.user.dto.RatingDto;
+import com.mirrorview.domain.user.dto.SearchedMemberDto;
 import com.mirrorview.domain.user.repository.MemberRepository;
 import com.mirrorview.domain.user.repository.RatingRepository;
+import com.mirrorview.global.alarm.domain.RealTimeUser;
+import com.mirrorview.global.alarm.repository.RealTimeUserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberServiceImpl implements MemberService {
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RatingRepository ratingRepository;
+    private final FriendRepository friendRepository;
+    private final RealTimeUserRepository realTimeUserRepository;
 
-	private final MemberRepository memberRepository;
+    @Override
+    public boolean duplicatedUserId(String userId) {
+        return memberRepository.existsByUserId(userId);
+    }
 
-	private final PasswordEncoder passwordEncoder;
+    @Override
+    public void save(JoinDto joinDto) {
+        if (duplicatedUserId(joinDto.getUserId())) {
+            throw new IllegalArgumentException("아이디 확인이 필요합니다.");
+        }
 
-	private final RatingRepository ratingRepository;
+        Member joinMember;
+        if (joinDto.getPassword() != null) { //일반 로그인
+            String encoded = passwordEncoder.encode(joinDto.getPassword());
+            joinDto.setPassword(encoded);
+            joinMember = joinDto.toEntity();
+        } else { //OAuth 로그인
+            joinMember = joinDto.toEntityWithPhoto();
+        }
 
-	@Override
-	public boolean duplicatedUserId(String userId) {
-		return memberRepository.existsByUserId(userId);
-	}
+        memberRepository.save(joinMember);
+    }
 
-	@Override
-	public void save(JoinDto joinDto) {
-		if (duplicatedUserId(joinDto.getUserId())) {
-			throw new IllegalArgumentException("아이디 확인이 필요합니다.");
-		}
+    @Override
+    public Optional<Member> findByUserId(String userId) {
+        return memberRepository.findByUserId(userId);
+    }
 
-		if (joinDto.getPassword() != null) {
-			String encoded = passwordEncoder.encode(joinDto.getPassword());
-			joinDto.setPassword(encoded);
-		}
-		Member joinMember = joinDto.toEntity();
+    @Override
+    public String findByEmail(String email) {
+        Optional<Member> findMemberByEmail = memberRepository.findByEmail(email);
+        return findMemberByEmail.map(member -> maskString(member.getUserId()))
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
+    }
 
-		memberRepository.save(joinMember);
-	}
+    @Override
+    public Optional<Member> findByNickname(String userNickname) {
+        return memberRepository.findByNickname(userNickname);
+    }
 
-	@Override
-	public Optional<Member> findByUserId(String userId) {
-		return Optional.ofNullable(memberRepository.findByUserId(userId));
-	}
+    @Override
+    public Member findPassword(FindMemberRequestDto requestDto) {
+        Optional<Member> findMember = memberRepository.findByEmailAndUserId(requestDto.getEmail(),
+                requestDto.getUserId());
+        if (findMember.isEmpty()) {
+            throw new IllegalArgumentException("일치하는 계정이 존재하지 않습니다.");
+        }
+        return findMember.get();
+    }
 
-	@Override
-	public String findByEmail(String email) {
-		Optional<Member> findMemberByEmail = memberRepository.findByEmail(email);
-		return findMemberByEmail.map(member -> member.getUserId() + "***")
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
-	}
+    @Override
+    @Transactional
+    public float saveScore(String userId, RatingDto ratingDto) {
 
-	@Override
-	public Member findPassword(FindMemberRequestDto requestDto) {
-		Optional<Member> findMember = memberRepository.findByEmailAndUserId(requestDto.getEmail(),
-			requestDto.getUserId());
-		if (findMember.isEmpty()) {
-			throw new IllegalArgumentException("일치하는 계정이 존재하지 않습니다.");
-		}
-		return findMember.get();
-	}
+        Optional<Member> member = memberRepository.findByUserId(userId);
+        Optional<Member> otherMember = memberRepository.findByNickname(ratingDto.getNickname());
+        if (member.isEmpty() || otherMember.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않는 유저입니다.");
+        }
+        Rating newRating = Rating.builder()
+                .rater(member.get())
+                .rated(otherMember.get())
+                .score(ratingDto.getScore())
+                .build();
+        ratingRepository.save(newRating);
 
-	@Override
-	@Transactional
-	public float saveScore(String userId, RatingDto ratingDto) {
+        long count = findCount(otherMember.get());
+        System.out.println(count);
+        otherMember.get().updateAverageScore(count, newRating.getScore());
 
-		Member member = memberRepository.findByUserId(userId);
-		Member otherMember = memberRepository.findByUserId(ratingDto.getUserId());
-		if (member == null || otherMember == null) {
-			throw new IllegalArgumentException("존재하지 않는 유저입니다.");
-		}
-		Rating newRating = Rating.builder()
-			.rater(member)
-			.rated(otherMember)
-			.score(ratingDto.getScore())
-			.build();
-		ratingRepository.save(newRating);
+        return otherMember.get().getAverageRating();
+    }
 
-		long count = findCount(otherMember);
-		System.out.println(count);
-		otherMember.updateAverageScore(count, newRating.getScore());
+    @Override
+    public Set<SearchedMemberDto> findMemberList(String input) {
+        Set<SearchedMemberDto> result = new HashSet<>();
+        realTimeUserRepository.findAll()
+            .stream()
+            .filter(member -> member.getNickname().contains(input))
+            .map(RealTimeUser::toSearchedMemberDtos)
+            .forEach((member) -> result.add(member));
+        log.info("first logic");
+        for (SearchedMemberDto dtos : result) {
+            log.info("dto = {}", dtos);
+        }
 
-		return otherMember.getAverageRating();
-	}
+        memberRepository.findByNicknameContaining(input)
+                .stream()
+                .filter(member -> !member.getDelete())
+                .map(member -> SearchedMemberDto.builder()
+                        .userId(member.getUserId())
+                        .nickname(member.getNickname())
+                        .build())
+                .forEach((member) -> result.add(member));
+        log.info("second logic");
+        for (SearchedMemberDto dtos : result) {
+            log.info("dtos = {}", dtos);
+        }
+        return result;
+    }
 
-	@Override
-	public List<String> findMemberList(String userId) {
-		return memberRepository.findByUserIdContaining(userId)
-			.stream()
-			.map(Member::getUserId)
-			.collect(Collectors.toList());
-	}
+    @Override
+    @Transactional
+    public void deleteMember(String userId) {
 
-	private long findCount(Member otherMember) {
-		return ratingRepository.findCount(otherMember);
-	}
+        Optional<Member> member = memberRepository.findByUserId(userId);
+        if (member.isEmpty() || member.get().getDelete()) {
+            throw new IllegalArgumentException("잘못된 정보");
+        }
+        Member getMember = member.get();
+        getMember.delete();
+        friendRepository.deleteByFromOrTo(getMember, getMember);
+    }
 
-	@Override
-	public boolean duplicatedNickname(String nickname) {
-		return memberRepository.existsByNickname(nickname);
-	}
+    private long findCount(Member otherMember) {
+        return ratingRepository.findCount(otherMember);
+    }
+
+    @Override
+    public boolean duplicatedNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname);
+    }
+
+    private String maskString(String str) {
+        int numCharsToMask = str.length() / 3;
+        if (str == null || str.length() <= numCharsToMask) {
+            return str;
+        }
+
+        String mask = "*".repeat(numCharsToMask); // 나머지 길이만큼 "*"로 채움
+        return str.substring(0, str.length() - numCharsToMask) + mask;
+    }
 }

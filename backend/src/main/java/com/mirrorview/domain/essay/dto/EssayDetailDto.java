@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EssayDetailDto {
-	private Long id;
-	private String question;
-	private String answer;
+    private Long id;
+    private String question;
+    private String answer;
 }

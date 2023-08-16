@@ -1,23 +1,26 @@
 package com.mirrorview.domain.user.repository;
 
+import com.mirrorview.domain.user.domain.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.mirrorview.domain.user.domain.Member;
-
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-	boolean existsByUserId(String userId);
+    boolean existsByUserId(String userId);
 
-	Member findByUserId(String userId);
+    Optional<Member> findByUserId(String userId);
 
-	boolean existsByNickname(String nickname);
+    Optional<Member> findByNickname(String nickname);
 
-	Optional<Member> findByEmail(String email);
+    boolean existsByNickname(String nickname);
 
-	Optional<Member> findByEmailAndUserId(String email, String userId);
+    Optional<Member> findByEmail(String email);
 
-	List<Member> findByUserIdContaining(String userId);
+    Optional<Member> findByEmailAndUserId(String email, String userId);
+
+    List<Member> findByUserIdContaining(String userId);
+
+    List<Member> findByNicknameContaining(String nickname);
 }

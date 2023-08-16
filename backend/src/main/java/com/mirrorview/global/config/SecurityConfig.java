@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -21,9 +22,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.mirrorview.domain.user.service.MemberService;
-import com.mirrorview.global.auth.jwt.CustomMemberDetailService;
+import com.mirrorview.global.auth.security.CustomMemberDetailService;
 import com.mirrorview.global.auth.jwt.JwtAuthenticationFilter;
-import com.mirrorview.global.auth.jwt.RestAuthenticationEntryPoint;
+import com.mirrorview.global.auth.security.RestAccessDeniedHandler;
+import com.mirrorview.global.auth.security.RestAuthenticationEntryPoint;
 
 import lombok.RequiredArgsConstructor;
 
@@ -53,15 +55,18 @@ public class SecurityConfig {
 
 		http
 			.authorizeRequests()
+			.antMatchers("/").permitAll() //테스트 페이지
 			.antMatchers("/api/users/login").permitAll() //로그인
-			.antMatchers("/").permitAll() //로그인
-			.antMatchers("/kauth.kakao.com/oauth/authorize/**").permitAll()
 			.antMatchers("/api/users/**").permitAll() //회원 가입
-			.antMatchers("/ws/**").permitAll()
+			.antMatchers("/api/interviews/rooms/**").permitAll() // 면접방 조회
+			.antMatchers("/api/category/**").permitAll() // 카테고리 조회
+			.antMatchers(HttpMethod.GET, "/api/board/**").permitAll() //공지사항 조회
+			.antMatchers("/api/ws/**").permitAll()
 			.anyRequest().authenticated();
 
 		http
 			.exceptionHandling()
+			.accessDeniedHandler(new RestAccessDeniedHandler())
 			.authenticationEntryPoint(new RestAuthenticationEntryPoint()); // 그 외 모든 요청에 대해 인증 필요
 
 		return http.build();
@@ -102,10 +107,8 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowCredentials(true); // 쿠키를 받을건지
-		//configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
 		configuration.addAllowedOriginPattern("*");
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE"));
-
 		configuration.addAllowedHeader("*");
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

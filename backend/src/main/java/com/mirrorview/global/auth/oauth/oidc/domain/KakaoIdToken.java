@@ -1,12 +1,7 @@
 package com.mirrorview.global.auth.oauth.oidc.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * 사용자 인증 정보
@@ -28,9 +23,9 @@ import lombok.ToString;
 @ToString
 public class KakaoIdToken extends IdToken {
 
-	@JsonProperty("auth_time")
-	private String authTime;
-	private String nickname;
-	private String picture;
-	private String email;
+    @JsonProperty("auth_time")
+    private String authTime;
+    private String nickname;
+    private String picture;
+    private String email;
 }

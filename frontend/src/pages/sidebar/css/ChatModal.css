@@ -1,42 +1,87 @@
 .modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 300px;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    font-family: "HakgyoansimWoojuR";
 }
 
 .modal h2 {
-  margin: 0;
-  margin-bottom: 10px;
+    margin: 0;
+    margin-bottom: 10px;
 }
 
 .modal input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
-.modal button {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 5px;
+.createBtn {
+    padding: 3px;
+    border-radius: 4px;
+    cursor: pointer;
+
+    /* position: absolute;
+    right: 20px;
+    top: 20px;
+    border: 0; */
+
+    margin-top: 5px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    position: relative;
+    width: 65px;
+    height: 22px;
+    color: white;
+    background: #fe8a8a;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 19px;
+
+    font-weight: bold;
+}
+
+.createBtn:hover {
+    background: #ffd0d0;
+}
+
+.closeBtn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    border: 0;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+
+    font-size: 17px;
+
+    cursor: pointer;
+}
+
+.closeBtn:hover {
+    font-weight: bold;
 }
 
 .modal button:disabled {
-  background-color: #ccc;
+    background-color: #ccc;
 }

@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RatingDto {
 
-	private String userId;
-	private float score;
+    private String nickname;
+    private float score;
 }

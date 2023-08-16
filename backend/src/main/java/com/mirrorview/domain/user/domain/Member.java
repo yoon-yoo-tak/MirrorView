@@ -1,21 +1,11 @@
 package com.mirrorview.domain.user.domain;
 
+import lombok.*;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "member")
@@ -25,52 +15,62 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Member {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "userid")
-	private String userId;
+    @Column(name = "userid")
+    private String userId;
 
-	private String username;
+    private String username;
 
-	private String password;
+    private String password;
 
-	private String nickname;
+    private String nickname;
 
-	private String email;
+    private String email;
 
-	private String photo;
+    private String photo;
 
-	private String roles;
+    private String roles;
 
-	private float averageRating;
+    @Column(name = "is_oauth_user", nullable = false, columnDefinition = "TINYINT(1)")
+    private Boolean isOauthUser;
 
-	public void updatePhoto(String updatePhoto) {
-		this.photo = updatePhoto;
-	}
+    private float averageRating;
 
-	public void updateNickName(String nickname) {
-		this.nickname = nickname;
-	}
+    @Column(name = "delete_member", nullable = false, columnDefinition = "TINYINT(1)")
+    private Boolean delete;
 
-	public void updatePassword(String password) {
-		this.password = password;
-	}
+    public void updatePhoto(String updatePhoto) {
+        this.photo = updatePhoto;
+    }
 
-	public void updateEmail(String email) {
-		this.email = email;
-	}
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
-	public void updateAverageScore(long count, float score) {
-		float allScore = averageRating * (count - 1) + score;
-		averageRating = allScore / count;
-	}
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 
-	public List<String> getRoleList() {
-		if (this.roles.length() > 0) {
-			return Arrays.asList(this.roles.split(","));
-		}
-		return new ArrayList<>();
-	}
+    public void updateEmail(String email) {
+        this.email = email;
+    }
+
+    public void updateAverageScore(long count, float score) {
+        float allScore = averageRating * (count - 1) + score;
+        averageRating = allScore / count;
+    }
+
+    public List<String> getRoleList() {
+        if (this.roles.length() > 0) {
+            return Arrays.asList(this.roles.split(","));
+        }
+        return new ArrayList<>();
+    }
+
+    public void delete() {
+        delete = true;
+    }
 }
