@@ -110,7 +110,7 @@
 ![5](img/gif/introduce.gif)
 
 ### 채팅 기능
-- 오픈채팅 & 개인채팅 & 알림 등
+- 오픈채팅 & 개인채팅 & 알림 & 친구 등
 
 ![6](img/gif/openchat.gif)
 
