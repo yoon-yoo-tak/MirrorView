@@ -5,6 +5,8 @@ import { WebSocketContext } from "WebSocketContext";
 
 import sendIcon from "../../assets/send.png";
 import TextField from "@mui/material/TextField";
+import Swal from "sweetalert2";
+import AWN from "awesome-notifications";
 
 import "pages/sidebar/css/ChatRoom.css";
 import { switchView } from "store/ChatViewStore";
@@ -67,12 +69,23 @@ function ChatRoom() {
         client.send(`/app/chatrooms/${roomId}`);
     };
 
+    
+
     // 채팅 보내기
     const sendMessage = () => {
         if (!message.trim()) {
             alert("메시지를 입력하세요."); // 알림을 표시하거나 원하는 대응 로직을 넣을 수 있습니다.
             return;
         }
+
+        if (message.length > 250) {
+            Swal.fire({
+              title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">메시지는 250자 이하 입력 가능합니다.<div>',
+              icon: "error", width: 330
+            });
+            setMessage("");
+            return;
+          }
 
         client.send(
             `/app/chatrooms.send/${roomId}`,

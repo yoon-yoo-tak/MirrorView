@@ -9,7 +9,7 @@ import {
   MessageInput,
   SendButton,
 } from "cha/StudyRoomChatStyleComponent";
-
+import Swal from "sweetalert2";
 const USER_COLORS = [
   "#0F4C81", // Classic Blue
   "#FF6B6B", // Coral
@@ -62,6 +62,15 @@ const StudyChatting = () => {
 
   const handleSendClick = () => {
     if (message.trim() === "") return; // 빈 메시지 무시
+
+    if (message.length > 250) {
+      Swal.fire({
+        title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">메시지는 250자 이하 입력 가능합니다.<div>',
+        icon: "error", width: 330
+      });
+      setMessage("");
+      return;
+    }
 
     const messageToSend = {
       type: "CHAT",

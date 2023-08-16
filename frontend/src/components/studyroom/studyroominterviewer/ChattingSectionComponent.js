@@ -10,7 +10,7 @@ import {
     Hidden,
 } from "cha/StudyRoomChatStyleComponent";
 import { WebSocketContext } from "WebSocketContext";
-
+import Swal from "sweetalert2";
 // !! 면접 시작 이후 채팅 comp
 
 const USER_COLORS = [
@@ -65,6 +65,15 @@ const ChattingSection = () => {
 
     const handleSendClick = () => {
         if (message.trim() === "") return;
+
+        if (message.length > 250) {
+            Swal.fire({
+              title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">메시지는 250자 이하 입력 가능합니다.<div>',
+              icon: "error", width: 330
+            });
+            setMessage("");
+            return;
+          }
 
         const messageToSend = {
             type: "CHAT",

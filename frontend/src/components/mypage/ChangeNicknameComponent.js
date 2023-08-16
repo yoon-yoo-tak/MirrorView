@@ -24,6 +24,12 @@ const ChangeNicknameComponent = () => {
     const notifier = new AWN();
 
     const onClickVaildNickname = async (e) => {
+        if (newNickname.length > 15) {
+            Swal.fire({ icon: "error",
+            title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">14자 이하의 닉네임만 가능합니다.<div>'});
+            return;
+        }
+
         await axios
             .get(`/api/users/${newNickname}/check-nickname`)
             .then((response) => {
