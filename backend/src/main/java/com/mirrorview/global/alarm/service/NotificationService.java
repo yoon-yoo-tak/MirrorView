@@ -23,11 +23,13 @@ public class NotificationService {
 	private final SimpMessagingTemplate template;
 
 	// 알림 메시지 생성
-	public Notification createAndSaveNotification(String nickname, String message) {
+	public Notification createAndSaveNotification(String receiver, String message, String sender) {
 		Notification notification = new Notification();
 		notification.setId(UUID.randomUUID().toString());
 		notification.setMessage(message);
-		notification.setNickname(nickname);
+		notification.setNickname(receiver);
+		notification.setReceiver(receiver);
+		notification.setSender(sender);
 		notification.setTimestamp(LocalDateTime.now());
 		notification.setRead(false);
 
@@ -53,31 +55,8 @@ public class NotificationService {
 	}
 	
 	// 채팅을 보낼 떄, 일대일 채팅 알림 용도
-	public void sendNotificationIfRequired(String sender, String receiverNickname, ChatMessage chatMessage) {
-		boolean receiverOnline = realTimeUserRepository.existsById(receiverNickname);
-		if (receiverOnline) {
-			Optional<Notification> existingNotification = notificationRepository.findBySenderAndNickname(sender, receiverNickname);
-			if (!existingNotification.isPresent() || (existingNotification.isPresent() && !existingNotification.get().isRead())) {
-				Notification notification = Notification.builder()
-					.sender(sender)
-					.nickname(receiverNickname)
-					//.message(chatMessage.getContent())
-					.timestamp(LocalDateTime.now())
-					.read(false)
-					.build();
-				notificationRepository.save(notification);
-				template.convertAndSendToUser(receiverNickname, "/queue/chat", chatMessage);
-			}
-		} else {
-			Notification notification = Notification.builder()
-				.sender(sender)
-				.nickname(receiverNickname)
-				//.message(chatMessage.getContent())
-				.timestamp(LocalDateTime.now())
-				.read(false)
-				.build();
-			notificationRepository.save(notification);
-		}
+	public boolean isReceiverAndSender(String receiver, String sender){
+		Optional<Notification> bySenderAndReceiver = notificationRepository.findBySenderAndReceiver(sender, receiver);
+		return bySenderAndReceiver.isPresent();
 	}
-
 }
