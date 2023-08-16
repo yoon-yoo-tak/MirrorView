@@ -1,5 +1,6 @@
-import styled from "styled-components";
+import { styled, keyframes } from "styled-components";
 import etc from "../assets/dots.png";
+import background from "../assets/cloudbg3.svg";
 
 export const modal = styled.div`
     position: fixed;
@@ -148,4 +149,86 @@ export const etcBtn = styled.div`
 
 export const etcMenus = styled.div`
     padding: 10px;
+`;
+
+export const notFoundBack = styled.div`
+    background-image: url(${background});
+    background-size: cover;
+    width: auto;
+    height: calc(100vh - 60px);
+    justify-content: center;
+    display: flex;
+    font-family: "HakgyoansimWoojuR";
+    padding-top: 60px;
+    opacity: 0.7;
+`;
+
+export const nfContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
+
+const bounce = keyframes`
+    100% {
+        text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc,
+            0 5px 0 #ccc, 0 6px 0 #ccc, 0 7px 0 #ccc, 0 8px 0 #ccc, 0 9px 0 #ccc,
+            0 50px 25px rgba(0, 0, 0, 0.2);
+    }
+`;
+
+export const main404 = styled.div``;
+
+export const notText = styled.div`
+    font-family: "Cafe24Ssurround";
+    font-size: 35px;
+    text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc,
+        0 5px 0 #ccc, 0 6px 0 transparent, 0 7px 0 transparent,
+        0 8px 0 transparent, 0 9px 0 transparent, 0 10px 10px rgba(0, 0, 0, 0.4);
+
+    color: white;
+`;
+
+export const pageText = styled.div`
+    font-family: "Cafe24SsurroundAir";
+    font-size: 15px;
+    color: white;
+    text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc,
+        0 5px 0 #ccc, 0 6px 0 transparent, 0 7px 0 transparent,
+        0 8px 0 transparent, 0 9px 0 transparent, 0 10px 10px rgba(0, 0, 0, 0.4);
+`;
+
+export const text1 = styled.span`
+    font-family: "Cafe24Ssurround";
+
+    animation: ${bounce} 0.8s ease infinite alternate;
+    animation-delay: 0.2s;
+    font-size: 120px;
+    color: #fff;
+    text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc,
+        0 5px 0 #ccc, 0 6px 0 transparent, 0 7px 0 transparent,
+        0 8px 0 transparent, 0 9px 0 transparent, 0 10px 10px rgba(0, 0, 0, 0.4);
+`;
+export const text2 = styled.span`
+    font-family: "Cafe24Ssurround";
+
+    animation: ${bounce} 0.8s ease infinite alternate;
+    animation-delay: 0.4s;
+    font-size: 120px;
+    color: #fff;
+    text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc,
+        0 5px 0 #ccc, 0 6px 0 transparent, 0 7px 0 transparent,
+        0 8px 0 transparent, 0 9px 0 transparent, 0 10px 10px rgba(0, 0, 0, 0.4);
+`;
+export const text3 = styled.span`
+    font-family: "Cafe24Ssurround";
+
+    animation: ${bounce} 0.8s ease infinite alternate;
+    animation-delay: 0.6s;
+    font-size: 120px;
+    color: #fff;
+    text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc,
+        0 5px 0 #ccc, 0 6px 0 transparent, 0 7px 0 transparent,
+        0 8px 0 transparent, 0 9px 0 transparent, 0 10px 10px rgba(0, 0, 0, 0.4);
 `;
