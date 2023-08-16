@@ -51,7 +51,7 @@ public class GlobalWebSocketController {
 		switch (globalMessageDto.getType()) {
 			case "GLOBAL_MESSAGE":
 				String message = (String) globalMessageDto.getData().get("message");
-				Notification globalNotification = notificationService.createAndSaveNotification("ALL", message);
+				Notification globalNotification = notificationService.createAndSaveNotification("ALL", message, "");
 				globalMessageDto.getData().put("notification", globalNotification);
 				simpMessagingTemplate.convertAndSend("/sub/global", globalMessageDto);
 				break;
@@ -73,7 +73,7 @@ public class GlobalWebSocketController {
 
 				String message = fromUser+"님이 친구 요청을 보냈습니다.";
 
-				Notification notification = notificationService.createAndSaveNotification(toUser, message);
+				Notification notification = notificationService.createAndSaveNotification(toUser, message, "");
 				globalMessageDto.getData().put("notification", notification);
 
 				if(globalWebSocketService.isUserOnline(toUser))
@@ -87,7 +87,7 @@ public class GlobalWebSocketController {
 				globalMessageDto.getData().put("fromUser", nickname);
 				String friendToUser = (String) globalMessageDto.getData().get("toUser");
 
-				Notification acceptedNotification = notificationService.createAndSaveNotification(friendToUser, messageFriend);
+				Notification acceptedNotification = notificationService.createAndSaveNotification(friendToUser, messageFriend, "");
 				globalMessageDto.getData().put("notification", acceptedNotification);
 
 				if(globalWebSocketService.isUserOnline(friendToUser))
@@ -119,9 +119,14 @@ public class GlobalWebSocketController {
 				if(roomDataNow.equals("now"))
 					return;
 
+				if(notificationService.isReceiverAndSender(privateToUser, nickname)){
+					return;
+				}
+
 				// 한명의 유저가 채팅방에 입장하면, 상대방에게 알림을 줌
-				String messagePrivate = privateFromUser+"님이 개인 채팅을 신청했습니다.";
-				Notification privateChatNotification = notificationService.createAndSaveNotification(privateToUser, messagePrivate);
+				String messagePrivate = nickname+"님이 개인 채팅을 신청했습니다.";
+				Notification privateChatNotification = notificationService.createAndSaveNotification(privateToUser, messagePrivate
+				, nickname);
 				globalMessageDto.getData().put("notification", privateChatNotification);
 				if(globalWebSocketService.isUserOnline(privateToUser)) {
 					simpMessagingTemplate.convertAndSendToUser(privateToUser, "/sub/global.one", globalMessageDto);
