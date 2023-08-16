@@ -131,10 +131,10 @@ const Header = () => {
                     if (response.status === 200) {
                         dispatch(setNotifications(response.data.data)); // 알림 목록 업데이트
                     } else {
-                        console.error("알림을 가져오지 못했습니다.");
+                        // console.error("알림을 가져오지 못했습니다.");
                     }
                 } catch (error) {
-                    console.error("API 요청 중 오류가 발생했습니다.", error);
+                    // console.error("API 요청 중 오류가 발생했습니다.", error);
                 }
             };
 
@@ -152,7 +152,7 @@ const Header = () => {
         }
 
         if (globalMessages.length > length) {
-            console.log("찍엉");
+            // console.log("찍엉");
             notifier.info(
                 `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">새로운 알림이 도착했어요</div>`,
                 {

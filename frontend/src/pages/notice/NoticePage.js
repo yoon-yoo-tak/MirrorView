@@ -21,12 +21,12 @@ const NoticePage = () => {
         axios
             .get(`/api/board?size=${perPage}&page=${currentPage}`)
             .then(({ data }) => {
-                console.log(data.data);
+                //console.log(data.data);
                 setNotice(data.data.content);
                 setTotalPages(data.data.totalPages);
             })
             .catch((error) => {
-                console.error(error);
+                //console.error(error);
             });
     }, [currentPage]);
 

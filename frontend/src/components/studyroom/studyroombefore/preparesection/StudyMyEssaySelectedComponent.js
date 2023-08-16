@@ -68,7 +68,7 @@ const StudyMyEssaySelected = ({
                         mainEssay: selectedEssay,
                     })
                 );
-                console.log(selectedEssay);
+                // console.log(selectedEssay);
                 // pub로직
 
                 // alert(`${selectedEssay.title}이(가) 메인 자소서로 설정되었습니다.`);

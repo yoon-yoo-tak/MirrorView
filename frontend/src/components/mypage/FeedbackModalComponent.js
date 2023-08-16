@@ -35,7 +35,7 @@ const FeedbackModal = ({ item, setModalStates }) => {
                 const modalHeight = modalRef.current.offsetHeight;
                 const windowHeight = window.innerHeight;
                 const top = windowHeight / 2 - modalHeight / 2;
-                console.log(modalHeight + " " + windowHeight + " " + top);
+                // console.log(modalHeight + " " + windowHeight + " " + top);
                 modalRef.current.style.marginTop = `0px`;
             }
         };

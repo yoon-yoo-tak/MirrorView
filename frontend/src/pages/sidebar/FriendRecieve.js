@@ -20,12 +20,12 @@ function FriendRecieve() {
             })
             .then((response) => {
                 if (response.status === 200) {
-                    console.log(response.data.data);
+                    //console.log(response.data.data);
                     setFriendRequests(response.data.data);
                 }
             })
             .catch((error) => {
-                console.error("Error fetching friend requests:", error);
+                //console.error("Error fetching friend requests:", error);
             });
     }, []);
 
@@ -46,7 +46,7 @@ function FriendRecieve() {
                             (request) => request.userId !== userId
                         )
                     );
-                    console.log("친구가 수락됨", response);
+                    //console.log("친구가 수락됨", response);
                     const message = {
                         type: "FRIEND_ACCEPTED",
                         data: {
@@ -59,7 +59,7 @@ function FriendRecieve() {
                 }
             })
             .catch((error) => {
-                console.error("Error accepting friend request:", error);
+                //console.error("Error accepting friend request:", error);
             });
     };
 
@@ -92,11 +92,11 @@ function FriendRecieve() {
                                     (request) => request.userId !== userId
                                 )
                             );
-                            console.log("Friend request rejected:", response);
+                            //console.log("Friend request rejected:", response);
                         }
                     })
                     .catch((error) => {
-                        console.error("Error rejecting friend request:", error);
+                        //console.error("Error rejecting friend request:", error);
                     });
             }
         });

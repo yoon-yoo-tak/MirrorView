@@ -75,11 +75,11 @@ export const login = createAsyncThunk(
                 withCredentials: true,
             });
 
-            console.log(res);
+            //console.log(res);
 
             return res.data;
         } catch (error) {
-            console.error(error);
+            //console.error(error);
             return rejectWithValue(error.response.data);
         }
     }
@@ -88,7 +88,7 @@ export const login = createAsyncThunk(
 export const getUserInfo = createAsyncThunk(
     "getUserInfo",
     async (accessToken, { rejectWithValue }) => {
-        console.log(accessToken);
+        //console.log(accessToken);
         try {
             axios.defaults.headers.common[
                 "Authorization"
@@ -97,11 +97,11 @@ export const getUserInfo = createAsyncThunk(
                 withCredentials: true,
             });
 
-            console.log(res);
+            //console.log(res);
 
             return res.data;
         } catch (error) {
-            console.error(error);
+            //console.error(error);
             return rejectWithValue(error.response.data);
         }
     }
@@ -116,11 +116,11 @@ export const kakaoLogin = createAsyncThunk(
             const res = await axios.post("/api/users/login/kakao", {
                 withCredentials: true,
             });
-            console.log(res);
+            //console.log(res);
 
             return res.data;
         } catch (error) {
-            console.error(error);
+            //console.error(error);
             return rejectWithValue(error.response.data);
         }
     }

@@ -57,11 +57,13 @@ const ProfileModal = ({
     axios
       .get(`api/users/find/${nickname}`)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         setNowProfile(data.data);
         setFriendStatus(data.data.friendStatus);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+      // console.log(error)
+  });
   }, []);
 
   const deleteFriend = () => {
@@ -85,7 +87,7 @@ const ProfileModal = ({
               headers: { Authorization: `Bearer ${accessToken}` },
             })
             .then((response) => {
-              console.log(response.data.msg);
+              // console.log(response.data.msg);
               // alert("친구요청이 취소되었습니다");
               notifier.success("친구요청이 취소되었습니다", {
                 durations: { success: 3000 },
@@ -94,8 +96,8 @@ const ProfileModal = ({
                             setFriendStatus("none");
                         })
                         .catch((error) => {
-                            console.error(error);
-                            console.log("취소 실패");
+                            // console.error(error);
+                            // console.log("취소 실패");
                         });
                 } else if (result.isDenied) {
                 }
@@ -119,7 +121,7 @@ const ProfileModal = ({
                             headers: { Authorization: `Bearer ${accessToken}` },
                         })
                         .then((response) => {
-                            console.log(response.data.msg);
+                            // console.log(response.data.msg);
                             // alert("친구가 삭제되었습니다");
                             notifier.success("친구가 삭제되었습니다", {
                                 durations: { success: 3000 },
@@ -128,8 +130,8 @@ const ProfileModal = ({
                             setFriendStatus("none");
                         })
                         .catch((error) => {
-                            console.error(error);
-                            console.log("취소 실패");
+                            // console.error(error);
+                            // console.log("취소 실패");
                         });
                 } else if (result.isDenied) {
                 }
@@ -163,14 +165,14 @@ const ProfileModal = ({
             // buttons: true,
             // dangerMode: true,
         }).then((result) => {
-            console.log(nowProfile);
+            // console.log(nowProfile);
             if (result.isConfirmed) {
                 axios
                     .post(`api/friends/request/${nowProfile.userId}`, {
                         headers: { Authorization: `Bearer ${accessToken}` },
                     })
                     .then((response) => {
-                        console.log(response.data.msg);
+                        // console.log(response.data.msg);
                         // alert(`${nowProfile.nickname}님에게 친구를 신청했습니다!`);
                         notifier.success(
                             `${nowProfile.nickname}님에게 친구를 신청했습니다!`,
@@ -187,7 +189,7 @@ const ProfileModal = ({
                                 toUser: nowProfile.nickname,
                             },
                         };
-                        console.log(globalMessageDto);
+                        // console.log(globalMessageDto);
                         client.send(
                             `/app/global.one`,
                             {},
@@ -195,8 +197,8 @@ const ProfileModal = ({
                         );
                     })
                     .catch((error) => {
-                        console.error(error);
-                        console.log("요청 실패");
+                        // console.error(error);
+                        // console.log("요청 실패");
                     });
             } else if (result.isDenied) {
             }
@@ -221,7 +223,7 @@ const ProfileModal = ({
                 headers: { Authorization: `Bearer ${accessToken}` },
             })
             .then((response) => {
-                console.log(response.data.msg);
+                // console.log(response.data.msg);
                 // alert(`${nowProfile.nickname}님과 친구가 되었습니다!`);
                 notifier.success(
                     `${nowProfile.nickname}님과 친구가 되었습니다!`,
@@ -232,8 +234,8 @@ const ProfileModal = ({
                 setFriendStatus("connect");
             })
             .catch((error) => {
-                console.error(error);
-                console.log("수락 실패");
+                // console.error(error);
+                // console.log("수락 실패");
             });
     };
 
@@ -253,7 +255,7 @@ const ProfileModal = ({
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
         setMenuOpen(true);
-        console.log(event.currentTarget);
+        // console.log(event.currentTarget);
     };
     const handleClose = () => {
         setMenuOpen(false);
@@ -262,7 +264,7 @@ const ProfileModal = ({
 
   const openChat = () => {
     if (window.confirm(`${nickname}님과 1대1 채팅을 시작할까요?`)) {
-      console.log("넹");
+      // console.log("넹");
       const message = {
         type: "GET_PRIVATE_ROOM",
         data: {

@@ -18,17 +18,17 @@ const AdminManagePage = () => {
         axios
             .get(`api/admin?size=${perPage}&page=${currentPage}`)
             .then(({ data }) => {
-                console.log(data);
+                //console.log(data);
                 setReportUserList(data.data.content);
                 setTotalPages(data.data.totalPages);
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
             });
     }, [currentPage]);
 
     const handlePageChange = (pageNumber) => {
-        console.log(pageNumber.selected);
+        //console.log(pageNumber.selected);
         setCurrentPage(pageNumber.selected);
     };
 
@@ -45,11 +45,11 @@ const AdminManagePage = () => {
         axios
             .get(`/api/admin/${reportUser.nickname}`)
             .then(({ data }) => {
-                console.log(data);
+                //console.log(data);
                 setReportData(data.data);
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
             });
     };
 
@@ -61,10 +61,10 @@ const AdminManagePage = () => {
         axios
             .delete(`/api/admin/${selectedNickName}`)
             .then(({ data }) => {
-                console.log(data);
+                //console.log(data);
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
             });
         setSelectedNickname(null);
     };

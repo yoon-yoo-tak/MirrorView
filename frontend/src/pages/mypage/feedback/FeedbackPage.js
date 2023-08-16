@@ -23,12 +23,12 @@ const Feedback = () => {
                 `/api/mypage/feedbacks?size=${perPage}&page=${currentPage - 1}`
             )
             .then(({ data }) => {
-                console.log(data.data.content);
+                //console.log(data.data.content);
                 setFeedbackList(data.data.content);
                 setTotalPages(data.data.totalPages);
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
             });
     }, [currentPage]);
 
@@ -57,7 +57,7 @@ const Feedback = () => {
     // 모달 열기 함수를 정의합니다.
     const openModal = (index) => {
         const newModalStates = modalStates.map((state, idx) => {
-            console.log(state);
+            //console.log(state);
             return idx === index ? true : state;
         });
         setModalStates(newModalStates);

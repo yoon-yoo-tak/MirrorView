@@ -36,7 +36,7 @@ const ChangeNicknameComponent = () => {
                 setNicknameValid(true);
             })
             .catch((error) => {
-                console.error(error);
+                // console.error(error);
                 // alert("사용 불가능한 아이디입니다.");
                 Swal.fire({
                     icon: "error",
@@ -61,7 +61,7 @@ const ChangeNicknameComponent = () => {
                 navigate("/mypage/profile");
             })
             .catch((error) => {
-                console.error(error);
+                // console.error(error);
             });
     };
     return (

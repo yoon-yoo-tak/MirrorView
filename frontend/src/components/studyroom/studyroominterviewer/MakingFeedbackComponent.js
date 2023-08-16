@@ -137,7 +137,7 @@ const MakingFeedback = ({
     useEffect(() => {
         const idx = feedbackList.findIndex((obj) => obj.nickname === checkWho);
         setTargetUserIdx(idx);
-        console.log(idx);
+        // console.log(idx);
         if (idx !== null) {
             setQLength(
                 feedbackList[idx]?.feedbacks?.map((item) => item.question)
@@ -170,7 +170,7 @@ const MakingFeedback = ({
         //     })
         // );
         if (window.confirm(`${checkWho}님에게 피드백을 등록할까요?`)) {
-            console.log(feedbackList[targetUserIdx]);
+            // console.log(feedbackList[targetUserIdx]);
             let content = "";
             feedbackList[targetUserIdx].feedbacks.forEach((element,index) => {
                 content+=`${index+1}. ${element.question}\n ${element.feedback}\n\n`
@@ -181,10 +181,10 @@ const MakingFeedback = ({
                 roomTitle:currentRoom.title,
                 receiver:feedbackList[targetUserIdx].nickname
             }).then((response)=>{
-                console.log(response);
+                // console.log(response);
                 alert("피드백 저장 완료");
             }).catch((error)=>{
-                console.log(error);
+                // console.log(error);
             })
             // const combinedFeedbacks = feedbackList[
             //     targetUserIdx
@@ -204,8 +204,8 @@ const MakingFeedback = ({
     };
 
     const test = () => {
-        console.log("test");
-        console.log(feedbackList);
+        // console.log("test");
+        // console.log(feedbackList);
     };
     // ----------------------------------------------------------------------
 

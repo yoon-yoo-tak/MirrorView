@@ -77,7 +77,7 @@ const InterviewerSection = (props) => {
                     {},
                     JSON.stringify(exitData)
                 );
-                console.log("나가기 동작");
+                // console.log("나가기 동작");
                 notifier.success(
                     `<div style="font-size:18px; font-family: HakgyoansimWoojuR;font-weight:bold;">준비방으로 돌아갑니다.</div>`,
                     {

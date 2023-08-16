@@ -81,7 +81,7 @@ const PrepareSection = (props) => {
                 '<div style="font-size:17px; font-family: HakgyoansimWoojuR;font-weight:bold;">네<div>',
         }).then((result) => {
             if (result.isConfirmed) {
-                console.log(nicknames);
+                // console.log(nicknames);
                 if (!nicknames) {
                     const sendUserData = {
                         type: "EXIT",

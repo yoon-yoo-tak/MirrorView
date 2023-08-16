@@ -44,7 +44,7 @@ const FeedbackComponent = ({ feedbackList }) => {
 
     const handleModal = (index) => {
         const newModalStates = modalStates.map((state, idx) => {
-            console.log(state);
+            // console.log(state);
             return idx === index ? true : state;
         });
         setModalStates(newModalStates);

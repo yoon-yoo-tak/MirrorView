@@ -35,7 +35,7 @@ const MyEssay = () => {
                 setTotalPages(data.data.totalPages);
             })
             .catch((error) => {
-                console.error(error);
+                //console.error(error);
             });
     }, [currentPage]);
 

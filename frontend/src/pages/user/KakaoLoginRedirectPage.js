@@ -13,7 +13,7 @@ const KakaoLoginRedirect = () => {
     const grantType = "authorization_code";
     const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
     const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
-    console.log(REST_API_KEY);
+    //console.log(REST_API_KEY);
     const bodyData = {
       grant_type: grantType,
       client_id: REST_API_KEY,
@@ -33,7 +33,7 @@ const KakaoLoginRedirect = () => {
       .then((res) => res.json())
       .then((data) => {
         const idToken = data["id_token"];
-        console.log(idToken);
+        //console.log(idToken);
 
         dispatch(kakaoLogin(data["id_token"]))
           .unwrap()
@@ -42,7 +42,7 @@ const KakaoLoginRedirect = () => {
             navigate("/");
           })
           .catch((error) => {
-            console.log(error);
+            //console.log(error);
             navigate("/login");
             alert("카카오 로그인 오류."); //todo 이쁜 거로 바꾸기 sweetalert (?)
           });

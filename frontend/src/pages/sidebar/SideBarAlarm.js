@@ -38,7 +38,7 @@ const SideBarAlarm = ({ setClickAlarm, clickAlarm }) => {
       // 알림 리스트에서 해당 알림 제거
       dispatch(removeNotification(notificationId));
     } else {
-      console.error("알림 제거 실패");
+      //console.error("알림 제거 실패");
     }
   };
 

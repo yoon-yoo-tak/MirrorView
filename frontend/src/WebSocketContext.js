@@ -21,7 +21,7 @@ export const WebSocketProvider = ({ children }) => {
 
   const initializeWebSocket = useCallback(() => {
     if (!accessToken) {
-      console.log("로그인 이후 웹소켓이 동작함");
+      // console.log("로그인 이후 웹소켓이 동작함");
       return;
     }
 
@@ -47,7 +47,7 @@ export const WebSocketProvider = ({ children }) => {
         dispatch(globalOneUserSubscribe(stompClient));
       },
       (error) => {
-        console.error("웹 소켓 에러 ", error);
+        // console.error("웹 소켓 에러 ", error);
         if (reconnectAttempts < maxReconnectAttempts) {
           const delay = initialDelay * (reconnectAttempts + 1);
           setTimeout(() => {
@@ -55,7 +55,7 @@ export const WebSocketProvider = ({ children }) => {
             setReconnectAttempts((prev) => prev + 1);
           }, delay);
         } else {
-          console.error("재연결 시도 초과");
+          // console.error("재연결 시도 초과");
         }
       }
     );

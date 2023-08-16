@@ -130,10 +130,10 @@ const Profile = () => {
             if (serverResponse.data && serverResponse.data.fileName) {
                 const newImageUrl = serverResponse.data.fileName; // 혹은 적절한 경로를 추가하여 완전한 URL을 만듭니다.
                 // dispatch(setPhoto(newImageUrl));
-                console.log("등록해ㅠ");
+                //console.log("등록해ㅠ");
             }
         } catch (error) {
-            console.error("Error uploading the image:", error);
+            //console.error("Error uploading the image:", error);
         }
     };
 
@@ -162,10 +162,10 @@ const Profile = () => {
                 if (serverResponse.data && serverResponse.data.fileName) {
                     const newImageUrl = serverResponse.data.fileName; // 혹은 적절한 경로를 추가하여 완전한 URL을 만듭니다.
                     // dispatch(setPhoto(newImageUrl));
-                    console.log("등록해ㅠ");
+                    //console.log("등록해ㅠ");
                 }
             } catch (error) {
-                console.error("Error uploading the image:", error);
+                //console.error("Error uploading the image:", error);
             }
             handleClose();
         }
@@ -184,7 +184,7 @@ const Profile = () => {
                             navigate("/");
                         })
                         .catch((error) => {
-                            console.log(error);
+                            //console.log(error);
                             alert("회원탈퇴 실패 ㄷㄷ");
                         });
                 }

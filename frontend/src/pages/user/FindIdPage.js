@@ -19,13 +19,13 @@ const FindId = () => {
                 },
             })
             .then((response) => {
-                console.log(response.data);
+                //console.log(response.data);
                 setFoundId(response.data.data);
                 alert("Your ID : " + response.data.data);
                 setError(null);
             })
             .catch((error) => {
-                console.log(error);
+                //console.log(error);
                 setError("이메일 찾기에 실패했습니다.");
                 setFoundId("");
             });

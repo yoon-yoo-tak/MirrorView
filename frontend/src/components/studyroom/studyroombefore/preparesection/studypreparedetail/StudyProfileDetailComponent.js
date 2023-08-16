@@ -30,7 +30,7 @@ const StudyProfileDetail = (props) => {
     const [openProfileModal, setOpenProfileModal] = useState(false);
     // 모달 기능
     const goUserProfile = () => {
-        console.log(profile);
+        // console.log(profile);
         setOpenProfileModal(true);
     };
 

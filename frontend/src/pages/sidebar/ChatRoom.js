@@ -107,7 +107,7 @@ function ChatRoom() {
                         ...prevMessages,
                         newMessage,
                     ]);
-                    console.log(chatMessages);
+                    //console.log(chatMessages);
                 }
             }
         );

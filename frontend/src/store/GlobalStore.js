@@ -43,7 +43,7 @@ export const globalOneUserSubscribe = createAsyncThunk(
   async (client, { dispatch, getState }) => {
     await client.subscribe("/user/sub/global.one", (message) => {
       const parsedMessage = JSON.parse(message.body);
-      console.log(parsedMessage);
+      //console.log(parsedMessage);
       switch (parsedMessage.type) {
         case "FRIEND_REQUEST":
           dispatch(addNotification(parsedMessage.data.notification));
@@ -57,7 +57,7 @@ export const globalOneUserSubscribe = createAsyncThunk(
           break;
         case "GET_PRIVATE_ROOM":
           // 특정 사용자와의 채팅방 정보
-          console.log(parsedMessage);
+          //console.log(parsedMessage);
           dispatch(addNotification(parsedMessage.data.notification));
           dispatch(addOnePrivateRoom(parsedMessage.data.roomData));
           break;
@@ -108,11 +108,11 @@ export const globalSlice = createSlice({
       state.currentPrivateRoom = action.payload;
     },
     setPrivateChat: (state, action) => {
-      console.log(action.payload);
+      //console.log(action.payload);
       state.currentPrivateChat = action.payload;
     },
     addPrivateChatMessage: (state, action) => {
-      console.log(action.payload);
+      //console.log(action.payload);
       state.currentPrivateChat.push(action.payload);
     },
     deletePrivateRooms: (state, action) => {

@@ -16,12 +16,12 @@ function FriendWait() {
                 headers: { Authorization: `Bearer ${accessToken}` },
             })
             .then((response) => {
-                console.log(response.data.data);
+                //console.log(response.data.data);
                 setFriendRequests(response.data.data);
-                console.log(response.data.data);
+                //console.log(response.data.data);
             })
             .catch((error) => {
-                console.error("There was an error!", error);
+                //console.error("There was an error!", error);
             });
     }, []);
 
@@ -46,7 +46,7 @@ function FriendWait() {
                         { headers: { Authorization: `Bearer ${accessToken}` } }
                     )
                     .then((response) => {
-                        console.log("너랑 친구 안함");
+                        //console.log("너랑 친구 안함");
                         notifier.success("친구요청이 취소되었습니다", {
                             durations: { success: 3000 },
                         });
@@ -55,10 +55,10 @@ function FriendWait() {
                                 (request) => request.userId !== userId
                             )
                         );
-                        console.log("Friend request accepted:", response);
+                        //console.log("Friend request accepted:", response);
                     })
                     .catch((error) => {
-                        console.error("There was an error!", error);
+                        //console.error("There was an error!", error);
                     });
             }
         });

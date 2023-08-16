@@ -31,10 +31,10 @@ export const joinInterviewRoom = createAsyncThunk(
             thunkAPI.dispatch(
                 joinedInterviewRoomCurrentRoomUpdate(res.data.data)
             );
-            console.log(res.data.data);
+            //console.log(res.data.data);
             return res.data;
         } catch (error) {
-            console.error(error);
+            //console.error(error);
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
@@ -51,7 +51,7 @@ export const hostJoinInterviewRoom = createAsyncThunk(
             );
             return res.data;
         } catch (error) {
-            console.error(error);
+            //console.error(error);
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
@@ -93,7 +93,7 @@ export const interviewSubscribe = createAsyncThunk(
             "/sub/interviewrooms/" + interviewRoomId,
             (message) => {
                 const parsedMessage = JSON.parse(message.body);
-                console.log(parsedMessage);
+                //console.log(parsedMessage);
                 switch (parsedMessage.type) {
                     case "SYSTEM":
                     case "CHAT":
@@ -142,7 +142,7 @@ export const interviewSlice = createSlice({
     reducers: {
         // currentRoom update
         joinedInterviewRoomCurrentRoomUpdate: (state, action) => {
-            console.log(action.payload);
+            //console.log(action.payload);
 
             state.currentRoom = { ...action.payload, messages: [] };
         },
@@ -172,7 +172,7 @@ export const interviewSlice = createSlice({
         // 유저들에게 내정보 pub, call back
         joinRoom: (state, action) => {
             if (!state.currentRoom.members) return; // 방 생성 이전에 오는 내 정보 무시
-            console.log(action.payload);
+            //console.log(action.payload);
             state.currentRoom.members = [
                 ...state.currentRoom.members,
                 action.payload,
@@ -222,7 +222,7 @@ export const interviewSlice = createSlice({
         // 대표 자소서 call back
         selectedEssay: (state, action) => {
             const { nickname, mainEssay } = action.payload;
-            console.log(mainEssay);
+            //console.log(mainEssay);
             const member = state.currentRoom.members.find(
                 (member) => member.nickname === nickname
             );
@@ -259,7 +259,7 @@ export const interviewSlice = createSlice({
         },
         addQuestion: (state, action) => {
             let bool = false;
-            console.log(state.feedbackList);
+            //console.log(state.feedbackList);
             state.feedbackList.forEach((feedback) => {
                 if (feedback.nickname === action.payload.nickname) {
                     bool = true;
@@ -285,7 +285,7 @@ export const interviewSlice = createSlice({
             const { index, targetUserIdx } = action.payload;
             const deleteFeedback = state.feedbackList[targetUserIdx].feedbacks;
             state.feedbackList[targetUserIdx].feedbacks.splice(index, 1);
-            console.log(state.feedbackList);
+            //console.log(state.feedbackList);
         },
         addFeedback: (state, action) => {
             const { index, targetUserIdx, value } = action.payload;

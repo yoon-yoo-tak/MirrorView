@@ -31,16 +31,16 @@ function ChatList() {
     dispatch(switchView("ChatRoom")); // view를 ChatRoom으로 변경
   };
   const handleAddToFavorites = (roomId) => {
-    console.log(user.userId, " ", roomId);
+    //console.log(user.userId, " ", roomId);
     if (window.confirm("즐겨찾기에 추가할까요?")) {
       axios
         .post(`/api/chat/favorites/${roomId}`) // user id와 room id를 사용하여 요청
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           setIsFavorite((prev) => ({ ...prev, [roomId]: true }));
         })
         .catch((error) => {
-          console.error("즐겨찾기 추가 중 오류 발생:", error);
+          //console.error("즐겨찾기 추가 중 오류 발생:", error);
           alert("이미 등록한 방입니다.");
         });
     }
@@ -51,11 +51,11 @@ function ChatList() {
       axios
         .delete(`/api/chat/favorites/${roomId}`)
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           setIsFavorite((prev) => ({ ...prev, [roomId]: false }));
         })
         .catch((error) => {
-          console.error(error);
+          //console.error(error);
         });
     }
   };
@@ -73,7 +73,7 @@ function ChatList() {
           });
           setIsFavorite(favoriteStatus);
         } catch (error) {
-          console.error(error);
+          //console.error(error);
         }
       }
     };
