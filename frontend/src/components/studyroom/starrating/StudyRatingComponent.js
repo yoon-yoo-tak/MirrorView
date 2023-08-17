@@ -92,7 +92,7 @@ const StudyRating = ({ peopleList, setModalStates, leaveSession }) => {
           </S.ratingTitle>
           <S.ratingSection>
             {nicknames.map((person, index) => (
-              <S.ratingContent>
+              <S.ratingContent key={index}>
                 <div>{person}님</div>
                 <Rating
                   name="star-rating"
