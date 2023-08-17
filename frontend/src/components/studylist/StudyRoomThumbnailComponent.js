@@ -63,7 +63,6 @@ const StudyRoomThumbnail = (info) => {
                         if (result.isConfirmed) {
                             axios.get(`/api/interviews/find/${info.roomId}`)
                                 .then((ress) => {
-                                    console.log(ress);
                                     let bool = true;
                                     let alertMessage = "";
                                     if (ress.data.data.members.length == ress.data.data.maxMemberCount) {
@@ -91,7 +90,6 @@ const StudyRoomThumbnail = (info) => {
                                         });
                                     }
                                 }).catch((err) => {
-                                    console.log(err);
                                     Swal.fire({
                                         title: `<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">방이 존재하지 않습니다.<div>`,
                                         icon: "error", width: 330
@@ -129,7 +127,6 @@ const StudyRoomThumbnail = (info) => {
             if (result.isConfirmed) {
                 axios.get(`/api/interviews/find/${info.roomId}`)
                     .then((ress) => {
-                        console.log(ress);
                         let bool = true;
                         let alertMessage = "";
                         if (ress.data.data.members.length == ress.data.data.maxMemberCount) {
@@ -160,7 +157,6 @@ const StudyRoomThumbnail = (info) => {
                             });
                         }
                     }).catch((err) => {
-                        console.log(err);
                         Swal.fire({
                             title: `<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">방이 존재하지 않습니다.<div>`,
                             icon: "error", width: 330

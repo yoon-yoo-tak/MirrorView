@@ -35,7 +35,6 @@ const StudyProfileAndEssay = (props) => {
         setSelectedNickname(selectedPerson.nickname);
 
         const target = peopleList[index];
-        console.log(target);
         setCheckProfile(target);
         setCheckEssay(target.essay);
         setCheckWho(target.nickname);
