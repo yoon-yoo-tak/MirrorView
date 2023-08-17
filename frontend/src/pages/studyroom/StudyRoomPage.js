@@ -130,10 +130,10 @@ const StudyRoom = () => {
         if (redirect) {
             return;
         }
-        const storedList = localStorage.getItem("questionList");
-        if (storedList) {
-            setQuestionList(JSON.parse(storedList));
-        }
+        // const storedList = localStorage.getItem("questionList");
+        // if (storedList) {
+        //     setQuestionList(JSON.parse(storedList));
+        // }
     }, []);
     const { pathname } = useLocation();
 
@@ -464,7 +464,7 @@ const StudyRoom = () => {
         if (redirect) {
             return;
         }
-        localStorage.setItem("questionList", JSON.stringify(questionList));
+        //localStorage.setItem("questionList", JSON.stringify(questionList));
     }, [questionList]);
 
     const getToken = async () => {
