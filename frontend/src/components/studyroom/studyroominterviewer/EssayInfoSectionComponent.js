@@ -16,7 +16,6 @@ const EssayInfoSection = ({ peopleList, questionList }) => {
     );
     const [nickname, setNickname] = useState(null);
     const handleCheckWho = (e) => {
-        console.log(nickname);
         // setNickname(nickname);
         setNickname(e.target.value);
         // console.log(target.nickname);

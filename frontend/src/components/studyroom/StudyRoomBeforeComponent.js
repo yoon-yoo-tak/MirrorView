@@ -53,7 +53,6 @@ const StudyRoomBefore = (props) => {
     };
 
     useEffect(() => {
-        console.log(user);
     }, []);
 
     const handleTest = () => {
