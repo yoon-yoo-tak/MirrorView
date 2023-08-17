@@ -19,9 +19,22 @@ export const WebSocketProvider = ({ children }) => {
   const accessToken = useSelector((state) => state.auth.accessToken);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      setReconnectAttempts(0); // 새로고침 시 reconnectAttempts를 0으로 초기화
+      e.preventDefault();
+      e.returnValue = ""; // 브라우저에 따라 returnValue 설정이 필요할 수 있습니다.
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   const initializeWebSocket = useCallback(() => {
     if (!accessToken) {
-
       return;
     }
 
@@ -29,15 +42,14 @@ export const WebSocketProvider = ({ children }) => {
     const urlWithToken = `${httpUrl}?token=${accessToken}`;
     const socket = new SockJS(urlWithToken);
     const stompClient = Stomp.over(socket);
-    
+
     stompClient.debug = () => {
-      // 여기서 로깅 레벨을 조절할 수 있습니다. 
+      // 여기서 로깅 레벨을 조절할 수 있습니다.
       // 예: 'ERROR'로 시작하는 메시지만 출력하기
       // if (str.startsWith('ERROR')) {
       //   console.log(str);
       // }
     };
-    
 
     stompClient.connect(
       {},

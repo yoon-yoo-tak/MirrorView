@@ -73,14 +73,14 @@ const interviewSlice = createSlice({
       state.isStarted = action.payload;
     },
   },
-  extraReducers: {
-    [getInterviewRoom.fulfilled]: (state, { payload }) => {
-      state.room = payload.data;
-      //console.log(state);
-    },
-    [getInterviewRoomByCategory.fulfilled]: (state, { payload }) => {
-      state.room = payload.data;
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getInterviewRoom.fulfilled, (state, { payload }) => {
+        state.room = payload.data;
+      })
+      .addCase(getInterviewRoomByCategory.fulfilled, (state, { payload }) => {
+        state.room = payload.data;
+      });
   },
 });
 

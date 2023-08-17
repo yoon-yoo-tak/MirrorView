@@ -59,6 +59,9 @@ const SidebarSearch = ({ setClickSearch, clickSearch, setClickChat }) => {
     }
   };
   const clickSearchUser = async () => {
+    if (!searchingId.trim()) {
+      return; // 만약 searchingId가 빈 값이거나 공백만 있는 경우 함수를 종료
+    }
     // searchingId를 검색하러 보내!!
     await axios
       .get(`api/users/findAll/${searchingId}`)
@@ -118,10 +121,10 @@ const SidebarSearch = ({ setClickSearch, clickSearch, setClickChat }) => {
                         />
                       )}{" "}
                       <div className="nameTextSearch">
-                                                {" "}
-                                                {selectMember.nickname}
-                                            </div>
-                                        </div>
+                        {" "}
+                        {selectMember.nickname}
+                      </div>
+                    </div>
                     {selectMember.nickname !== user.nickname && (
                       <div
                         className="go-profile"
@@ -149,4 +152,3 @@ const SidebarSearch = ({ setClickSearch, clickSearch, setClickChat }) => {
 };
 
 export default SidebarSearch;
-
