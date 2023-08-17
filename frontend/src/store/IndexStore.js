@@ -12,7 +12,7 @@ import WebSocketStoreReducer from "store/WebSocketStore";
 import interviewReducer from "./InterviewStore";
 import interviewWebSocketStore from "store/InterviewWebSocketStore";
 import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+//import storage from "redux-persist/lib/storage";
 import globalReducer from "./GlobalStore";
 import thunk from "redux-thunk";
 import { WebSocketContext } from "WebSocketContext";
