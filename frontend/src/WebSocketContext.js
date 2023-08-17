@@ -22,8 +22,8 @@ export const WebSocketProvider = ({ children }) => {
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       setReconnectAttempts(0); // 새로고침 시 reconnectAttempts를 0으로 초기화
-      e.preventDefault();
-      e.returnValue = ""; // 브라우저에 따라 returnValue 설정이 필요할 수 있습니다.
+      // e.preventDefault();
+      // e.returnValue = ""; // 브라우저에 따라 returnValue 설정이 필요할 수 있습니다.
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
