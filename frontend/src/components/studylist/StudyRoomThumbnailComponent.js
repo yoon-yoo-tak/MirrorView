@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import AWN from "awesome-notifications";
 import "awesome-notifications/dist/style.css";
 import { get } from "react-scroll/modules/mixins/scroller";
+import { getInterviewRoom } from "store/InterviewStore";
 
 const StudyRoomThumbnail = (info) => {
     const dispatch = useDispatch();
@@ -153,6 +154,9 @@ const StudyRoomThumbnail = (info) => {
                             Swal.fire({
                                 title: `<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">${alertMessage}<div>`,
                                 icon: "error", width: 330
+                            }).then(()=>{
+                                const updateRooms = dispatch(getInterviewRoom());
+                                navigate("/studylist")
                             });
                         }
                     }).catch((err) => {
@@ -160,7 +164,11 @@ const StudyRoomThumbnail = (info) => {
                         Swal.fire({
                             title: `<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">방이 존재하지 않습니다.<div>`,
                             icon: "error", width: 330
+                        }).then(()=>{
+                            const updateRooms = dispatch(getInterviewRoom());
+                            navigate("/studylist")
                         });
+                        
                     })
             }
         });
