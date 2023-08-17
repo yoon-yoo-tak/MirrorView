@@ -71,7 +71,7 @@ const FindPassword = () => {
                             <div>
                                 <S.submitButton
                                     className="bottomButton"
-                                    // onClick={handleSubmit}
+                                    onClick={handleSubmit}
                                 >
                                     찾기
                                 </S.submitButton>
