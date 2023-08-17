@@ -33,13 +33,19 @@ const StudyRoomThumbnail = (info) => {
 
             return;
         }
-        if(info.started){
-            Swal.fire('<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">이미 시작된 방입니다<div>');
+        if (info.started) {
+            Swal.fire({
+                title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">이미 시작된 방입니다.<div>',
+                icon: "error", width: 330
+            });
             return;
         }
 
         if (info.maxMemberCount === info.currentMemberCount) {
-            alert('<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">정원 초과입니다.<div>');
+            Swal.fire({
+                title: '<div style="font-size:20px; font-family: HakgyoansimWoojuR;font-weight:bold;">정원 초과입니다.<div>',
+                icon: "error", width: 330
+            });
             return;
         }
         if (info.havePassword) {
