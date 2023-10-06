@@ -1,11 +1,5 @@
 ![](frontend/public/mirlogo.png)
 
-<p align="center">
-  <br>
-  ![image](/uploads/09caec313cfa252aef4a285e9e5d7ff7/image.png)
-  <br>
-</p>
-
 ## 목차
 1. [**서비스 소개**](#1)
 2. [**프로젝트 일정**](#2)
